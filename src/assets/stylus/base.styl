@@ -1,0 +1,185 @@
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, input
+  margin: 0
+  padding: 0
+  border: 0
+  font-size: 100%
+  font-weight: normal
+  vertical-align: baseline
+  font-style normal
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section
+  display: block
+
+body
+  line-height: 1
+
+blockquote, q
+  quotes: none
+
+blockquote:before, blockquote:after,
+q:before, q:after
+  content: none
+
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+/* custom */
+
+a
+  color: #7e8c8d
+  -webkit-backface-visibility: hidden
+  text-decoration: none
+
+li
+  list-style: none
+
+body
+  -webkit-text-size-adjust: none
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+
+input[type=search] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+  font-family: inherit;
+  font-size: 100%;
+}
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button {
+    display: none;
+}
+ #app{
+ 	width:100%;
+ 	height:100%;
+ 	overflow-x:hidden;
+ 	overflow-y:auto;
+ }
+ /*通用*/
+ html, body{
+  width 100%
+  height 100%
+}
+
+body{
+  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background : $background-base
+}
+
+*{
+	box-sizing border-box
+}
+
+.fb{
+  font-weight: bold;
+}
+.flt {
+  float: left;
+}
+.frt {
+  float: right;
+}
+.clr {
+  clear: both;
+}
+.block-center {
+  display: block;
+}
+.pre {
+  position: relative;
+}
+.c-w {
+  color: #fff;
+}
+.c-b {
+  color: #000;
+}
+.c-9 {
+  color: #999;
+}
+.c-6 {
+  color: #666;
+}
+.c-3 {
+  color: #333;
+}
+.c-w-i {
+  color: #fff ! important;
+}
+.c-b-i {
+  color: #000 ! important;
+}
+.c-9-i {
+  color: #999 ! important;
+}
+.c-6-i {
+  color: #666 ! important;
+}
+.c-3-i {
+  color: #333 ! important;
+}
+.c-yellow{
+ c(#FF5500)
+}
+.fz38{
+	ft(38)
+}
+.fz25{
+	ft(28)
+}
+.fz30{
+  ft(30)
+}
+.t-c {
+  text-align: center;
+}
+.l-c {
+  vertical-align: middle;
+}
+.bz-bb {
+  box-sizing: border-box;
+}
+.bz-cb {
+  box-sizing: content-box;
+}
+.bg-w{
+    background: #FFFFFF;
+}
+.clearfix:after{
+	clear: both;
+	display: block;
+	content: "...";
+	visibility: hidden;
+	height: 0;
+	font-size: 0;
+ }
+.flex{
+  display: flex;
+}
+.flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-1{
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
