@@ -8,10 +8,6 @@
         <a class="tab-home" href="javascript:;"></a>
         <span>首页</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/navi/service">
-        <a class="tab-service" href="javascript:;"></a>
-        <span>服务</span>
-      </router-link>
       <router-link tag="div" class="tab-item" to="/navi/orders">
         <a class="tab-order" href="javascript:;"></a>
         <span>订单</span>
@@ -74,23 +70,15 @@ export default {
   }
 
   .tab-home {
-    background-image: url('./../assets/images/icon-shouye-active.png');
-  }
-
-  .tab-service {
-    background-image: url('./../assets/images/icon-service.png');
+    background-image: url('./../assets/images/icon-shouye.png');
   }
 
   .tab-mine {
-    background-image: url('./../assets/images/icon-shouye-active.png');
-  }
-
-  .tab-area {
-    background-image: url('./../assets/images/icon-shouye-active.png');
+    background-image: url('./../assets/images/icon-mine.png');
   }
 
   .tab-order {
-    background-image: url('./../assets/images/icon-shouye-active.png');
+    background-image: url('./../assets/images/icon-orders.png');
   }
 
   &.router-link-active {
@@ -102,20 +90,12 @@ export default {
       background-image: url('./../assets/images/icon-shouye-active.png');
     }
 
-    .tab-service {
-      background-image: url('./../assets/images/icon-service.png');
-    }
-
     .tab-mine {
-      background-image: url('./../assets/images/icon-shouye-active.png');
-    }
-
-    .tab-area {
-      background-image: url('./../assets/images/icon-shouye-active.png');
+      background-image: url('./../assets/images/icon-mine-active.png');
     }
 
     .tab-order {
-      background-image: url('./../assets/images/icon-shouye-active.png');
+      background-image: url('./../assets/images/icon-orders-active.png');
     }
   }
 }

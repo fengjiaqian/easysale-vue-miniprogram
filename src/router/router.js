@@ -27,6 +27,11 @@ const Mine = (resolve) => {
 		resolve(module)
 	})
 }
+const productDetail = (resolve) => {
+	import('views/productDetail.vue').then((module) => {
+		resolve(module)
+	})
+}
 
 export default new Router({
 	routes: [{
@@ -70,7 +75,14 @@ export default new Router({
 			},
 			component: Mine
 		}]
+	}, {
+		path: '/detail',
+		name: 'detail',
+		meta: {
+			title: '商品详情',
+			keepAlive: true
+		},
+		component: productDetail,
 	}
-
 	]
 })

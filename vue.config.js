@@ -1,3 +1,6 @@
+/**
+ * created by yuanzishu 2019/04/04
+ */
 //const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const path = require('path');
 const resolve = (dir) => path.join(__dirname, dir);
@@ -84,16 +87,17 @@ module.exports = {
         hotOnly: true,
         disableHostCheck: true,
         proxy: {
-            '/ua': {
-                target: 'http://ua2.release.yijiupidev.com/himalaya-ApiService-UA2/',
-                changeOrigin: true,
-                ws: false,
-                pathRewrite: { '^/ua': '' }
-            },
+            // '/ua': {
+            //     target: 'http://ua2.release.yijiupidev.com/himalaya-ApiService-UA2/',
+            //     changeOrigin: true,
+            //     ws: false,
+            //     pathRewrite: { '^/ua': '' }
+            // },
             '/': {
-                target: 'http://mall.release.yijiupidev.com/v31/',
+                target: 'http://192.168.0.25:5201/',
                 ws: false,
-                changeOrigin: true
+                changeOrigin: true,
+                pathRewrite: { '^/': '' }
             },
 
         }

@@ -47,7 +47,7 @@
     </div>
     <!--  -->
     <div class="home-product-list">
-        <product v-for="i in 2"></product>
+        <product v-for="i in 10"></product>
     </div>
   </div>
 </template>
@@ -129,6 +129,7 @@ export default {
   pos(relative);
   width: 100%;
   h(88);
+  mt(20)
   bg(#fff);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
