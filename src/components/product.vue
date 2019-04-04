@@ -1,14 +1,14 @@
 <template>
   <div class="H-product-item clearfix">
     <div class="H-product-img">
-      <img v-lazy alt>
+      <img v-lazy="" alt>
     </div>
     <div class="H-product-content">
-      <p class="name">茅台镇封藏镇封藏镇原浆酒茅台镇封藏镇封藏镇原浆酒V60V60</p>
-      <div class="spec">规格 6瓶/件</div>
+      <p class="name">{{product.productName}}</p>
+      <div class="spec">规格 {{product.specification}}</div>
       <div class="price">
         <div>
-          <span class="c-yellow" v-html="$options.filters.price(398)"></span>
+          <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
         </div>
         <number-picker></number-picker>
       </div>
@@ -20,6 +20,7 @@
 import numberPicker from "./number-picker.vue";
 export default {
   name: "product",
+  props: ["product"],
   components: {
     numberPicker
   },

@@ -47,10 +47,9 @@ export default {
     numberPicker
   },
   created() {
-    test();
-    // queryProductDetail(1885).then((res)=>{
-    //     console.log(res)
-    // })
+    queryProductDetail(169840639200985701).then(res => {
+      console.log(res);
+    });
   },
   mounted() {},
   methods: {}

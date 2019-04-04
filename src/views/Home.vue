@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <div id="home" ref="scrollDom">
     <search-bar></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
@@ -21,13 +21,13 @@
       <div class="scroll-menu-area">
         <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu">
           <ul ref="scroll_menu_content" class="scroll-menu-ul">
-            <li v-for="menu in scrollMenu" :key="menu.columnId" :id="'menu'+menu.columnId">
+            <li v-for="menu in scrollMenu" :key="menu.brandId" :id="'menu'+menu.brandId">
               <a
                 href="javascript:;"
                 class="c-3 fz30"
-                @click="bindClickMenu(menu.columnId)"
-                :class="{'active':currentColumnId == menu.columnId}"
-              >{{menu.columnName}}</a>
+                @click="bindClickMenu(menu.brandId)"
+                :class="{'active':currentColumnId == menu.brandId}"
+              >{{menu.brandName}}</a>
             </li>
           </ul>
         </scroll>
@@ -35,19 +35,19 @@
 
       <transition name="squre">
         <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
-          <div class="squre-item-wrap flt" v-for="item in scrollMenu" :key="item.columnId">
+          <div class="squre-item-wrap flt" v-for="item in scrollMenu" :key="item.brandId">
             <div
               class="squre-item"
-              @click="bindClickMenu(item.columnId,true)"
-              :class="{'squre-item-active':currentColumnId === item.columnId}"
-            >{{item.columnName}}</div>
+              @click="bindClickMenu(item.brandId,true)"
+              :class="{'squre-item-active':currentColumnId === item.brandId}"
+            >{{item.brandName}}</div>
           </div>
         </div>
       </transition>
     </div>
     <!--  -->
     <div class="home-product-list">
-        <product v-for="i in 10"></product>
+      <product v-for="item in productList" :product="item" :key="item.id"></product>
     </div>
   </div>
 </template>
@@ -56,7 +56,9 @@
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
-import {home_scroll_menu} from './mock'
+import { home_scroll_menu } from "./mock";
+import { queryHomeProducts, ListProduct } from "api/fetch/home";
+import { addClass, removeClass } from "common/dom";
 export default {
   name: "home",
   data() {
@@ -65,8 +67,8 @@ export default {
       productList: [],
       currentColumnId: "",
       showSqure: false,
-      menuCanScroll: true,
-      scrollMenu: home_scroll_menu,
+      menuCanScroll: false,
+      scrollMenu: [],
       currentColumnPorducts: []
     };
   },
@@ -76,15 +78,144 @@ export default {
     product
   },
   computed: {},
-  created() {},
+  created() {
+    queryHomeProducts(19990530).then(res => {
+      if (res.result === "success" && res.data) {
+        this.scrollMenu = res.data.brands;
+        this.scrollMenu.length &&
+          (this.currentColumnId = this.scrollMenu[0].brandId);
+        this.productList = res.data.products;
+        //
+        this.scrollMenu[0].products = this.productList;
+        this.$nextTick(() => {
+          this.calculateScrollRect();
+          this.watchScroll();
+        });
+      }
+    });
+  },
   mounted() {},
   methods: {
-    jumpSecondsort(item) {}
+    jumpSecondsort(item) {},
+    //计算 scroll-menu 的scroll_menu_content 的宽度
+    calculateScrollRect() {
+      const clientWidth =
+        document.body.clientWidth || document.documentElement.clientWidth;
+      const els = this.$refs.scroll_menu_content.children;
+      let w = 0;
+      for (let el of Array.prototype.slice.call(els)) {
+        w += el.getBoundingClientRect().width;
+      }
+      this.$refs.scroll_menu_content.style.width = w + "px";
+      //判断menu是否能滑动
+      this.menuCanScroll = w > clientWidth - (clientWidth * 88) / 750;
+    },
+    bindClickMenu(id) {
+      this.showSqure = false;
+      this.currentColumnId = id;
+      this.menuScrollToEl(id);
+      //匹配
+      let matchItem = this.scrollMenu.find(item => id == item.brandId);
+      if (matchItem.products) {
+        this.productList = matchItem.products;
+        return true;
+      }
+      // const Index = this.productColumns.findIndex(
+      //   item => this.currentColumnId == item.columnId
+      // );
+      // if (Index != -1 && this.productColumns[Index].products) {
+      //   this.currentColumnPorducts = transformList(
+      //     this.productColumns[Index].products,
+      //     getAllGoods()
+      //   );
+      //   this.$nextTick(() => {
+      //     this.scrollSmoothTo(this.$refs.scrollDom, this.distance);
+      //   });
+      //   return false;
+      // }
+      //如果没有产品则需查询
+      const params = {
+        dealerId: "19990530",
+        brandId: id,
+        pageSize: 10
+      };
+      ListProduct(params).then(res => {
+        if (res.result === "success" && res.data) {
+          this.productList = res.data.dataList;
+          matchItem.products = this.productList;
+          // this.currentColumnPorducts = transformList(res.data, getAllGoods());
+          // this.productColumns[Index].products = this.currentColumnPorducts;
+          // this.$nextTick(() => {
+          //   this.scrollSmoothTo(this.$refs.scrollDom, this.distance);
+          // });
+        }
+      });
+    },
+    menuScrollToEl(id) {
+      let Index = this.scrollMenu.findIndex(item => item.columnId == id);
+      Index = Index > 2 ? Index - 2 : 0;
+      let domId = "menu" + this.scrollMenu[Index].columnId;
+      this.$refs.ScrollMenu.scrollToElement(
+        document.getElementById(domId),
+        150
+      );
+    },
+    watchScroll() {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function(callback, element) {
+          return setTimeout(callback, 17);
+        };
+      }
+      const clientWidth =
+        document.body.clientWidth || document.documentElement.clientWidth;
+      var last_known_scroll_position = 0,
+        ticking = false;
+      this.distance =
+        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * 92) / 750;
+
+      this.$refs.scrollDom.addEventListener("scroll", e => {
+        last_known_scroll_position = this.$refs.scrollDom.scrollTop;
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            if (last_known_scroll_position > this.distance) {
+              addClass(this.$refs.scrollMenuWrap, "fixed");
+            } else {
+              removeClass(this.$refs.scrollMenuWrap, "fixed");
+            }
+            ticking = false;
+          });
+        }
+        ticking = true;
+      });
+    },
+    scrollSmoothTo(el, position) {
+      var distance = el.scrollTop;
+      if (distance <= position) {
+        return false;
+      }
+      var step = function() {
+        // 距离目标滚动距离
+        distance -= 200;
+        if (Math.abs(distance) < position) {
+          el.scrollTop = position;
+        } else {
+          el.scrollTop = distance;
+          window.requestAnimationFrame(step);
+        }
+      };
+      step();
+    }
   }
 };
 </script>
 
 <style lang="stylus">
+.fixed {
+  position: fixed !important;
+  top: 92px;
+  z-index: 10;
+}
+
 #home {
   pt(92);
   pb(98);
@@ -95,6 +226,7 @@ export default {
 }
 
 .home-icons {
+  mb(20);
   background: #fff;
   width: 100%;
   padding-bottom: 32px;
@@ -129,7 +261,6 @@ export default {
   pos(relative);
   width: 100%;
   h(88);
-  mt(20)
   bg(#fff);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
@@ -211,6 +342,16 @@ export default {
 
   &.squre-enter-active, &.squre-leave-active {
     transition: all 0.2s;
+  }
+}
+
+.home-product-list {
+  .H-product-item {
+    &:nth-last-of-type(1) {
+      .H-product-content {
+        border: 0;
+      }
+    }
   }
 }
 </style>

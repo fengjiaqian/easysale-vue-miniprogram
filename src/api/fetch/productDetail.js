@@ -17,20 +17,3 @@ export function queryProductDetail(skuId) {
 	});
 }
 
-
-export function test() {
-
-	const url = "/product/dealerProductList"
-	return axios({
-		method: 'post',
-		url: url,
-		data: {
-			productInfoName: '娃哈哈'
-		},
-		loading: true,
-	}).then((res) => {
-		return Promise.resolve(res.data)
-	}).catch(res => {
-		return Promise.reject(res.data)
-	});
-}
