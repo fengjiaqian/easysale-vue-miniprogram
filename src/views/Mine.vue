@@ -5,7 +5,7 @@
         <img v-lazy alt>
       </div>
       <div class="user-tel">
-        <h5>销售员-小黑1</h5>
+        <h5>销售员-小黑</h5>
         <p>电话：13627762233</p>
       </div>
     </div>
