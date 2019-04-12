@@ -70,6 +70,8 @@
 
     },
     methods: {
+
+      
       switchBar(idx) {
         this.activeIdx = idx
       }
