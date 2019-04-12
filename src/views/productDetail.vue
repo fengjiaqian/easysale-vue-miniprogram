@@ -1,15 +1,15 @@
 <template>
   <div id="detail">
     <div class="D-img">
-      <img v-lazy alt>
+      <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
-    <div class="D-name">洋河蓝色经典 梦之蓝M6 52度 500ml*2瓶</div>
+    <div class="D-name">{{product.productName}}</div>
     <div class="D-price">
-      <span class="c-yellow" v-html="$options.filters.price(398)"></span>
+      <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
     </div>
     <div class="D-number">
       <span class="c-3 fz30">数量</span>
-      <number-picker></number-picker>
+      <number-picker :product="product"></number-picker>
     </div>
     <!--  -->
     <div class="D-info">
@@ -32,7 +32,7 @@
       </div>
       <div class="D-bottom-right">
         <a href="javascript:;" class="normal-btn immediately">立即下单</a>
-        <a href="javascript:;" class="normal-btn">加入订单</a>
+        <a href="javascript:;" class="normal-btn" @click="_addToCart(product)">加入订单</a>
       </div>
     </div>
   </div>
@@ -41,18 +41,41 @@
 <script>
 import numberPicker from "components/number-picker.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
+import { updateItem } from "common/goodsStorage";
 export default {
   name: "detail",
+  data() {
+    return {
+      product: {}
+    };
+  },
   components: {
     numberPicker
   },
   created() {
-    queryProductDetail(169840639200985701).then(res => {
-      console.log(res);
-    });
+    this._queryDetail();
   },
   mounted() {},
-  methods: {}
+  methods: {
+    _queryDetail() {
+      const skuId = this.$route.params.code;
+      queryProductDetail(skuId).then(res => {
+        if (res.result === "success" && res.data) {
+          this.product = this.initPorduct(res.data);
+        }
+      });
+    },
+    initPorduct(product) {
+      product.buyCount = 1;
+      product.minBuyNum = 1;
+      product.maxBuyNum = 9999;
+      return product;
+    },
+    _addToCart(product) {
+      updateItem(product, product.buyCount, true);
+      this.$toast("加入订单成功");
+    }
+  }
 };
 </script>
 
@@ -112,7 +135,7 @@ export default {
   c(#fff);
   ft(32);
   lh(98);
-  bg(#0096FF);
+  bg(#FF5638);
   text-c();
 }
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="H-product-item clearfix">
+  <div class="H-product-item clearfix" @click="_enterDetail">
     <div class="H-product-img">
-      <img v-lazy="" alt>
+      <img v-lazy="''" alt>
     </div>
     <div class="H-product-content">
       <p class="name">{{product.productName}}</p>
@@ -10,7 +10,7 @@
         <div>
           <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
         </div>
-        <number-picker></number-picker>
+        <number-picker :product="product"></number-picker>
       </div>
     </div>
   </div>
@@ -20,11 +20,26 @@
 import numberPicker from "./number-picker.vue";
 export default {
   name: "product",
-  props: ["product"],
+  props: {
+    product: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   components: {
     numberPicker
   },
-  methods: {}
+  methods: {
+    _enterDetail() {
+      const code = this.product.id;
+      this.$router.push({
+        name: "detail",
+        params: {
+          code
+        }
+      });
+    }
+  }
 };
 </script>
 

@@ -91,7 +91,7 @@ export default {
   h(98);
   pos(fixed);
   left: 0;
-  bottom: 98px;
+  bottom: 0;
   pl(88);
 
   .O-check-icon {
