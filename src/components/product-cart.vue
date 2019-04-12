@@ -1,16 +1,16 @@
 <template>
   <div class="O-product-item clearfix">
-    <span class="O-check-icon checked"></span>
+    <span class="O-check-icon" @click.stop="_select(product)" :class="{'checked': product.checked}"></span>
     <div class="O-product-img">
-      <img v-lazy alt>
+      <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
     <div class="O-product-content">
-      <p class="name">茅台镇封藏镇封藏镇原浆酒茅台镇封藏镇封藏镇原浆酒V60V60</p>
+      <p class="name">{{product.productName}}</p>
       <div class="price">
         <div>
           <span class="c-yellow" v-html="$options.filters.price(398)"></span>
         </div>
-        <number-picker></number-picker>
+        <number-picker :product="product"></number-picker>
       </div>
     </div>
   </div>
@@ -20,10 +20,30 @@
 import numberPicker from "./number-picker.vue";
 export default {
   name: "product",
+  props: {
+    product: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   components: {
     numberPicker
   },
-  methods: {}
+  methods: {
+    _select(product) {
+      this.$emit('itemSelect', product);
+    }
+  },
+  watch: {
+    "product.buyCount": {
+      handler(newval, oldval) {
+        console.log(newval)
+
+      },
+      deep: true,
+      //immediate: true  //首次绑定是否执行handler 
+    }
+  }
 };
 </script>
 
@@ -48,6 +68,12 @@ export default {
   pos(relative);
   padding: 24px 0 0 88px;
   bg(#fff);
+
+  &:nth-last-child(2) {
+    .O-product-content {
+      border: 0;
+    }
+  }
 }
 
 .O-product-img {
@@ -68,10 +94,10 @@ export default {
   border-bottom: 1px solid #EDEDED;
 
   .name {
-    pr(30)
+    pr(30);
     ft(32);
     c(#333);
-    h(84)
+    h(84);
     line-height: 1.2;
   }
 

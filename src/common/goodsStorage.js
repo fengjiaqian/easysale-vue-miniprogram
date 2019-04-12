@@ -2,20 +2,18 @@
  * 处理缓存商品 
  */
 import storage from 'common/storage'
+const _userId = '001'
+const _storageKey = 'yjxGoods'
 
 function getAllGoods() {
-    const userId = localStorage.getItem('userId') || ''
-    let param = userId + 'groupGoods'
-    return storage.get(param, [])
+    return storage.get(_userId + _storageKey, [])
 }
 
 function setAllGoods(goods) {
     if (!goods && !goods.length) {
         return false;
     }
-    const userId = localStorage.getItem('userId') || ''
-    let param = userId + 'groupGoods'
-    storage.set(param, goods)
+    storage.set(_userId + _storageKey, goods)
 }
 
 function getGoodsCount() {
@@ -36,10 +34,7 @@ function updateItem(sku, number, isAdd = false) {
         sku.buyCount = number;
         goods = new Array(sku);
     } else {
-        const idx = goods.findIndex((item) => {
-            return item.productSkuId === sku.productSkuId &&
-                item.productSaleSpecId === sku.productSaleSpecId
-        })
+        const idx = goods.findIndex(item => item.id === sku.id);
         if (idx != -1) {
             isAdd ? goods[idx].buyCount += number :
                 goods[idx].buyCount = number
@@ -58,10 +53,7 @@ function removeItem(sku) {
     if (!goods || !goods.length) {
         return false;
     }
-    const idx = goods.findIndex((item) => {
-        return item.productSkuId === sku.productSkuId &&
-            item.productSaleSpecId === sku.productSaleSpecId
-    })
+    const idx = goods.findIndex(item => item.id === sku.id);
     if (idx === -1) {
         return false;
     }
@@ -77,7 +69,7 @@ function batchRemoveItem(skus) {
     }
     skus.forEach((item) => {
         goods.forEach((product, i) => {
-            if (item.productSkuId == product.productSkuId && item.productSaleSpecId == product.productSaleSpecId) {
+            if (item.id == product.id) {
                 goods.splice(i, 1)
                 return
             }
@@ -88,9 +80,7 @@ function batchRemoveItem(skus) {
 
 //clear goods
 function clearGoods() {
-    const userId = localStorage.getItem('userId') || ''
-    let param = userId + 'groupGoods'
-    storage.remove(param)
+    storage.remove(_userId + _storageKey)
 }
 export {
     getAllGoods,
