@@ -83,7 +83,7 @@ export default {
 
   &.router-link-active {
     span {
-      c(#0096FF);
+      c(#FF5638);
     }
 
     .tab-home {

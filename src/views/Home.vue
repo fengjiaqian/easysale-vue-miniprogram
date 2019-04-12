@@ -1,5 +1,6 @@
 <template>
   <div id="home" ref="scrollDom">
+    <float-cart></float-cart>
     <search-bar></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
@@ -53,12 +54,14 @@
 </template>
 
 <script>
+import floatCart from 'components/floatCart.vue'
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import { home_scroll_menu } from "./mock";
 import { queryHomeProducts, ListProduct } from "api/fetch/home";
 import { addClass, removeClass } from "common/dom";
+import { transformProductList } from "common/productUtil";
 export default {
   name: "home",
   data() {
@@ -75,7 +78,8 @@ export default {
   components: {
     searchBar,
     scroll,
-    product
+    product,
+    floatCart
   },
   computed: {},
   created() {
@@ -84,7 +88,7 @@ export default {
         this.scrollMenu = res.data.brands;
         this.scrollMenu.length &&
           (this.currentColumnId = this.scrollMenu[0].brandId);
-        this.productList = res.data.products;
+        this.productList = transformProductList(res.data.products);
         //
         this.scrollMenu[0].products = this.productList;
         this.$nextTick(() => {
@@ -141,7 +145,7 @@ export default {
       };
       ListProduct(params).then(res => {
         if (res.result === "success" && res.data) {
-          this.productList = res.data.dataList;
+          this.productList = transformProductList(res.data.dataList);
           matchItem.products = this.productList;
           // this.currentColumnPorducts = transformList(res.data, getAllGoods());
           // this.productColumns[Index].products = this.currentColumnPorducts;
