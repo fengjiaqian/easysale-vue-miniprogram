@@ -1,5 +1,6 @@
 <template>
   <div id="home" ref="scrollDom">
+    <float-cart></float-cart>
     <search-bar></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
@@ -53,6 +54,7 @@
 </template>
 
 <script>
+import floatCart from 'components/floatCart.vue'
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
@@ -76,7 +78,8 @@ export default {
   components: {
     searchBar,
     scroll,
-    product
+    product,
+    floatCart
   },
   computed: {},
   created() {

@@ -38,6 +38,18 @@ const Cart = (resolve) => {
 	})
 }
 
+const OrderDetail = (resolve) => {
+	import('views/OrderDetail.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+const OrderSubmit = (resolve) => {
+	import('views/OrderSubmit.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 export default new Router({
 	routes: [{
 		path: '',
@@ -93,6 +105,20 @@ export default new Router({
 			title: '商品详情',
 		},
 		component: productDetail,
+	}, {
+		path: '/orderDetail/:orderId',
+		name: 'orderDetail',
+		meta: {
+			title: '订单详情',
+		},
+		component: OrderDetail,
+	}, {
+		path: '/OrderSubmit',
+		name: 'OrderSubmit',
+		meta: {
+			title: '订单详情',
+		},
+		component: OrderSubmit,
 	}
 	]
 })

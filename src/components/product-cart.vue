@@ -1,10 +1,10 @@
 <template>
-  <div class="O-product-item clearfix">
-    <span class="O-check-icon" @click.stop="_select(product)" :class="{'checked': product.checked}"></span>
-    <div class="O-product-img">
+  <div class="C-product-item clearfix" @click="_enterDetail">
+    <span class="C-check-icon" @click.stop="_select(product)" :class="{'checked': product.checked}"></span>
+    <div class="C-product-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
-    <div class="O-product-content">
+    <div class="C-product-content">
       <p class="name">{{product.productName}}</p>
       <div class="price">
         <div>
@@ -31,24 +31,32 @@ export default {
   },
   methods: {
     _select(product) {
-      this.$emit('itemSelect', product);
+      this.$emit("itemSelect", product);
+    },
+    _enterDetail() {
+      const code = this.product.id;
+      this.$router.push({
+        name: "detail",
+        params: {
+          code
+        }
+      });
     }
   },
   watch: {
-    "product.buyCount": {
-      handler(newval, oldval) {
-        console.log(newval)
-
-      },
-      deep: true,
-      //immediate: true  //首次绑定是否执行handler 
-    }
+    // "product.buyCount": {
+    //   handler(newval, oldval) {
+    //     console.log(newval);
+    //   },
+    //   deep: true
+    //   //immediate: true  //首次绑定是否执行handler
+    // }
   }
 };
 </script>
 
 <style lang="stylus">
-.O-check-icon {
+.C-check-icon {
   block();
   squ(40);
   pos(absolute);
@@ -64,19 +72,19 @@ export default {
   background-image: url('../assets/images/icon-checked.png');
 }
 
-.O-product-item {
+.C-product-item {
   pos(relative);
   padding: 24px 0 0 88px;
   bg(#fff);
 
   &:nth-last-child(2) {
-    .O-product-content {
+    .C-product-content {
       border: 0;
     }
   }
 }
 
-.O-product-img {
+.C-product-img {
   squ(144);
   flt();
   bg(rgba(246, 246, 246, 1));
@@ -87,7 +95,7 @@ export default {
   }
 }
 
-.O-product-content {
+.C-product-content {
   pr(24);
   pb(24);
   ml(168);

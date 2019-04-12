@@ -2,14 +2,14 @@
   <div id="orders">
     <product-cart v-for="item in products" :product="item" :key="item.id" @itemSelect="_itemSelect"></product-cart>
     <!--  -->
-    <div class="O-bottom">
-      <span class="O-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
+    <div class="C-bottom">
+      <span class="C-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
       <!--  -->
-      <a href="javascript:;" class="O-bottom-right">
+      <a href="javascript:;" class="C-bottom-right">
         下单
         <span v-show="amount">({{amount}})</span>
       </a>
-      <div class="O-bottom-left">
+      <div class="C-bottom-left">
         <span>全选</span>
         <span>合计¥{{totalMoney}}</span>
       </div>
@@ -85,7 +85,7 @@ export default {
   pb(98 + 98);
 }
 
-.O-bottom {
+.C-bottom {
   bg(#fff);
   width: 100%;
   h(98);
@@ -94,12 +94,12 @@ export default {
   bottom: 0;
   pl(88);
 
-  .O-check-icon {
+  .C-check-icon {
     top: 29px;
   }
 }
 
-.O-bottom-left {
+.C-bottom-left {
   mr(224);
   pr(16);
   h(98);
@@ -108,7 +108,7 @@ export default {
   justify-content: space-between;
 }
 
-.O-bottom-right {
+.C-bottom-right {
   w(224);
   lh(98);
   frt();

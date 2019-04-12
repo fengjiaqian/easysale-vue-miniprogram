@@ -94,7 +94,8 @@ module.exports = {
             //     pathRewrite: { '^/ua': '' }
             // },
             '/': {
-                target: 'http://192.168.0.25:5201/',
+                //target: 'http://192.168.0.25:5201/', //lidengfeng
+                target: 'http://192.168.0.212:5201/', //chenchuxiang 
                 ws: false,
                 changeOrigin: true,
                 pathRewrite: { '^/': '' }
