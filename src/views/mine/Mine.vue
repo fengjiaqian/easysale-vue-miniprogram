@@ -1,5 +1,6 @@
 <template>
   <div id="mine">
+    <router-link to="/my/userInfo">
     <div class="user-info">
       <div class="user-avart">
         <img v-lazy alt>
@@ -9,16 +10,19 @@
         <p>电话：13627762233</p>
       </div>
     </div>
+    </router-link>
     <!--  -->
     <div class="enter-list">
       <div class="enter-item" v-for="i in 4">
+        <router-link to="/my/statistical">
         <div class="enter-item-img">
-          <img src="../assets/images/icon-order-handler.png" alt>
+          <img src="../../assets/images/icon-order-handler.png" alt>
         </div>
         <div class="enter-item-txt">
           <span>业绩报表</span>
           <em></em>
         </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -75,7 +79,7 @@ export default {};
       w(16);
       h(26);
       mr(24);
-      background: url('./../assets/images/icon-enter.png') no-repeat center;
+      background: url('./../../assets/images/icon-enter.png') no-repeat center;
       background-size: contain;
     }
   }

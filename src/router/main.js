@@ -1,6 +1,3 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(Router)
 
 const Tab = (resolve) => {
 	import('components/Tab.vue').then((module) => {
@@ -23,7 +20,7 @@ const Orders = (resolve) => {
 	})
 }
 const Mine = (resolve) => {
-	import('views/Mine.vue').then((module) => {
+	import('views/mine/Mine.vue').then((module) => {
 		resolve(module)
 	})
 }
@@ -37,12 +34,18 @@ const Cart = (resolve) => {
 		resolve(module)
 	})
 }
+const UserInfo = (resolve) => {
+	import('views/mine/user/userInfo.vue').then((module) => {
+		resolve(module)
+	})
+}
 
-export default new Router({
-	routes: [{
+
+
+const main = [{
 		path: '',
 		redirect: '/navi/home'
-	},
+		},
 	{
 		path: '/navi',
 		name: 'navi',
@@ -94,5 +97,7 @@ export default new Router({
 		},
 		component: productDetail,
 	}
-	]
-})
+]
+
+
+export default main
