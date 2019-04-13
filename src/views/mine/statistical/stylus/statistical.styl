@@ -1,0 +1,74 @@
+.top-bar{
+  bg(#fff)
+  border-bottom 1PX solid #EDEDED
+  flex-center()
+  h(98)
+  span{
+    width 25%
+    text-c()
+    lh(98)
+    c-6()
+    ft(28)
+  }
+  .active{
+    font-weight 600
+    ft(34)
+    c-3()
+    position relative
+    &:before{
+      content ""
+      position absolute
+      left 50%
+      bottom 0
+      transform translateX(-50%)
+      w(40)
+      h(6)
+      bg(#FF5638)
+    }
+  }
+}
+
+.quanty-total{
+  margin 20px 16px 0 16px
+  padding 40px 0
+  border-radius 2px
+  bg(#fff)
+  flex-center()
+  c-6()
+  ft(28)
+  li{
+    width 50%
+    flex-center()
+    flex-direction column
+    h5{
+      font-weight 600
+      ft(48)
+      mb(24)
+    }
+  }
+  .qt-money{
+    h5{
+      c(#FF5638)
+    }
+  }
+  .qt-num{
+    h5{
+      c(#333)
+    }
+  }
+}
+.classes-column{
+  margin 20px 16px 0 16px
+  border-radius 2px
+  ft(30)
+  c-6()
+  bg(#fff)
+  li{
+    lh(90)
+    flex-center()
+    padding 0 52px 0 24px
+    >span:first-child{
+      flex-1()
+    }
+  }
+}

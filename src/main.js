@@ -2,7 +2,7 @@
 //   new VConsole() // 初始化
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router/router.js'
+import router from './router/index.js'
 import store from './store/store.js'
 import VueLazyload from 'vue-lazyload'
 

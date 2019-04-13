@@ -11,9 +11,7 @@
       ref="scrollOrders"
     >
       <div>
-        <div v-for="i in 10">
-          <order-item v-for="item in orderList" :order="item"></order-item>
-        </div>
+        <order-item v-for="item in orderList" :order="item"></order-item>
       </div>
     </scroll>
   </div>
@@ -61,16 +59,16 @@ export default {
       }
       this.loading = true;
       const params = {
-        orderState: this.currentState,
-        userId: 6348352047144356487,
+        //orderState: this.currentState,
+        userId: 6348352047144357000,
         pageNum: this.currentPage
       };
       orderApi
         .QueryOrders(params)
         .then(res => {
           if (res.result === "success" && res.data) {
-            this.orderList = res.data.dataList.filter(
-              item => item.orderItem.length
+            this.orderList = this.transformOrders(
+              res.data.dataList.filter(item => item.orderItem.length)
             );
             // if (currentPage == 1) {
             //   this.totalPage = Math.ceil(res.totalCount / pageSize);
@@ -88,6 +86,15 @@ export default {
         .catch(err => {
           this.loading = false;
         });
+    },
+    transformOrders(orderList) {
+      for (let order of orderList) {
+        order.totalQuantity = order.orderItem.reduce(
+          (acc, cur) => acc + cur.quantity,
+          0
+        );
+      }
+      return orderList;
     },
     loadMoreOrders() {
       if (this.loading || this.orderList.length < 6) return false;
@@ -116,34 +123,6 @@ export default {
   left: 0;
   pt(101);
   pb(98);
-}
-
-.O-tab {
-  width: 100%;
-  h(80);
-  bg(#fff);
-  pos(absolute);
-  top: 0;
-  left: 0;
-
-  li {
-    width: 25%;
-    flt();
-    text-c();
-
-    a {
-      inline();
-      lh(80);
-      padding: 0 28px;
-      ft(30);
-      c(#333);
-
-      &.active {
-        c($color-theme);
-        border-bottom: 2PX solid $color-theme;
-      }
-    }
-  }
 }
 </style>
 

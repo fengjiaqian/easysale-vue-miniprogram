@@ -156,9 +156,9 @@ export default {
       });
     },
     menuScrollToEl(id) {
-      let Index = this.scrollMenu.findIndex(item => item.columnId == id);
+      let Index = this.scrollMenu.findIndex(item => item.brandId == id);
       Index = Index > 2 ? Index - 2 : 0;
-      let domId = "menu" + this.scrollMenu[Index].columnId;
+      let domId = "menu" + this.scrollMenu[Index].brandId;
       this.$refs.ScrollMenu.scrollToElement(
         document.getElementById(domId),
         150

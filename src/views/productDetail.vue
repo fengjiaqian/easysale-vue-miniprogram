@@ -32,7 +32,7 @@
       </div>
       <div class="D-bottom-right">
         <a href="javascript:;" class="normal-btn immediately">立即下单</a>
-        <a href="javascript:;" class="normal-btn" @click="_addToCart(product)">加入订单</a>
+        <a href="javascript:;" class="normal-btn" @click="_addToCart(product)">加入购物车</a>
       </div>
     </div>
   </div>
@@ -140,7 +140,7 @@ export default {
 }
 
 .immediately {
-  bg(#FF5500);
+  bg(#FFBD38);
 }
 
 .D-info {

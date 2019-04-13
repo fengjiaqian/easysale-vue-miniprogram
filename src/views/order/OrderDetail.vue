@@ -64,6 +64,8 @@ export default {
 </script>
 
 <style lang='stylus' scoped>
+@import './common.styl';
+
 .bottom-wrap {
   pos(fixed);
   width: 100%;
@@ -101,7 +103,7 @@ export default {
     bottom: 25px;
     right: 32px;
     squ(40);
-    background: url('../assets/images/icon-tel.png') no-repeat center;
+    background: url('../../assets/images/icon-tel.png') no-repeat center;
     background-size: contain;
   }
 }
@@ -131,61 +133,6 @@ export default {
     c(#333);
     text-align: right;
     border-top: 1px solid #EDEDED;
-  }
-}
-
-.multiple-skus {
-  margin: 16px 0;
-
-  .m-s-amount {
-    lh(150);
-    ft(29);
-    c(#333);
-    padding: 0 5px 0 19px;
-    frt();
-  }
-}
-
-.m-s-skus {
-  h(150);
-  mr(100);
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-
-  li {
-    inline();
-
-    &:nth-last-of-type(1) {
-      a {
-        mr(0);
-      }
-    }
-
-    a {
-      block();
-      mr(21);
-      pos(relative);
-      squ(150);
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-
-      span {
-        pos(absolute);
-        bottom: 0;
-        left: 0;
-        lh(30);
-        h(30);
-        width: 100%;
-        bg(rgba(0, 0, 0, 0.5));
-        ft(23);
-        c(#fff);
-        text-c();
-      }
-    }
   }
 }
 
