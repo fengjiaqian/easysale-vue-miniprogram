@@ -1,4 +1,3 @@
-
 /* 我的页面 */
 const My = (resolve) => {
     import('@/views/mine/my.vue').then((module) => { resolve(module) })
@@ -17,6 +16,21 @@ const UserInviteCode = (resolve) => {
 //我的数据统计
 const Statistical = (resolve) => {
     import('@/views/mine/statistical/statistical.vue').then((module) => { resolve(module) })
+}
+
+//商品管理-商品列表
+const ProductManage = (resolve) => {
+    import('@/views/mine/productManage/productList.vue').then((module) => { resolve(module) })
+}
+
+//商品管理-添加自有商品
+const AddProduct = (resolve) => {
+    import('@/views/mine/productManage/addProduct.vue').then((module) => { resolve(module) })
+}
+
+//商品管理-导入易酒批商品
+const ImportProduct = (resolve) => {
+    import('@/views/mine/productManage/importProduct.vue').then((module) => { resolve(module) })
 }
 
 const mine = [
@@ -50,6 +64,30 @@ const mine = [
                     title: '数据统计'
                 },
                 component: Statistical
+            },
+            {
+                path: 'productList',
+                name: 'productList',
+                meta: {
+                    title: '商品管理'
+                },
+                component: ProductManage
+            },
+            {
+                path: 'addProduct',
+                name: 'addProduct',
+                meta: {
+                    title: '添加自有商品'
+                },
+                component: AddProduct
+            },
+            {
+                path: 'importProduct',
+                name: 'importProduct',
+                meta: {
+                    title: '导入易酒批商品'
+                },
+                component: ImportProduct
             }
         ]
     }]
