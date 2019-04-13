@@ -1,11 +1,11 @@
 <template>
-  <div id="orders">
+  <div id="cart">
     <product-cart v-for="item in products" :product="item" :key="item.id" @itemSelect="_itemSelect"></product-cart>
     <!--  -->
     <div class="C-bottom">
       <span class="C-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
       <!--  -->
-      <a href="javascript:;" class="C-bottom-right">
+      <a href="javascript:;" class="C-bottom-right" @click="_submitOrder">
         下单
         <span v-show="amount">({{amount}})</span>
       </a>
@@ -75,14 +75,20 @@ export default {
     _itemSelect(product) {
       product.checked = !product.checked;
       this.isAllSelected = !this.products.some(item => !item.checked);
+    },
+    //提交订单
+    _submitOrder() {
+      this.$router.push({
+        path: "/OrderSubmit"
+      });
     }
   }
 };
 </script>
 
 <style lang="stylus">
-#orders {
-  pb(98 + 98);
+#cart {
+  pb(98);
 }
 
 .C-bottom {

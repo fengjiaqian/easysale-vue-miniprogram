@@ -1,6 +1,9 @@
 <template>
   <div class="order-submit">
-    <div class="select-customer">客户信息 选择客户</div>
+    <div class="select-customer">
+      <strong class="fz30">客户信息</strong>
+      <a class="c-theme" href="javascript:;" @click>选择客户</a>
+    </div>
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
       <!-- 多个产品 -->
@@ -20,6 +23,15 @@
         <span class="c-theme">&yen;794.00</span>
       </div>
     </div>
+    <div class="select-customer">
+      <strong class="fz30">折扣</strong>
+      <input type="number" placeholder="请输入折扣">
+    </div>
+    <!--  -->
+    <div class="bottom">
+      <a href="javascript:;">提交订单</a>
+      ¥398.00
+    </div>
   </div>
 </template>
 
@@ -28,6 +40,48 @@ export default {};
 </script>
 
 <style lang="stylus" scoped>
+.bottom {
+  width 100%
+  pl(24)
+  pos(fixed);
+  bottom: 0;
+  left: 0;
+  bg(#fff);
+  h(98);
+  lh(98);
+  ft(48)
+  c($color-theme)
+
+  a {
+    w(224);
+    h(98);
+    frt();
+    bg(#ccc);
+    c(#fff)
+    ft(32);
+    text-c();
+  }
+}
+
+.select-customer {
+  margin: 20px 16px;
+  padding: 0 24px;
+  bg(#fff);
+  lh(90);
+  flex-center();
+  justify-content: space-between;
+
+  a {
+    ft(28);
+  }
+
+  input {
+    w(150);
+    h(42);
+    text-indent: 5px;
+  }
+}
+
 .order-detail-area {
   margin: 20px 16px;
   padding: 0 24px;
@@ -36,6 +90,7 @@ export default {};
   h5 {
     lh(90);
     ft(30);
+    fb();
     border-bottom: 1px solid #EDEDED;
   }
 
