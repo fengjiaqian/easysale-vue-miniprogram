@@ -44,15 +44,14 @@
           {
             'title': '客户管理',
             'class': 'customer',
-            'path': '/my/statistical'
+            'path': '/my/customerList'
           },          {
             'title': '员工管理',
             'class': 'staff',
-            'path': '/my/statistical'
+            'path': '/my/staffList'
           },
           {
             'title': '设置',
-            'icon': '../../assets/images/setting_icon.png',
             'class': 'setting',
             'path': '/my/statistical'
           }

@@ -33,6 +33,16 @@ const ImportProduct = (resolve) => {
     import('@/views/mine/productManage/importProduct.vue').then((module) => { resolve(module) })
 }
 
+//员工管理-我的员工列表
+const StaffList = (resolve) => {
+    import('@/views/mine/staffManage/staffList.vue').then((module) => { resolve(module) })
+}
+
+//客户管理-我的客户列表
+const CustomerList = (resolve) => {
+    import('@/views/mine/customerManage/customerList.vue').then((module) => { resolve(module) })
+}
+
 const mine = [
     {
         path: '/my',
@@ -88,6 +98,22 @@ const mine = [
                     title: '导入易酒批商品'
                 },
                 component: ImportProduct
+            },
+            {
+                path: 'staffList',
+                name: 'staffList',
+                meta: {
+                    title: '员工管理'
+                },
+                component: StaffList
+            },
+            {
+                path: 'customerList',
+                name: 'customerList',
+                meta: {
+                    title: '客户管理'
+                },
+                component: CustomerList
             }
         ]
     }]
