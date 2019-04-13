@@ -16,3 +16,18 @@ export function QueryOrders(params = {}) {
         return Promise.reject(res.data)
     });
 }
+
+//提交订单
+export function OrderSubmit(params = {}) {
+    const url = "/order/saveOrder";
+    return axios({
+        method: 'post',
+        url,
+        data: params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}

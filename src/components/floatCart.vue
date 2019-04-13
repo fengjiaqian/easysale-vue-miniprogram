@@ -6,7 +6,7 @@
     @touchmove.prevent="move($event)"
     @touchend="end"
   >
-    <span class="cart-count" v-show="count>0">{{count>99 ? '99+' : count}}</span>
+    <!-- <span class="cart-count" v-show="count>0">{{count>99 ? '99+' : count}}</span> -->
   </div>
 </template>
 
