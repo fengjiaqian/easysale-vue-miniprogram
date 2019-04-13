@@ -34,7 +34,7 @@
           {
             'title': '商品管理',
             'class': 'product_manage',
-            'path': '/my/statistical'
+            'path': '/my/productList'
           },
           {
             'title': '数据统计',

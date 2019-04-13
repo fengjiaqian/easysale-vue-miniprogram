@@ -1,0 +1,54 @@
+.product-wrap{
+  flex-center()
+  padding 24px
+  .pw-l{
+    span{
+      inline()
+      w(40)
+      h(40)
+      background-image url(../../assets/images/icon-check.png)
+      background-size contain
+      background-repeat no-repeat
+      background-position center
+    }
+    .selected{
+      background-image url(../../assets/images/icon-checked.png)
+    }
+  }
+  .pw-r{
+    flex-1()
+    flex()
+    .product-pic{
+      w(166)
+      h(166)
+      bg(#F6F6F6)
+      margin 0 24px
+      img{
+        w(143)
+        h(143)
+        margin auto
+      }
+    }
+    .product-info{
+      h(166)
+      flex()
+      flex-direction column
+      .name{
+        ft(32)
+        c-3()
+        text-overflow-1()
+        font-weight 600
+      }
+      .spec{
+        ft(26)
+        c-9()
+        mt(8)
+      }
+      .price{
+        ft(32)
+        c(#FF5638)
+        font-weight 600
+      }
+    }
+  }
+}

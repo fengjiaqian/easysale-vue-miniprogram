@@ -1,4 +1,3 @@
-
 /* 我的页面 */
 const My = (resolve) => {
     import('@/views/mine/my.vue').then((module) => { resolve(module) })
@@ -17,6 +16,11 @@ const UserInviteCode = (resolve) => {
 //我的数据统计
 const Statistical = (resolve) => {
     import('@/views/mine/statistical/statistical.vue').then((module) => { resolve(module) })
+}
+
+//商品管理-商品列表
+const ProductManage = (resolve) => {
+    import('@/views/mine/productManage/productList.vue').then((module) => { resolve(module) })
 }
 
 const mine = [
@@ -50,6 +54,14 @@ const mine = [
                     title: '数据统计'
                 },
                 component: Statistical
+            },
+            {
+                path: 'productList',
+                name: 'productList',
+                meta: {
+                    title: '商品管理'
+                },
+                component: ProductManage
             }
         ]
     }]
