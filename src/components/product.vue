@@ -43,7 +43,8 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+
+<style lang="stylus"> 
 .H-product-item {
   padding: 24px 0 0 24px;
   bg(#fff);

@@ -1,121 +1,149 @@
 <template>
   <div id="orders">
-    <product-cart v-for="item in products" :product="item" :key="item.id" @itemSelect="_itemSelect"></product-cart>
+    <ui-table :orderTab="orderTab" :initialState="currentState" @swithTab="_switchOrderType"></ui-table>
     <!--  -->
-    <div class="O-bottom">
-      <span class="O-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
-      <!--  -->
-      <a href="javascript:;" class="O-bottom-right">
-        下单
-        <span v-show="amount">({{amount}})</span>
-      </a>
-      <div class="O-bottom-left">
-        <span>全选</span>
-        <span>合计¥{{totalMoney}}</span>
+    <scroll
+      class="O-list"
+      :data="orderList"
+      :probeType="3"
+      :autoLoad="true"
+      @autoLoad="loadMoreOrders"
+      ref="scrollOrders"
+    >
+      <div>
+        <div v-for="i in 10">
+          <order-item v-for="item in orderList" :order="item"></order-item>
+        </div>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
+// 订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成
+const orderTab = [
+  { text: "待处理", state: 1 },
+  { text: "已处理", state: 2 },
+  { text: "已拒绝", state: 3 },
+  { text: "已完成", state: 4 }
+];
+import orderItem from "components/order-item.vue";
+import uiTable from "components/ui-table.vue";
 import productCart from "components/product-cart.vue";
 import { getAllGoods } from "common/goodsStorage";
+import empty from "components/empty.vue";
+import scroll from "components/scroll.vue";
+import * as orderApi from "api/fetch/order";
 export default {
   name: "orders",
   data() {
     return {
-      isAllSelected: false, //商品全选
-      products: []
+      orderTab: orderTab,
+      currentState: 1,
+      orderList: []
     };
   },
   components: {
-    productCart
+    uiTable,
+    orderItem,
+    scroll
   },
-  computed: {
-    amount() {
-      let amount = 0;
-      const products = this.products.filter(item => item.checked);
-      for (let product of products) {
-        amount += product.buyCount;
-      }
-      return amount;
-    },
-    totalMoney() {
-      let totalMoney = 0;
-      const products = this.products.filter(item => item.checked);
-      for (let product of products) {
-        totalMoney += product.buyCount * product.price;
-      }
-      return totalMoney.toFixed(2);
-    }
-  },
+  computed: {},
   created() {
-    this.initProducts();
+    this._QueryOrders();
   },
   methods: {
-    initProducts() {
-      const storeProducts = getAllGoods();
-      for (let product of storeProducts) {
-        if (!product.hasOwnProperty("checked")) {
-          product.checked = true;
-        }
+    _QueryOrders(reset) {
+      if (this.loading) return false;
+      if (reset) {
+        this.currentPage = 1;
+        this.totalPage = 1;
       }
-      this.products = storeProducts;
-      this.isAllSelected = !this.products.some(item => !item.checked);
+      this.loading = true;
+      const params = {
+        orderState: this.currentState,
+        userId: 6348352047144356487,
+        pageNum: this.currentPage
+      };
+      orderApi
+        .QueryOrders(params)
+        .then(res => {
+          if (res.result === "success" && res.data) {
+            this.orderList = res.data.dataList.filter(
+              item => item.orderItem.length
+            );
+            // if (currentPage == 1) {
+            //   this.totalPage = Math.ceil(res.totalCount / pageSize);
+            //   this.orderList = this._transformOrders(res.data);
+            //   this.empty = !this.orderList.length;
+            // } else {
+            //   this.orderList = this.orderList.concat(
+            //     this._transformOrders(res.data)
+            //   );
+            // }
+            // this.currentPage++;
+            // this.loading = false;
+          }
+        })
+        .catch(err => {
+          this.loading = false;
+        });
     },
-    //处理商品全选
-    _allSelect() {
-      this.isAllSelected = !this.isAllSelected;
-      this.products.forEach(product => {
-        product.checked = this.isAllSelected;
-        return product;
-      });
+    loadMoreOrders() {
+      if (this.loading || this.orderList.length < 6) return false;
+      this._QueryOrders();
     },
-    //处理商品单选
-    _itemSelect(product) {
-      product.checked = !product.checked;
-      this.isAllSelected = !this.products.some(item => !item.checked);
+    _switchOrderType(state) {
+      this.$refs.scrollOrders.scrollTo(0, 0);
+      this.currentState = state;
+      this._QueryOrders(true);
     }
   }
 };
 </script>
 
 <style lang="stylus">
+.O-list {
+  height: 100%;
+  overflow: hidden;
+}
+
 #orders {
-  pb(98 + 98);
-}
-
-.O-bottom {
-  bg(#fff);
   width: 100%;
-  h(98);
-  pos(fixed);
+  height: 100%;
+  pos(relative);
+  top: 0;
   left: 0;
-  bottom: 98px;
-  pl(88);
+  pt(101);
+  pb(98);
+}
 
-  .O-check-icon {
-    top: 29px;
+.O-tab {
+  width: 100%;
+  h(80);
+  bg(#fff);
+  pos(absolute);
+  top: 0;
+  left: 0;
+
+  li {
+    width: 25%;
+    flt();
+    text-c();
+
+    a {
+      inline();
+      lh(80);
+      padding: 0 28px;
+      ft(30);
+      c(#333);
+
+      &.active {
+        c($color-theme);
+        border-bottom: 2PX solid $color-theme;
+      }
+    }
   }
-}
-
-.O-bottom-left {
-  mr(224);
-  pr(16);
-  h(98);
-  ft(30);
-  flex-center();
-  justify-content: space-between;
-}
-
-.O-bottom-right {
-  w(224);
-  lh(98);
-  frt();
-  bg(#FF5638);
-  ft(32);
-  c(#fff);
-  text-c();
 }
 </style>
 

@@ -1,17 +1,17 @@
-// 颜色定义规范
-$color-theme = #FF5638
+// 颜色定义规范    css预处理
+$color-theme = #FF5638 //变量
 $color-price = #FF5500
 $background-base = rgba(246,246,246,1);
 
 //
-w(x){
-  width : unit(arguments, 'px')    
+w(x){  //函数    stylus-loader
+    width : unit(arguments, 'px')
 }
 h(x){
-  height: unit(arguments, 'px')    
+    height: unit(arguments, 'px')
 }
 ft(){
-   font-size unit(arguments, 'px')
+    font-size unit(arguments, 'px')
 }
 lh(){
     line-height unit(arguments, 'px')
@@ -75,7 +75,7 @@ box(){
     box-sizing border-box
 }
 radius(){
-     border-radius unit(arguments, 'px')
+    border-radius unit(arguments, 'px')
 }
 flex(){
     display: flex;
@@ -86,9 +86,9 @@ flex-1(){
     flex-basis: auto;
 }
 flex-center(){
-   display: flex;
-   justify-content: center;
-   align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 b1(x){
     border 1PX solid x
