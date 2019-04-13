@@ -93,6 +93,7 @@ const main = [{
 		name: 'orders',
 		meta: {
 			title: '订单',
+			keepAlive: true
 		},
 		component: Orders
 	}, {
