@@ -12,24 +12,81 @@
     </div>
     </router-link>
     <!--  -->
-    <div class="enter-list">
-      <div class="enter-item" v-for="i in 4">
-        <router-link to="/my/statistical">
+    <ul class="enter-list">
+      <li class="enter-item" :class="item.class" @click="mineSkip(item.path)" v-for="item in mineMenu">
         <div class="enter-item-img">
-          <img src="../../assets/images/icon-order-handler.png" alt>
+          <span></span>
         </div>
         <div class="enter-item-txt">
-          <span>业绩报表</span>
+          <span>{{item.title}}</span>
           <em></em>
         </div>
-        </router-link>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-export default {};
+  export default {
+    data() {
+      return {
+        mineMenu: [
+          {
+            'title': '商品管理',
+            'class': 'product_manage',
+            'path': '/my/statistical'
+          },
+          {
+            'title': '数据统计',
+            'class': 'data_static',
+            'path': '/my/statistical'
+          },
+          {
+            'title': '客户管理',
+            'class': 'customer',
+            'path': '/my/statistical'
+          },          {
+            'title': '员工管理',
+            'class': 'staff',
+            'path': '/my/statistical'
+          },
+          {
+            'title': '设置',
+            'icon': '../../assets/images/setting_icon.png',
+            'class': 'setting',
+            'path': '/my/statistical'
+          }
+        ]
+      }
+    },
+    computed: {
+
+    },
+    components: {
+
+    },
+    beforeCreate: function() {
+
+    },
+    created: function() {
+
+    },
+    beforeDestory(){
+    },
+    destoryed(){
+    },
+    mounted() {
+
+    },
+    methods: {
+      mineSkip(path) {
+        this.$router.push(path);
+      },
+    },
+    watch: {
+
+    }
+  }
 </script>
 
 <style lang="stylus" scoped>
@@ -46,10 +103,6 @@ export default {};
     }
   }
 
-  &:nth-last-of-type(1) {
-    mt(20);
-  }
-
   .enter-item-img {
 
     
@@ -63,6 +116,14 @@ export default {};
       squ(56);
       margin: 17px auto 0;
     }
+    span{
+      block();
+      squ(56);
+      margin: 17px auto 0;
+      background-size contain
+      background-repeat no-repeat
+      background-position center
+    }
   }
 
   .enter-item-txt {
@@ -72,7 +133,7 @@ export default {};
     ft(30);
     flex-center();
     justify-content: space-between;
-    border-bottom: 1px solid #ededed;
+
 
     em {
       block();
@@ -81,6 +142,50 @@ export default {};
       mr(24);
       background: url('./../../assets/images/icon-enter.png') no-repeat center;
       background-size: contain;
+    }
+  }
+}
+
+.product_manage{
+  .enter-item-img{
+    span{
+      background-image url(../../assets/images/product_manage_icon.png)
+    }
+  }
+  .enter-item-txt{
+    border-bottom: 1px solid #ededed;
+  }
+}
+.data_static{
+  .enter-item-img{
+    span{
+      background-image url(../../assets/images/data_static_icon.png)
+    }
+  }
+}
+.customer{
+  mt(20)
+  .enter-item-img{
+    span{
+      background-image url(../../assets/images/customer_icon.png)
+    }
+  }
+  .enter-item-txt{
+    border-bottom: 1px solid #ededed;
+  }
+}
+.staff{
+  .enter-item-img{
+    span{
+      background-image url(../../assets/images/staff_icon.png)
+    }
+  }
+}
+.setting{
+  mt(20)
+  .enter-item-img{
+    span{
+      background-image url(../../assets/images/setting_icon.png)
     }
   }
 }
@@ -119,5 +224,9 @@ export default {};
     c(#888);
   }
 }
+  .mt-20{
+    mt(20)
+  }
+
 </style>
 
