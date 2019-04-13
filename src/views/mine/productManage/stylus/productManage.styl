@@ -202,6 +202,64 @@
 
 //添加自有商品页面
 .product-add-wrap{
+  .add-column{
+    bg(#fff)
+    mt(20)
+    pl(24)
+    ft(30)
+    c-6()
+    >li{
+      lh(90)
+      border-bottom 1PX solid #EDEDED
+      flex()
+      align-items center
+      justify-content flex-start
+      span{
+        w(150)
+      }
+      input{
+        ml(12)
+        lh(70)
+        outline none
+        &::-webkit-input-placeholder{
+          c(#bdbdbd)
+        }
+      }
+      .price{
+        w(180)
+      }
+    }
+  }
+  .upload-pic-wrap{
+    margin 20px 0
+    padding 24px
+    bg(#fff)
+    flex()
+    span{
+      ft(30)
+      c-6()
+      w(150)
+    }
+  }
+  .product-introduce{
+    padding 24px
+    bg(#fff)
+    flex()
+    span{
+      ft(30)
+      c-6()
+      w(150)
+    }
+    textarea{
+      flex-1()
+      ml(12)
+      border 0px solid transparent
+      outline none
+      &::-webkit-input-placeholder{
+        c(#bdbdbd)
+      }
+    }
+  }
   .confirm{
     position fixed
     width 100%
@@ -212,5 +270,60 @@
     ft(32)
     c(#fff)
     text-c()
+  }
+}
+
+
+//导入易酒批商品页面
+.product-import-wrap{
+  bg(#fff)
+  .pi-header{
+    border-bottom 1PX solid #EDEDED
+    position fixed
+    left 0
+    top 0
+    width 100%
+    bg(#fff)
+  }
+  .pi-content{
+    margin 198px 0 98px
+  }
+  .pi-footer{
+    position fixed
+    left 0
+    bottom 0
+    width 100%
+    pl(24)
+    lh(98)
+    flex-center()
+    border-top 1PX solid #EDEDED
+    bg(#fff)
+    .f-select{
+      flex-center()
+      i{
+        w(40)
+        h(40)
+        background-image url(../../../assets/images/icon-check.png)
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+        mr(24)
+      }
+      .selected{
+        background-image url(../../../assets/images/icon-checked.png)
+      }
+      span{
+        ft(30)
+        c-3()
+      }
+    }
+    .import-btn{
+      w(192)
+      c(#fff)
+      ft(32)
+      letter-spacing 1PX
+      text-c()
+      bg(#FF5638)
+    }
   }
 }

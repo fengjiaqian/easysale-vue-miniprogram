@@ -1,34 +1,35 @@
 <template>
   <div class="product-add-wrap">
     <div>
-      <ul>
+      <ul class="add-column">
         <li>
-          <label>商品名称：</label>
+          <span>商品名称：</span>
           <input placeholder="请输入商品名称">
         </li>
         <li>
-          <label>商品品牌：</label>
+          <span>商品品牌：</span>
           <input placeholder="请输入商品品牌">
         </li>
         <li>
-          <label>商品价格：</label>
-          <input placeholder="请输入商品价格">
+          <span>商品价格：</span>
+          <input class="price" placeholder="请输入商品价格">
+          <i>元</i>
         </li>
         <li>
-          <label>规格单位：</label>
+          <span>规格单位：</span>
           <input placeholder="请输入规格单位，如瓶、件">
         </li>
         <li>
-          <label>规格数量：</label>
+          <span>规格数量：</span>
           <input placeholder="请输入规格数量">
         </li>
       </ul>
-      <div>
+      <div class="upload-pic-wrap">
         <span>商品图片</span>
-        <span></span>
+        <ul></ul>
       </div>
-      <div>
-        <span>商品介绍</span>
+      <div class="product-introduce">
+        <span>商品介绍：</span>
         <textarea placeholder="请输入介绍文字"></textarea>
       </div>
     </div>
@@ -45,7 +46,7 @@
       };
     },
     components: {
-      productManage
+
     },
     computed: {
 

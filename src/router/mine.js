@@ -23,6 +23,16 @@ const ProductManage = (resolve) => {
     import('@/views/mine/productManage/productList.vue').then((module) => { resolve(module) })
 }
 
+//商品管理-添加自有商品
+const AddProduct = (resolve) => {
+    import('@/views/mine/productManage/addProduct.vue').then((module) => { resolve(module) })
+}
+
+//商品管理-导入易酒批商品
+const ImportProduct = (resolve) => {
+    import('@/views/mine/productManage/importProduct.vue').then((module) => { resolve(module) })
+}
+
 const mine = [
     {
         path: '/my',
@@ -62,6 +72,22 @@ const mine = [
                     title: '商品管理'
                 },
                 component: ProductManage
+            },
+            {
+                path: 'addProduct',
+                name: 'addProduct',
+                meta: {
+                    title: '添加自有商品'
+                },
+                component: AddProduct
+            },
+            {
+                path: 'importProduct',
+                name: 'importProduct',
+                meta: {
+                    title: '导入易酒批商品'
+                },
+                component: ImportProduct
             }
         ]
     }]
