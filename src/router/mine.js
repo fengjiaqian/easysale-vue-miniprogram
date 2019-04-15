@@ -183,7 +183,7 @@ const mine = [{
         },
         component: writeApplicationInformation,
     }, 
-    { //wx 申请经销商
+    { //wx 申请经销商   aaaa
         path: '/applyDealer',
         name: 'applyDealer',
         meta: {
