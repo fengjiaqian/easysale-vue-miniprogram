@@ -15,6 +15,25 @@
       flex-1()
       ml(10)
     }
+    input{
+      c-3()
+      flex-1()
+      ml(10)
+      outline none
+      &::-webkit-input-placeholder{
+        c(#999)
+      }
+    }
+    textarea{
+      c-3()
+      flex-1()
+      ml(10)
+      outline none
+      border none
+      &::-webkit-textarea-placeholder{
+        c(#999)
+      }
+    }
   }
   .uiw-info,.uiw-pic{
     align-items flex-start
@@ -30,6 +49,10 @@
   ft(32)
   bg(#fff)
   text-c()
+  &.save{
+    bg(#FF5638)
+    c(#fff)
+  }
 }
 .mb-20{
   mb(20)

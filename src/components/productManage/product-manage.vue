@@ -1,5 +1,5 @@
 <template>
-  <div class="product-wrap">
+  <div class="product-wrap" @click="goToDetail">
     <div class="pw-l">
       <span></span>
     </div>
@@ -21,7 +21,27 @@
 </template>
 
 <script>
-export default {};
+  export default {
+    data() {
+      return {
+
+      };
+    },
+    components: {
+
+    },
+    created() {
+
+    },
+    mounted() {},
+    methods: {
+      goToDetail(){
+        this.$router.push({
+          path: "/my/productDetail"
+        });
+      },
+    }
+  };
 </script>
 
 <style lang="stylus" scoped>
