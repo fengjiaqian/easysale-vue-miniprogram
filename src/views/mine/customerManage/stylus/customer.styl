@@ -1,4 +1,4 @@
-//我的员工列表页面
+//我的客户列表页面
 input{
   outline none
   &::-webkit-input-placeholder{
@@ -32,4 +32,150 @@ input{
     letter-spacing 1PX
     text-c()
   }
+  .sl-content /deep/{
+    .list{
+      top 90px
+      bottom 98px
+    }
+  }
 }
+
+
+//客户详情页面
+.staff-detail-wrap{
+  .sd-info{
+    padding 0 24px
+    bg(#fff)
+    li{
+      border-bottom 1PX solid #EDEDED
+      padding 24px 0
+      flex()
+      align-items center
+      justify-content space-between
+      ft(30)
+      c-6()
+      span{
+        c-3()
+      }
+    }
+    .header-pic{
+      flex()
+      justify-content flex-start
+      align-items center
+      padding 30px 0
+      img{
+        w(120)
+        h(120)
+        mr(24)
+      }
+      h5{
+        ft(34)
+        c-3()
+        font-weight 600
+      }
+    }
+    .special-li{
+      border-bottom none
+    }
+    .h20{
+      width 100%
+      h(20)
+      bg(#F6F6F6)
+    }
+  }
+  .sd-oprate{
+    bg(#fff)
+    li{
+      lh(98)
+      text-c()
+      ft(32)
+      border-bottom 1PX solid #EDEDED
+      &:last-child{
+        border-bottom none
+      }
+    }
+    .sd-c-b{
+      c(#477AAC)
+    }
+    .sd-c-o{
+      c(#FF5638)
+    }
+  }
+}
+
+
+//编辑客户信息页面
+.staff-edit-wrap{
+  bg(#fff)
+  .staff-info-list{
+    li{
+      margin 0 24px
+      flex()
+      align-items center
+      justify-content flex-start
+      border-bottom 1PX solid #EDEDED
+      lh(90)
+      ft(30)
+      c-3()
+      span{
+        c-6()
+        mr(12)
+        min-width 150px
+      }
+      input{
+        flex-1()
+        &::-webkit-input-placeholder{
+          c(#bdbdbd)
+        }
+      }
+      div{
+        flex-1()
+      }
+      i{
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+      }
+      .close{
+        w(32)
+        h(32)
+        background-image url(../../../assets/images/close_icon1.png)
+      }
+      .position{
+        w(48)
+        h(48)
+        background-image url(../../../assets/images/address_position_icon.png)
+      }
+      .extension{
+        w(16)
+        h(26)
+        background-image url(../../../assets/images/icon-enter.png)
+      }
+      .discount-int{
+        w(130)
+        mr(10)
+      }
+    }
+    .special-li{
+      border-bottom none
+    }
+    .h20{
+      width 100%
+      h(20)
+      bg(#F6F6F6)
+    }
+  }
+  .staff-info-btn{
+    bg(#FF5638)
+    width 100%
+    lh(98)
+    position fixed
+    left 0
+    bottom 0
+    text-c()
+    ft(32)
+    c(#fff)
+  }
+}
+
+

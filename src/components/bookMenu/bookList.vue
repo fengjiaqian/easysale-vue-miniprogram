@@ -1,8 +1,8 @@
 <template>
   <div class="list" ref="wrapper">
-    <div>
-      <!-- 城市列表 -->
-      <div class="area" v-for="(item,key) in cities" :key="key" :ref="key">
+    <!-- 员工列表 -->
+    <section v-if="bookMenuType == 1">
+      <div class="area" @click="skipTo" v-for="(item,key) in bookMenu" :key="key" :ref="key">
         <div class="title border-topbottom">{{key}}</div>
         <div class="item-list">
           <div class="il-l">
@@ -13,13 +13,22 @@
             <span>19520234183</span>
           </div>
         </div>
-<!--        <div class="button-list">
-          <div class="button-wrapper" v-for="innerItem in item" :key="innerItem.id">
-            <div class="button">{{innerItem.name}}</div>
-          </div>
-        </div>-->
       </div>
-    </div>
+    </section>
+    <!-- 客户列表 -->
+    <section v-if="bookMenuType == 2">
+      <div class="area" @click="skipTo" v-for="(item,key) in bookMenu" :key="key" :ref="key">
+        <div class="title border-topbottom">{{key}}</div>
+        <div class="ct-item-list">
+          <div class="ct-l-s">
+            <span>张栋</span>
+            <span>18622466231</span>
+          </div>
+          <div>小王店铺</div>
+          <div>湖北省武汉市洪山区软件新城1期</div>
+        </div>
+      </div>
+    </section>
     <!-- 弹出层 -->
     <transition name="fade">
       <div class="toast" v-show="showToast">
@@ -32,10 +41,10 @@
   import Bscroll from 'better-scroll'
   import bus from 'common/Bus'
   export default {
-    name: 'tList',
+    name: 'bookList',
     props: {
-      cities: Object,
-      hotCities: Array
+      bookMenu: Object,
+      bookMenuType: Number,
     },
     data() {
       return {
@@ -61,7 +70,18 @@
         this.timer = setTimeout(()=>{
           this.showToast = false
         },500)
-      }
+      },
+      skipTo(){
+        if(this.bookMenuType == 1){
+          this.$router.push({
+            path: "/my/staffDetail"
+          });
+        }else if(this.bookMenuType == 2){
+          this.$router.push({
+            path: "/my/customerDetail"
+          });
+        }
+      },
     },
     mounted() {
       bus.$on('change', (letter) => {
@@ -77,7 +97,7 @@
   .list
     position absolute
     overflow hidden
-    top 90px
+    top 0
     left 0
     right 0
     bottom 0
@@ -123,11 +143,12 @@
         color #eee
 
   .item-list{
+    padding 16px 24px
     flex-center()
     .il-l{
-      padding 0 24px
       w(100)
       h(100)
+      mr(24)
       img{
         w(100)
         h(100)
@@ -136,6 +157,32 @@
     }
     .il-r{
       flex-1()
+      h5{
+        ft(30)
+        c-3()
+        mb(8)
+      }
+      span{
+        ft(26)
+        c-9()
+      }
+    }
+  }
+  .ct-item-list{
+    padding 24px
+    border-bottom 1PX solid #EDEDED
+    ft(28)
+    c-6()
+    .ct-l-s{
+      ft(32)
+      c-3()
+      span{
+        mr(40)
+      }
+    }
+    div:nth-of-type(2){
+      mt(16)
+      mb(8)
     }
   }
 </style>

@@ -16,9 +16,9 @@
 <script>
   import bus from 'common/Bus'
   export default {
-    name: 'tAlphabet',
+    name: 'bookMenuSide',
     props: {
-      cities: Object
+      bookMenu: Object
     },
     data() {
       return {
@@ -28,7 +28,7 @@
     computed: {
       letters() {
         var letters = []
-        for(let key in this.cities) {
+        for(let key in this.bookMenu) {
           letters.push(key)
         }
         return letters

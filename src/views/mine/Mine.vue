@@ -1,16 +1,18 @@
 <template>
   <div id="mine">
-    <router-link to="/my/userInfo">
     <div class="user-info">
-      <div class="user-avart">
+      <div class="user-avart" @click="mineSkip('/my/userInfo')">
         <img v-lazy alt>
       </div>
-      <div class="user-tel">
+      <div class="user-tel" @click="mineSkip('/my/userInfo')">
         <h5>销售员-小黑</h5>
         <p>电话：13627762233</p>
       </div>
+      <div class="user-code" @click="mineSkip('/my/userInviteCode')">
+        <i></i>
+        <span>邀请码</span>
+      </div>
     </div>
-    </router-link>
     <!--  -->
     <ul class="enter-list">
       <li class="enter-item" :class="item.class" @click="mineSkip(item.path)" v-for="item in mineMenu">
@@ -191,9 +193,8 @@
 
 // icon-order-handler
 .user-info {
-  pl(24);
+  padding 32px 24px
   bg(#fff);
-  padding: 32px 0;
 }
 
 .user-avart {
@@ -208,12 +209,13 @@
 }
 
 .user-tel {
-  ml(120 + 24);
-
+  ml(24)
+  inline()
   h5 {
     ft(33);
     c(#333);
     lh(46);
+    pt(12)
   }
 
   p {
@@ -221,6 +223,23 @@
     lh(36);
     ft(26);
     c(#888);
+  }
+}
+.user-code{
+  float right
+  flex()
+  flex-direction column
+  align-items center
+  mt(12)
+  i{
+    inline
+    w(48)
+    h(48)
+    background-image url(../../assets/images/user_code_icon.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+    mb(8)
   }
 }
   .mt-20{

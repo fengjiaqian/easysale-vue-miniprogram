@@ -38,10 +38,40 @@ const StaffList = (resolve) => {
     import('@/views/mine/staffManage/staffList.vue').then((module) => { resolve(module) })
 }
 
+//员工管理-员工详情
+const StaffDetail = (resolve) => {
+    import('@/views/mine/staffManage/staffDetail.vue').then((module) => { resolve(module) })
+}
+
+//员工管理-员工信息编辑
+const EditStaffInfo = (resolve) => {
+    import('@/views/mine/staffManage/editStaffInfo.vue').then((module) => { resolve(module) })
+}
+
+//员工管理-新增员工
+const AddStaffInfo = (resolve) => {
+    import('@/views/mine/staffManage/addStaffInfo.vue').then((module) => { resolve(module) })
+}
+
 //客户管理-我的客户列表
 const CustomerList = (resolve) => {
     import('@/views/mine/customerManage/customerList.vue').then((module) => { resolve(module) })
 }
+
+//客户管理-客户详情
+const CustomerDetail = (resolve) => {
+    import('@/views/mine/customerManage/customerDetail.vue').then((module) => { resolve(module) })
+}
+//客户管理-客户信息编辑
+const EditCustomerInfo = (resolve) => {
+    import('@/views/mine/customerManage/editCustomerInfo.vue').then((module) => { resolve(module) })
+}
+
+//客户管理-新增客户
+const AddCustomerInfo = (resolve) => {
+    import('@/views/mine/customerManage/addCustomerInfo.vue').then((module) => { resolve(module) })
+}
+
 
 const mine = [
     {
@@ -108,13 +138,61 @@ const mine = [
                 component: StaffList
             },
             {
+                path: 'staffDetail',
+                name: 'staffDetail',
+                meta: {
+                    title: '员工详情'
+                },
+                component: StaffDetail
+            },
+            {
+                path: 'editStaffInfo',
+                name: 'editStaffInfo',
+                meta: {
+                    title: '编辑员工信息'
+                },
+                component: EditStaffInfo
+            },
+            {
+                path: 'addStaffInfo',
+                name: 'addStaffInfo',
+                meta: {
+                    title: '新增员工'
+                },
+                component: AddStaffInfo
+            },
+            {
                 path: 'customerList',
                 name: 'customerList',
                 meta: {
                     title: '客户管理'
                 },
                 component: CustomerList
-            }
+            },
+            {
+                path: 'customerDetail',
+                name: 'customerDetail',
+                meta: {
+                    title: '客户详情'
+                },
+                component: CustomerDetail
+            },
+            {
+                path: 'editCustomerInfo',
+                name: 'editCustomerInfo',
+                meta: {
+                    title: '编辑客户信息'
+                },
+                component: EditCustomerInfo
+            },
+            {
+                path: 'addCustomerInfo',
+                name: 'addCustomerInfo',
+                meta: {
+                    title: '新增客户'
+                },
+                component: AddCustomerInfo
+            },
         ]
     }]
 export default mine
