@@ -34,7 +34,7 @@
     </ul>
     <ul class="sd-oprate">
       <li class="sd-c-b" @click="skipTo">编辑</li>
-      <li class="sd-c-o">停用</li>
+      <li class="sd-c-o" @click="freeze">停用</li>
     </ul>
   </div>
 </template>
@@ -61,6 +61,13 @@
         this.$router.push({
           path: "/my/editCustomerInfo"
         });
+      },
+      freeze(){
+        this.$confirm('停用的客户不能再通过小程序下单，且 员工也无法代替下单。')
+        .then(() => {
+
+        })
+        .catch(() => {});
       },
     }
   };

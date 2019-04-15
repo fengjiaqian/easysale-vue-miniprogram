@@ -29,6 +29,11 @@ const ProductManage = (resolve) => {
     import('@/views/mine/productManage/productList.vue').then((module) => { resolve(module) })
 }
 
+//商品管理-商品详情
+const ManageProductDetail = (resolve) => {
+    import('@/views/mine/productManage/productDetail.vue').then((module) => { resolve(module) })
+}
+
 //商品管理-添加自有商品
 const AddProduct = (resolve) => {
     import('@/views/mine/productManage/addProduct.vue').then((module) => { resolve(module) })
@@ -149,6 +154,14 @@ const mine = [
                     title: '商品管理'
                 },
                 component: ProductManage
+            },
+            {
+                path: 'productDetail',
+                name: 'productDetail',
+                meta: {
+                    title: '商品详情'
+                },
+                component: ManageProductDetail
             },
             {
                 path: 'addProduct',

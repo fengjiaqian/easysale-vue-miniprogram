@@ -29,7 +29,7 @@
     <ul class="sd-oprate">
       <li class="sd-c-b">重置账号密码</li>
       <li class="sd-c-b" @click="skipTo">编辑</li>
-      <li class="sd-c-o">删除</li>
+      <li class="sd-c-o" @click="freeze">删除</li>
     </ul>
   </div>
 </template>
@@ -56,6 +56,13 @@
         this.$router.push({
           path: "/my/editStaffInfo"
         });
+      },
+      freeze(){
+        this.$confirm('确定要删除该员工吗？')
+        .then(() => {
+
+        })
+        .catch(() => {});
       },
     }
   };
