@@ -1,33 +1,47 @@
 
 
 <template>
-  <div class="O-item">
+  <div class="O-item" @click="_jumpOrderDetail">
     <!--  -->
     <div class="O-item-header">
-      <div class="state">待处理</div>
+      <div class="state">{{format(order.orderState)}}</div>
       <div class="title">小王 -【良品铺子】</div>
       <p class="time">{{order.createTime}}</p>
     </div>
     <!--  -->
     <div class="O-item-skus" v-if="order.orderItem">
       <!-- 单个产品 -->
-      <div class="single-sku clearfix">
+      <div class="single-sku clearfix" v-if="order.orderItem.length===1">
         <div class="s-s-img">
-          <img v-lazy alt>
+          <img v-lazy="order.orderItem[0].product.productImageUrl" alt>
         </div>
         <div class="s-s-main">
-          <p class="name">小王 -【良品铺子】</p>
-          <div class="price">{{order.orderItem[0].salePrice}}元/瓶</div>
+          <p class="name">{{order.orderItem[0].product.productName}}</p>
+          <div
+            class="price"
+          >{{order.orderItem[0].product.price}}元/{{order.orderItem[0].product.priceUnit}}</div>
           <div class="price">
-            <span>规格：15瓶/件</span>
-            <span class="frt">x{{order.orderItem[0].quantity}}</span>
+            <span>规格：{{order.orderItem[0].product.specification}}</span>
+            <span class="frt fz28">X{{order.orderItem[0].quantity}}</span>
           </div>
         </div>
+      </div>
+      <!-- 多个产品 -->
+      <div class="multiple-skus" v-else>
+        <div class="m-s-amount">共{{order.totalQuantity}}></div>
+        <ul class="m-s-skus clearfix">
+          <li v-for="item in order.orderItem" :key="item.product.id">
+            <a href="javascript:;">
+              <img v-lazy="item.product.productImageUrl || ''" alt>
+              <span>X{{item.quantity}}{{item.product.priceUnit}}</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="O-item-amount">
       订单总金额：
-      <span class="c-theme">&yen;794.00</span>
+      <span class="c-theme">&yen;{{order.orderAmount}}</span>
     </div>
     <div class="O-item-btns">
       <a href="javascript:;" class="btn">拒绝</a>
@@ -51,6 +65,15 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    format(state) {
+      const orderTab = [
+        { text: "待处理", state: 1 },
+        { text: "已处理", state: 2 },
+        { text: "已拒绝", state: 3 },
+        { text: "已完成", state: 4 }
+      ];
+      return orderTab.find(item => item.state === state).text || "";
+    },
     _jumpOrderDetail() {
       const orderId = this.order.id;
       this.$router.push({
@@ -65,6 +88,8 @@ export default {
 </script>
 
 <style lang="stylus">
+@import '../views/order/common.styl';
+
 .single-sku {
   .s-s-img {
     flt();

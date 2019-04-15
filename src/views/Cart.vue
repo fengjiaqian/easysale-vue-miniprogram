@@ -1,8 +1,14 @@
 <template>
   <div id="cart">
+    <empty v-if="!products.length"></empty>
+    <div class="C-header" v-if="products.length">
+      <strong>共{{products.length}}商品</strong>
+      <a href="javascript:;" class="c-3" @click="_delete">删除</a>
+    </div>
+    <!--  -->
     <product-cart v-for="item in products" :product="item" :key="item.id" @itemSelect="_itemSelect"></product-cart>
     <!--  -->
-    <div class="C-bottom">
+    <div class="C-bottom" v-if="products.length">
       <span class="C-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
       <!--  -->
       <a href="javascript:;" class="C-bottom-right" @click="_submitOrder">
@@ -19,7 +25,8 @@
 
 <script>
 import productCart from "components/product-cart.vue";
-import { getAllGoods } from "common/goodsStorage";
+import { getAllGoods, clearGoods, removeItem } from "common/goodsStorage";
+import empty from "components/empty.vue";
 export default {
   name: "orders",
   data() {
@@ -29,7 +36,8 @@ export default {
     };
   },
   components: {
-    productCart
+    productCart,
+    empty
   },
   computed: {
     amount() {
@@ -76,6 +84,34 @@ export default {
       product.checked = !product.checked;
       this.isAllSelected = !this.products.some(item => !item.checked);
     },
+    //删除商品
+    _delete() {
+      const selectedProducts = this.products.filter(item => !!item.checked);
+      if (!selectedProducts.length) {
+        return this.$toast("请选择需要删除的商品");
+      }
+      if (selectedProducts.length === this.products.length) {
+        return this.$confirm("确定删除所有商品？")
+          .then(() => {
+            clearGoods();
+            this.products = [];
+          })
+          .catch(() => {});
+      }
+      this.$confirm("确定删除已选中的商品？")
+        .then(() => {
+          for (let item of selectedProducts) {
+            const Idx = this.products.findIndex(
+              product => product.id === item.id
+            );
+            if (Idx != -1) {
+              removeItem(this.products[Idx]);
+              this.products.splice(Idx, 1);
+            }
+          }
+        })
+        .catch(() => {});
+    },
     //提交订单
     _submitOrder() {
       this.$router.push({
@@ -88,17 +124,39 @@ export default {
 
 <style lang="stylus">
 #cart {
+  pt(92);
   pb(98);
+}
+
+.C-header {
+  width: 100%;
+  pos(fixed);
+  top: 0;
+  left: 0;
+  z-index: 10;
+  h(92);
+  bg(#fff);
+  padding: 0 24px;
+  ft(30);
+  c(#333);
+  flex-center();
+  justify-content: space-between;
+  border-bottom: 1px solid #EDEDED;
+
+  strong {
+    ft(34);
+  }
 }
 
 .C-bottom {
   bg(#fff);
   width: 100%;
   h(98);
+  pl(88);
   pos(fixed);
   left: 0;
   bottom: 0;
-  pl(88);
+  z-index: 10;
 
   .C-check-icon {
     top: 29px;
