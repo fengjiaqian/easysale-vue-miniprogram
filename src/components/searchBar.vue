@@ -2,7 +2,14 @@
   <div class="search-bar-wrap">
     <div class="search-bar">
       <span class="s-b-l"></span>
-      <input type="text" value @click="_searchBarJump" placeholder="茅台 五粮液">
+      <input
+        ref="inputDom"
+        type="text"
+        :value="searchKey"
+        @click="_searchBarJump"
+        placeholder="茅台 五粮液"
+        @change="handleChange($event)"
+      >
     </div>
     <slot></slot>
   </div>
@@ -11,8 +18,37 @@
 <script>
 export default {
   name: "search-bar",
+  data() {
+    return {
+      searchKey: ""
+    };
+  },
+  props: {
+    emit: {
+      //是否发射事件
+      type: Boolean,
+      default: false
+    },
+    jump: {
+      //是否点击跳转 首页
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
-    _searchBarJump() {}
+    _searchBarJump() {
+      if (this.jump) {
+        this.$router.push({
+          path: "/search"
+        });
+      }
+    },
+    handleChange($event) {
+      if (this.emit) {
+        this.searchKey = $event.target.value;
+        this.$emit("emitEvt", this.searchKey);
+      }
+    }
   }
 };
 </script>

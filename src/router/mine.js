@@ -39,11 +39,6 @@ const ImportProduct = (resolve) => {
     import('@/views/mine/productManage/importProduct.vue').then((module) => { resolve(module) })
 }
 
-import('views/mine/statistical/statistical.vue').then((module) => {
-    resolve(module)
-})
-
-
 const addPersonalInformation = (resolve) => { //wx 新增个人信息的页面
     import('views/wxDescript/addPersonalInformation.vue').then((module) => {
         resolve(module)
