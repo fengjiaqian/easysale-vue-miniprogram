@@ -8,13 +8,15 @@
         <img v-lazy="''" >
       </div>
       <div class="product-info">
-        <h5 class="name">洋河蓝色经典 梦之蓝M6 52度</h5>
+        <h5 class="name">
+          <i v-if="product.productType == 1" class="tag">自有</i>
+          <span>{{product.productName}}</span>
+        </h5>
         <div class="spec">
-          <span>规格 6瓶/件</span>
-          <span>销量 200件</span>
+          <span>规格 {{product.specification}}</span>
         </div>
         <div style="flex:1;"></div>
-        <div class="price">¥398.00</div>
+        <div class="price">¥{{product.price}}<span>元/{{product.priceUnit}}</span></div>
       </div>
     </div>
   </div>
@@ -22,6 +24,12 @@
 
 <script>
   export default {
+    props: {
+      product: {
+        type: Object,
+        default: {}
+      },
+    },
     data() {
       return {
 
@@ -36,8 +44,12 @@
     mounted() {},
     methods: {
       goToDetail(){
+        const code = this.product.id;
         this.$router.push({
-          path: "/my/productDetail"
+          path: "/my/productDetail",
+          query: {
+            code
+          }
         });
       },
     }
