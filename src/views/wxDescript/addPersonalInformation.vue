@@ -1,6 +1,6 @@
 <template>
     <div class="common">
-        <!-- wx  新增个人信息的页面 -->
+        <!-- wx  新增个人信息的页面 addPersonalInformation-->
         <div class="name">
             <div class="left">您的姓名 :</div>
             <input class="right" value="张栋"  type="text">
@@ -104,7 +104,7 @@ export default {};
     width:100%;
     height:98px;
     background:rgba(255,255,255,1);
-    position:absolute;
+    position:fixed;
     bottom:0;
     font-size:32px;
     font-family:PingFang-SC-Regular;

@@ -56,6 +56,18 @@ const addConsignee = (resolve) => { //wx 新增收货人的页面
     })
 }
 
+const writeApplicationInformation = (resolve) => { //wx 填写申请信息
+    import('views/wxDescript/writeApplicationInformation.vue').then((module) => {
+        resolve(module)
+    })
+}
+
+const applyDealer = (resolve) => { //wx 申请经销商
+    import('views/wxDescript/applyDealer.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 const mine = [{
     path: '/my',
     name: 'my',
@@ -120,6 +132,20 @@ const mine = [{
                 title: '新增收货人',
             },
             component: addConsignee,
+        }, { //wx 填写申请信息
+            path: '/writeApplicationInformation',
+            name: 'writeApplicationInformation',
+            meta: {
+                title: '填写申请信息',
+            },
+            component: writeApplicationInformation,
+        }, { //wx 申请经销商
+            path: '/applyDealer',
+            name: 'applyDealer',
+            meta: {
+                title: '申请经销商',
+            },
+            component: applyDealer,
         }
     ]
 }]

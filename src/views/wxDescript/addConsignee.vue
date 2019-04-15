@@ -50,10 +50,12 @@ export default {};
   width: 150px;
   height: 42px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(102, 102, 102, 1);
   line-height: 42px;
   margin: 24px 12px 24px 24px;
+
+
+
 }
 
 .common .name .right, .common .tele .right,
@@ -62,7 +64,6 @@ export default {};
   width: 600px;
   height: 42px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(51, 51, 51, 1);
   line-height: 42px;
   margin-top: 24px;
@@ -73,6 +74,7 @@ export default {};
   height: 132px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
+
 }
 
 .common .address .left {
@@ -80,10 +82,10 @@ export default {};
   width: 150px;
   height: 42px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(102, 102, 102, 1);
   line-height: 42px;
   margin: 24px 12px 66px 24px;
+
 }
 
 .common .address .right {
@@ -96,13 +98,14 @@ export default {};
   outline: none;
   resize: none;
   border: 0;
+
 }
 
 .common .edit {
   width: 100%;
   height: 98px;
   background: rgba(255, 86, 56, 1);
-  position: absolute;
+  position: fixed;
   bottom: 0;
   font-size: 32px;
   color: rgba(255, 255, 255, 1);
