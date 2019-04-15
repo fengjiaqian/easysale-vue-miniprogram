@@ -1,7 +1,19 @@
 <template>
-  <div id="home" ref="scrollDom">
+  <div id="home" ref="scrollDom" :class="{'pt174': userType===3}">
     <float-cart></float-cart>
-    <search-bar :jump="true"></search-bar>
+    <!--  -->
+    <div class="select-dealer" v-if="userType===3">
+      <div class="left">
+        <img v-lazy="''" alt>
+        <strong>某某商贸公司</strong>
+        <em></em>
+      </div>
+      <div class="right">
+        <em></em>
+        <span>分享</span>
+      </div>
+    </div>
+    <search-bar :jump="true" :class="{'top82': userType===3}"></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
       <li v-for="item in [1,2,3,4]">
@@ -54,11 +66,10 @@
 </template>
 
 <script>
-import floatCart from 'components/floatCart.vue'
+import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
-import { home_scroll_menu } from "./mock";
 import { queryHomeProducts, ListProduct } from "api/fetch/home";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -174,17 +185,19 @@ export default {
         document.body.clientWidth || document.documentElement.clientWidth;
       var last_known_scroll_position = 0,
         ticking = false;
+      var d = this.userType === 3 ? 174 : 92;
       this.distance =
-        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * 92) / 750;
+        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * d) / 750;
 
       this.$refs.scrollDom.addEventListener("scroll", e => {
         last_known_scroll_position = this.$refs.scrollDom.scrollTop;
         if (!ticking) {
           window.requestAnimationFrame(() => {
+            var cls = this.userType === 3 ? "fixed-customer" : "fixed-dealer";
             if (last_known_scroll_position > this.distance) {
-              addClass(this.$refs.scrollMenuWrap, "fixed");
+              addClass(this.$refs.scrollMenuWrap, cls);
             } else {
-              removeClass(this.$refs.scrollMenuWrap, "fixed");
+              removeClass(this.$refs.scrollMenuWrap, cls);
             }
             ticking = false;
           });
@@ -214,9 +227,15 @@ export default {
 </script>
 
 <style lang="stylus">
-.fixed {
+.fixed-dealer {
   position: fixed !important;
   top: 92px;
+  z-index: 10;
+}
+
+.fixed-customer {
+  position: fixed !important;
+  top: 174px;
   z-index: 10;
 }
 
@@ -227,6 +246,75 @@ export default {
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+}
+
+.top82 {
+  top: 82px;
+}
+
+.pt174 {
+  padding-top: 174px !important;
+}
+
+.select-dealer {
+  pos(fixed);
+  top: 0;
+  left: 0;
+  width: 100%;
+  h(82);
+  padding: 0 24px;
+  bg(#fff);
+
+  .left {
+    flt();
+    h(82);
+    pr(24);
+
+    img {
+      inline();
+      squ(60);
+    }
+
+    strong {
+      ml(16);
+      mr(8);
+      c(#333);
+      ft(32);
+      lh(82);
+    }
+
+    em {
+      inline();
+      squ(32);
+      background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
+      transform: rotateZ(-90deg);
+      background-size: contain;
+    }
+
+    * {
+      vm();
+    }
+  }
+
+  .right {
+    frt();
+
+    em {
+      inline();
+      squ(48);
+      mr(8);
+      vm();
+      background: url('./../assets/images/icon-share.png') no-repeat center center #FFF;
+      background-size: cover;
+    }
+
+    span {
+      vm();
+      ft(28);
+      c(#666);
+      lh(82);
+    }
+  }
 }
 
 .home-icons {

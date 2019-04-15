@@ -69,6 +69,11 @@ const Search = (resolve) => {
 	})
 }
 
+const DealerList = (resolve) => {
+	import('views/other/DealerList.vue').then((module) => {
+		resolve(module)
+	})
+}
 
 const main = [{
 	path: '',
@@ -161,6 +166,13 @@ const main = [{
 		keepAlive: true
 	},
 	component: Search,
+}, {
+	path: '/dealerList',
+	name: 'dealerList',
+	meta: {
+		title: '选择商贸公司',
+	},
+	component: DealerList,
 }
 ]
 

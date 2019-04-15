@@ -96,6 +96,7 @@ module.exports = {
             '/': {
                 target: 'http://192.168.0.25:5201/', //lidengfeng
                 // target: 'http://192.168.0.212:5201/', //chenchuxiang 
+                target:'http://192.168.0.157:5201/', //dev 
                 ws: false,
                 changeOrigin: true,
                 pathRewrite: { '^/': '' }

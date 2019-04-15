@@ -43,7 +43,8 @@ export default {
   props: {},
   data() {
     return {
-      products: []
+      products: [],
+      empty: false,
     };
   },
   components: {

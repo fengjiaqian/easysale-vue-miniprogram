@@ -31,7 +31,7 @@ export default {
   name: "orders",
   data() {
     return {
-      isAllSelected: false, //商品全选
+      isAllSelected: false,  //商品全选
       products: []
     };
   },
