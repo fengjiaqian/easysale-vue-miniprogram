@@ -65,7 +65,7 @@ export default {
   font-size: 28px;
   font-weight: 400;
   color: rgba(136, 136, 136, 1);
-  background: rgba(246, 246, 246, 1) url('../../assets/images/ic_sousuo@2x.png') no-repeat center;
+  background: rgba(246, 246, 246, 1) url('../../../assets/images/ic_sousuo@2x.png') no-repeat center;
   background-position:30% center;
   background-size: 32px 32px;
 
