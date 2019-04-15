@@ -12,6 +12,13 @@ const UserInfo = (resolve) => {
     })
 }
 
+//修改店铺信息
+const UserInfoEdit = (resolve) => {
+    import('@/views/mine/user/userInfoEdit.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 //我的邀请码
 const UserInviteCode = (resolve) => {
     import('@/views/mine/user/userInviteCode.vue').then((module) => {
@@ -125,10 +132,17 @@ const mine = [
                 path: 'userInfo',
                 name: 'userInfo',
                 meta: {
-                    title: '店铺信息',
-                    keepAlive: true
+                    title: '店铺信息'
                 },
                 component: UserInfo
+            },
+            {
+                path: 'userInfoEdit',
+                name: 'userInfoEdit',
+                meta: {
+                    title: '店铺信息'
+                },
+                component: UserInfoEdit
             },
             {
                 path: 'userInviteCode',
