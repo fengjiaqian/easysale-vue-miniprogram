@@ -20,7 +20,6 @@
     </div>
     <div class="license">
       <div class="left">营业执照 :</div>
-      <!-- <input class="right" value type="text" placeholder="请输入店铺地址"> -->
       <div class="right"></div>
     </div>
     <div class="edit">保存</div>
