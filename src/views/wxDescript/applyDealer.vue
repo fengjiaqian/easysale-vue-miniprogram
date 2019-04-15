@@ -1,0 +1,133 @@
+
+<template>
+  <div class="common">
+    <!-- wx  申请经销商 applyDealer -->
+    <div class="status">
+      <div class="mode">
+        <div class="way">退货状态:</div>
+        <div class="fettle">审核中</div>
+      </div>
+      <div class="describe">经销商正在处理您的问题，请耐心等待！</div>
+    </div>
+    <div class="license">
+      <div class="trade">营业执照</div>
+      <div class="carousel">
+        1111222333
+        <div class="slider-wrapper bg-w" v-if="banners && banners.length">
+          <div class="slider-body">
+            <slider :loop="loop" ref="slider_dom">
+              <div class="banner-item" v-for="item in banners" :key="item.bannerId">
+                <a href="javascript:;" @click="_jumpBannerLink(item)">
+                  <img :src="item.imgUrl">
+                </a>
+              </div>
+            </slider>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="infor">
+      <div class="trade">个人信息</div>
+      <div class="news">
+        <div class="name">姓名 : 张栋</div>
+        <div>联系电话 : 13555555555</div>
+      </div>
+      <div class="detail">
+        <div class="name">老王的店铺</div>
+        <div>湖北省 武汉市 洪山区 花城大道软件新城 A3-401湖北省 武汉市 洪山区</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  components: {},
+  computed: {},
+  created() {},
+  methods: {}
+};
+</script>
+
+<style lang="stylus" scoped>
+.common {
+  background-color: #F6F6F6;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.common .status {
+  padding: 40px 24px 15px 24px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; /* Firefox */
+  background: white;
+}
+
+.common .status .mode {
+  width: 100%;
+  height: 46px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.common .status .mode .way {
+  float: left;
+  font-size: 34px;
+  font-weight: bold;
+  color: rgba(51, 51, 51, 1);
+  line-height: 46px;
+  margin-right: 20px;
+  display: inline;
+}
+
+.common .status .mode .fettle {
+  float: left;
+  font-size: 34px;
+  font-weight: bold;
+  color: #FF5638;
+  line-height: 46px;
+  margin-right: 20px;
+  display: inline;
+}
+
+.common .status .describe {
+  width: 468px;
+  height: 36px;
+  font-size: 26px;
+  color: rgba(153, 153, 153, 1);
+  line-height: 36px;
+}
+
+.common .license, .common .infor {
+  width: 96%;
+  margin: 2%;
+  background: #fff;
+}
+
+.common .license .trade, .common .infor .trade {
+  padding: 24px;
+  font-size: 32px;
+  font-weight: bold;
+  color: rgba(51, 51, 51, 1);
+  line-height: 42px;
+  border-bottom: 1px solid #f6f6f6;
+}
+
+.common .infor .news, .common .infor .detail {
+  padding: 24px;
+  font-size: 30px;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: rgba(102, 102, 102, 1);
+  line-height: 42px;
+  border-bottom: 1px solid #f6f6f6;
+}
+
+.common .infor .news .name, .common .infor .detail .name {
+  margin-bottom: 10px;
+}
+</style>

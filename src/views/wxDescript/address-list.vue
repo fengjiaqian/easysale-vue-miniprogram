@@ -53,6 +53,10 @@ export default {};
 .common .list .part:last-child{
   margin-bottom :192px;
 }
+
+.common .list .part:first-child{
+  margin-top :110px;
+}
 .common .list .part .info {
   width: 100%;
   height: 64px;

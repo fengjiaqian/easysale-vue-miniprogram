@@ -44,11 +44,14 @@ export default {
 
 .common .search {
   width: 100%;
+  height:110px;
   background-color: white;
   display: border-box;
   padding: 24px;
   padding:24px 24px 10px 24px;
-//   text-align: center;
+  position: fixed;
+  top: 0;
+  z-index: 100;
 }
 
 .common .search .case {
@@ -63,7 +66,7 @@ export default {
   font-weight: 400;
   color: rgba(136, 136, 136, 1);
   background: rgba(246, 246, 246, 1) url('../../assets/images/ic_sousuo@2x.png') no-repeat center;
-  background-position:180px 22px;
+  background-position:30% center;
   background-size: 32px 32px;
 
 //   block()
@@ -84,7 +87,7 @@ export default {
   width: 100%;
   height: 98px;
   background: rgba(255, 255, 255, 1);
-  position: absolute;
+  position: fixed;
   bottom: 0;
   font-size: 32px;
   color: rgba(255, 86, 56, 1);
