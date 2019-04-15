@@ -1,7 +1,7 @@
 <template>
   <div id="home" ref="scrollDom">
     <float-cart></float-cart>
-    <search-bar></search-bar>
+    <search-bar :jump="true"></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
       <li v-for="item in [1,2,3,4]">

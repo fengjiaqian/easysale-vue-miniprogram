@@ -10,6 +10,7 @@ import 'api/index'
 import 'common/appConfig'
 import './assets/stylus/index.styl'
 import { Toast, Alert, Confirm } from './plugins/dialog/index.js'
+import mixin from 'common/rootMixin'
 Vue.use(Toast)
 Vue.use(Alert)
 Vue.use(Confirm)
@@ -34,3 +35,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+Vue.mixin(mixin)

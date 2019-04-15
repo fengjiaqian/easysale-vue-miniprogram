@@ -63,6 +63,12 @@ const OrderResult = (resolve) => {
 		resolve(module)
 	})
 }
+const Search = (resolve) => {
+	import('views/Search.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 
 const main = [{
 	path: '',
@@ -93,6 +99,7 @@ const main = [{
 		name: 'orders',
 		meta: {
 			title: '订单',
+			keepAlive: true
 		},
 		component: Orders
 	}, {
@@ -146,7 +153,16 @@ const main = [{
 		title: '提交订单结果页',
 	},
 	component: OrderResult,
+}, {
+	path: '/search',
+	name: 'search',
+	meta: {
+		title: '搜索',
+		keepAlive: true
+	},
+	component: Search,
 }
 ]
+
 
 export default main

@@ -98,6 +98,7 @@ export default {
   b1(#DDDDDD);
   text-c();
   radius(10);
+  ft(30) 
 
   &:nth-of-type(2) {
     ml(20);
