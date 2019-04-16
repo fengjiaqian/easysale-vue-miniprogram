@@ -35,10 +35,10 @@ export default {
           this.$router.push({ path: "/navi/mine" });
           break;
         case 2:
-          this.$router.push({ path: "/navi/mine" });
+          this.$router.push({ path: "/navi/mineSales" });
           break;
         case 3:
-          this.$router.push({ path: "/navi/mine" });
+          this.$router.push({ path: "/navi/mineClient" });
           break;
         default:
           break;

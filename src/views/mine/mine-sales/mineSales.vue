@@ -1,6 +1,6 @@
 <template>
   <div id="mine">
-      <!-- userType : 2  销售人员   mineSales -->
+    <!-- userType : 2  销售人员   mineSales -->
     <div class="user-info">
       <div class="user-avart" @click="mineSkip('/my/userInfo')">
         <img v-lazy alt>
@@ -12,69 +12,61 @@
     </div>
     <!--  -->
     <ul class="enter-list">
-      <li class="enter-item" :class="item.class" @click="mineSkip(item.path)" v-for="item in mineMenu">
+      <li
+        class="enter-item"
+        :class="item.class"
+        @click="mineSkip(item.path)"
+        v-for="item in mineMenu"
+      >
         <div class="enter-item-img">
           <span></span>
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <em></em>        </div>
+          <em></em>
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        mineMenu: [
-          {
-            'title': '业绩报表',
-            'class': 'consignee_manage',
-            'path': '/myConsignee'
-          },
-          {
-            'title': '客户管理',
-            'class': 'consignee_manage',
-            'path': '/myConsignee'
-          },
-          {
-            'title': '修改密码',
-            'class': 'apply_dealer',
-            'path': '/writeApplicationInformation'
-          }
-        ]
-      }
-    },
-    computed: {
-
-    },
-    components: {
-
-    },
-    beforeCreate: function() {
-
-    },
-    created: function() {
-
-    },
-    beforeDestory(){
-    },
-    destoryed(){
-    },
-    mounted() {
-
-    },
-    methods: {
-      mineSkip(path) {
-        this.$router.push(path);
-      },
-    },
-    watch: {
-
+export default {
+  data() {
+    return {
+      mineMenu: [
+        {
+          title: "业绩报表",
+          class: "consignee_manage",
+          path: "/myConsignee"
+        },
+        {
+          title: "客户管理",
+          class: "consignee_manage",
+          path: "/myConsignee"
+        },
+        {
+          title: "修改密码",
+          class: "apply_dealer",
+          path: "/writeApplicationInformation"
+        }
+      ]
+    };
+  },
+  computed: {},
+  components: {},
+  beforeCreate: function() {},
+  created: function() {},
+  beforeDestory() {},
+  destoryed() {},
+  mounted() {},
+  methods: {
+    mineSkip(path) {
+      this.$router.push(path);
     }
-  }
+  },
+  watch: {}
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -92,8 +84,6 @@
   }
 
   .enter-item-img {
-
-    
     block();
     flt();
     w(104);
@@ -104,13 +94,14 @@
       squ(56);
       margin: 17px auto 0;
     }
-    span{
+
+    span {
       block();
       squ(56);
       margin: 17px auto 0;
-      background-size contain
-      background-repeat no-repeat
-      background-position center
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
   }
 
@@ -121,7 +112,6 @@
     ft(30);
     flex-center();
     justify-content: space-between;
-
 
     em {
       block();
@@ -134,53 +124,61 @@
   }
 }
 
-.consignee_manage{
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/data_static_icon.png)
+.consignee_manage {
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/data_static_icon.png');
     }
   }
-  .enter-item-txt{
+
+  .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
 }
-.apply_dealer{
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/customer_icon.png)
+
+.apply_dealer {
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/customer_icon.png');
     }
   }
 }
-.customer{
-  mt(20)
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/customer_icon.png)
+
+.customer {
+  mt(20);
+
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/customer_icon.png');
     }
   }
-  .enter-item-txt{
+
+  .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
 }
-.staff{
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/staff_icon.png)
+
+.staff {
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/staff_icon.png');
     }
   }
 }
-.setting{
-  mt(20)
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/setting_icon.png)
+
+.setting {
+  mt(20);
+
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/setting_icon.png');
     }
   }
 }
 
 // icon-order-handler
 .user-info {
-  padding 32px 24px
+  padding: 32px 24px;
   bg(#fff);
 }
 
@@ -196,13 +194,14 @@
 }
 
 .user-tel {
-  ml(24)
-  inline()
+  ml(24);
+  inline();
+
   h5 {
     ft(33);
     c(#333);
     lh(46);
-    pt(12)
+    pt(12);
   }
 
   p {
@@ -212,26 +211,28 @@
     c(#888);
   }
 }
-.user-code{
-  float right
-  flex()
-  flex-direction column
-  align-items center
-  mt(12)
-  i{
-    inline
-    w(48)
-    h(48)
-    background-image url(../../../assets/images/user_code_icon.png)
-    background-size contain
-    background-repeat no-repeat
-    background-position center
-    mb(8)
+
+.user-code {
+  float: right;
+  flex();
+  flex-direction: column;
+  align-items: center;
+  mt(12);
+
+  i {
+    inline;
+    w(48);
+    h(48);
+    background-image: url('../../../assets/images/user_code_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    mb(8);
   }
 }
-  .mt-20{
-    mt(20)
-  }
 
+.mt-20 {
+  mt(20);
+}
 </style>
 
