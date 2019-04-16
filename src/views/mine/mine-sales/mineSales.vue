@@ -6,7 +6,7 @@
         <img v-lazy alt>
       </div>
       <div class="user-tel" @click="mineSkip('/my/userInfo')">
-        <h5>终端客户的我的页面-小终端</h5>
+        <h5>销售人员的我的页面-小销售</h5>
         <p>电话：13555555555</p>
       </div>
     </div>
@@ -18,8 +18,7 @@
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <em></em>
-        </div>
+          <em></em>        </div>
       </li>
     </ul>
   </div>
