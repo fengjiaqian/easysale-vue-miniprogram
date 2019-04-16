@@ -3,7 +3,7 @@
     <div class="order-result">
       <img :src="imgSrc" alt>
       <div class="state">{{text}}</div>
-      <p class="fail-reason" v-if="failReason">失败原因：您当前网络不可用。</p>
+      <p class="fail-reason" v-if="failReason">{{failReason}}</p>
       <div class="actions">
         <a href="javascript:;" class="btn" @click="_jump(1)">返回首页</a>
         <a href="javascript:;" class="btn" @click="_jump(3)" v-if="failReason">重新提交</a>
@@ -43,7 +43,7 @@ export default {
           this.$router.push({ path: "/navi/orders" });
           break;
         case 3:
-          this.$router.push({ path: "/orderSubmit" });
+          this.$router.go(-1);
           break;
         default:
           break;
@@ -98,7 +98,7 @@ export default {
   b1(#DDDDDD);
   text-c();
   radius(10);
-  ft(30) 
+  ft(30);
 
   &:nth-of-type(2) {
     ml(20);

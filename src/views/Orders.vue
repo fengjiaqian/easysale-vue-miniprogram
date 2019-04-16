@@ -38,13 +38,15 @@ export default {
     return {
       orderTab: orderTab,
       currentState: 1,
-      orderList: []
+      orderList: [],
+      empty: false
     };
   },
   components: {
     uiTable,
     orderItem,
-    scroll
+    scroll,
+    empty
   },
   computed: {},
   created() {
@@ -60,27 +62,26 @@ export default {
       this.loading = true;
       const params = {
         //orderState: this.currentState,
-        userId: 6348352047144357000,
+        userId: 465273,
         pageNum: this.currentPage
       };
       orderApi
         .QueryOrders(params)
         .then(res => {
           if (res.result === "success" && res.data) {
-            this.orderList = this.transformOrders(
-              res.data.dataList.filter(item => item.orderItem.length)
-            );
-            // if (currentPage == 1) {
-            //   this.totalPage = Math.ceil(res.totalCount / pageSize);
-            //   this.orderList = this._transformOrders(res.data);
-            //   this.empty = !this.orderList.length;
-            // } else {
-            //   this.orderList = this.orderList.concat(
-            //     this._transformOrders(res.data)
-            //   );
-            // }
-            // this.currentPage++;
-            // this.loading = false;
+            const { dataList = [], pager } = res.data;
+            const { currentPage, totalPage } = pager;
+            if (currentPage === 1) {
+              this.orderList = this.transformOrders(dataList);
+              this.totalPage = totalPage;
+              this.empty = !this.orderList.length;
+            } else {
+              this.orderList = this.orderList.concat(
+                this.transformOrders(dataList)
+              );
+            }
+            this.params.pageNum++;
+            this.loading = false;
           }
         })
         .catch(err => {
@@ -97,7 +98,7 @@ export default {
       return orderList;
     },
     loadMoreOrders() {
-      if (this.loading || this.orderList.length < 6) return false;
+      if (this.loading) return false;
       this._QueryOrders();
     },
     _switchOrderType(state) {
