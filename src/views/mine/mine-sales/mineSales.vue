@@ -6,7 +6,7 @@
         <img v-lazy alt>
       </div>
       <div class="user-tel" @click="mineSkip('/my/userInfo')">
-        <h5>终端客户的我的页面-小终端</h5>
+        <h5>销售人员的我的页面-小销售</h5>
         <p>电话：13555555555</p>
       </div>
     </div>
@@ -18,8 +18,7 @@
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <em></em>
-        </div>
+          <em></em>        </div>
       </li>
     </ul>
   </div>
@@ -31,12 +30,17 @@
       return {
         mineMenu: [
           {
-            'title': '收货人管理',
+            'title': '业绩报表',
             'class': 'consignee_manage',
             'path': '/myConsignee'
           },
           {
-            'title': '申请经销商',
+            'title': '客户管理',
+            'class': 'consignee_manage',
+            'path': '/myConsignee'
+          },
+          {
+            'title': '修改密码',
             'class': 'apply_dealer',
             'path': '/writeApplicationInformation'
           }
@@ -133,7 +137,7 @@
 .consignee_manage{
   .enter-item-img{
     span{
-      background-image url(../../../assets/images/staff_icon.png)
+      background-image url(../../../assets/images/data_static_icon.png)
     }
   }
   .enter-item-txt{

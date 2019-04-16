@@ -83,7 +83,7 @@ const mineClient = (resolve) => {  //wx   终端客户的 “我的”的页面
 
 
 const mineSales = (resolve) => {  //wx   销售人员的 “我的”的页面
-	import('views/mine/mine-user/mineSales.vue').then((module) => {
+	import('views/mine/mine-sales/mineSales.vue').then((module) => {
 		resolve(module)
 	})
 }
