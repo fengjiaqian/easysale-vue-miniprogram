@@ -102,8 +102,8 @@ export default {
   methods: {
     _selectCustomer() {},
     _OrderSubmit() {
-      const dealerId = 465273, //userId
-        customerId = 465273,
+      const dealerId = 323232, //userId
+        customerId = 7459728428173504343,
         orderAmount = 90;
       const orderItem = transformOrderItems(this.products);
       const params = {

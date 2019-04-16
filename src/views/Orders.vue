@@ -1,13 +1,15 @@
 <template>
   <div id="orders">
+    <empty v-if="empty" txt="暂无此类订单"></empty>
     <ui-table :orderTab="orderTab" :initialState="currentState" @swithTab="_switchOrderType"></ui-table>
     <!--  -->
     <scroll
+      v-if="orderList.length"
       class="O-list"
       :data="orderList"
       :probeType="3"
-      :autoLoad="true"
-      @autoLoad="loadMoreOrders"
+      :pullup="true"
+      @scrollToEnd="loadMoreOrders"
       ref="scrollOrders"
     >
       <div>
@@ -18,16 +20,26 @@
 </template>
 
 <script>
-// 订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成
+/**
+ *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成
+ */
 const orderTab = [
   { text: "待处理", state: 1 },
   { text: "已处理", state: 2 },
   { text: "已拒绝", state: 3 },
   { text: "已完成", state: 4 }
 ];
+const params = {
+  id: "",
+  userId: "465273",
+  customerId: "",
+  orderState: "",
+  createUser: "",
+  pageNum: 1,
+  pageSize: 3
+};
 import orderItem from "components/order-item.vue";
 import uiTable from "components/ui-table.vue";
-import productCart from "components/product-cart.vue";
 import { getAllGoods } from "common/goodsStorage";
 import empty from "components/empty.vue";
 import scroll from "components/scroll.vue";
@@ -50,23 +62,18 @@ export default {
   },
   computed: {},
   created() {
+    this.params = params;
     this._QueryOrders();
   },
   methods: {
     _QueryOrders(reset) {
       if (this.loading) return false;
       if (reset) {
-        this.currentPage = 1;
-        this.totalPage = 1;
+        this.params.pageNum = 1;
       }
       this.loading = true;
-      const params = {
-        //orderState: this.currentState,
-        userId: 465273,
-        pageNum: this.currentPage
-      };
       orderApi
-        .QueryOrders(params)
+        .QueryOrders(this.params)
         .then(res => {
           if (res.result === "success" && res.data) {
             const { dataList = [], pager } = res.data;
@@ -98,12 +105,14 @@ export default {
       return orderList;
     },
     loadMoreOrders() {
-      if (this.loading) return false;
+      //
+      if (this.loading || this.params.pageNum > this.totalPage) return false;
       this._QueryOrders();
     },
     _switchOrderType(state) {
-      this.$refs.scrollOrders.scrollTo(0, 0);
+      this.$refs.scrollOrders && this.$refs.scrollOrders.scrollTo(0, 0);
       this.currentState = state;
+      this.params.orderState = state;
       this._QueryOrders(true);
     }
   }
