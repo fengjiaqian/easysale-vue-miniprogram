@@ -2,10 +2,10 @@
   <div id="mine">
     <div class="user-info">
       <div class="user-avart" @click="mineSkip('/my/userInfo')">
-        <img v-lazy alt>
+        <img v-lazy="avatarUrl" alt>
       </div>
-      <div class="user-tel" @click="mineSkip('/my/userInfo')">
-        <h5>销售员-小黑</h5>
+      <div class="user-tel" @click.stop="jumpWX">
+        <h5>{{nickName || 'test'}}</h5>
         <p>电话：13627762233</p>
       </div>
       <div class="user-code" @click="mineSkip('/my/userInviteCode')">
@@ -15,7 +15,12 @@
     </div>
     <!--  -->
     <ul class="enter-list">
-      <li class="enter-item" :class="item.class" @click="mineSkip(item.path)" v-for="item in mineMenu">
+      <li
+        class="enter-item"
+        :class="item.class"
+        @click="mineSkip(item.path)"
+        v-for="item in mineMenu"
+      >
         <div class="enter-item-img">
           <span></span>
         </div>
@@ -29,65 +34,65 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        mineMenu: [
-          {
-            'title': '商品管理',
-            'class': 'product_manage',
-            'path': '/my/productList'
-          },
-          {
-            'title': '数据统计',
-            'class': 'data_static',
-            'path': '/my/statistical'
-          },
-          {
-            'title': '客户管理',
-            'class': 'customer',
-            'path': '/my/customerList'
-          },          {
-            'title': '员工管理',
-            'class': 'staff',
-            'path': '/my/staffList'
-          },
-          {
-            'title': '设置',
-            'class': 'setting',
-            'path': '/my/statistical'
-          }
-        ]
+import storage from "common/storage";
+export default {
+  data() {
+    return {
+      nickName: "",
+      avatarUrl: "",
+      mineMenu: [
+        {
+          title: "商品管理",
+          class: "product_manage",
+          path: "/my/productList"
+        },
+        {
+          title: "数据统计",
+          class: "data_static",
+          path: "/my/statistical"
+        },
+        {
+          title: "客户管理",
+          class: "customer",
+          path: "/my/customerList"
+        },
+        {
+          title: "员工管理",
+          class: "staff",
+          path: "/my/staffList"
+        },
+        {
+          title: "设置",
+          class: "setting",
+          path: "/my/statistical"
+        }
+      ]
+    };
+  },
+  computed: {},
+  components: {},
+  beforeCreate: function() {},
+  created: function() {
+    this.nickName = storage.get("nickName", "");
+    this.avatarUrl = storage.get("avatarUrl", "");
+  },
+  beforeDestory() {},
+  destoryed() {},
+  mounted() {},
+  methods: {
+    mineSkip(path) {
+      this.$router.push(path);
+    },
+    jumpWX() {
+      if (window.__wxjs_environment === "miniprogram") {
+        wx.miniProgram.redirectTo({
+          url: `/pages/mobile/mobile`
+        });
       }
-    },
-    computed: {
-
-    },
-    components: {
-
-    },
-    beforeCreate: function() {
-
-    },
-    created: function() {
-
-    },
-    beforeDestory(){
-    },
-    destoryed(){
-    },
-    mounted() {
-
-    },
-    methods: {
-      mineSkip(path) {
-        this.$router.push(path);
-      },
-    },
-    watch: {
-
     }
-  }
+  },
+  watch: {}
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -105,8 +110,6 @@
   }
 
   .enter-item-img {
-
-    
     block();
     flt();
     w(104);
@@ -117,13 +120,14 @@
       squ(56);
       margin: 17px auto 0;
     }
-    span{
+
+    span {
       block();
       squ(56);
       margin: 17px auto 0;
-      background-size contain
-      background-repeat no-repeat
-      background-position center
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
   }
 
@@ -134,7 +138,6 @@
     ft(30);
     flex-center();
     justify-content: space-between;
-
 
     em {
       block();
@@ -147,53 +150,61 @@
   }
 }
 
-.product_manage{
-  .enter-item-img{
-    span{
-      background-image url(../../assets/images/product_manage_icon.png)
+.product_manage {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/product_manage_icon.png');
     }
   }
-  .enter-item-txt{
+
+  .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
 }
-.data_static{
-  .enter-item-img{
-    span{
-      background-image url(../../assets/images/data_static_icon.png)
+
+.data_static {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/data_static_icon.png');
     }
   }
 }
-.customer{
-  mt(20)
-  .enter-item-img{
-    span{
-      background-image url(../../assets/images/customer_icon.png)
+
+.customer {
+  mt(20);
+
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/customer_icon.png');
     }
   }
-  .enter-item-txt{
+
+  .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
 }
-.staff{
-  .enter-item-img{
-    span{
-      background-image url(../../assets/images/staff_icon.png)
+
+.staff {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/staff_icon.png');
     }
   }
 }
-.setting{
-  mt(20)
-  .enter-item-img{
-    span{
-      background-image url(../../assets/images/setting_icon.png)
+
+.setting {
+  mt(20);
+
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/setting_icon.png');
     }
   }
 }
 
 // icon-order-handler
 .user-info {
-  padding 32px 24px
+  padding: 32px 24px;
   bg(#fff);
 }
 
@@ -209,13 +220,15 @@
 }
 
 .user-tel {
-  ml(24)
-  inline()
+  ml(24);
+  inline();
+
   h5 {
+    h(46);
     ft(33);
     c(#333);
     lh(46);
-    pt(12)
+    pt(12);
   }
 
   p {
@@ -225,26 +238,28 @@
     c(#888);
   }
 }
-.user-code{
-  float right
-  flex()
-  flex-direction column
-  align-items center
-  mt(12)
-  i{
-    inline
-    w(48)
-    h(48)
-    background-image url(../../assets/images/user_code_icon.png)
-    background-size contain
-    background-repeat no-repeat
-    background-position center
-    mb(8)
+
+.user-code {
+  float: right;
+  flex();
+  flex-direction: column;
+  align-items: center;
+  mt(12);
+
+  i {
+    inline;
+    w(48);
+    h(48);
+    background-image: url('../../assets/images/user_code_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    mb(8);
   }
 }
-  .mt-20{
-    mt(20)
-  }
 
+.mt-20 {
+  mt(20);
+}
 </style>
 

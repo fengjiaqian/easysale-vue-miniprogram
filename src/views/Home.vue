@@ -73,6 +73,7 @@ import scroll from "components/scroll.vue";
 import { queryHomeProducts, ListProduct } from "api/fetch/home";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
+import storage from "common/storage";
 export default {
   name: "home",
   data() {
@@ -91,6 +92,13 @@ export default {
     scroll,
     product,
     floatCart
+  },
+  beforeCreate() {
+    const { nickName, avatarUrl } = this.$route.query;
+    if (nickName && avatarUrl) {
+      storage.set("nickName", decodeURIComponent(nickName));
+      storage.set("avatarUrl", decodeURIComponent(avatarUrl));
+    }
   },
   computed: {},
   created() {
