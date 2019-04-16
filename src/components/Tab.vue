@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%; height:100%;" class="ios-scroll-smooth">
+  <div class="ios-scroll-smooth">
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -12,10 +12,10 @@
         <a class="tab-order" href="javascript:;"></a>
         <span>订单</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/navi/mine">
+      <div class="tab-item" @click="_jumpMine">
         <a class="tab-mine" href="javascript:;"></a>
         <span>我的</span>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -28,12 +28,30 @@ export default {
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    _jumpMine() {
+      switch (this.userType) {
+        case 1:
+          this.$router.push({ path: "/navi/mine" });
+          break;
+        case 2:
+          this.$router.push({ path: "/navi/mine" });
+          break;
+        case 3:
+          this.$router.push({ path: "/navi/mine" });
+          break;
+        default:
+          break;
+      }
+    }
+  }
 };
 </script>
 
 <style lang='stylus'>
 .ios-scroll-smooth {
+  width: 100%;
+  height: 100%;
   -webkit-overflow-scrolling: touch;
 }
 

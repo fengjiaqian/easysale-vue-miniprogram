@@ -12,22 +12,22 @@
       <div v-if="moduleShowIdx == 0">
         <ul class="quanty-total">
           <li class="qt-money">
-            <h5>998.00</h5>
-            <p>今日累计下单额(元)</p>
+            <h5>{{statisticalData.totalAmount || 0}}</h5>
+            <p>{{activeTitle}}累计下单额(元)</p>
           </li>
           <li class="qt-num">
-            <h5>99</h5>
-            <p>今日累计下单数(个)</p>
+            <h5>{{statisticalData.orderSum}}</h5>
+            <p>{{activeTitle}}累计下单数(个)</p>
           </li>
         </ul>
         <ul class="classes-column">
           <li @click="switchModule(1)">
             <span>下单商品数量</span>
-            <span>45<i></i></span>
+            <span>{{statisticalData.productSum}}<i></i></span>
           </li>
           <li @click="switchModule(2)">
             <span>下单客户数量</span>
-            <span>45<i></i></span>
+            <span>{{statisticalData.customerSum}}<i></i></span>
           </li>
         </ul>
       </div>
@@ -81,11 +81,17 @@
 </template>
 
 <script>
+  import { queryStatisticalData } from "api/fetch/mine";
   export default {
     data() {
+
       return {
-        activeIdx: 0,
+        activeIdx: 0,   //选中的区间
+        activeTitle: '今日', //选中的区间名称
         moduleShowIdx: 0,
+        userId: '',
+        dayNum: 1,
+        statisticalData: {},
       }
     },
     computed: {
@@ -94,11 +100,10 @@
     components: {
 
     },
-    beforeCreate: function() {
 
-    },
-    created: function() {
-
+    created() {
+      this.userId = '465273'
+      this.initStatistical()
     },
     beforeDestory(){
     },
@@ -110,13 +115,48 @@
     methods: {
       switchBar(idx) {
         this.activeIdx = idx
+        switch (idx) {
+          case 0:
+            this.dayNum = 1
+            this.activeTitle = '今日'
+            break;
+          case 1:
+            this.dayNum = 7
+            this.activeTitle = '7天'
+            break;
+          case 2:
+            this.dayNum = 30
+            this.activeTitle = '30天'
+            break;
+          case 3:
+            this.dayNum = ''
+            this.activeTitle = '总共'
+            break;
+          default:
+            break;
+        }
       },
       switchModule(idx) {
         this.moduleShowIdx = idx
-      }
+      },
+      initStatistical(){
+        let param = {
+          userId: this.userId,
+          dayNum: this.dayNum,
+        }
+        queryStatisticalData(param).then(res => {
+          if (res.result === "success" && res.data) {
+            this.statisticalData = res.data
+          }
+        });
+      },
     },
     watch: {
-
+      dayNum: function(val) {
+          if (val) {
+            this.initStatistical()
+          }
+        }
     }
   }
 </script>
