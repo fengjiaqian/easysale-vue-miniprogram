@@ -13,6 +13,8 @@
 
 <script>
 import AddressList from "./address-list.vue";
+import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
+///
 export default {
   data() {
     return {
@@ -26,10 +28,20 @@ export default {
     
   },
   created() {
-   
+   this.queryList()
   },
   methods: {
-    
+    queryList(){
+      let param = {
+        userId: 222,
+        keyword: ''
+      }
+      queryCustomerConsigneeList(param).then(res => {
+        if (res.result === "success" && res.data) {
+          debugger
+        }
+      });      
+    }
   }
 };
 </script>
