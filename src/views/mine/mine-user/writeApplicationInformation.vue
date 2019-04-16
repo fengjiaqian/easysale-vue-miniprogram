@@ -126,7 +126,7 @@ export default {};
   border-radius: 6px;
   border: 1px dashed rgba(221, 221, 221, 1);
   margin-top: 24px;
-  background: rgba(246, 246, 246, 1) url('../../assets/images/ic_jiahao.png.jpg') no-repeat center;
+  background: rgba(246, 246, 246, 1) url('../../../assets/images/ic_jiahao.png.jpg') no-repeat center;
   background-size: 64px 64px;
 }
 

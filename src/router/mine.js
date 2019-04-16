@@ -92,43 +92,43 @@ const AddCustomerInfo = (resolve) => {
 
 
 const addPersonalInformation = (resolve) => { //wx 新增个人信息的页面
-    import('views/wxDescript/addPersonalInformation.vue').then((module) => {
+    import('views/mine/mine-user/addPersonalInformation.vue').then((module) => {
         resolve(module)
     })
 }
 
 const editPersonalInformation = (resolve) => { //wx 编辑个人信息的页面
-    import('views/wxDescript/editPersonalInformation.vue').then((module) => {
+    import('views/mine/mine-user/editPersonalInformation.vue').then((module) => {
         resolve(module)
     })
 }
 
 const myConsignee = (resolve) => { //wx 我的收货人的页面
-    import('views/wxDescript/myConsignee.vue').then((module) => {
+    import('views/mine/mine-user/myConsignee.vue').then((module) => {
         resolve(module)
     })
 }
 
 const editConsignee = (resolve) => { //wx 编辑收货人的页面
-    import('views/wxDescript/editConsignee.vue').then((module) => {
+    import('views/mine/mine-user/editConsignee.vue').then((module) => {
         resolve(module)
     })
 }
 
 const addConsignee = (resolve) => { //wx 新增收货人的页面
-    import('views/wxDescript/addConsignee.vue').then((module) => {
+    import('views/mine/mine-user/addConsignee.vue').then((module) => {
         resolve(module)
     })
 }
 
 const writeApplicationInformation = (resolve) => { //wx 填写申请信息
-    import('views/wxDescript/writeApplicationInformation.vue').then((module) => {
+    import('views/mine/mine-user/writeApplicationInformation.vue').then((module) => {
         resolve(module)
     })
 }
 
 const applyDealer = (resolve) => { //wx 申请经销商
-    import('views/wxDescript/applyDealer.vue').then((module) => {
+    import('views/mine/mine-user/applyDealer.vue').then((module) => {
         resolve(module)
     })
 }
