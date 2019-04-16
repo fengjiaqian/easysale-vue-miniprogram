@@ -43,6 +43,7 @@
     data() {
       return {
         dealerId: '19990530',
+        createUser: '465273',
         productModal: {
           productSpecificationId: null,
           brandName: '',
@@ -53,8 +54,7 @@
           priceUnit: '',
           productType: 1, //类型 0=酒批 1=经销商
           specification: '',
-          effectiveDate: '',
-          createUser: '465273',
+          effectiveDate: ''
         },
       };
     },
@@ -95,6 +95,7 @@
       saveAdd(){
         let param = {
           dealerId: this.dealerId,
+          createUser: this.createUser,
           productList: [this.productModal]
         }
         addProduct(param).then(res => {
