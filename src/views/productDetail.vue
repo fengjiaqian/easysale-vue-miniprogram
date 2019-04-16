@@ -23,11 +23,11 @@
       <div class="D-bottom-left">
         <dl class="D-link">
           <dt class="shouye"></dt>
-          <dd>首页</dd>
+          <router-link tag="dd" to="/navi/home">首页</router-link>
         </dl>
         <dl class="D-link">
           <dt class="order"></dt>
-          <dd>订单</dd>
+          <router-link tag="dd" to="/cart">购物车</router-link>
         </dl>
       </div>
       <div class="D-bottom-right">
@@ -73,7 +73,7 @@ export default {
     },
     _addToCart(product) {
       updateItem(product, product.buyCount, true);
-      this.$toast("加入订单成功");
+      this.$toast("加入购物车成功");
     }
   }
 };
