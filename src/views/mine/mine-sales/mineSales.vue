@@ -30,12 +30,17 @@
       return {
         mineMenu: [
           {
-            'title': '收货人管理',
+            'title': '业绩报表',
             'class': 'consignee_manage',
             'path': '/myConsignee'
           },
           {
-            'title': '申请经销商',
+            'title': '客户管理',
+            'class': 'consignee_manage',
+            'path': '/myConsignee'
+          },
+          {
+            'title': '修改密码',
             'class': 'apply_dealer',
             'path': '/writeApplicationInformation'
           }
@@ -132,7 +137,7 @@
 .consignee_manage{
   .enter-item-img{
     span{
-      background-image url(../../../assets/images/staff_icon.png)
+      background-image url(../../../assets/images/data_static_icon.png)
     }
   }
   .enter-item-txt{
