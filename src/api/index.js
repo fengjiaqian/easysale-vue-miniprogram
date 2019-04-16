@@ -7,7 +7,7 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 axios.interceptors.request.use(function (config) {
 
 	if (config.data) {
-		config.data.userId = "6348352047144357000";  //用户id 
+		//config.data.userId = "6348352047144357000";  //用户id 
 		//config.data.dealerId = "19990530";  //店铺id
 	}
 	// const token = storage.get('TOKEN', '');
