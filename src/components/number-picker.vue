@@ -14,17 +14,13 @@
 
 <script>
 import { updateItem } from "common/goodsStorage";
+import Bus from "common/Bus";
 export default {
   name: "number-picker",
   props: {
     product: {
       type: Object,
       default: () => ({})
-    },
-    detection: {
-      //是否需要调用购物车金额计算
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -35,7 +31,11 @@ export default {
   methods: {
     decrease(product) {
       const { minBuyNum, maxBuyNum } = product;
-      if (product.buyCount <= minBuyNum) return false;
+      //if (product.buyCount <= minBuyNum) return false;
+      //购物车是否删除此商品提示
+      if (product.buyCount === 1 && this.isInCart()) {
+        return Bus.$emit("deleteOneInCart", product.id);
+      }
       product.buyCount--;
       updateItem(product, product.buyCount);
     },
@@ -47,8 +47,11 @@ export default {
     },
     handleChange(product, $event) {
       let currentVal = parseInt($event.target.value) || 0;
-      product.buyCount = currentVal;
+      product.buyCount = currentVal ? currentVal : 1;
       updateItem(product, product.buyCount);
+    },
+    isInCart() {
+      return this.$route.path === "/cart";
     }
   }
 };

@@ -21,7 +21,7 @@ export function transformProductList(list) {
 //订单预查询商品处理
 export function transformOrderItems(list) {
     return list.map(product => {
-        const { productId, quantity, salePrice } = product;
-        return { productId, quantity, salePrice }
+        const { id, buyCount, price } = product;
+        return { productId: id, quantity: buyCount, salePrice: price }
     })
 }

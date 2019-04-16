@@ -24,21 +24,35 @@
     <!--  -->
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
+      <!-- 单个产品 -->
+      <div class="single-sku clearfix" v-if="products.length===1">
+        <div class="s-s-img">
+          <img v-lazy="products[0].productImageUrl" alt>
+        </div>
+        <div class="s-s-main">
+          <p class="name">{{products[0].productName}}</p>
+          <div class="price">{{products[0].price}}元/{{products[0].priceUnit}}</div>
+          <div class="price">
+            <span>规格：{{products[0].specification}}</span>
+            <span class="frt fz28">X{{products[0].buyCount}}</span>
+          </div>
+        </div>
+      </div>
       <!-- 多个产品 -->
-      <div class="multiple-skus">
-        <div class="m-s-amount">共15></div>
+      <div class="multiple-skus" v-else @click="_jumpGoodsList">
+        <div class="m-s-amount">共{{amount}}></div>
         <ul class="m-s-skus clearfix">
-          <li v-for="item in 5" :key="item">
+          <li v-for="item in products" :key="item.id">
             <a href="javascript:;">
-              <img v-lazy="''" alt>
-              <span>X1件</span>
+              <img v-lazy="item.productImageUrl || ''" alt>
+              <span>X{{item.buyCount}}{{item.priceUnit}}</span>
             </a>
           </li>
         </ul>
       </div>
       <div class="order-detail-amount">
         订单总金额：
-        <span class="c-theme">&yen;794.00</span>
+        <span class="c-theme">&yen;{{totalMoney.toFixed(2)}}</span>
       </div>
     </div>
     <div class="select-customer">
@@ -48,7 +62,7 @@
     <!--  -->
     <div class="bottom">
       <a href="javascript:;" @click="_OrderSubmit">提交订单</a>
-      ¥398.00
+      &yen;{{totalMoney.toFixed(2)}}
     </div>
   </div>
 </template>
@@ -69,27 +83,37 @@ export default {
   name: "order-submit",
   data() {
     return {
-      products: []
+      products: [],
+      amount: 0,
+      totalMoney: 0
     };
   },
-  beforeCreate() {
+  beforeCreate() {},
+  created() {
+    //TODO prefix userId
     this.products = storage.get("orderPrequeryParams", []);
+    this.amount = this.products.reduce((ac, cur) => (ac += cur.buyCount), 0);
+    this.totalMoney = this.products.reduce(
+      (ac, cur) => (ac += cur.buyCount * cur.price),
+      0
+    );
   },
-  created() {},
   mounted() {},
   methods: {
     _selectCustomer() {},
     _OrderSubmit() {
-      const dealerId = 19990530,
-        customerId = 6348352047144357000,
+      const dealerId = 465273, //userId
+        customerId = 465273,
         orderAmount = 90;
       const orderItem = transformOrderItems(this.products);
       const params = {
-        //orderState:1,
+        orderState: 1,
         dealerId,
         customerId,
         orderAmount,
-        orderItem
+        orderItem,
+        createUser: 465273, //userId
+        updateUser: 465273
       };
       OrderSubmit(params)
         .then(res => {
@@ -97,12 +121,19 @@ export default {
           if (res.result === "success") {
             this.$router.push({ path: "/orderResult" });
           } else {
-            enterFail(res.message);
+            enterFail.call(this, res.message);
           }
         })
         .catch(err => {
-          enterFail(err.message);
+          enterFail.call(this, res.message);
         });
+    },
+    _jumpGoodsList() {
+      const products = encodeURIComponent(JSON.stringify(this.products));
+      this.$router.push({
+        path: "/goodsList",
+        query: { products }
+      });
     }
   }
 };
@@ -137,7 +168,7 @@ export default {
     w(224);
     h(98);
     frt();
-    bg(#ccc);
+    bg($color-theme);
     c(#fff);
     ft(32);
     text-c();

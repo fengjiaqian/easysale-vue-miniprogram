@@ -25,6 +25,7 @@
 
 <script>
   import productManageSmall from "components/productManage/product-manage-small.vue";
+  import { queryJyProduct } from "api/fetch/mine";
   export default {
     data() {
       return {

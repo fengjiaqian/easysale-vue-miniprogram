@@ -58,9 +58,79 @@ function queryProductList(params) {
 	});
 }
 
-//我的模块-商品管理-商品列表查询
+//我的模块-商品管理-商品品牌查询
 function queryProductBrand(params) {
-	const url = "/product/selectBrandProductList"
+	const url = "/product/productBrandList"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-商品管理-商品批量上下架删除接口
+function oprateManageProduct(params) {
+	const url = "/product/updateProductState"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-商品管理-商品详情接口
+function productDetail(params) {
+	const url = "/product/productDetail"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-商品管理-商品新增接口
+function addProduct(params) {
+	const url = "/product/saveProductList"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-商品管理-商品修改接口
+function editProduct(params) {
+	const url = "/product/updateProduct"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-商品管理-查寻交易的产品
+function queryJyProduct(params) {
+	const url = "/product/dealerProductList"
 	return axios({
 		method: 'post',
 		url: url,
@@ -73,5 +143,7 @@ function queryProductBrand(params) {
 }
 
 export {
-	queryShopInfo, editShopInfo, queryStatisticalData, queryProductList, queryProductBrand
+	queryShopInfo, editShopInfo, queryStatisticalData, queryProductList, queryProductBrand,
+	oprateManageProduct, addProduct, productDetail, editProduct,
+	queryJyProduct
 }

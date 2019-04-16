@@ -15,7 +15,7 @@
     <div class="D-info">
       <h3>商品介绍</h3>
       <ul class="D-info-list">
-        <li v-for="i in 4">产地：江苏</li>
+        <li>{{product.description}}</li>
       </ul>
     </div>
     <!--  -->
@@ -31,7 +31,7 @@
         </dl>
       </div>
       <div class="D-bottom-right">
-        <a href="javascript:;" class="normal-btn immediately">立即下单</a>
+        <a href="javascript:;" class="normal-btn immediately" @click="_immediatelyBuy(product)">立即下单</a>
         <a href="javascript:;" class="normal-btn" @click="_addToCart(product)">加入购物车</a>
       </div>
     </div>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import storage from "common/storage";
 import numberPicker from "components/number-picker.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
 import { updateItem } from "common/goodsStorage";
@@ -74,6 +75,14 @@ export default {
     _addToCart(product) {
       updateItem(product, product.buyCount, true);
       this.$toast("加入购物车成功");
+    },
+    // 立即购买
+    _immediatelyBuy(product) {
+      //TODO  加上userId
+      storage.set("orderPrequeryParams", [product]);
+      this.$router.push({
+        path: "/OrderSubmit"
+      });
     }
   }
 };

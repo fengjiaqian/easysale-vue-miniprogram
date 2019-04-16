@@ -1,3 +1,4 @@
+
 //商品列表页
 .product-list-wrap{
   bg(#fff)
@@ -45,6 +46,7 @@
 .search-bar{
   padding 14px 24px
   input{
+    outline none
     width 100%
     bg(#F6F6F6)
     h(72)
@@ -176,10 +178,12 @@
 .column-wrap{
   padding 24px 24px 0
   .column-list{
-    flex-center()
+    flex()
+    align-items center
+    justify-content flex-start
     flex-wrap wrap
     li{
-      width 30%
+      width 31%
       lh(64)
       text-c()
       mb(24)
@@ -187,7 +191,7 @@
       ft(28)
       c-6()
       border-radius 10px
-      mr(24)
+      margin-right 3.5%
       &:nth-child(3n+3){
         margin-right 0
       }
@@ -286,7 +290,7 @@
     bg(#fff)
   }
   .pi-content{
-    margin 198px 0 98px
+    margin 100px 0 98px
   }
   .pi-footer{
     position fixed

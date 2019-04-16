@@ -2,13 +2,16 @@ import axios from 'axios'
 
 //订单列表
 export function QueryOrders(params = {}) {
-    params.pageNum = params.pageNum || 1;
-    params.pageSize = params.pageSize || 20;
+
+    var paramsData = Object.assign({
+        pageNum: 1,
+        pageSize: 10
+    }, params);
     const url = "/order/getOrderList";
     return axios({
         method: 'post',
         url,
-        data: params,
+        data: paramsData,
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)
