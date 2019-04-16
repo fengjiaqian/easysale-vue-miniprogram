@@ -135,7 +135,7 @@ const main = [{
 			title: '我的',
 			keepAlive: true
 		},
-		component: mineClient
+		component: mineSales
 	}, {
 		path: 'mine',
 		name: 'mine',

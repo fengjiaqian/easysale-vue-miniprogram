@@ -31,18 +31,18 @@
         mineMenu: [
           {
             'title': '业绩报表',
-            'class': 'consignee_manage',
-            'path': '/myConsignee'
+            'class': 'performance_report',
+            'path': '/performanceReport'
           },
           {
             'title': '客户管理',
-            'class': 'consignee_manage',
-            'path': '/myConsignee'
+            'class': 'customer_manage',
+            'path': '/customerManage'
           },
           {
             'title': '修改密码',
-            'class': 'apply_dealer',
-            'path': '/writeApplicationInformation'
+            'class': 'change_password',
+            'path': '/changePassword'
           }
         ]
       }
@@ -134,7 +134,7 @@
   }
 }
 
-.consignee_manage{
+.performance_report{
   .enter-item-img{
     span{
       background-image url(../../../assets/images/data_static_icon.png)
@@ -144,18 +144,18 @@
     border-bottom: 1px solid #ededed;
   }
 }
-.apply_dealer{
+.customer_manage{
   .enter-item-img{
     span{
       background-image url(../../../assets/images/customer_icon.png)
     }
   }
 }
-.customer{
+.change_password{
   mt(20)
   .enter-item-img{
     span{
-      background-image url(../../../assets/images/customer_icon.png)
+      background-image url(../../../assets/images/setting_icon.png)
     }
   }
   .enter-item-txt{
