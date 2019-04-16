@@ -1,6 +1,5 @@
 <template>
   <div id="mine">
-    <!-- userType : 2  销售人员   mineSales -->
     <div class="user-info">
       <div class="user-avart" @click="mineSkip('/my/userInfo')">
         <img v-lazy alt>
@@ -37,18 +36,18 @@ export default {
       mineMenu: [
         {
           title: "业绩报表",
-          class: "consignee_manage",
-          path: "/myConsignee"
+          class: "performance_report",
+          path: "/performanceReport"
         },
         {
           title: "客户管理",
-          class: "consignee_manage",
-          path: "/myConsignee"
+          class: "customer_manage",
+          path: "/customerManage"
         },
         {
           title: "修改密码",
-          class: "apply_dealer",
-          path: "/writeApplicationInformation"
+          class: "change_password",
+          path: "/changePassword"
         }
       ]
     };
@@ -124,7 +123,7 @@ export default {
   }
 }
 
-.consignee_manage {
+.performance_report {
   .enter-item-img {
     span {
       background-image: url('../../../assets/images/data_static_icon.png');
@@ -136,7 +135,7 @@ export default {
   }
 }
 
-.apply_dealer {
+.customer_manage {
   .enter-item-img {
     span {
       background-image: url('../../../assets/images/customer_icon.png');
@@ -144,12 +143,12 @@ export default {
   }
 }
 
-.customer {
+.change_password {
   mt(20);
 
   .enter-item-img {
     span {
-      background-image: url('../../../assets/images/customer_icon.png');
+      background-image: url('../../../assets/images/setting_icon.png');
     }
   }
 
