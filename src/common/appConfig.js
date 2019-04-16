@@ -12,6 +12,16 @@ Vue.filter('price', function (val, unit="") {
 	return `&yen;<span class="fz38">${nums[0]}<span><span class="fz28">.${nums[1]}<span class="fz28">${unit}</span></span>`
 })
 
+Vue.filter('priceToFixed', function (val) {
+	let value = '0.00';
+	if (val && !isNaN(val)) {
+		value = val.toFixed(2);
+	} else {
+		value = val
+	}
+	return value
+})
+
 /*
  * format：'yyyy-MM-dd h:m:s'
  */

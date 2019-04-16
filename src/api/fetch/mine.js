@@ -43,6 +43,34 @@ function queryStatisticalData(params) {
 	});
 }
 
+//我的模块-数据统计-商品维度报表
+function queryProductPerformance(params) {
+    const url = "/performance/getProductPerformance"
+    return axios({
+        method: 'post',
+        url: url,
+        data: params
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+
+//我的模块-数据统计-客户维度报表
+function queryCustomerPerformance(params) {
+    const url = "/performance/getCustomerPerformance"
+    return axios({
+        method: 'post',
+        url: url,
+        data: params
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+
 
 //我的模块-商品管理-商品列表查询
 function queryProductList(params) {
@@ -143,7 +171,7 @@ function queryJyProduct(params) {
 }
 
 export {
-	queryShopInfo, editShopInfo, queryStatisticalData, queryProductList, queryProductBrand,
-	oprateManageProduct, addProduct, productDetail, editProduct,
-	queryJyProduct
+	queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
+    queryProductList, queryProductBrand, oprateManageProduct,
+    addProduct, productDetail, editProduct, queryJyProduct
 }

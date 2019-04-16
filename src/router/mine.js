@@ -31,6 +31,16 @@ const Statistical = (resolve) => {
     import('@/views/mine/statistical/statistical.vue').then((module) => { resolve(module) })
 }
 
+//我的数据统计-下单商品统计
+const StatisProductList = (resolve) => {
+    import('@/views/mine/statistical/statisProductList.vue').then((module) => { resolve(module) })
+}
+
+//我的数据统计-下单用户统计
+const StatisCustomerList = (resolve) => {
+    import('@/views/mine/statistical/statisCustomerList.vue').then((module) => { resolve(module) })
+}
+
 //商品管理-商品列表
 const ProductManage = (resolve) => {
     import('@/views/mine/productManage/productList.vue').then((module) => { resolve(module) })
@@ -221,6 +231,22 @@ const mine = [
                     title: '数据统计'
                 },
                 component: Statistical
+            },
+            {
+                path: 'statisProductList',
+                name: 'statisProductList',
+                meta: {
+                    title: '下单商品数量'
+                },
+                component: StatisProductList
+            },
+            {
+                path: 'statisCustomerList',
+                name: 'statisCustomerList',
+                meta: {
+                    title: '下单用户数量'
+                },
+                component: StatisCustomerList
             },
             {
                 path: 'productList',
