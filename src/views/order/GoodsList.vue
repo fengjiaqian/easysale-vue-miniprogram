@@ -7,14 +7,14 @@
       :key="product.id"
     >
       <div class="G-product-img">
-        <img v-lazy="''" alt>
+        <img v-lazy="product.productImageUrl || ''" alt>
       </div>
       <div class="G-product-content">
         <p class="name">{{product.productName}}</p>
         <div class="spec">规格 {{product.specification}}</div>
         <div class="price">
           <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
-          <span class="fz28 c-6">X4</span>
+          <span class="fz28 c-6">X{{product.buyCount}}</span>
         </div>
       </div>
     </div>
@@ -30,12 +30,10 @@ export default {
       products: []
     };
   },
+  beforeCreate() {},
   created() {
-    queryProductDetail(169840639200985720).then(res => {
-      if (res.result === "success" && res.data) {
-        this.products.push(res.data);
-      }
-    });
+    const { products } = this.$route.query;
+    this.products = products ? JSON.parse(decodeURIComponent(products)) : [];
   },
   methods: {
     _enterDetail(product) {

@@ -25,11 +25,17 @@
 
 <script>
 import productCart from "components/product-cart.vue";
-import { getAllGoods, clearGoods, removeItem } from "common/goodsStorage";
+import {
+  getAllGoods,
+  clearGoods,
+  removeItem,
+  setAllGoods
+} from "common/goodsStorage";
 import empty from "components/empty.vue";
 import storage from "common/storage";
+import Bus from "common/Bus";
 export default {
-  name: "orders",
+  name: "cart",
   data() {
     return {
       isAllSelected: false, //商品全选
@@ -44,10 +50,7 @@ export default {
     amount() {
       let amount = 0;
       const products = this.products.filter(item => item.checked);
-      for (let product of products) {
-        amount += product.buyCount;
-      }
-      return amount;
+      return products.reduce((acc, cur) => (acc += cur.buyCount), amount);
     },
     totalMoney() {
       let totalMoney = 0;
@@ -61,7 +64,18 @@ export default {
   created() {
     this.initProducts();
   },
+  mounted() {
+    Bus.$on("deleteOneInCart", id => {
+      this._delete(id);
+    });
+  },
+  //路由离开之前，改变缓存商品cheched的状态
+  beforeRouteLeave(to, from, next) {
+    setAllGoods(this.products);
+    next();
+  },
   methods: {
+    //初始化购物车商品
     initProducts() {
       const storeProducts = getAllGoods();
       for (let product of storeProducts) {
@@ -85,9 +99,14 @@ export default {
       product.checked = !product.checked;
       this.isAllSelected = !this.products.some(item => !item.checked);
     },
-    //删除商品
-    _delete() {
-      const selectedProducts = this.products.filter(item => !!item.checked);
+    //删除单个或者多个商品
+    _delete(id) {
+      let selectedProducts = [];
+      if (id) {
+        selectedProducts = this.products.filter(item => item.id == id);
+      } else {
+        selectedProducts = this.products.filter(item => !!item.checked);
+      }
       if (!selectedProducts.length) {
         return this.$toast("请选择需要删除的商品");
       }
