@@ -20,7 +20,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name:"address-list",
+  props:{
+    
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
