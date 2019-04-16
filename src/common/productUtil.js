@@ -17,3 +17,11 @@ export function transformProductList(list) {
     }
     return list;
 }
+
+//订单预查询商品处理
+export function transformOrderItems(list) {
+    return list.map(product => {
+        const { productId, quantity, salePrice } = product;
+        return { productId, quantity, salePrice }
+    })
+}

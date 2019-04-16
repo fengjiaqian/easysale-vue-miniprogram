@@ -6,6 +6,10 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 
 axios.interceptors.request.use(function (config) {
 
+	if (config.data) {
+		config.data.userId = "6348352047144357000";  //用户id 
+		//config.data.dealerId = "19990530";  //店铺id
+	}
 	// const token = storage.get('TOKEN', '');
 	// const addressId = storage.get('addressId', '');
 	// if (token) {
@@ -20,13 +24,6 @@ axios.interceptors.request.use(function (config) {
 	// 	config.data.userClassId = 1
 	// 	config.data.userDisplayClass = 0
 	// }
-	// //所有的属性如果不包含地址id，直接设置默认地址
-	// if (config.data && !config.data.addressId) {
-	// 	config.data.addressId = String(addressId)
-	// }
-//	if (config.data) {
-//		config.data.deviceType = "2"
-//	}
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();

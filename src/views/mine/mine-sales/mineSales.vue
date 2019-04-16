@@ -2,15 +2,11 @@
   <div id="mine">
     <div class="user-info">
       <div class="user-avart" @click="mineSkip('/my/userInfo')">
-        <img v-lazy="avatarUrl" alt>
+        <img v-lazy alt>
       </div>
-      <div class="user-tel" @click.stop="jumpWX">
-        <h5>{{nickName || 'test'}}</h5>
-        <p>电话：13627762233</p>
-      </div>
-      <div class="user-code" @click="mineSkip('/my/userInviteCode')">
-        <i></i>
-        <span>邀请码</span>
+      <div class="user-tel" @click="mineSkip('/my/userInfo')">
+        <h5>销售人员的我的页面-小销售</h5>
+        <p>电话：13555555555</p>
       </div>
     </div>
     <!--  -->
@@ -34,37 +30,24 @@
 </template>
 
 <script>
-import storage from "common/storage";
 export default {
   data() {
     return {
-      nickName: "",
-      avatarUrl: "",
       mineMenu: [
         {
-          title: "商品管理",
-          class: "product_manage",
-          path: "/my/productList"
-        },
-        {
-          title: "数据统计",
-          class: "data_static",
-          path: "/my/statistical"
+          title: "业绩报表",
+          class: "performance_report",
+          path: "/performanceReport"
         },
         {
           title: "客户管理",
-          class: "customer",
-          path: "/my/customerList"
+          class: "customer_manage",
+          path: "/customerManage"
         },
         {
-          title: "员工管理",
-          class: "staff",
-          path: "/my/staffList"
-        },
-        {
-          title: "设置",
-          class: "setting",
-          path: "/my/statistical"
+          title: "修改密码",
+          class: "change_password",
+          path: "/changePassword"
         }
       ]
     };
@@ -72,23 +55,13 @@ export default {
   computed: {},
   components: {},
   beforeCreate: function() {},
-  created: function() {
-    this.nickName = storage.get("nickName", "");
-    this.avatarUrl = storage.get("avatarUrl", "");
-  },
+  created: function() {},
   beforeDestory() {},
   destoryed() {},
   mounted() {},
   methods: {
     mineSkip(path) {
       this.$router.push(path);
-    },
-    jumpWX() {
-      if (window.__wxjs_environment === "miniprogram") {
-        wx.miniProgram.redirectTo({
-          url: `/pages/mobile/mobile`
-        });
-      }
     }
   },
   watch: {}
@@ -144,16 +117,16 @@ export default {
       w(16);
       h(26);
       mr(24);
-      background: url('./../../assets/images/icon-enter.png') no-repeat center;
+      background: url('../../../assets/images/icon-enter.png') no-repeat center;
       background-size: contain;
     }
   }
 }
 
-.product_manage {
+.performance_report {
   .enter-item-img {
     span {
-      background-image: url('../../assets/images/product_manage_icon.png');
+      background-image: url('../../../assets/images/data_static_icon.png');
     }
   }
 
@@ -162,20 +135,20 @@ export default {
   }
 }
 
-.data_static {
+.customer_manage {
   .enter-item-img {
     span {
-      background-image: url('../../assets/images/data_static_icon.png');
+      background-image: url('../../../assets/images/customer_icon.png');
     }
   }
 }
 
-.customer {
+.change_password {
   mt(20);
 
   .enter-item-img {
     span {
-      background-image: url('../../assets/images/customer_icon.png');
+      background-image: url('../../../assets/images/setting_icon.png');
     }
   }
 
@@ -187,7 +160,7 @@ export default {
 .staff {
   .enter-item-img {
     span {
-      background-image: url('../../assets/images/staff_icon.png');
+      background-image: url('../../../assets/images/staff_icon.png');
     }
   }
 }
@@ -197,7 +170,7 @@ export default {
 
   .enter-item-img {
     span {
-      background-image: url('../../assets/images/setting_icon.png');
+      background-image: url('../../../assets/images/setting_icon.png');
     }
   }
 }
@@ -224,7 +197,6 @@ export default {
   inline();
 
   h5 {
-    h(46);
     ft(33);
     c(#333);
     lh(46);
@@ -250,7 +222,7 @@ export default {
     inline;
     w(48);
     h(48);
-    background-image: url('../../assets/images/user_code_icon.png');
+    background-image: url('../../../assets/images/user_code_icon.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

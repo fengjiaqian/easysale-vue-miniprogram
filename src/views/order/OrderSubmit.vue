@@ -1,9 +1,9 @@
 <template>
   <div class="order-submit">
-    <div class="select-customer">
+    <!-- <div class="select-customer">
       <strong class="fz30">收货人信息</strong>
       <a class="c-theme" href="javascript:;" @click="_selectCustomer">选择客户</a>
-    </div>
+    </div>-->
 
     <!--  -->
     <div class="order-detail-area">
@@ -54,11 +54,26 @@
 </template>
 
 <script>
+const enterFail = function(msg) {
+  this.$router.push({
+    path: "/orderResult",
+    query: {
+      err: msg
+    }
+  });
+};
+import storage from "common/storage";
 import { OrderSubmit } from "api/fetch/order";
+import { transformOrderItems } from "common/productUtil";
 export default {
   name: "order-submit",
   data() {
-    return {};
+    return {
+      products: []
+    };
+  },
+  beforeCreate() {
+    this.products = storage.get("orderPrequeryParams", []);
   },
   created() {},
   mounted() {},
@@ -68,24 +83,13 @@ export default {
       const dealerId = 19990530,
         customerId = 6348352047144357000,
         orderAmount = 90;
-      const orderItem = [
-        { productId: 169840639200985719, quantity: 2, salePrice: 5 }
-        // { productId: 169840639200985720, quantity: 2, salePrice: 500 }
-      ];
+      const orderItem = transformOrderItems(this.products);
       const params = {
-        // orderState:1,
+        //orderState:1,
         dealerId,
         customerId,
         orderAmount,
         orderItem
-      };
-      const enterFail = function(msg) {
-        this.$router.push({
-          path: "/orderResult",
-          query: {
-            err: msg
-          }
-        });
       };
       OrderSubmit(params)
         .then(res => {

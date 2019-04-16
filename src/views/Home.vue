@@ -1,13 +1,31 @@
 <template>
-  <div id="home" ref="scrollDom">
+  <div id="home" ref="scrollDom" :class="{'pt174': userType===3}">
     <float-cart></float-cart>
-    <search-bar :jump="true"></search-bar>
+    <!--  -->
+    <div class="home-banner">
+      <div class="banner-item">
+        <img :src="icBanner" alt>
+      </div>
+    </div>
+    <!--  -->
+    <div class="select-dealer" v-if="userType===3">
+      <div class="left" @click="_jumpDealerList">
+        <img v-lazy="''" alt>
+        <strong>某某商贸公司</strong>
+        <em></em>
+      </div>
+      <div class="right">
+        <em></em>
+        <span>分享</span>
+      </div>
+    </div>
+    <search-bar :jump="true" :class="{'top82': userType===3}"></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
-      <li v-for="item in [1,2,3,4]">
+      <li v-for="item in appIcons">
         <a @click="jumpSecondsort(item)">
           <img v-lazy="item.imgUrl || ''">
-          <span>陈列</span>
+          <span>{{item.value}}</span>
         </a>
       </li>
     </ul>
@@ -54,19 +72,31 @@
 </template>
 
 <script>
-import floatCart from 'components/floatCart.vue'
+import icBanner from "../assets/images/ic-banner.png";
+import ic1 from "../assets/images/ic-tousu.png";
+import ic2 from "../assets/images/ic-duijiang.png";
+import ic3 from "../assets/images/ic-tuihuo.png";
+import ic4 from "../assets/images/ic-chenglie.png";
+const appIcons = [
+  { imgUrl: ic1, value: "投诉管理" },
+  { imgUrl: ic2, value: "兑奖管理" },
+  { imgUrl: ic3, value: "退货管理" },
+  { imgUrl: ic4, value: "陈列管理" }
+];
+import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
-import { home_scroll_menu } from "./mock";
 import { queryHomeProducts, ListProduct } from "api/fetch/home";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
+import storage from "common/storage";
 export default {
   name: "home",
   data() {
     return {
-      appIcons: [],
+      icBanner: icBanner,
+      appIcons: appIcons,
       productList: [],
       currentColumnId: "",
       showSqure: false,
@@ -80,6 +110,13 @@ export default {
     scroll,
     product,
     floatCart
+  },
+  beforeCreate() {
+    const { nickName, avatarUrl } = this.$route.query;
+    if (nickName && avatarUrl) {
+      storage.set("nickName", decodeURIComponent(nickName));
+      storage.set("avatarUrl", decodeURIComponent(avatarUrl));
+    }
   },
   computed: {},
   created() {
@@ -100,6 +137,9 @@ export default {
   },
   mounted() {},
   methods: {
+    _jumpDealerList(){
+      this.$router.push({path:'/dealerList'})
+    },
     jumpSecondsort(item) {},
     //计算 scroll-menu 的scroll_menu_content 的宽度
     calculateScrollRect() {
@@ -174,17 +214,19 @@ export default {
         document.body.clientWidth || document.documentElement.clientWidth;
       var last_known_scroll_position = 0,
         ticking = false;
+      var d = this.userType === 3 ? 174 : 92;
       this.distance =
-        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * 92) / 750;
+        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * d) / 750;
 
       this.$refs.scrollDom.addEventListener("scroll", e => {
         last_known_scroll_position = this.$refs.scrollDom.scrollTop;
         if (!ticking) {
           window.requestAnimationFrame(() => {
+            var cls = this.userType === 3 ? "fixed-customer" : "fixed-dealer";
             if (last_known_scroll_position > this.distance) {
-              addClass(this.$refs.scrollMenuWrap, "fixed");
+              addClass(this.$refs.scrollMenuWrap, cls);
             } else {
-              removeClass(this.$refs.scrollMenuWrap, "fixed");
+              removeClass(this.$refs.scrollMenuWrap, cls);
             }
             ticking = false;
           });
@@ -214,9 +256,15 @@ export default {
 </script>
 
 <style lang="stylus">
-.fixed {
+.fixed-dealer {
   position: fixed !important;
   top: 92px;
+  z-index: 10;
+}
+
+.fixed-customer {
+  position: fixed !important;
+  top: 174px;
   z-index: 10;
 }
 
@@ -227,6 +275,89 @@ export default {
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+}
+
+.home-banner {
+  bg(#fff);
+  padding: 0 24px;
+
+  .banner-item {
+    h(234);
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.top82 {
+  top: 82px;
+}
+
+.pt174 {
+  padding-top: 174px !important;
+}
+
+.select-dealer {
+  pos(fixed);
+  top: 0;
+  left: 0;
+  width: 100%;
+  h(82);
+  padding: 0 24px;
+  bg(#fff);
+
+  .left {
+    flt();
+    h(82);
+    pr(24);
+
+    img {
+      inline();
+      squ(60);
+    }
+
+    strong {
+      ml(16);
+      mr(8);
+      c(#333);
+      ft(32);
+      lh(82);
+    }
+
+    em {
+      inline();
+      squ(32);
+      background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
+      transform: rotateZ(-90deg);
+      background-size: contain;
+    }
+
+    * {
+      vm();
+    }
+  }
+
+  .right {
+    frt();
+
+    em {
+      inline();
+      squ(48);
+      mr(8);
+      vm();
+      background: url('./../assets/images/icon-share.png') no-repeat center center #FFF;
+      background-size: cover;
+    }
+
+    span {
+      vm();
+      ft(28);
+      c(#666);
+      lh(82);
+    }
+  }
 }
 
 .home-icons {
@@ -254,8 +385,8 @@ export default {
       >span {
         text-align: center;
         display: block;
-        font-size: 26px;
-        color: #666;
+        font-size: 28px;
+        color: #333;
       }
     }
   }

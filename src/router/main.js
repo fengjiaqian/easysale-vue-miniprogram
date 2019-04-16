@@ -69,6 +69,24 @@ const Search = (resolve) => {
 	})
 }
 
+const DealerList = (resolve) => {
+	import('views/other/DealerList.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+const mineClient = (resolve) => {  //wx   终端客户的 “我的”的页面
+	import('views/mine/mine-user/mineClient.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+
+const mineSales = (resolve) => {  //wx   销售人员的 “我的”的页面
+	import('views/mine/mine-sales/mineSales.vue').then((module) => {
+		resolve(module)
+	})
+}
 
 const main = [{
 	path: '',
@@ -94,7 +112,7 @@ const main = [{
 			keepAlive: true
 		},
 		component: Service
-	}, {
+	},{
 		path: 'orders',
 		name: 'orders',
 		meta: {
@@ -102,6 +120,22 @@ const main = [{
 			keepAlive: true
 		},
 		component: Orders
+	},{   //wx   终端客户的 “我的”的页面
+		path: 'mineClient',
+		name: 'mineClient',
+		meta: {
+			title: '我的',
+			keepAlive: true
+		},
+		component: mineClient
+	},{   //wx   销售人员的 “我的”的页面
+		path: 'mineSales',
+		name: 'mineSales',
+		meta: {
+			title: '我的',
+			keepAlive: true
+		},
+		component: mineSales
 	}, {
 		path: 'mine',
 		name: 'mine',
@@ -161,6 +195,13 @@ const main = [{
 		keepAlive: true
 	},
 	component: Search,
+}, {
+	path: '/dealerList',
+	name: 'dealerList',
+	meta: {
+		title: '选择商贸公司',
+	},
+	component: DealerList,
 }
 ]
 

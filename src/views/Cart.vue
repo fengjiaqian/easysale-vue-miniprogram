@@ -27,6 +27,7 @@
 import productCart from "components/product-cart.vue";
 import { getAllGoods, clearGoods, removeItem } from "common/goodsStorage";
 import empty from "components/empty.vue";
+import storage from "common/storage";
 export default {
   name: "orders",
   data() {
@@ -114,6 +115,12 @@ export default {
     },
     //提交订单
     _submitOrder() {
+      const selectedProducts = this.products.filter(item => item.checked);
+      if (!selectedProducts.length) {
+        return this.$toast("请选择商品");
+      }
+      //TODO  加上userId
+      storage.set("orderPrequeryParams", selectedProducts);
       this.$router.push({
         path: "/OrderSubmit"
       });
