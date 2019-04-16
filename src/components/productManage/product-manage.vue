@@ -1,9 +1,9 @@
 <template>
-  <div class="product-wrap" @click="goToDetail">
-    <div class="pw-l">
-      <span></span>
+  <div class="product-wrap">
+    <div class="pw-l" @click="onTap">
+      <span :class="{'selected':product.select}"></span>
     </div>
-    <div class="pw-r">
+    <div class="pw-r" @click="goToDetail">
       <div class="product-pic">
         <img v-lazy="''" >
       </div>
@@ -52,7 +52,11 @@
           }
         });
       },
-    }
+      onTap(){
+        this.product.select = !this.product.select
+      }
+
+    },
   };
 </script>
 

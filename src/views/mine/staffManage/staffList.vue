@@ -20,6 +20,7 @@
   import BookList from "components/bookMenu/bookList.vue";
   import bookMenuSide from "components/bookMenu/bookMenuSide.vue";
   export default {
+
     data() {
       return {
         bookMenuData: {},

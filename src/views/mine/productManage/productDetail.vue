@@ -3,57 +3,73 @@
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
-    <div class="D-name">{{product.productName}}</div>
+    <div class="D-name"><i>自有</i>{{product.productName}}</div>
+    <div class="D-spec">规格：<span>{{product.specification}}</span></div>
     <div class="D-price">
       <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
-    </div>
-    <div class="D-number">
-      <span class="c-3 fz30">数量</span>
     </div>
     <!--  -->
     <div class="D-info">
       <h3>商品介绍</h3>
       <ul class="D-info-list">
-        <li v-for="i in 4">产地：江苏</li>
+        <li>{{product.description}}</li>
       </ul>
     </div>
     <div class="D-bottom">
-      <span>删除</span>
-      <span class="edit">编辑</span>
+      <span @click="deleteProduct">删除</span>
+      <span class="edit" @click="editProduct">编辑</span>
     </div>
   </div>
 </template>
 
 <script>
-import { queryProductDetail, test } from "api/fetch/productDetail";
+import { productDetail,oprateManageProduct } from "api/fetch/mine";
 
 export default {
   data() {
     return {
-      product: {}
+      id: '',//商品id
+      product: {},//商品对象
+      oprateParam: {
+        idList: [],
+        updateUser: '465273',
+        dealerId: "19990530",
+        state: 0  //状态 0:删除 1：已上架  2：已下架
+      },//商品操作查询参数
     };
   },
   components: {
 
   },
   created() {
+    this.id = this.$route.query.code
+    this.oprateParam.idList = [this.id]
     this._queryDetail();
   },
   mounted() {},
   methods: {
     _queryDetail() {
-      const skuId = this.$route.query.code;
-      queryProductDetail(skuId).then(res => {
+      let param = {
+        id: this.id
+      }
+      productDetail(param).then(res => {
         if (res.result === "success" && res.data) {
-          this.product = this.initPorduct(res.data);
+          this.product = res.data
         }
       });
     },
-    initPorduct(product) {
-      product.buyCount = 1;
-      product.minBuyNum = 1;
-      product.maxBuyNum = 9999;
-      return product;
+    deleteProduct(){
+      oprateManageProduct(this.oprateParam).then(res => {
+        if (res.result === "success") {
+          this.$toast("操作成功")
+          //操作成功后返回商品管理列表
+          this.$router.push({ path: "/my/productList" })
+        }
+      });
+    },
+    editProduct(){
+      localStorage.setItem('productInfo',JSON.stringify(this.product))
+      this.$router.push({ path: "/my/editProduct" })
     },
   }
 };
@@ -109,6 +125,7 @@ export default {
 }
 
 .D-info-list {
+  min-height 200px
   padding: 20px 20px 20px 24px;
 
   li {
@@ -130,13 +147,30 @@ export default {
 }
 
 .D-name {
+  flex()
+  align-items center
   bg(#fff);
   pl(24);
-  lh(94);
+  lh(80);
   c(#333);
   ft(34);
+  i{
+    bg(#FF5638)
+    ft(22)
+    c(#fff)
+    border-radius 4px
+    padding 0 8px
+    mr(12)
+    lh(34)
+  }
 }
-
+.D-spec{
+  bg(#fff);
+  pl(24);
+  c(#999);
+  ft(30);
+  pb(16)
+}
 .D-price {
   bg(#fff);
   pb(16);
