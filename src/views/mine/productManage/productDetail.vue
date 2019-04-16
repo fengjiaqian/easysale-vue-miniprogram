@@ -42,7 +42,7 @@ export default {
   mounted() {},
   methods: {
     _queryDetail() {
-      const skuId = this.$route.params.code || '169840639200985719';
+      const skuId = this.$route.query.code;
       queryProductDetail(skuId).then(res => {
         if (res.result === "success" && res.data) {
           this.product = this.initPorduct(res.data);

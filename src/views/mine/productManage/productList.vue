@@ -30,7 +30,7 @@
 
     <!--内容-->
     <section class="content">
-      <product-manage v-for="item in 12"></product-manage>
+      <product-manage v-for="product in productList" :key="product.id"  :product="product"></product-manage>
     </section>
 
     <!--底部-->
@@ -60,12 +60,23 @@
 
 <script>
   import productManage from "components/productManage/product-manage.vue";
+  import { queryProductList, queryProductBrand } from "api/fetch/mine";
   export default {
     data() {
       return {
         popAddShow: false,
         brandFilterShow: false,
         stateFilterShow: false,
+        filterParam: {
+          dealerId: '19990530',
+          brandId: '',
+          pageNum: 1,
+          pageSize: 20,
+          searchKey: '',
+          state: null
+        },
+        productList: [],//产品列表
+        brandList: [],//品牌列表
       };
     },
     components: {
@@ -75,9 +86,29 @@
 
     },
     created() {
-
+      this.queryProducts()
+      this.initBrand()
     },
     methods: {
+      //查询产品列表
+      queryProducts(){
+        queryProductList(this.filterParam).then(res => {
+          if (res.result === "success" && res.data) {
+            this.productList = res.data.dataList
+          }
+        });
+      },
+      //查询商品品牌
+      initBrand(){
+        let param = {
+          dealerId: this.filterParam.dealerId
+        }
+        queryProductBrand(param).then(res => {
+          if (res.result === "success" && res.data) {
+            this.brandList = res.data
+          }
+        });
+      },
       togglePopShow(){
         this.popAddShow = !this.popAddShow
       },
