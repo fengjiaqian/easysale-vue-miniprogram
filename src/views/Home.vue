@@ -2,8 +2,14 @@
   <div id="home" ref="scrollDom" :class="{'pt174': userType===3}">
     <float-cart></float-cart>
     <!--  -->
+    <div class="home-banner">
+      <div class="banner-item">
+        <img :src="icBanner" alt>
+      </div>
+    </div>
+    <!--  -->
     <div class="select-dealer" v-if="userType===3">
-      <div class="left">
+      <div class="left" @click="_jumpDealerList">
         <img v-lazy="''" alt>
         <strong>某某商贸公司</strong>
         <em></em>
@@ -16,10 +22,10 @@
     <search-bar :jump="true" :class="{'top82': userType===3}"></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
-      <li v-for="item in [1,2,3,4]">
+      <li v-for="item in appIcons">
         <a @click="jumpSecondsort(item)">
           <img v-lazy="item.imgUrl || ''">
-          <span>陈列</span>
+          <span>{{item.value}}</span>
         </a>
       </li>
     </ul>
@@ -66,6 +72,17 @@
 </template>
 
 <script>
+import icBanner from "../assets/images/ic-banner.png";
+import ic1 from "../assets/images/ic-tousu.png";
+import ic2 from "../assets/images/ic-duijiang.png";
+import ic3 from "../assets/images/ic-tuihuo.png";
+import ic4 from "../assets/images/ic-chenglie.png";
+const appIcons = [
+  { imgUrl: ic1, value: "投诉管理" },
+  { imgUrl: ic2, value: "兑奖管理" },
+  { imgUrl: ic3, value: "退货管理" },
+  { imgUrl: ic4, value: "陈列管理" }
+];
 import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
@@ -78,7 +95,8 @@ export default {
   name: "home",
   data() {
     return {
-      appIcons: [],
+      icBanner: icBanner,
+      appIcons: appIcons,
       productList: [],
       currentColumnId: "",
       showSqure: false,
@@ -119,6 +137,9 @@ export default {
   },
   mounted() {},
   methods: {
+    _jumpDealerList(){
+      this.$router.push({path:'/dealerList'})
+    },
     jumpSecondsort(item) {},
     //计算 scroll-menu 的scroll_menu_content 的宽度
     calculateScrollRect() {
@@ -256,6 +277,20 @@ export default {
   -webkit-overflow-scrolling: touch;
 }
 
+.home-banner {
+  bg(#fff);
+  padding: 0 24px;
+
+  .banner-item {
+    h(234);
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
 .top82 {
   top: 82px;
 }
@@ -350,8 +385,8 @@ export default {
       >span {
         text-align: center;
         display: block;
-        font-size: 26px;
-        color: #666;
+        font-size: 28px;
+        color: #333;
       }
     }
   }
