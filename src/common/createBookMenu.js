@@ -9,7 +9,7 @@ function creatBookMenuData(data) {
     }
     data.forEach((item)=>{
         //截取首个中文字符
-        let firstN = interceptStr(item.name)
+        let firstN = interceptStr(item.name) || '阿'
         //添加中文字符转拼音首字母的属性
         item.initials = pinyin.getCamelChars(firstN)
     })

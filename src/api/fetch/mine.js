@@ -254,10 +254,66 @@ function queryRole(params) {
 	});
 }
 
+//我的模块-客户管理-查寻客户列表
+function queryCustomerList(params) {
+	const url = "/customer/findCustomerList"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-客户管理-查寻客户详情
+function queryCustomerDetail(params) {
+	const url = "/customer/findCustomerInfo"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-客户管理-新增客户
+function addCustomer(params) {
+	const url = "/customer/addCustomer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-客户管理-新增客户
+function editCustomer(params) {
+	const url = "/customer/updateCustomer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 export {
 	queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
     queryProductList, queryProductBrand, oprateManageProduct,
     addProduct, productDetail, editProduct, queryJyProduct,
-	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff,
-	queryRole
+	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole,
+	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer
 }

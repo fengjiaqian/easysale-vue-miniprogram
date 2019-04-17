@@ -17,15 +17,15 @@
     </section>
     <!-- 客户列表 -->
     <section v-if="bookMenuType == 2">
-      <div class="area" @click="skipTo" v-for="(item,key) in bookMenu" :key="key" :ref="key">
+      <div class="area" v-for="(item,key) in bookMenu" :key="key" :ref="key" v-show="bookMenu[key].length">
         <div class="title border-topbottom">{{key}}</div>
-        <div class="ct-item-list">
+        <div class="ct-item-list" @click="skipTo(list)" v-for="list in bookMenu[key]" :key="list.id">
           <div class="ct-l-s">
-            <span>张栋</span>
-            <span>18622466231</span>
+            <span>{{list.name}}</span>
+            <span>{{list.phone}}</span>
           </div>
-          <div>小王店铺</div>
-          <div>湖北省武汉市洪山区软件新城1期</div>
+          <div>{{list.customerShopName}}</div>
+          <div>{{list.address}}</div>
         </div>
       </div>
     </section>
@@ -79,7 +79,8 @@
           });
         }else if(this.bookMenuType == 2){
           this.$router.push({
-            path: "/my/customerDetail"
+            path: "/my/customerDetail",
+            query: { id: item.id}
           });
         }
       },
@@ -171,6 +172,7 @@
   }
   .ct-item-list{
     padding 24px
+    bg(#fff)
     border-bottom 1PX solid #EDEDED
     ft(28)
     c-6()
@@ -184,6 +186,9 @@
     div:nth-of-type(2){
       mt(16)
       mb(8)
+    }
+    &:last-child{
+      border-bottom none
     }
   }
 </style>

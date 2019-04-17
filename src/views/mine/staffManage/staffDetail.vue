@@ -51,6 +51,7 @@
 
     },
     created(){
+      localStorage.removeItem('staffInfo')
       this.userId = this.$route.query.userId
       this._queryStaffDetail()
     },

@@ -34,7 +34,6 @@
           keyword: ''
         },
         staffList: [],//员工列表
-        bookMenuData: {},
         searchKey: '',//搜索关键字
       };
     },

@@ -1,7 +1,7 @@
 //截取字符串的第一个中文字符
 function interceptStr(str) {
     var reg = new RegExp('[\u4e00-\u9fa5]+$','g');
-    str=str.match(/[\u4e00-\u9fa5]/g).join("").substr(0,1);
+    str=str.match(/[\u4e00-\u9fa5]/g) ? str.match(/[\u4e00-\u9fa5]/g).join("").substr(0,1) : '阿';
     return str
 }
 var pinyin = (function (){
