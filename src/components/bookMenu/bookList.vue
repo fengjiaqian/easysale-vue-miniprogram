@@ -2,15 +2,15 @@
   <div class="list" ref="wrapper">
     <!-- 员工列表 -->
     <section v-if="bookMenuType == 1">
-      <div class="area" @click="skipTo" v-for="(item,key) in bookMenu" :key="key" :ref="key">
+      <div class="area" v-for="(item,key) in bookMenu" :key="key" :ref="key" v-show="bookMenu[key].length">
         <div class="title border-topbottom">{{key}}</div>
-        <div class="item-list">
+        <div class="item-list" @click="skipTo(list)" v-for="list in bookMenu[key]" :key="list.id">
           <div class="il-l">
             <img v-lazy="''" >
           </div>
           <div class="il-r">
-            <h5>戴超</h5>
-            <span>19520234183</span>
+            <h5>{{list.name}}</h5>
+            <span>{{list.phone}}</span>
           </div>
         </div>
       </div>
@@ -71,10 +71,11 @@
           this.showToast = false
         },500)
       },
-      skipTo(){
+      skipTo(item){
         if(this.bookMenuType == 1){
           this.$router.push({
-            path: "/my/staffDetail"
+            path: "/my/staffDetail",
+            query: { userId: item.userId}
           });
         }else if(this.bookMenuType == 2){
           this.$router.push({

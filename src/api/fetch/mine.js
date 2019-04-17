@@ -170,8 +170,94 @@ function queryJyProduct(params) {
 	});
 }
 
+//我的模块-员工管理-查寻员工列表
+function queryStaffList(params) {
+	const url = "/dealer/findDealerListByParentId"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-员工管理-查看经销商或员工信息
+function queryStaffDetail(params) {
+	const url = "/dealer/findDealerInfo"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-员工管理-删除员工
+function deleteStaff(params) {
+	const url = "/dealer/deleteDealer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-员工管理-新增员工
+function addStaff(params) {
+	const url = "/dealer/addSalesperson"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-员工管理-编辑员工
+function editStaff(params) {
+	const url = "/dealer/updateDealer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//我的模块-角色-查询所有角色
+function queryRole(params) {
+	const url = "/role/selectStaffRoleList"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 export {
 	queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
     queryProductList, queryProductBrand, oprateManageProduct,
-    addProduct, productDetail, editProduct, queryJyProduct
+    addProduct, productDetail, editProduct, queryJyProduct,
+	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff,
+	queryRole
 }
