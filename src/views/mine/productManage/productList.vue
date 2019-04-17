@@ -5,7 +5,6 @@
       <div class="search-bar">
         <input v-model="searchKey"
                placeholder="请输入商品名称"
-               @click="search"
                @change="handleChange($event)">
       </div>
       <ul class="filter-bar">
@@ -260,11 +259,12 @@
           }
         });
       },
-      search(){
-        //console.log(this.searchKey)
-      },
       handleChange($event){
-        console.log($event.target.value)
+        this.filterParam.searchKey = $event.target.value
+        this.allSelected = false
+        this.filterParam.pageNum = 1
+        this.productList = []
+        this.domShow = false
       },
       togglePopShow(){
         this.popAddShow = !this.popAddShow
