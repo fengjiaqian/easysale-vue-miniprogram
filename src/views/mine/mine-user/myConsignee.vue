@@ -3,21 +3,23 @@
   <div class="common">
     <!-- wx  我的收货人的页面 myConsignee -->
     <div class="search">
-      <input class="case" type="text" value="" placeholder="请输入姓名或者电话">
+      <input class="case" type="text" value="" @change="chooseData()" v-model="chooseCode" placeholder="请输入姓名或者电话">
     </div>
     <address-list></address-list>
     
-    <div class="edit">新增收货人</div>
+    <div class="edit" @click="addPerson()">新增收货人</div>
   </div>
 </template>
 
 <script>
 import AddressList from "./address-list.vue";
 import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
-///
+
 export default {
   data() {
     return {
+      chooseCode:"", //input框绑定的事件
+      listDetail:"", //我的收货人的数据
       
     };
   },
@@ -31,17 +33,30 @@ export default {
    this.queryList()
   },
   methods: {
-    queryList(){
+    queryList(){   //获取收货人的数据
       let param = {
         userId: 222,
-        keyword: ''
+        keyword: this.chooseCode,
       }
       queryCustomerConsigneeList(param).then(res => {
         if (res.result === "success" && res.data) {
+          this.listDetail  = res.data;
+          console.log(this.listDetail);
           debugger
         }
-      });      
-    }
+      });  
+    },
+    chooseData(){   //当输入条件查询的时候
+      let that = this;
+      that.queryList();
+      console.log(4444);
+
+    },
+    addPerson(){
+
+    },
+    stop(){}
+
   }
 };
 </script>
