@@ -2,45 +2,61 @@
   <div id="orderDetail">
     <div class="state">
       订单状态：
-      <strong class="c-theme">待处理</strong>
+      <strong class="c-theme">{{order.orderState | orderState}}</strong>
     </div>
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
+      <!-- 单个产品 -->
+      <div class="single-sku clearfix" v-if="order.orderItem.length===1">
+        <div class="s-s-img">
+          <img v-lazy="order.orderItem[0].product.productImageUrl" alt>
+        </div>
+        <div class="s-s-main">
+          <p class="name">{{order.orderItem[0].product.productName}}</p>
+          <div
+            class="price"
+          >{{order.orderItem[0].product.price}}元/{{order.orderItem[0].product.priceUnit}}</div>
+          <div class="price">
+            <span>规格：{{order.orderItem[0].product.specification}}</span>
+            <span class="frt fz28">X{{order.orderItem[0].quantity}}</span>
+          </div>
+        </div>
+      </div>
       <!-- 多个产品 -->
-      <div class="multiple-skus">
-        <div class="m-s-amount">共15></div>
+      <div class="multiple-skus" v-else @click="_jumpGoodsList">
+        <div class="m-s-amount">共{{order.totalQuantity}}></div>
         <ul class="m-s-skus clearfix">
-          <li v-for="item in 5" :key="item">
+          <li v-for="item in order.orderItem" :key="item.orderId">
             <a href="javascript:;">
-              <img v-lazy="''" alt>
-              <span>X1件</span>
+              <img v-lazy="item.product.productImageUrl" alt>
+              <span>X{{item.quantity}}{{item.product.priceUnit}}</span>
             </a>
           </li>
         </ul>
       </div>
       <div class="order-detail-amount">
         订单总金额：
-        <span class="c-theme">&yen;794.00</span>
+        <span class="c-theme">&yen;{{order.orderAmount}}</span>
       </div>
     </div>
     <div class="order-detail-area">
       <h5>收货人信息</h5>
       <div class="info-display pre">
-        <p>客户姓名：老王</p>
-        <p>手机号码：134-2348-2334</p>
-        <a class="tel" href="tel:15071124354"></a>
+        <p>客户姓名：{{order.customer.label}}</p>
+        <p>手机号码：{{order.customer.phone}}</p>
+        <a class="tel" :href="'tel:'+order.customer.phone"></a>
       </div>
       <div class="info-display">
-        <p>店铺名称：老王的店铺</p>
-        <p>收货地址：武汉市洪山区软件新城A3-401</p>
+        <p>店铺名称：{{order.customer.customerShopName}}</p>
+        <p>收货地址：{{order.customer.address}}</p>
       </div>
     </div>
     <!-- 经销商角色展示下单人 -->
     <div class="order-detail-area">
       <h5>订单信息</h5>
       <div class="info-display">
-        <p>下单人：销售员-小黑</p>
-        <p>下单时间：2019-03-23 13:32</p>
+        <p>下单人：{{order.createUser}}</p>
+        <p>下单时间：{{order.createTime}}</p>
       </div>
     </div>
     <!--  -->
@@ -55,11 +71,25 @@
 export default {
   name: "order-detail",
   data() {
-    return {};
+    return {
+      order: {}
+    };
   },
-  created() {},
+  created() {
+    const { order } = this.$route.query;
+    this.order = JSON.parse(decodeURIComponent(order));
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    _jumpGoodsList() {
+      let products = this.order.orderItem.map(item => item.product);
+      products = encodeURIComponent(JSON.stringify(products));
+      this.$router.push({
+        path: "/goodsList",
+        query: { products }
+      });
+    }
+  }
 };
 </script>
 

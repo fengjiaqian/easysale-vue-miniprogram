@@ -160,7 +160,7 @@ const main = [{
 	},
 	component: productDetail,
 }, {
-	path: '/orderDetail/:orderId',
+	path: '/orderDetail',
 	name: 'orderDetail',
 	meta: {
 		title: '订单详情',

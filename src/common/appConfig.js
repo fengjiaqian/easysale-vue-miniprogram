@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-Vue.filter('price', function (val, unit="") {
+Vue.filter('price', function (val, unit = "") {
 	if (!val) {
 		return `&yen;<span class="fz38">?<span><span class="fz28">${unit}</span>`
 	}
@@ -10,6 +10,16 @@ Vue.filter('price', function (val, unit="") {
 	}
 	let nums = value.split('.');
 	return `&yen;<span class="fz38">${nums[0]}<span><span class="fz28">.${nums[1]}<span class="fz28">${unit}</span></span>`
+})
+
+Vue.filter('orderState', function (state) {
+	const orderTab = [
+		{ text: "待处理", state: 1 },
+		{ text: "已处理", state: 2 },
+		{ text: "已拒绝", state: 3 },
+		{ text: "已完成", state: 4 }
+	];
+	return orderTab.find(item => item.state === state).text || "";
 })
 
 /*

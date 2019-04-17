@@ -73,8 +73,12 @@ export default {
   components: {},
   beforeCreate: function() {},
   created: function() {
+    const mobileNo = storage.get("mobileNo", "");
     this.nickName = storage.get("nickName", "");
     this.avatarUrl = storage.get("avatarUrl", "");
+    if (!this.nickName && mobileNo) {
+      //req userInfo
+    }
   },
   beforeDestory() {},
   destoryed() {},
@@ -84,8 +88,9 @@ export default {
       this.$router.push(path);
     },
     jumpWX() {
+      if (storage.get("mobileNo", "")) return false;
       if (window.__wxjs_environment === "miniprogram") {
-        wx.miniProgram.redirectTo({
+        wx.miniProgram.navigateTo({
           url: `/pages/mobile/mobile`
         });
       }
@@ -212,6 +217,7 @@ export default {
   squ(120);
   flt();
   border-radius: 50%;
+  overflow: hidden;
 
   img {
     width: 100%;

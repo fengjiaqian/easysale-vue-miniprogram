@@ -112,11 +112,17 @@ export default {
     floatCart
   },
   beforeCreate() {
-    const { nickName, avatarUrl } = this.$route.query;
+    const { nickName, avatarUrl, mobileNo, token, userId="" } = this.$route.query;
+    //有mobieNo, 到我的界面直接request userInfo
+    if(mobileNo){
+       storage.set("mobileNo", mobileNo);
+    }
+    //只有nickName和avatarUrl  缓存用户我的界面展示
     if (nickName && avatarUrl) {
       storage.set("nickName", decodeURIComponent(nickName));
       storage.set("avatarUrl", decodeURIComponent(avatarUrl));
     }
+
   },
   computed: {},
   created() {
@@ -137,8 +143,8 @@ export default {
   },
   mounted() {},
   methods: {
-    _jumpDealerList(){
-      this.$router.push({path:'/dealerList'})
+    _jumpDealerList() {
+      this.$router.push({ path: "/dealerList" });
     },
     jumpSecondsort(item) {},
     //计算 scroll-menu 的scroll_menu_content 的宽度
