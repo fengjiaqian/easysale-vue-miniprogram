@@ -228,7 +228,7 @@ function addStaff(params) {
 
 //我的模块-员工管理-编辑员工
 function editStaff(params) {
-	const url = "/dealer/updateDealer"
+	const url = "/dealer/updateSalesperson"
 	return axios({
 		method: 'post',
 		url: url,

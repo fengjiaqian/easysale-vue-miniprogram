@@ -64,6 +64,14 @@
           path: "/my/addStaffInfo"
         });
       },
+    },
+    watch: {
+      filterParam: {
+        handler(newVal, oldVal) {
+          this.queryStaffs()
+        },
+        deep: true
+      },
     }
   };
 </script>
