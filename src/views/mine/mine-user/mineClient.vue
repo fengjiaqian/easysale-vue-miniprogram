@@ -11,13 +11,33 @@
       </div>
     </div>
     <!--  -->
-    <ul class="enter-list">
+    <!-- <ul class="enter-list">
       <li class="enter-item" :class="item.class" @click="mineSkip(item.path)" v-for="item in mineMenu">
         <div class="enter-item-img">
           <span></span>
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
+          <em></em>
+        </div>
+      </li>
+    </ul> -->
+     <ul class="enter-list">
+      <li class="enter-item consignee_manage"   @click="toConsigneeManage()">
+        <div class="enter-item-img">
+          <span></span>
+        </div>
+        <div class="enter-item-txt">
+          <span>收货人管理</span>
+          <em></em>
+        </div>
+      </li>
+      <li class="enter-item apply_dealer"   @click="toApplication()" >
+        <div class="enter-item-img">
+          <span></span>
+        </div>
+        <div class="enter-item-txt">
+          <span>申请经销商</span>
           <em></em>
         </div>
       </li>
@@ -63,9 +83,19 @@
 
     },
     methods: {
-      mineSkip(path) {
-        this.$router.push(path);
+      toConsigneeManage(){  //点击收货人管理
+        this.$router.push({
+          path: "/myConsignee"
+        });
       },
+      toApplication(){  //点击申请经销商
+        this.$router.push({
+          path: "/writeApplicationInformation"
+        });
+      }
+      // mineSkip(path) {
+      //   // this.$router.push(path);
+      // },
     },
     watch: {
 
