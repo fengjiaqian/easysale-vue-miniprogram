@@ -9,10 +9,10 @@
 
     <section class="content-wrap">
       <!--累计下单金额-->
-      <div v-if="moduleShowIdx == 0">
+      <div>
         <ul class="quanty-total">
           <li class="qt-money">
-            <h5>{{statisticalData.totalAmount || 0}}</h5>
+            <h5>{{$options.filters.priceToFixed(statisticalData.totalAmount)}}</h5>
             <p>{{activeTitle}}累计下单额(元)</p>
           </li>
           <li class="qt-num">
@@ -21,60 +21,17 @@
           </li>
         </ul>
         <ul class="classes-column">
-          <li @click="switchModule(1)">
+          <li @click="skipTo('product')">
             <span>下单商品数量</span>
             <span>{{statisticalData.productSum}}<i></i></span>
           </li>
-          <li @click="switchModule(2)">
+          <li @click="skipTo('customer')">
             <span>下单客户数量</span>
             <span>{{statisticalData.customerSum}}<i></i></span>
           </li>
         </ul>
       </div>
 
-      <!--累计下单商品数据-->
-      <div v-if="moduleShowIdx == 1">
-        <div class="adsorb-bar">
-          <div class="ab-l">商品名称</div>
-          <div class="ab-m">
-            下单件数
-            <span></span>
-          </div>
-          <div class="ab-r">
-            下单金额
-            <span></span>
-          </div>
-        </div>
-        <ul class="list">
-          <li v-for="item in [1,2,3,4]">
-            <div>洋河蓝色经典梦之洋河蓝色经典梦之洋河蓝色经典梦之洋河蓝色经典梦之</div>
-            <div class="letter-p1">100件</div>
-            <div>¥9478.00</div>
-          </li>
-        </ul>
-      </div>
-
-      <!--累计下单用户数据-->
-      <div v-if="moduleShowIdx == 2">
-        <div class="adsorb-bar">
-          <div class="ab-l">客户名称</div>
-          <div class="ab-m">
-            下单件数
-            <span></span>
-          </div>
-          <div class="ab-r">
-            下单金额
-            <span></span>
-          </div>
-        </div>
-        <ul class="list">
-          <li v-for="item in [1,2,3,4]">
-            <div>小李的店铺</div>
-            <div class="letter-p1">100件</div>
-            <div>¥9478.00</div>
-          </li>
-        </ul>
-      </div>
     </section>
 
   </div>
@@ -88,7 +45,6 @@
       return {
         activeIdx: 0,   //选中的区间
         activeTitle: '今日', //选中的区间名称
-        moduleShowIdx: 0,
         userId: '',
         dayNum: 1,
         statisticalData: {},
@@ -136,9 +92,6 @@
             break;
         }
       },
-      switchModule(idx) {
-        this.moduleShowIdx = idx
-      },
       initStatistical(){
         let param = {
           userId: this.userId,
@@ -150,12 +103,14 @@
           }
         });
       },
+      skipTo(type){
+        let path = type == 'product' ? '/my/statisProductList' : '/my/statisCustomerList'
+        this.$router.push({ path });
+      },
     },
     watch: {
       dayNum: function(val) {
-          if (val) {
-            this.initStatistical()
-          }
+          this.initStatistical()
         }
     }
   }

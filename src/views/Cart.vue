@@ -102,10 +102,10 @@ export default {
     //删除单个或者多个商品
     _delete(id) {
       let selectedProducts = [];
-      if (id) {
-        selectedProducts = this.products.filter(item => item.id == id);
-      } else {
+      if (typeof id === "object") {  //此时id为$event 
         selectedProducts = this.products.filter(item => !!item.checked);
+      } else {
+        selectedProducts = this.products.filter(item => item.id == id);
       }
       if (!selectedProducts.length) {
         return this.$toast("请选择需要删除的商品");

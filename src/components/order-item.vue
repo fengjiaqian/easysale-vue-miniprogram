@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import encodeUtil from "common/encodeUtil";
 export default {
   name: "order-item",
   props: {
@@ -75,11 +76,11 @@ export default {
       return orderTab.find(item => item.state === state).text || "";
     },
     _jumpOrderDetail() {
-      const orderId = this.order.id;
+      const order = encodeURIComponent(JSON.stringify(this.order));
       this.$router.push({
         name: "orderDetail",
-        params: {
-          orderId
+        query: {
+          order
         }
       });
     }
