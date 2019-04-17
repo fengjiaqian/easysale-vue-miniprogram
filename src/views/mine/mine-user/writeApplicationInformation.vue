@@ -64,8 +64,8 @@ export default {
         // this.$router.push({
         //   path: "/navi/mineClient"
         // });
-     
-    }
+    },
+    step(){}
   }
 }
 </script>
