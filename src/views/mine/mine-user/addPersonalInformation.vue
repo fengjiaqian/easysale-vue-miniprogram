@@ -11,7 +11,7 @@
         </div>
         <div class="address">
             <div class="left">收货地址 :</div>
-            <textarea rows="2" cols="20"  placeholder="请填写收货地址" class="right">湖北省 武汉市 洪山区 花城大道软件新城A3-401</textarea>
+            <textarea rows="2" cols="20"  placeholder="请填写收货地址" class="right"></textarea>
         </div>
         <div class="edit">编辑</div>
     </div>
