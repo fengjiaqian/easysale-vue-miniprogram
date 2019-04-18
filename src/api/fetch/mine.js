@@ -186,7 +186,7 @@ function queryStaffList(params) {
 
 //我的模块-员工管理-查看经销商或员工信息
 function queryStaffDetail(params) {
-	const url = "/dealer/findDealerInfo"
+	const url = "/dealer/findSalespersonInfo"
 	return axios({
 		method: 'post',
 		url: url,
