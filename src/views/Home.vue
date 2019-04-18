@@ -1,5 +1,5 @@
 <template>
-  <div id="home" ref="scrollDom" :class="{'pt174': userType===3}">
+  <div id="home" ref="scrollDom" :class="{'pt174': userType==3}">
     <float-cart></float-cart>
     <!--  -->
     <div class="home-banner">
@@ -8,7 +8,7 @@
       </div>
     </div>
     <!--  -->
-    <div class="select-dealer" v-if="userType===3">
+    <div class="select-dealer" v-if="userType==3">
       <div class="left" @click="_jumpDealerList">
         <img v-lazy="''" alt>
         <strong>某某商贸公司</strong>
@@ -19,7 +19,7 @@
         <span>分享</span>
       </div>
     </div>
-    <search-bar :jump="true" :class="{'top82': userType===3}"></search-bar>
+    <search-bar :jump="true" :class="{'top82': userType==3}"></search-bar>
     <!--  -->
     <ul class="home-icons clearfix">
       <li v-for="item in appIcons">
@@ -111,22 +111,11 @@ export default {
     product,
     floatCart
   },
-  beforeCreate() {
-    const { nickName, avatarUrl, mobileNo, token, userId="" } = this.$route.query;
-    //有mobieNo, 到我的界面直接request userInfo
-    if(mobileNo){
-       storage.set("mobileNo", mobileNo);
-    }
-    //只有nickName和avatarUrl  缓存用户我的界面展示
-    if (nickName && avatarUrl) {
-      storage.set("nickName", decodeURIComponent(nickName));
-      storage.set("avatarUrl", decodeURIComponent(avatarUrl));
-    }
-
-  },
+  beforeCreate() {},
   computed: {},
   created() {
-    queryHomeProducts(19990530).then(res => {
+    this._initAuth();
+    queryHomeProducts().then(res => {
       if (res.result === "success" && res.data) {
         this.scrollMenu = res.data.brands;
         this.scrollMenu.length &&
@@ -143,6 +132,29 @@ export default {
   },
   mounted() {},
   methods: {
+    //初始化auth
+    _initAuth() {
+      const {
+        nickName,
+        avatarUrl,
+        mobileNo,
+        token,
+        userType
+      } = this.$route.query;
+      // 以登录身份访问
+      if (mobileNo && token && userType) {
+        storage.set("mobileNo", mobileNo);
+        storage.set("token", token);
+        storage.set("userType", userType);
+        this.userType = userType;
+      }
+      //只有nickName和avatarUrl,cache for mine page。以终端访客身份访问
+      if (nickName && avatarUrl) {
+        storage.set("nickName", decodeURIComponent(nickName));
+        storage.set("avatarUrl", decodeURIComponent(avatarUrl));
+      }
+    },
+    //
     _jumpDealerList() {
       this.$router.push({ path: "/dealerList" });
     },
@@ -220,7 +232,7 @@ export default {
         document.body.clientWidth || document.documentElement.clientWidth;
       var last_known_scroll_position = 0,
         ticking = false;
-      var d = this.userType === 3 ? 174 : 92;
+      var d = this.userType == 3 ? 174 : 92;
       this.distance =
         this.$refs.scrollMenuWrap.offsetTop - (clientWidth * d) / 750;
 
@@ -228,7 +240,7 @@ export default {
         last_known_scroll_position = this.$refs.scrollDom.scrollTop;
         if (!ticking) {
           window.requestAnimationFrame(() => {
-            var cls = this.userType === 3 ? "fixed-customer" : "fixed-dealer";
+            var cls = this.userType == 3 ? "fixed-customer" : "fixed-dealer";
             if (last_known_scroll_position > this.distance) {
               addClass(this.$refs.scrollMenuWrap, cls);
             } else {
@@ -313,6 +325,7 @@ export default {
   h(82);
   padding: 0 24px;
   bg(#fff);
+  z-index: 100;
 
   .left {
     flt();

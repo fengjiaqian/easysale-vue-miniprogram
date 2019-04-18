@@ -21,28 +21,37 @@
 </template>
 
 <script>
+import storage from "common/storage";
 export default {
   name: "tab",
   data() {
     return {};
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.userType = storage.get("userType", "3");
+  },
   methods: {
     _jumpMine() {
       switch (this.userType) {
-        case 1:
+        case "1":
           this.$router.push({ path: "/navi/mine" });
           break;
-        case 2:
+        case "2":
           this.$router.push({ path: "/navi/mineSales" });
           break;
-        case 3:
+        case "3":
           this.$router.push({ path: "/navi/mineClient" });
+          this._routeMineActive();
           break;
         default:
           break;
       }
+    },
+    _routeMineActive() {
+      const els = document.querySelectorAll(".tab-item");
+      const el = els[els.length - 1];
+      console.log(el);
     }
   }
 };

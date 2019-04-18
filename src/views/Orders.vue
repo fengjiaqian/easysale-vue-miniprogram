@@ -3,6 +3,11 @@
     <empty v-if="empty" txt="暂无此类订单"></empty>
     <ui-table :orderTab="orderTab" :initialState="currentState" @swithTab="_switchOrderType"></ui-table>
     <!--  -->
+    <div class="empty-page" v-if="isVisitor">
+      <p class="fz30 c-3">您当前没有订单</p>
+      <a class="default-btn" href="javascript:;" @click="_jumpWX">立即登录</a>
+    </div>
+    <!--  -->
     <scroll
       v-if="orderList.length"
       class="O-list"
@@ -31,7 +36,7 @@ const orderTab = [
 ];
 const params = {
   id: "",
-  userId: "465273",
+  // userId: "465273",
   customerId: "",
   orderState: "",
   createUser: "",
@@ -63,7 +68,9 @@ export default {
   computed: {},
   created() {
     this.params = params;
-    this._QueryOrders();
+    if (!this.isVisitor) {
+      this._QueryOrders();
+    }
   },
   methods: {
     _QueryOrders(reset) {
@@ -113,7 +120,15 @@ export default {
       this.$refs.scrollOrders && this.$refs.scrollOrders.scrollTo(0, 0);
       this.currentState = state;
       this.params.orderState = state;
+      if (!this.isVisitor) return false;
       this._QueryOrders(true);
+    },
+    _jumpWX() {
+      if (window.__wxjs_environment === "miniprogram") {
+        wx.miniProgram.navigateTo({
+          url: `/pages/mobile/mobile`
+        });
+      }
     }
   }
 };

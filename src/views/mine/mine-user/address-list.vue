@@ -3,24 +3,56 @@
   <div class="common">
     <!-- wx  收货信息的组件 addressList -->
     <ul class="list">
-      <li class="part" v-for="item in [1,2,3,4,5,6,7,8,9,10,11,12]">
+      <li class="part" v-for="item in addressCode">
         <div class="info">
-          <div class="name">张栋</div>
-          <div class="tel">13555555555</div>
+          <div class="name">{{item.name}}</div>
+          <div class="tel">{{item.phone}}</div>
         </div>
         <div class="operate">
-          <div class="shopname">小王店铺</div>
-          <div class="edit">编辑</div>
-          <div class="del">删除</div>
+          <div class="shopname">{{item.shopName}}</div>
+          <div class="edit" @click="modifyData(item)">编辑</div>
+          <div class="del" @click="DeletData(item)">删除</div>
         </div>
-        <div class="address">湖北省武汉市洪山区软件新城1期</div>
+        <div class="address">{{item.address}}</div>
       </li>
     </ul>
+    <div class="support"></div>
   </div>
 </template>
 
 <script>
-export default {};
+import { deleteConsignee } from "api/fetch/endCustomer";
+import bus from 'common/Bus'    //这是自定义事件，刷新页面
+
+export default {
+  name:"address-list",
+  props:{
+    addressCode: Array
+  },
+  methods:{
+    modifyData(item){   //点击编辑的时候
+      this.$router.push({
+        path: "/editConsignee",
+        query:{name:item.name,
+                phone:item.phone,
+                shop:item.shopName,
+                address:item.address,
+                id:item.id}
+      });
+    },
+    DeletData(item){  //点击删除的时候
+      console.log(222);
+      let param={
+        id: item.id,
+      }
+      deleteConsignee(param).then(res=>{
+         if (res.result === "success") {
+          bus.$emit('update','')
+        }
+      })
+    }
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -42,7 +74,7 @@ export default {};
 
 .common .list .part {
   width: 100%;
-  height: 192px;
+  // height: 192px;
   padding-top:24px;
   overflow :hidden;
   display: border-box;
@@ -50,9 +82,9 @@ export default {};
   border-bottom: 1px solid #f6f6f6;
 }
 
-.common .list .part:last-child{
-  margin-bottom :192px;
-}
+// .common .list .part:last-child{
+//   padding-bottom :192px;
+// }
 
 .common .list .part:first-child{
   margin-top :110px;
@@ -64,7 +96,6 @@ export default {};
 
 .common .list .part .info .name {
   float: left;
-  width: 64px;
   height: 44px;
   font-size: 32px;
   font-weight: 500;
@@ -89,7 +120,7 @@ export default {};
 }
 
 .common .list .part .operate .shopname {
-  width: 112px;
+  // width: 112px;
   height: 56px;
   font-size: 28px;
   color: rgba(102, 102, 102, 1);
@@ -124,11 +155,20 @@ export default {};
 
 .common .list .part .address {
   width: 100%;
-  height: 38px;
+  // height: 38px;
   font-size: 28px;
   font-family: PingFang-SC-Regular;
   font-weight: 400;
   color: rgba(102, 102, 102, 1);
   line-height: 38px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.common .support{
+  width :100%;
+  height:192px;
+  background-color #f6f6f6;
+
 }
 </style>
