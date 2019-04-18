@@ -10,8 +10,8 @@
     <!--  -->
     <div class="select-dealer" v-if="userType==3">
       <div class="left" @click="_jumpDealerList">
-        <img v-lazy="''" alt>
-        <strong>某某商贸公司</strong>
+        <img v-lazy="currentDealer.logoIamgeUrl" alt>
+        <strong>{{currentDealer.shopName}}</strong>
         <em></em>
       </div>
       <div class="right">
@@ -83,6 +83,24 @@ const appIcons = [
   { imgUrl: ic3, value: "退货管理" },
   { imgUrl: ic4, value: "陈列管理" }
 ];
+
+const currentDealer = {
+  id: 19990530,
+  shopName: "青春店铺",
+  phone: "13311112222",
+  address: "海南按",
+  userId: 19990530,
+  hireDate: 1597449600000,
+  discount: 0.99,
+  cardId: "55555",
+  parentId: 1111,
+  type: 1,
+  createDate: 1555126727000,
+  name: "青春作",
+  state: 1,
+  logoIamgeUrl:
+    "http://yjp-dev-articlesharing.ufile.ucloud.cn/easysale/2019/04/2d2e6bf8fe1a438a85da853eac9c3d59.png"
+};
 import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
@@ -102,7 +120,8 @@ export default {
       showSqure: false,
       menuCanScroll: false,
       scrollMenu: [],
-      currentColumnPorducts: []
+      currentColumnPorducts: [],
+      currentDealer: storage.get("currentDealer", "") || currentDealer
     };
   },
   components: {
@@ -117,7 +136,10 @@ export default {
     this._initAuth();
     queryHomeProducts().then(res => {
       if (res.result === "success" && res.data) {
-        this.scrollMenu = res.data.brands;
+        this.scrollMenu = res.data.brands || [];
+        if (!this.scrollMenu.length) {
+          return this.$toast("当前经销商暂无商品，请重新选择经销商");
+        }
         this.scrollMenu.length &&
           (this.currentColumnId = this.scrollMenu[0].brandId);
         this.productList = transformProductList(res.data.products);
@@ -156,7 +178,12 @@ export default {
     },
     //
     _jumpDealerList() {
-      this.$router.push({ path: "/dealerList" });
+      this.$router.push({
+        name: "dealerList",
+        params: {
+          id: this.currentDealer.id
+        }
+      });
     },
     jumpSecondsort(item) {},
     //计算 scroll-menu 的scroll_menu_content 的宽度
@@ -197,7 +224,6 @@ export default {
       // }
       //如果没有产品则需查询
       const params = {
-        dealerId: "19990530",
         brandId: id,
         pageSize: 10
       };

@@ -2,15 +2,15 @@
   <div class="common">
     <div class="name">
       <div class="left">姓名 :</div>
-      <input class="right" v-model="name" placeholder="请输入姓名" type="text">
+      <input class="right" type="text" v-model="name" placeholder="请输入姓名">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" v-model="phone" placeholder="请输入手机号码" type="text">
+      <input class="right" type="number" v-model="phone" placeholder="请输入手机号码">
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" v-model="shopName" placeholder="请输入店铺名称" type="text">
+      <input class="right" type="text" v-model="shopName" placeholder="请输入店铺名称">
     </div>
     <div class="address">
       <div class="left">收货地址 :</div>

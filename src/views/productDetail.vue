@@ -5,7 +5,7 @@
     </div>
     <div class="D-name">{{product.productName}}</div>
     <div class="D-price">
-      <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
+      <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
     </div>
     <div class="D-number">
       <span class="c-3 fz30">数量</span>

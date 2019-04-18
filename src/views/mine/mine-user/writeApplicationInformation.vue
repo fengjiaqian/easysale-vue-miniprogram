@@ -1,23 +1,22 @@
 
 <template>
   <div class="common">
-    <!-- wx  填写申请信息 writeApplicationInformation -->
     <div class="name">
       <div class="left">客户姓名 :</div>
       <input class="right" v-model="clientName" value type="text" placeholder="请输入姓名">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="clientTel" type="text" placeholder="请输入手机号码">
+      <input class="right" value v-model="clientTel" type="number" placeholder="请输入手机号码">
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" value  v-model="storeName" type="text" placeholder="请输入店铺名称">
+      <input class="right" value v-model="storeName" type="text" placeholder="请输入店铺名称">
     </div>
     <div class="address">
       <div class="left">店铺地址 :</div>
       <input class="right" value v-model="storeAddress" type="text" placeholder="请输入店铺地址">
-      <img class="location" src="../../../assets/images/address_position_icon.png" alt="">
+      <img class="location" src="../../../assets/images/address_position_icon.png" alt>
     </div>
     <div class="license">
       <div class="left">营业执照 :</div>
@@ -33,41 +32,37 @@ import { applyDealer } from "api/fetch/endCustomer";
 export default {
   data() {
     return {
-      clientName:"", //客户名字
-      clientTel:"", //电话
-      storeName:"", //店铺名字
-      storeAddress:"", //收货人地址
-      // judgeName:false,
-      // judgePhone:false,
-      // judgeShop:false,
-      // judgeaddArea:false,
+      clientName: "", //客户名字
+      clientTel: "", //电话
+      storeName: "", //店铺名字
+      storeAddress: "" //收货人地址
     };
   },
-  created() {
-  },
-  methods:{
-    referData(){   //点击保存的时候
-     console.log(666);
-      let param ={
-        name:this.clientName,
-        id:323232,
+  created() {},
+  methods: {
+    referData() {
+      //点击保存的时候
+      console.log(666);
+      let param = {
+        name: this.clientName,
+        id: 323232,
         phone: this.clientTel,
-        shopName :this.storeName,
-        address:this.storeAddress,
-      }
+        shopName: this.storeName,
+        address: this.storeAddress
+      };
       applyDealer(param).then(res => {
-          if (res.result === "success") {
-            // bus.$emit('update',''); //刷新页面的东西
-            console.log("保存成功");
-          }
-        }); 
-        // this.$router.push({
-        //   path: "/navi/mineClient"
-        // });
+        if (res.result === "success") {
+          // bus.$emit('update',''); //刷新页面的东西
+          console.log("保存成功");
+        }
+      });
+      // this.$router.push({
+      //   path: "/navi/mineClient"
+      // });
     },
-    step(){}
+    step() {}
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -115,7 +110,7 @@ export default {
   height: 90px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
-  position:relative;
+  position: relative;
 }
 
 .common .address .left {
@@ -142,12 +137,12 @@ export default {
 }
 
 .common .address .location {
-  width:48px;
-  height:48px;
-  display :inline-block;
-  position:absolute;
-  right:24px;
-  top:24px;
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+  position: absolute;
+  right: 24px;
+  top: 24px;
 }
 
 .common .license {
