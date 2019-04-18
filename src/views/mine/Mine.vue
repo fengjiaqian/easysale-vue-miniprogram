@@ -8,7 +8,7 @@
         <h5>{{nickName || '访客'}}</h5>
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
-      <div class="user-code" @click="mineSkip('/my/userInviteCode')">
+      <div class="user-code" @click="mineSkip('/my/userInviteCode')" v-if="userType==1">
         <i></i>
         <span>邀请码</span>
       </div>
