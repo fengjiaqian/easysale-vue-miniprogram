@@ -1,17 +1,16 @@
 
 <template>
   <div class="common">
-    <!-- wx  收货信息的组件 addressList -->
     <ul class="list">
-      <li class="part" v-for="item in addressCode">
+      <li class="part" v-for="item in addressList" :key="item.id">
         <div class="info">
           <div class="name">{{item.name}}</div>
           <div class="tel">{{item.phone}}</div>
         </div>
         <div class="operate">
           <div class="shopname">{{item.shopName}}</div>
-          <div class="edit" @click="modifyData(item)">编辑</div>
-          <div class="del" @click="DeletData(item)">删除</div>
+          <div class="edit" @click="_modify(item)">编辑</div>
+          <div class="del" @click="_delet(item.id)">删除</div>
         </div>
         <div class="address">{{item.address}}</div>
       </li>
@@ -22,34 +21,42 @@
 
 <script>
 import { deleteConsignee } from "api/fetch/endCustomer";
-import bus from 'common/Bus'    //这是自定义事件，刷新页面
-
 export default {
-  name:"address-list",
-  props:{
-    addressCode: Array
+  name: "address-list",
+  props: {
+    addressList: {
+      type: Array,
+      default: () => []
+    }
   },
-  methods:{
-    modifyData(item){   //点击编辑的时候
+  methods: {
+    _modify(item) {
+      const addressInfo = encodeURIComponent(JSON.stringify(item));
       this.$router.push({
+<<<<<<< HEAD
         path: "/editConsignee",
         query:{name:item.name,
                phone:item.phone,
                shop:item.shopName,
                address:item.address,
                id:item.id}
+=======
+        name: "updateConsignee",
+        params: {
+          code: 2
+        },
+        query: {
+          addressInfo
+        }
+>>>>>>> d88a8b940b9be64937c0d8f060a70f855ee4cd5b
       });
     },
-    DeletData(item){  //点击删除的时候
-      console.log(222);
-      let param={
-        id: item.id,
-      }
-      deleteConsignee(param).then(res=>{
-         if (res.result === "success") {
-          bus.$emit('update','')
+    _delet(id) {
+      deleteConsignee(id).then(res => {
+        if (res.result === "success") {
+          this.$emit("deletItem", id);
         }
-      })
+      });
     }
   }
 };
@@ -75,20 +82,20 @@ export default {
 .common .list .part {
   width: 100%;
   // height: 192px;
-  padding-top:24px;
-  overflow :hidden;
+  padding-top: 24px;
+  overflow: hidden;
   display: border-box;
   background-color: #fff;
   border-bottom: 1px solid #f6f6f6;
 }
 
 // .common .list .part:last-child{
-//   padding-bottom :192px;
+// padding-bottom :192px;
 // }
-
-.common .list .part:first-child{
-  margin-top :110px;
+.common .list .part:first-child {
+  margin-top: 110px;
 }
+
 .common .list .part .info {
   width: 100%;
   height: 64px;
@@ -165,10 +172,9 @@ export default {
   margin-bottom: 5px;
 }
 
-.common .support{
-  width :100%;
-  height:192px;
-  background-color #f6f6f6;
-
+.common .support {
+  width: 100%;
+  height: 192px;
+  background-color: #f6f6f6;
 }
 </style>

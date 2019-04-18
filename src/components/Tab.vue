@@ -12,15 +12,16 @@
         <a class="tab-order" href="javascript:;"></a>
         <span>订单</span>
       </router-link>
-      <div class="tab-item" @click="_jumpMine">
+      <router-link tag="div" class="tab-item" to="/navi/mine">
         <a class="tab-mine" href="javascript:;"></a>
         <span>我的</span>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import storage from "common/storage";
 export default {
   name: "tab",
   data() {
@@ -28,23 +29,7 @@ export default {
   },
   created() {},
   mounted() {},
-  methods: {
-    _jumpMine() {
-      switch (this.userType) {
-        case 1:
-          this.$router.push({ path: "/navi/mine" });
-          break;
-        case 2:
-          this.$router.push({ path: "/navi/mineSales" });
-          break;
-        case 3:
-          this.$router.push({ path: "/navi/mineClient" });
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  methods: {}
 };
 </script>
 

@@ -8,7 +8,7 @@
       <div class="spec">规格 {{product.specification}}</div>
       <div class="price">
         <div>
-          <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
+          <span class="c-yellow" v-html="$options.filters.price(product.price, product.priceUnit)"></span>
         </div>
         <number-picker :product="product"></number-picker>
       </div>
@@ -44,8 +44,7 @@ export default {
 </script>
 
 
-<style lang="stylus"> 
-.H-product-item {
+<style lang="stylus">.H-product-item {
   padding: 24px 0 0 24px;
   bg(#fff);
 }

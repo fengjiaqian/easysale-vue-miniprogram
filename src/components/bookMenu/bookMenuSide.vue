@@ -72,13 +72,13 @@
     justify-content center
     align-items center
     position absolute
-    top 120px
+    top 80px
     width 20px
     right 16px
     bottom 0
     .item
       text-align center
-      lh(46)
+      lh(44)
       ft(30)
       c-6()
 </style>

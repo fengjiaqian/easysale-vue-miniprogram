@@ -24,15 +24,13 @@ export function ListProduct(params = {}) {
 }
 
 // 19990530  首页类目商品
-export function queryHomeProducts(id) {
+export function queryHomeProducts() {
 
 	const url = "/product/selectBrandProductList";
 	return axios({
 		method: 'post',
 		url: url,
-		data: {
-			dealerId: id
-		},
+		data: {},
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)

@@ -2,14 +2,14 @@ import Vue from 'vue'
 
 Vue.filter('price', function (val, unit = "") {
 	if (!val) {
-		return `&yen;<span class="fz38">?<span><span class="fz28">${unit}</span>`
+		return `&yen;<span class="fz38">?<span><span class="fz28">元/${unit}</span>`
 	}
 	let value = '0.00';
 	if (val) {
 		value = val.toFixed(2);
 	}
 	let nums = value.split('.');
-	return `&yen;<span class="fz38">${nums[0]}<span><span class="fz28">.${nums[1]}<span class="fz28">${unit}</span></span>`
+	return `&yen;<span class="fz38">${nums[0]}<span><span class="fz28">.${nums[1]}<span class="fz28">元/${unit}</span></span>`
 })
 
 Vue.filter('orderState', function (state) {
@@ -30,4 +30,20 @@ Vue.filter('priceToFixed', function (val) {
 		value = val
 	}
 	return value;
+})
+
+Vue.directive('auth-interceptors',  {
+	bind(el, binding){
+		console.log(el) 
+		console.log(binding)
+		el.addEventListener('click',function(){
+			console.log('directive evt')
+		})
+	},
+	inserted(){
+		console.log('inserted') 
+	},
+	unbind(){
+
+	}
 })

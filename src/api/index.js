@@ -6,25 +6,15 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 
 axios.interceptors.request.use(function (config) {
 
-	if (config.data) {
-		//config.data.userId = "6348352047144357000";  //用户id 
-		//config.data.userId = "6348352047144357000";  //用户id
-		//config.data.dealerId = "19990530";  //店铺id
+	const token = storage.get("token", "");
+	const userType = storage.get("userType", "");
+	//如果缓存里面没有token userId  ，req 默认带一个 default_dealerId （类似酒批默认城市 南京）。
+	const default_dealerId = storage.get("dealerId", "") || "19990530";  //default_dealerId
+	if (token) {
+		config.headers.token = token;
 	}
-	// const token = storage.get('TOKEN', '');
-	// const addressId = storage.get('addressId', '');
-	// if (token) {
-	// 	config.headers.token = token
-	// 	config.headers.addressId = String(addressId)
-	// 	//如果是易酒批零会员，请求头要加上
-	// 	if(localStorage.getItem("loginType")=='YjtBizuser'){
-	// 		config.headers.usersource = localStorage.getItem("loginType")
-	// 	}
-	// } else {
-	// 	config.data.cityId = '402'
-	// 	config.data.userClassId = 1
-	// 	config.data.userDisplayClass = 0
-	// }
+	//一个终端用只匹配当前选择的dealerId
+	config.data.dealerId = default_dealerId;
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();
