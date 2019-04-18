@@ -90,3 +90,35 @@ export function applyDealer(param) {
 		return Promise.reject(res.data)
 	});
 }
+
+// 客户登录时查看自己的详细信息（客户登录）
+export function findCustomerOwerInfo() {
+
+	const url = "/customer/findCustomerOwerInfo"
+	return axios({
+		method: 'post',
+		url: url,
+		data: {},
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//客户登录时修改自己的详细信息（客户登录） 
+export function updateOwerCustomer(param) {
+
+	const url = "/customer/updateOwerCustomer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: param,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
