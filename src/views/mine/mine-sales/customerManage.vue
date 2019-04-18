@@ -1,5 +1,4 @@
 
-
 <template>
   <div class="staff-list-wrap">
     <!-- 销售人员   客户管理   customerManage -->
@@ -26,7 +25,7 @@
     data() {
       return {
         bookMenuData: {},
-        bookMenuType: 1,
+        bookMenuType: 2,
       };
     },
     components: {

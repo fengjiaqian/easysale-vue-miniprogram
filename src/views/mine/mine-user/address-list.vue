@@ -34,10 +34,10 @@ export default {
       this.$router.push({
         path: "/editConsignee",
         query:{name:item.name,
-                phone:item.phone,
-                shop:item.shopName,
-                address:item.address,
-                id:item.id}
+               phone:item.phone,
+               shop:item.shopName,
+               address:item.address,
+               id:item.id}
       });
     },
     DeletData(item){  //点击删除的时候
