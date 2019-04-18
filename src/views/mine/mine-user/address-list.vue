@@ -33,14 +33,6 @@ export default {
     _modify(item) {
       const addressInfo = encodeURIComponent(JSON.stringify(item));
       this.$router.push({
-<<<<<<< HEAD
-        path: "/editConsignee",
-        query:{name:item.name,
-               phone:item.phone,
-               shop:item.shopName,
-               address:item.address,
-               id:item.id}
-=======
         name: "updateConsignee",
         params: {
           code: 2
@@ -48,7 +40,6 @@ export default {
         query: {
           addressInfo
         }
->>>>>>> d88a8b940b9be64937c0d8f060a70f855ee4cd5b
       });
     },
     _delet(id) {
