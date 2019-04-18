@@ -96,8 +96,8 @@ module.exports = {
             '/': {
                 // target: 'http://192.168.0.25:5201/', //lidengfeng
                 // target: 'http://192.168.0.221:5201/', //chenchuxiang
-                // target: 'http://192.168.0.157:5201/', //dev
-                target: 'http://192.168.0.74:5201/', //lilijuan
+                    target: 'http://192.168.0.133:5201/', //dev
+                //  target: 'http://192.168.0.74:5201/', //lilijuan
                 ws: false,
                 changeOrigin: true,
                 pathRewrite: { '^/': '' }

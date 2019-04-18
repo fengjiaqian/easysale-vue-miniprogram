@@ -102,7 +102,8 @@ export default {
     //删除单个或者多个商品
     _delete(id) {
       let selectedProducts = [];
-      if (typeof id === "object") {  //此时id为$event 
+      if (typeof id === "object") {
+        //此时id为$event
         selectedProducts = this.products.filter(item => !!item.checked);
       } else {
         selectedProducts = this.products.filter(item => item.id == id);
@@ -134,6 +135,7 @@ export default {
     },
     //提交订单
     _submitOrder() {
+      if (this.navigateToLogin()) return false;
       const selectedProducts = this.products.filter(item => item.checked);
       if (!selectedProducts.length) {
         return this.$toast("请选择商品");
