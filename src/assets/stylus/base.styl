@@ -189,3 +189,31 @@ body{
 .letter-p1{
   letter-spacing 1px
 }
+.upload-wrap{
+  .el-upload--picture-card{
+    w(160)
+    h(160)
+    background-image url(../images/input_upload_icon.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+    border none
+  }
+  .el-upload-list{
+    display none
+    li{
+      w(160)
+      h(160)
+    }
+  }
+  .el-upload-list__item-actions{
+    display none
+  }
+  .el-progress-circle{
+    width 140px !important
+    height 140px !important
+  }
+  .el-progress{
+    width 140px !important
+  }
+}

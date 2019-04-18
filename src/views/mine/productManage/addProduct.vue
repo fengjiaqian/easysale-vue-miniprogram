@@ -26,19 +26,36 @@
       </ul>
       <div class="upload-pic-wrap">
         <span>商品图片</span>
-        <ul></ul>
+        <ul class="img-list">
+          <li v-for="(item,index) in fileList">
+            <img :src="item.url">
+            <i @click="deleteUploadImg(index)"></i>
+          </li>
+          <el-upload class="upload-wrap"
+                     action="file/uploadImg"
+                     list-type="picture-card"
+                     :headers="headers"
+                     :before-upload="onBeforeUpload"
+                     :on-change="changeLoad"
+                     :on-success="fileSuccess"
+                     :on-error="fileFaild"
+                     accept="image/jpeg,image/gif,image/png">
+          </el-upload>
+        </ul>
       </div>
       <div class="product-introduce">
         <span>商品介绍：</span>
         <textarea v-model="productModal.description" maxlength="180" rows="4" placeholder="请输入介绍文字"></textarea>
       </div>
+
     </div>
     <div class="confirm" @click="verify">确认</div>
   </div>
 </template>
 
 <script>
-  import { addProduct } from "api/fetch/mine";
+  import { addProduct,uploadImg } from "api/fetch/mine";
+  import storage from "common/storage";
   export default {
     data() {
       return {
@@ -54,15 +71,22 @@
           priceUnit: '',
           productType: 1, //类型 0=酒批 1=经销商
           specification: '',
-          effectiveDate: ''
+          effectiveDate: '',
         },
+        limitUploadNum: 1,//上传图片的限制张数
+        fileList: [],
       };
     },
     components: {
 
     },
     computed: {
-
+      headers() {
+        const token = storage.get("token", "");
+        return {
+          'token': token,
+      }
+      }
     },
     created() {
 
@@ -104,6 +128,41 @@
             this.$router.push({ path: "/my/productList" });
           }
         });
+      },
+      //图片上传前验证
+      onBeforeUpload(file){
+        const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
+        const isLt1M = file.size / 1024 / 1024 < 1;
+        if (!isIMAGE) {
+          this.$alert('上传文件只能是图片格式!');
+        }
+        if (!isLt1M) {
+          this.$alert('上传文件大小不能超过 1MB!');
+        }
+        return isIMAGE && isLt1M;
+      },
+      changeLoad(file, fileList){
+
+      },
+      //图片上传成功时
+      fileSuccess(res, file) {
+        this.fileList.unshift(file)
+        if(this.fileList.length == this.limitUploadNum){
+          document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
+        }
+        this.productModal.productImageUrl = res.data
+      },
+      fileFaild(){
+        this.$alert('图片上传失败！')
+      },
+      deleteUploadImg(idx){
+        this.fileList = this.fileList.filter((item,index)=>{
+          return idx!=index
+        })
+        if(this.fileList.length < this.limitUploadNum){
+          document.querySelector('.el-upload--picture-card').removeAttribute('style')
+        }
+        this.productModal.productImageUrl = ''
       },
     }
   };

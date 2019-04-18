@@ -310,10 +310,25 @@ function editCustomer(params) {
 	});
 }
 
+//文件上传-图片上传
+function uploadImg(params) {
+	const url = "/file/uploadImg"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 export {
 	queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
     queryProductList, queryProductBrand, oprateManageProduct,
     addProduct, productDetail, editProduct, queryJyProduct,
 	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole,
-	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer
+	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer,
+	uploadImg
 }

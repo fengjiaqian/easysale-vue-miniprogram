@@ -11,6 +11,7 @@ import 'common/appConfig'
 import './assets/stylus/index.styl'
 import { Toast, Alert, Confirm } from './plugins/dialog/index.js'
 import mixin from 'common/rootMixin'
+import './plugins/element.js'
 
 Vue.use(Toast)
 Vue.use(Alert)
