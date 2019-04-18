@@ -137,7 +137,8 @@ export default {
     pos(absolute);
     top: 54px;
     right: 24px;
-    bg($color-theme);
+    background: url('../../assets/images/icon-duigou.png') no-repeat center;
+    background-size: cover;
   }
 
   .pic {
