@@ -3,26 +3,95 @@
     <!-- wx  新增收货人的页面  addConsignee -->
     <div class="name">
       <div class="left">姓名 :</div>
-      <input class="right" value="张栋" type="text">
+      <input class="right" v-model="addName" value="张栋" type="text">
     </div>
+    <div class="judgeinfo" v-if="judgeName">姓名不可以为空</div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value="13555555555" type="text">
+      <input class="right" v-model="addPhone" value="13555555555" type="text">
     </div>
+     <div class="judgeinfo" v-if="judgePhone">请填入正确的联系电话</div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" value="老王的店铺" type="text">
+      <input class="right" v-model="addShop" value="老王的店铺" type="text">
     </div>
+     <div class="judgeinfo" v-if="judgeShop">店铺名字不能为空</div>
     <div class="address">
       <div class="left">收货地址 :</div>
-      <textarea rows="2" cols="20" class="right">湖北省 武汉市 洪山区 花城大道软件新城A3-401</textarea>
+      <textarea rows="2" cols="20" class="right" v-model="addArea">湖北省 武汉市 洪山区 花城大道软件新城A3-401</textarea>
     </div>
-    <div class="edit">保存</div>
+     <div class="judgeinfo" v-if="judgeaddArea">收货地址不可以为空</div>
+    <div class="edit" @click="addData()">保存</div>
   </div>
 </template>
 
 <script>
-export default {};
+import { addConsigneer } from "api/fetch/endCustomer";
+import bus from 'common/Bus'    //刷新页面的东西
+
+
+export default {
+  data() {
+    return {
+      addName:"", //名字
+      addPhone:"", //电话
+      addShop:"", //店铺名字
+      addArea:"", //收货人地址
+      userId:222,
+      judgeName:false,
+      judgePhone:false,
+      judgeShop:false,
+      judgeaddArea:false,
+    };
+  },
+  created() {
+  },
+  methods:{
+    addData(){   //点击保存的时候
+      if(this.addName ==''){
+        console.log('名字不可以为空！');
+        this.judgeName = true;
+        return false;
+      }
+      this.judgeName = false;
+      if(!(/^1[34578]\d{9}$/.test(this.addPhone))){ 
+          console.log("请输入正确的手机号码");  
+          this.judgePhone = true;
+          return false; 
+      } 
+       this.judgePhone = false;
+       if(this.addShop ==''){
+        console.log('店铺名字不可以为空！');
+         this.judgeShop = true;
+        return false;
+      }
+       this.judgeShop = false;
+       if(this.addArea ==''){
+        console.log('收货人地址不可以为空！');
+         this.judgeaddArea = true;
+        return false;
+      }
+      this.judgeaddArea = false;
+      let param ={
+        name:this.addName,
+        userId:222,
+        phone: this.addPhone,
+        shopName :this.addShop,
+        address:this.addArea,
+      }
+      addConsigneer(param).then(res => {
+          if (res.result === "success") {
+            bus.$emit('update',''); //刷新页面的东西
+            console.log("新增成功");
+          }
+        }); 
+        this.$router.push({
+          path: "/myConsignee"
+        });
+     
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -111,5 +180,13 @@ export default {};
   color: rgba(255, 255, 255, 1);
   line-height: 98px;
   text-align: center;
+}
+
+.judgeinfo{
+    text-align: right;
+    color: #f00;
+    height: 45px;
+    line-height: 45px;
+    margin-right: 80px;
 }
 </style>

@@ -3,9 +3,9 @@
   <div class="common">
     <!-- wx  我的收货人的页面 myConsignee -->
     <div class="search">
-      <input class="case" type="text" value="" @change="chooseData()" v-model="chooseCode" placeholder="请输入姓名或者电话">
+      <input class="case" type="text" value=""  @change="chooseData()" v-model="chooseCode" placeholder="请输入姓名或者电话">
     </div>
-    <address-list></address-list>
+    <address-list :addressCode="listDetail" @operationalData="operational"></address-list>
     
     <div class="edit" @click="addPerson()">新增收货人</div>
   </div>
@@ -14,17 +14,22 @@
 <script>
 import AddressList from "./address-list.vue";
 import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
-
+import bus from 'common/Bus'
 export default {
   data() {
     return {
-      chooseCode:"", //input框绑定的事件
-      listDetail:"", //我的收货人的数据
+      chooseCode:"", //input框绑定的数据
+      listDetail:[], //我的收货人的数据
       
     };
   },
   components: {
     AddressList
+  },
+  mounted(){
+      bus.$on('update', () => {
+        this.queryList()
+      })    
   },
   computed: {
     
@@ -42,7 +47,7 @@ export default {
         if (res.result === "success" && res.data) {
           this.listDetail  = res.data;
           console.log(this.listDetail);
-          debugger
+          // debugger
         }
       });  
     },
@@ -50,10 +55,14 @@ export default {
       let that = this;
       that.queryList();
       console.log(4444);
-
     },
-    addPerson(){
-
+    addPerson(){   //点击新建收货人的时候
+      this.$router.push({
+          path: "/addConsignee",
+        });
+    },
+    operational(){ //自定义事件，传到子组件里去
+    
     },
     stop(){}
 
