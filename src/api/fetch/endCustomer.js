@@ -1,15 +1,19 @@
 // 终端客户的接口
 import axios from 'axios'
 
-
-// 查询客户收货人列表
-export function queryCustomerConsigneeList(param) {
+/**
+ * 查询客户收货人列表
+ * @param { } keyword  关键字
+ */
+export function queryCustomerConsigneeList(keyword = "") {
 
 	const url = "/consigneer/listConsigneerByNameOrPhone"
 	return axios({
 		method: 'post',
 		url: url,
-		data: param,
+		data: {
+			keyword
+		},
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)
@@ -18,14 +22,19 @@ export function queryCustomerConsigneeList(param) {
 	});
 }
 
-// 删除收货人
-export function deleteConsignee(param) {
+/**
+ * 删除收货人
+ * @param {*} id  
+ */
+export function deleteConsignee(id) {
 
 	const url = "/consigneer/deleteConsigneer"
 	return axios({
 		method: 'post',
 		url: url,
-		data: param,
+		data: {
+			id
+		},
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)

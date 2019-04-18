@@ -124,14 +124,8 @@ const myConsignee = (resolve) => { //wx 我的收货人的页面
     })
 }
 
-const editConsignee = (resolve) => { //wx 编辑收货人的页面
-    import('views/mine/mine-user/editConsignee.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-const addConsignee = (resolve) => { //wx 新增收货人的页面
-    import('views/mine/mine-user/addConsignee.vue').then((module) => {
+const updateConsignee = (resolve) => {
+    import('views/mine/mine-user/updateConsignee.vue').then((module) => {
         resolve(module)
     })
 }
@@ -433,21 +427,13 @@ const mine = [
                 },
                 component: myConsignee,
             },
-            { //wx 编辑收货人
-                path: '/editConsignee',
-                name: 'editConsignee',
+            {
+                path: '/updateConsignee/:code',
+                name: 'updateConsignee',
                 meta: {
-                    title: '编辑收货人',
+                    title: '收货人',
                 },
-                component: editConsignee,
-            },
-            { //wx 新增收货人
-                path: '/addConsignee',
-                name: 'addConsignee',
-                meta: {
-                    title: '新增收货人',
-                },
-                component: addConsignee,
+                component: updateConsignee,
             },
             { //wx 填写申请信息
                 path: '/writeApplicationInformation',

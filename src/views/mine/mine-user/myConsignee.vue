@@ -1,71 +1,62 @@
 
 <template>
   <div class="common">
-    <!-- wx  我的收货人的页面 myConsignee -->
     <div class="search">
-      <input class="case" type="text" value=""  @change="chooseData()" v-model="chooseCode" placeholder="请输入姓名或者电话">
+      <input
+        class="case"
+        type="text"
+        value
+        @change="_queryCustomerConsigneeList"
+        v-model="keyword"
+        placeholder="请输入姓名或者电话"
+      >
     </div>
-    <address-list :addressCode="listDetail" @operationalData="operational"></address-list>
-    
-    <div class="edit" @click="addPerson()">新增收货人</div>
+    <address-list :addressList="addressList" @deletItem="_deletItem"></address-list>
+    <div class="edit" @click="_addAddress()">新增收货人</div>
   </div>
 </template>
 
 <script>
 import AddressList from "./address-list.vue";
 import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
-import bus from 'common/Bus'
+
 export default {
   data() {
     return {
-      chooseCode:"", //input框绑定的数据
-      listDetail:[], //我的收货人的数据
-      
+      keyword: "",
+      addressList: []
     };
   },
   components: {
     AddressList
   },
-  mounted(){
-      bus.$on('update', () => {
-        this.queryList()
-      })    
-  },
-  computed: {
-    
-  },
+  mounted() {},
+  computed: {},
   created() {
-   this.queryList()
+    this._queryCustomerConsigneeList();
   },
   methods: {
-    queryList(){   //获取收货人的数据
-      let param = {
-        userId: 222,
-        keyword: this.chooseCode,
-      }
-      queryCustomerConsigneeList(param).then(res => {
+    _queryCustomerConsigneeList() {
+      queryCustomerConsigneeList(this.keyword).then(res => {
         if (res.result === "success" && res.data) {
-          this.listDetail  = res.data;
-          console.log(this.listDetail);
-          // debugger
+          this.addressList = res.data;
         }
-      });  
+      });
     },
-    chooseData(){   //当输入条件查询的时候
-      let that = this;
-      that.queryList();
-      console.log(4444);
+    _deletItem(id) {
+      const Idx = this.addressList.findIndex(item => item.id == id);
+      if (Idx != -1) {
+        this.addressList.splice(Idx, 1);
+      }
     },
-    addPerson(){   //点击新建收货人的时候
+    _addAddress() {
       this.$router.push({
-          path: "/addConsignee",
-        });
-    },
-    operational(){ //自定义事件，传到子组件里去
-    
-    },
-    stop(){}
-
+        name: "updateConsignee",
+        params: {
+          code: 1
+        }
+      });
+    }
   }
 };
 </script>
@@ -80,11 +71,11 @@ export default {
 
 .common .search {
   width: 100%;
-  height:110px;
+  height: 110px;
   background-color: white;
   display: border-box;
   padding: 24px;
-  padding:24px 24px 10px 24px;
+  padding: 24px 24px 10px 24px;
   position: fixed;
   top: 0;
   z-index: 100;
@@ -102,23 +93,11 @@ export default {
   font-weight: 400;
   color: rgba(136, 136, 136, 1);
   background: rgba(246, 246, 246, 1) url('../../../assets/images/ic_sousuo@2x.png') no-repeat center;
-  background-position:30% center;
+  background-position: 30% center;
   background-size: 32px 32px;
-
-//   block()
-//   inline()
-//   w(702)
-//   h(72)
-//   bg()
-//   c()
-//   ft()
-//   text-c()
-//   radius(10)
 }
 
-
 // list
-
 .common .edit {
   width: 100%;
   height: 98px;
