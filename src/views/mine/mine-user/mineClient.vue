@@ -1,18 +1,24 @@
 <template>
   <div id="mine">
-      <!-- userType : 3  终端客户  mineClient -->
+    <!-- userType : 3  终端客户  mineClient -->
     <div class="user-info">
       <div class="user-avart" @click="mineSkip('/my/userInfo')">
-        <img v-lazy alt>
+        <img v-lazy="avatarUrl" alt>
       </div>
       <div class="user-tel" @click="mineSkip('/my/userInfo')">
-        <h5>终端客户的我的页面-小终端</h5>
-        <p>电话：13555555555</p>
+        <h5>{{nickName || 'id4209888'}}</h5>
+        <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
+      <span class="bind-tel" @click.stop="_jumpWX" v-if="isVisitor">绑定手机号</span>
     </div>
     <!--  -->
     <ul class="enter-list">
-      <li class="enter-item" :class="item.class" @click="mineSkip(item.path)" v-for="item in mineMenu">
+      <li
+        class="enter-item"
+        :class="item.class"
+        @click="mineSkip(item.path)"
+        v-for="item in mineMenu"
+      >
         <div class="enter-item-img">
           <span></span>
         </div>
@@ -26,51 +32,51 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        mineMenu: [
-          {
-            'title': '收货人管理',
-            'class': 'consignee_manage',
-            'path': '/myConsignee'
-          },
-          {
-            'title': '申请经销商',
-            'class': 'apply_dealer',
-            'path': '/writeApplicationInformation'
-          }
-        ]
+import storage from "common/storage";
+export default {
+  data() {
+    return {
+      mobileNo: storage.get("mobileNo", ""),
+      avatarUrl: "",
+      nickName: "",
+      mineMenu: [
+        {
+          title: "收货人管理",
+          class: "consignee_manage",
+          path: "/myConsignee"
+        },
+        {
+          title: "申请经销商",
+          class: "apply_dealer",
+          path: "/writeApplicationInformation"
+        }
+      ]
+    };
+  },
+  computed: {},
+  components: {},
+  beforeCreate: function() {},
+  created: function() {
+    this.nickName = storage.get("nickName", "");
+    this.avatarUrl = storage.get("avatarUrl", "");
+  },
+  beforeDestory() {},
+  destoryed() {},
+  mounted() {},
+  methods: {
+    mineSkip(path) {
+      this.$router.push(path);
+    },
+    _jumpWX() {
+      if (window.__wxjs_environment === "miniprogram") {
+        wx.miniProgram.navigateTo({
+          url: `/pages/mobile/mobile`
+        });
       }
-    },
-    computed: {
-
-    },
-    components: {
-
-    },
-    beforeCreate: function() {
-
-    },
-    created: function() {
-
-    },
-    beforeDestory(){
-    },
-    destoryed(){
-    },
-    mounted() {
-
-    },
-    methods: {
-      mineSkip(path) {
-        this.$router.push(path);
-      },
-    },
-    watch: {
-
     }
-  }
+  },
+  watch: {}
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -88,8 +94,6 @@
   }
 
   .enter-item-img {
-
-    
     block();
     flt();
     w(104);
@@ -100,13 +104,14 @@
       squ(56);
       margin: 17px auto 0;
     }
-    span{
+
+    span {
       block();
       squ(56);
       margin: 17px auto 0;
-      background-size contain
-      background-repeat no-repeat
-      background-position center
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
   }
 
@@ -117,7 +122,6 @@
     ft(30);
     flex-center();
     justify-content: space-between;
-
 
     em {
       block();
@@ -130,53 +134,62 @@
   }
 }
 
-.consignee_manage{
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/staff_icon.png)
+.consignee_manage {
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/staff_icon.png');
     }
   }
-  .enter-item-txt{
+
+  .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
 }
-.apply_dealer{
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/customer_icon.png)
+
+.apply_dealer {
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/customer_icon.png');
     }
   }
 }
-.customer{
-  mt(20)
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/customer_icon.png)
+
+.customer {
+  mt(20);
+
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/customer_icon.png');
     }
   }
-  .enter-item-txt{
+
+  .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
 }
-.staff{
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/staff_icon.png)
+
+.staff {
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/staff_icon.png');
     }
   }
 }
-.setting{
-  mt(20)
-  .enter-item-img{
-    span{
-      background-image url(../../../assets/images/setting_icon.png)
+
+.setting {
+  mt(20);
+
+  .enter-item-img {
+    span {
+      background-image: url('../../../assets/images/setting_icon.png');
     }
   }
 }
 
 // icon-order-handler
 .user-info {
-  padding 32px 24px
+  pos(relative);
+  padding: 32px 24px;
   bg(#fff);
 }
 
@@ -184,6 +197,7 @@
   squ(120);
   flt();
   border-radius: 50%;
+  overflow: hidden;
 
   img {
     width: 100%;
@@ -192,13 +206,15 @@
 }
 
 .user-tel {
-  ml(24)
-  inline()
+  ml(24);
+  inline();
+
   h5 {
+    h(46);
     ft(33);
     c(#333);
     lh(46);
-    pt(12)
+    pt(12);
   }
 
   p {
@@ -208,26 +224,42 @@
     c(#888);
   }
 }
-.user-code{
-  float right
-  flex()
-  flex-direction column
-  align-items center
-  mt(12)
-  i{
-    inline
-    w(48)
-    h(48)
-    background-image url(../../../assets/images/user_code_icon.png)
-    background-size contain
-    background-repeat no-repeat
-    background-position center
-    mb(8)
+
+.bind-tel {
+  pos(absolute);
+  top: 76px;
+  right: 24px;
+  block();
+  w(154);
+  lh(48);
+  bg(#FFBD38);
+  c(#fff);
+  ft(26);
+  text-c();
+  radius(24);
+}
+
+.user-code {
+  float: right;
+  flex();
+  flex-direction: column;
+  align-items: center;
+  mt(12);
+
+  i {
+    inline();
+    w(48);
+    h(48);
+    background-image: url('../../../assets/images/user_code_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    mb(8);
   }
 }
-  .mt-20{
-    mt(20)
-  }
 
+.mt-20 {
+  mt(20);
+}
 </style>
 

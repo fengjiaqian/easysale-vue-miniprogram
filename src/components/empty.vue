@@ -4,7 +4,7 @@
       <img :src="iconUrl" alt>
     </div>
     <p class="fz30 c-3">{{txt}}</p>
-    <router-link v-if="hasBtn" tag="span" class="default-btn" to="/navi/home">返回首页</router-link>
+    <router-link v-if="hasBtn" class="default-btn" to="/navi/home">返回首页</router-link>
   </div>
 </template>
 

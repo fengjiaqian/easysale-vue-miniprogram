@@ -429,6 +429,7 @@ const mine = [
                 name: 'myConsignee',
                 meta: {
                     title: '我的收货人',
+                    requireAuth: true
                 },
                 component: myConsignee,
             },
@@ -453,6 +454,7 @@ const mine = [
                 name: 'writeApplicationInformation',
                 meta: {
                     title: '填写申请信息',
+                    requireAuth: true
                 },
                 component: writeApplicationInformation,
             },

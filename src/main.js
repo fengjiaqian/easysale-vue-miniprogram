@@ -19,16 +19,6 @@ Vue.use(VueLazyload, {
   error: require('./assets/images/loading-logo.png'),
   loading: require('./assets/images/loading-logo.png')
 })
-
-router.beforeEach((to, from, next) => {
-
-  let $el = document.querySelector('.loading-message');
-  $el && $el.parentNode.removeChild($el);
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
-  next()
-})
 Vue.config.productionTip = false
 
 new Vue({

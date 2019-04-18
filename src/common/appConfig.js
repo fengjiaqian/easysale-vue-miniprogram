@@ -31,3 +31,19 @@ Vue.filter('priceToFixed', function (val) {
 	}
 	return value;
 })
+
+Vue.directive('auth-interceptors',  {
+	bind(el, binding){
+		console.log(el) 
+		console.log(binding)
+		el.addEventListener('click',function(){
+			console.log('directive evt')
+		})
+	},
+	inserted(){
+		console.log('inserted') 
+	},
+	unbind(){
+
+	}
+})
