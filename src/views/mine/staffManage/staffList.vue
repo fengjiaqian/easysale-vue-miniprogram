@@ -13,6 +13,10 @@
       <book-list :bookMenu="bookMenuData" :bookMenuType="bookMenuType"></book-list>
       <book-menu-side :bookMenu="bookMenuData"></book-menu-side>
     </section>
+    <section class="empty-wrap" v-if="staffList&&!staffList.length">
+      <i></i>
+      <span>暂无员工，快去添加吧！</span>
+    </section>
     <!--底部-->
     <section class="sl-footer" @click="skipTo">新增员工</section>
   </div>
@@ -23,6 +27,7 @@
   import bookMenuSide from "components/bookMenu/bookMenuSide.vue";
   import { queryStaffList } from "api/fetch/mine";
   import { creatBookMenuData } from "common/createBookMenu";
+  import empty from "components/empty.vue";
   export default {
 
     data() {
@@ -33,13 +38,14 @@
           parentId: 19990530,
           keyword: ''
         },
-        staffList: [],//员工列表
+        staffList: null,//员工列表
         searchKey: '',//搜索关键字
       };
     },
     components: {
       BookList,
-      bookMenuSide
+      bookMenuSide,
+      empty
     },
     computed: {
 
@@ -52,8 +58,11 @@
       queryStaffs(){
         queryStaffList(this.filterParam).then(res => {
           if (res.result === "success" && res.data) {
+            this.staffList = res.data
             this.bookMenuData = creatBookMenuData(res.data)
           }
+        }).catch(res => {
+          this.staffList = []
         });
       },
       handleChange($event){
