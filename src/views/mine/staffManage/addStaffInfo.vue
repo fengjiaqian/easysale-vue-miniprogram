@@ -17,7 +17,7 @@
       </li>
       <li class="special-li">
         <span>详细地址：</span>
-        <div>{{staffInfo.address}}</div>
+        <div @click="obtainAddress">{{staffInfo.address}}</div>
         <i class="position"></i>
       </li>
       <div class="h20"></div>
@@ -59,6 +59,7 @@
 
 <script>
   import { addStaff,queryRole } from "api/fetch/mine";
+  import { evokeWxLocation } from "common/location";
   export default {
     data() {
       return {
@@ -84,6 +85,19 @@
     },
     computed: {
 
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm=>{
+        console.log('进入')
+      })
+    },
+    beforeRouteLeave (to, from, next) {
+      console.log('离开')
+      next()
+    },
+    beforeRouteUpdate (to, from, next) {
+      console.log('路由变化')
+      next()
     },
     created(){
       this._queryRole()
@@ -137,8 +151,15 @@
       },
       rolePopToggle(){
         this.rolePopShow = true
-      }
-    }
+      },
+      obtainAddress(){
+        let recordData = {
+          path: this.$route.path,
+          pageData: this.staffInfo
+        }
+        evokeWxLocation(recordData)
+      },
+    },
   };
 </script>
 
