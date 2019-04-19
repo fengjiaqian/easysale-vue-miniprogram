@@ -1,7 +1,6 @@
 
 <template>
   <div class="common">
-    <!-- wx  申请经销商 applyDealer -->
     <div class="status">
       <div class="mode">
         <div class="way">退货状态:</div>
@@ -50,8 +49,6 @@ export default {
   created() {},
   methods: {}
 };
-
-
 </script>
 
 <style lang="stylus" scoped>
