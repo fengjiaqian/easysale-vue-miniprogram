@@ -7,6 +7,7 @@ const mixin = {
         }
     },
     methods: {
+        //auth权限控制
         navigateToLogin() {
             if (this.isVisitor) {
                 if (window.__wxjs_environment === "miniprogram") {

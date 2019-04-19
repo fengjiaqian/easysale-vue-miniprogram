@@ -1,25 +1,28 @@
 <template>
   <div id="mine">
     <div class="user-info">
-      <div class="user-avart" @click="mineSkip('/my/userInfo')">
+      <div class="user-avart" @click="mineSkip('/customerInfo')">
         <img v-lazy="avatarUrl" alt>
       </div>
-      <div class="user-tel" @click.stop="jumpWX">
-        <h5>{{nickName || 'test'}}</h5>
-        <p>电话：13627762233</p>
+      <div class="user-tel" @click="mineSkip('/customerInfo')">
+        <h5>{{nickName || '访客'}}</h5>
+
+        <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
-      <div class="user-code" @click="mineSkip('/my/userInviteCode')">
+      <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
         <i></i>
         <span>邀请码</span>
       </div>
+      <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
     </div>
-    <!--  -->
+    <!-- 功能模块 -->
     <ul class="enter-list">
       <li
         class="enter-item"
         :class="item.class"
         @click="mineSkip(item.path)"
         v-for="item in mineMenu"
+        :key="item.path"
       >
         <div class="enter-item-img">
           <span></span>
@@ -34,61 +37,36 @@
 </template>
 
 <script>
+//TODO: 终端用户 申请经销商待审核状态显示
+import * as mineUtil from "./mineCommon";
 import storage from "common/storage";
 export default {
   data() {
     return {
-      nickName: "",
-      avatarUrl: "",
-      mineMenu: [
-        {
-          title: "商品管理",
-          class: "product_manage",
-          path: "/my/productList"
-        },
-        {
-          title: "数据统计",
-          class: "data_static",
-          path: "/my/statistical"
-        },
-        {
-          title: "客户管理",
-          class: "customer",
-          path: "/my/customerList"
-        },
-        {
-          title: "员工管理",
-          class: "staff",
-          path: "/my/staffList"
-        },
-      ]
+      mobileNo: storage.get("mobileNo", ""),
+      avatarUrl: storage.get("avatarUrl", ""),
+      nickName: storage.get("nickName", ""),
+      mineMenu: []
     };
   },
   computed: {},
   components: {},
   beforeCreate: function() {},
   created: function() {
-    const mobileNo = storage.get("mobileNo", "");
-    this.nickName = storage.get("nickName", "");
-    this.avatarUrl = storage.get("avatarUrl", "");
-    if (!this.nickName && mobileNo) {
-      //req userInfo
-    }
+    this.mineMenu = mineUtil.initAccessModule(this.userType);
   },
   beforeDestory() {},
   destoryed() {},
   mounted() {},
   methods: {
     mineSkip(path) {
+      if (this.navigateToLogin()) {
+        return false;
+      }
       this.$router.push(path);
     },
-    jumpWX() {
-      if (storage.get("mobileNo", "")) return false;
-      if (window.__wxjs_environment === "miniprogram") {
-        wx.miniProgram.navigateTo({
-          url: `/pages/mobile/mobile`
-        });
-      }
+    _bindPhone() {
+      this.navigateToLogin();
     }
   },
   watch: {}
@@ -221,6 +199,7 @@ export default {
 }
 
 .user-tel {
+  h(120);
   ml(24);
   inline();
 
@@ -229,15 +208,33 @@ export default {
     ft(33);
     c(#333);
     lh(46);
-    pt(12);
+    pt(20);
   }
 
   p {
-    mt(8);
+    mt(20);
     lh(36);
     ft(26);
     c(#888);
   }
+
+  span {
+    float: right;
+  }
+}
+
+.bind-tel {
+  pos(absolute);
+  top: 70px;
+  right: 24px;
+  block();
+  w(154);
+  lh(48);
+  bg(#FFBD38);
+  c(#fff);
+  ft(26);
+  text-c();
+  radius(24);
 }
 
 .user-code {

@@ -9,7 +9,7 @@ axios.interceptors.request.use(function (config) {
 	const token = storage.get("token", "");
 	const userType = storage.get("userType", "");
 	//如果缓存里面没有token userId  ，req 默认带一个 default_dealerId （类似酒批默认城市 南京）。
-	const default_dealerId = storage.get("dealerId", "") || "19990530";  //default_dealerId
+	const default_dealerId = storage.get("currentDealerId", "") || "19990530";  //default_dealerId
 	if (token) {
 		config.headers.token = token;
 	}
@@ -37,6 +37,9 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
 	if (response.config.loading) {
 		$Loading && $Loading.close()
+	}
+	if (response.data.result != 'success') {
+		return Promise.reject(response);
 	}
 	// if (response.data && (response.data.message === '100102009'
 	// 	|| response.data.desc == '登录已过期，请重新登录~')) {

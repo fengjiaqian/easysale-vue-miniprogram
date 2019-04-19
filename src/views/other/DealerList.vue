@@ -1,32 +1,38 @@
 <template>
   <div class="dealer-list">
     <search-bar></search-bar>
-    <div class="current-dealer">
+    <div class="current-dealer" v-if="currentDealer.phone">
       <div class="title">当前商贸公司</div>
       <div class="dealer-item">
         <div class="pic">
-          <img v-lazy="''" alt>
+          <img v-lazy="currentDealer.logoIamgeUrl" alt>
         </div>
         <div class="content" style="border: 0;">
-          <p>茅台商贸公司</p>
-          <p>电话：13876542333</p>
+          <p>{{currentDealer.shopName}}</p>
+          <p>电话：{{currentDealer.phone}}</p>
         </div>
         <span class="checked"></span>
       </div>
     </div>
     <!--  -->
+    <empty class="scroll-list" :txt="'当前没有可选经销商店铺'" v-if="empty"></empty>
+    <!--  -->
     <div class="scroll-list">
       <scroll class="scroll-dom">
         <section>
-          <div class="dealer-item" v-for="i in 10">
+          <div
+            class="dealer-item"
+            v-for="item in dealerList"
+            :key="item.id"
+            @click="_chooseDealer(item)"
+          >
             <div class="pic">
-              <img v-lazy="''" alt>
+              <img v-lazy="item.logoIamgeUrl" alt>
             </div>
             <div class="content">
-              <p>茅台商贸公司</p>
-              <p>电话：13876542333</p>
+              <p>{{item.shopName}}</p>
+              <p>电话：{{item.phone}}</p>
             </div>
-            <span class="checked"></span>
           </div>
         </section>
       </scroll>
@@ -37,16 +43,45 @@
 <script>
 import searchBar from "components/searchBar.vue";
 import scroll from "components/scroll.vue";
+import empty from "components/empty.vue";
+import { ListAllDealer } from "api/fetch/home";
+import storage from "common/storage";
 export default {
   name: "dealer-list",
   data() {
-    return {};
+    return {
+      currentDealer: {},
+      dealerList: [],
+      empty: false
+    };
   },
   components: {
     searchBar,
-    scroll
+    scroll,
+    empty
   },
-  methods: {}
+  created() {
+    this.currentId = this.$route.params.id || "";
+    this._ListAllDealer();
+  },
+  methods: {
+    _ListAllDealer() {
+      ListAllDealer().then(res => {
+        if (res.data) {
+          const { dataList, pager } = res.data;
+          this.currentDealer = dataList.find(item => item.id == this.currentId);
+          this.dealerList = dataList.filter(item => item.id != this.currentId);
+          this.empty = !this.dealerList.length;
+        }
+      });
+    },
+    _chooseDealer(dealer) {
+      storage.set("currentDealerId", dealer.id);
+      storage.set("currentDealer", dealer);
+      location.href = location.origin + "/#/navi/home";
+      location.reload();
+    }
+  }
 };
 </script>
 
@@ -102,7 +137,8 @@ export default {
     pos(absolute);
     top: 54px;
     right: 24px;
-    bg($color-theme);
+    background: url('../../assets/images/icon-duigou.png') no-repeat center;
+    background-size: cover;
   }
 
   .pic {

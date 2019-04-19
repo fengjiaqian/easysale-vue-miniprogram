@@ -39,9 +39,9 @@ module.exports = {
                     uglifyOptions: {
                         compress: {
                             warnings: false,
-                            drop_console: true,//console
+                            drop_console: true, //console
                             drop_debugger: true,
-                            pure_funcs: ['console.log']//移除console
+                            pure_funcs: ['console.log'] //移除console
                         }
                     }
                 })
@@ -68,10 +68,9 @@ module.exports = {
     },
     css: {
         modules: false,
-        extract: IS_PROD,//IS_PROD ==>true
+        extract: IS_PROD, //IS_PROD ==>true
         sourceMap: false,
-        loaderOptions: {
-        }
+        loaderOptions: {}
     },
     pluginOptions: {
 
@@ -94,13 +93,15 @@ module.exports = {
             //     pathRewrite: { '^/ua': '' }
             // },
             '/': {
-                 //target: 'http://192.168.0.25:5201/', //lidengfeng
-                // target: 'http://192.168.0.221:5201/', //chenchuxiang
-                //    target: 'http://192.168.0.133:5201/', //dev
-                  target: 'http://192.168.0.74:5201/', //lilijuan
+                // target: 'http://192.168.0.25:5201/', //lidengfeng
+                //    target: 'http://192.168.0.221:5201/', //chenchuxiang
+                target: 'http://192.168.0.133:5201/', //dev
+                //  target: 'http://192.168.0.74:5201/', //lilijuan
                 ws: false,
                 changeOrigin: true,
-                pathRewrite: { '^/': '' }
+                pathRewrite: {
+                    '^/': ''
+                }
             },
 
         }

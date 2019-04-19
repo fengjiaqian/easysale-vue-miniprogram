@@ -1,37 +1,31 @@
-
 <template>
   <div class="common">
     <div class="name">
-      <div class="left">客户姓名 :</div>
-      <input class="right" v-model="name" value type="text" placeholder="请输入姓名">
+      <div class="left">姓名 :</div>
+      <input class="right" type="text" v-model="name" placeholder="请输入姓名">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码">
+      <input class="right" type="number" v-model="phone" placeholder="请输入手机号码">
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" value v-model="shopName" type="text" placeholder="请输入店铺名称">
+      <input class="right" type="text" v-model="shopName" placeholder="请输入店铺名称">
     </div>
     <div class="address">
-      <div class="left">店铺地址 :</div>
-      <input class="right" value v-model="address" type="text" placeholder="请输入店铺地址">
-      <img class="location" src="../../../assets/images/address_position_icon.png" alt>
+      <div class="left">收货地址 :</div>
+      <textarea rows="2" cols="20" class="right" v-model="address" placeholder="请输入店铺名称"></textarea>
     </div>
-    <div class="license">
-      <div class="left">营业执照 :</div>
-      <div class="right"></div>
-    </div>
-    <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
+    <div class="edit" @click="_operate" :class="{'can-operate': canOperate}">保存</div>
   </div>
 </template>
 
 <script>
-import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
-
+import * as Operation from "api/fetch/endCustomer";
 export default {
   data() {
     return {
+      code: 1, //新增1  编辑2
       name: "",
       phone: "",
       shopName: "",
@@ -43,27 +37,38 @@ export default {
       return this.name && this.phone && this.shopName && this.address;
     }
   },
-  created() {},
+  created() {
+    this.init();
+  },
   methods: {
-    //TODO: 带入电话号码和姓名
-    //TODO: 上传参数加入图片
-    _applyDealer() {
+    init() {
+      this.code = this.$route.params.code;
+      let addressInfo = this.$route.query.addressInfo;
+      addressInfo &&
+        (addressInfo = JSON.parse(decodeURIComponent(addressInfo)));
+      document.title = this.code == 1 ? "新增收货人" : "编辑收货人";
+      if (this.code == 2 && addressInfo) {
+        for (let preperty in addressInfo) {
+          this[preperty] = addressInfo[preperty];
+        }
+      }
+    },
+    _operate() {
       if (!this.canOperate) return false;
       const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
       const regExp = new RegExp(partter);
-      if (!regExp.test(this.phone)) {
+      const { name, phone, shopName, address } = this;
+      if (!regExp.test(phone)) {
         return this.$toast("手机号码格式不正确");
       }
-      const params = {
-        name: this.name,
-        phone: this.phone,
-        shopName: this.shopName,
-        address: this.address
-      };
-      applyDealer(params)
+      const operate = this.code == 1 ? "addConsigneer" : "modifyConsignee";
+      Operation[operate]({ name, phone, shopName, address })
         .then(res => {
-          this.$toast("申请信息提交成功");
-          this.$router.go(-1);
+          if (res.result === "success") {
+            this.$router.push({
+              path: "/myConsignee"
+            });
+          }
         })
         .catch(err => {
           this.$toast(err.message);
@@ -96,7 +101,6 @@ export default {
   width: 150px;
   height: 42px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(102, 102, 102, 1);
   line-height: 42px;
   margin: 24px 12px 24px 24px;
@@ -107,7 +111,6 @@ export default {
   width: 600px;
   height: 42px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(51, 51, 51, 1);
   line-height: 42px;
   margin-top: 24px;
@@ -115,10 +118,9 @@ export default {
 }
 
 .common .address {
-  height: 90px;
+  height: 132px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
-  position: relative;
 }
 
 .common .address .left {
@@ -126,61 +128,21 @@ export default {
   width: 150px;
   height: 42px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(102, 102, 102, 1);
   line-height: 42px;
   margin: 24px 12px 66px 24px;
 }
 
 .common .address .right {
-  float: left;
-  width: 600px;
-  height: 42px;
+  width: 540px;
+  height: 84px;
   font-size: 30px;
-  font-weight: 400;
   color: rgba(51, 51, 51, 1);
   line-height: 42px;
   margin-top: 24px;
   outline: none;
-}
-
-.common .address .location {
-  width: 48px;
-  height: 48px;
-  display: inline-block;
-  position: absolute;
-  right: 24px;
-  top: 24px;
-}
-
-.common .license {
-  width: 100%;
-  height: 208px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 1);
-  margin-top: 20px;
-}
-
-.common .license .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 24px 24px;
-}
-
-.common .license .right {
-  float: left;
-  width: 160px;
-  height: 160px;
-  border-radius: 6px;
-  border: 1px dashed rgba(221, 221, 221, 1);
-  margin-top: 24px;
-  background: rgba(246, 246, 246, 1) url('../../../assets/images/ic_jiahao.png.jpg') no-repeat center;
-  background-size: 64px 64px;
+  resize: none;
+  border: 0;
 }
 
 .edit {

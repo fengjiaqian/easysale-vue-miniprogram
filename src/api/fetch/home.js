@@ -38,3 +38,25 @@ export function queryHomeProducts() {
 		return Promise.reject(res.data)
 	});
 }
+
+/**
+ * 查询所有经销商列表
+ */
+export function ListAllDealer(params = {}) {
+
+	const paramsData = Object.assign({
+		pageNum: 1,
+		pageSize: 20
+	}, params);
+	const url = "/user/listAllDealer";
+	return axios({
+		method: 'post',
+		url,
+		data: paramsData,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}

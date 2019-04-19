@@ -1,7 +1,6 @@
 
 <template>
   <div class="common">
-    <!-- wx  申请经销商 applyDealer -->
     <div class="status">
       <div class="mode">
         <div class="way">退货状态:</div>
@@ -13,7 +12,7 @@
       <div class="trade">营业执照</div>
       <div class="carousel">
         1111222333
-        <!-- <div class="slider-wrapper bg-w" v-if="banners && banners.length">
+        <div class="slider-wrapper bg-w" v-if="banners && banners.length">
           <div class="slider-body">
             <slider :loop="loop" ref="slider_dom">
               <div class="banner-item" v-for="item in banners" :key="item.bannerId">
@@ -23,7 +22,7 @@
               </div>
             </slider>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="infor">

@@ -8,7 +8,7 @@
       <p class="name">{{product.productName}}</p>
       <div class="price">
         <div>
-          <span class="c-yellow" v-html="$options.filters.price(398)"></span>
+          <span class="c-yellow" v-html="$options.filters.price( product.price, product.priceUnit)"></span>
         </div>
         <number-picker :product="product"></number-picker>
       </div>

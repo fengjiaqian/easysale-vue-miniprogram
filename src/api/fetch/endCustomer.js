@@ -1,15 +1,19 @@
 // 终端客户的接口
 import axios from 'axios'
 
-
-// 查询客户收货人列表
-export function queryCustomerConsigneeList(param) {
+/**
+ * 查询客户收货人列表
+ * @param { } keyword  关键字
+ */
+export function queryCustomerConsigneeList(keyword = "") {
 
 	const url = "/consigneer/listConsigneerByNameOrPhone"
 	return axios({
 		method: 'post',
 		url: url,
-		data: param,
+		data: {
+			keyword
+		},
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)
@@ -18,14 +22,19 @@ export function queryCustomerConsigneeList(param) {
 	});
 }
 
-// 删除收货人
-export function deleteConsignee(param) {
+/**
+ * 删除收货人
+ * @param {*} id  
+ */
+export function deleteConsignee(id) {
 
 	const url = "/consigneer/deleteConsigneer"
 	return axios({
 		method: 'post',
 		url: url,
-		data: param,
+		data: {
+			id
+		},
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)
@@ -65,11 +74,30 @@ export function addConsigneer(param) {
 		return Promise.reject(res.data)
 	});
 }
+/**
+ * 客户登录时查看自己的详细信息(包含经销商查看required id)
+ * @param {*} id  客户id
+ */
+export function findCustomerOwerInfo(id = "") {
 
-// 申请经销商   
-export function applyDealer(param) {
+	const url = "/customer/findCustomerOwerInfo"
+	return axios({
+		method: 'post',
+		url: url,
+		data: { id },
+		loading: true,
+	}).then((res) => {
 
-	const url = "/dealer/updateDealer"
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//客户登录时修改自己的详细信息（客户登录） 
+export function updateOwerCustomer(param) {
+
+	const url = "/customer/updateOwerCustomer"
 	return axios({
 		method: 'post',
 		url: url,
@@ -81,3 +109,26 @@ export function applyDealer(param) {
 		return Promise.reject(res.data)
 	});
 }
+
+
+/**
+ * 终端用户申请经销商  
+ * @param {*} params  Object {name,phone,shopName,address}
+ */
+
+export function applyDealer(params) {
+
+	const url = "/dealer/customerApplyToDealer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+
