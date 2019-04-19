@@ -23,7 +23,13 @@
       <div class="h20"></div>
       <li>
         <span>雇佣日期：</span>
-        <input v-model="staffInfo.hireDate" type="date" placeholder="请输入身份证号">
+        <!--<input v-model="staffInfo.hireDate" type="date" placeholder="请选择雇佣日期">-->
+        <el-date-picker
+                class="date-pick-wrap"
+                v-model="staffInfo.hireDate"
+                type="date"
+                placeholder="请选择雇佣日期">
+        </el-date-picker>
         <i class="extension"></i>
       </li>
       <li>
@@ -122,6 +128,7 @@
         this.saveAdd()
       },
       saveAdd(){
+        this.staffInfo.hireDate = new Date(this.staffInfo.hireDate).getTime()
         addStaff(this.staffInfo).then(res => {
           if (res.result === "success") {
             //商品添加成功后回到商品管理列表页
