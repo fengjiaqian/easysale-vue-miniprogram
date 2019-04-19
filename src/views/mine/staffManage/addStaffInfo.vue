@@ -85,7 +85,7 @@
         rolePopShow: false,
         activeRoleName: '',
         roleId: '',//角色id
-        passData: {'a':144},
+        passData: {},
       };
     },
     components: {
@@ -96,15 +96,18 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm=>{
-        console.log('进入')
+        let passData = to.query.passData ? to.query.passData : null
+        if(passData){
+          passData = JSON.parse(passData)
+          Object.assign(vm.staffInfo,passData.pageData)
+          vm.staffInfo.address = passData.addressData.address
+        }
       })
     },
     beforeRouteLeave (to, from, next) {
-      console.log('离开')
       next()
     },
     beforeRouteUpdate (to, from, next) {
-      console.log('路由变化')
       next()
     },
     created(){
