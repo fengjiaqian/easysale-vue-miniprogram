@@ -2,25 +2,51 @@
   <div class="order-submit">
     <!-- <div class="select-customer">
       <strong class="fz30">收货人信息</strong>
-      <a class="c-theme" href="javascript:;" @click="_selectCustomer">选择客户</a>
+      <a
+        class="c-theme"
+        href="javascript:;"
+        @click="_selectCustomer"
+      >{{customers.length?'选择客户':'新增客户'}}</a>
     </div>-->
 
     <!--  -->
-    <div class="order-detail-area">
+    <div class="order-detail-area" v-if="!userType==3">
       <h5>
         收货人信息
-        <a href="javascript:;" class="frt c-theme fz28">选择客户</a>
+        <a
+          href="javascript:;"
+          class="frt c-theme fz28"
+          @click="_selectCustomer"
+        >{{userType==3?'选择收货人':'选择客户'}}</a>
       </h5>
-      <div class="info-display pre">
-        <p>客户姓名：老王</p>
-        <p>手机号码：134-2348-2334</p>
+      <div class="info-display pre" v-if="currentCustomer.name">
+        <p>客户姓名：{{currentCustomer.name}}</p>
+        <p>手机号码：{{currentCustomer.phone}}</p>
       </div>
-      <div class="info-display">
-        <p>店铺名称：老王的店铺</p>
-        <p>收货地址：武汉市洪山区软件新城A3-401</p>
+      <div class="info-display" v-if="currentCustomer.name">
+        <p>店铺名称：{{currentCustomer.customerShopName}}</p>
+        <p>收货地址：{{currentCustomer.address}}</p>
       </div>
     </div>
-
+    <!--  -->
+    <div class="order-detail-area" v-else>
+      <h5>
+        收货人信息
+        <a
+          href="javascript:;"
+          class="frt c-theme fz28"
+          @click="_selectCustomer"
+        >{{userType==3?'选择收货人':'选择客户'}}</a>
+      </h5>
+      <div class="info-display pre" v-if="currentCustomer.name">
+        <p>客户姓名：{{currentCustomer.name}}</p>
+        <p>手机号码：{{currentCustomer.phone}}</p>
+      </div>
+      <div class="info-display" v-if="currentCustomer.name">
+        <p>店铺名称：{{currentCustomer.customerShopName}}</p>
+        <p>收货地址：{{currentCustomer.address}}</p>
+      </div>
+    </div>
     <!--  -->
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
@@ -68,6 +94,11 @@
 </template>
 
 <script>
+/**
+ * 终端用户下单 3  选择收货人
+ * 经销商下单  1 选择客户  同销售人员
+ *
+ */
 const enterFail = function(msg) {
   this.$router.push({
     path: "/orderResult",
@@ -79,13 +110,18 @@ const enterFail = function(msg) {
 import storage from "common/storage";
 import { OrderSubmit } from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
+import { queryAddressList } from "api/fetch/endCustomer";
+import { findCustomerList } from "api/fetch/dealer";
 export default {
   name: "order-submit",
   data() {
     return {
       products: [],
       amount: 0,
-      totalMoney: 0
+      totalMoney: 0,
+      addresList: [], //收货人列表 userType3
+      customers: [], //客户列表   userType1 2
+      currentCustomer: {} //当前客户
     };
   },
   beforeCreate() {},
@@ -97,23 +133,33 @@ export default {
       (ac, cur) => (ac += cur.buyCount * cur.price),
       0
     );
+    //
+    const customerInfo = this.$route.query.customerInfo || "";
+    customerInfo &&
+      (this.currentCustomer = JSON.parse(decodeURIComponent(customerInfo)));
+    this._initInRole();
   },
   mounted() {},
   methods: {
-    _selectCustomer() {},
+    _initInRole() {
+      if (this.userType == 3) {
+        this.listAddress();
+      } else {
+        this.listCustomers();
+      }
+    },
     _OrderSubmit() {
-      const dealerId = 323232, //userId
-        customerId = 7459728428173504343,
+      const dealerId = 323232,
+        customerId = this.currentCustomer.id,
         orderAmount = 90;
       const orderItem = transformOrderItems(this.products);
       const params = {
-        orderState: 1,
-        dealerId,
+        //dealerId,
         customerId,
         orderAmount,
-        orderItem,
-        createUser: 465273, //userId
-        updateUser: 465273
+        orderItem
+        // createUser: 465273,
+        // updateUser: 465273
       };
       OrderSubmit(params)
         .then(res => {
@@ -129,6 +175,44 @@ export default {
       this.$router.push({
         path: "/goodsList",
         query: { products }
+      });
+    },
+    //收货人列表
+    listAddress() {
+      queryAddressList()
+        .then(res => {
+          this.addresList = res.data || [];
+        })
+        .catch(err => {
+          this.$toast(err.message);
+        });
+    },
+    //客户列表
+    listCustomers() {
+      findCustomerList()
+        .then(res => {
+          this.customers = res.data || [];
+        })
+        .catch(err => {
+          this.$toast(err.message);
+        });
+    },
+    _selectCustomer() {
+      if (!this.customers.length) {
+        //新增客户
+        return this.$router.push({
+          path: "/my/addCustomerInfo",
+          query: {
+            fromOrder: true
+          }
+        });
+      }
+      //选择客户
+      this.$router.push({
+        path: "/my/customerList",
+        query: {
+          fromOrder: true
+        }
       });
     }
   }

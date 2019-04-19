@@ -13,7 +13,12 @@
       <div class="h20"></div>
       <li>
         <span>店铺名称：</span>
-        <input v-model="customerInfo.customerShopName" maxlength="30" type="tel" placeholder="请输入店铺名称">
+        <input
+          v-model="customerInfo.customerShopName"
+          maxlength="30"
+          type="tel"
+          placeholder="请输入店铺名称"
+        >
       </li>
       <li class="special-li">
         <span>详细地址：</span>
@@ -36,9 +41,12 @@
           <i @click="rolePopShow=false"></i>
         </h5>
         <ul class="list">
-          <li :class="{'active':activeIdx == index}"
-              v-for="(item,index) in saleList" :key="item.id"
-              @click="selectItem(item,index)">{{item.name}}</li>
+          <li
+            :class="{'active':activeIdx == index}"
+            v-for="(item,index) in saleList"
+            :key="item.id"
+            @click="selectItem(item,index)"
+          >{{item.name}}</li>
         </ul>
         <div class="btn" @click="confirmSale">确定</div>
       </div>
@@ -48,93 +56,99 @@
 </template>
 
 <script>
-  import { addCustomer,queryStaffList } from "api/fetch/mine";
-  export default {
-    data() {
-      return {
-        customerInfo: {
-          name: '',
-          phone: '',
-          customerShopName: '',
-          address: '测试地址',
-          salesPersonUserId: '',
-          label:''
-        },
-        saleList: [],//销售人员列表
-        rolePopShow: false,
-        filterParam: {
-          parentId: 19990530,
-          keyword: ''
-        },
-        activeIdx: null,
-        activeName: '',
-      };
-    },
-    components: {
-
-    },
-    computed: {
-
-    },
-    created(){
-      this.queryStaffs()
-    },
-    methods: {
-      //查询员工列表
-      queryStaffs(){
-        queryStaffList(this.filterParam).then(res => {
-          if (res.result === "success") {
-            this.saleList = res.data || []
-          }
-        });
+import { addCustomer, queryStaffList } from "api/fetch/mine";
+export default {
+  data() {
+    return {
+      customerInfo: {
+        name: "",
+        phone: "",
+        customerShopName: "",
+        address: "测试地址",
+        salesPersonUserId: "",
+        label: ""
       },
-      selectItem(item,idx){
-        this.activeIdx = idx
+      saleList: [], //销售人员列表
+      rolePopShow: false,
+      filterParam: {
+        parentId: 19990530,
+        keyword: ""
       },
-      confirmSale(){
-        let activeItem = this.saleList[this.activeIdx]
-        this.activeName = activeItem.name
-        this.customerInfo.salesPersonUserId = activeItem.userId
-        this.rolePopShow = false
-      },
-      rolePopToggle(){
-        this.rolePopShow = true
-      },
-      //验证添加商品所需字段
-      verify(){
-        const { name,phone,customerShopName,address,salesPersonUserId } = this.customerInfo
-        if(!name){
-          this.$alert(`请输入客户姓名！`)
-          return
-        }else if(!phone){
-          this.$alert(`请输入客户手机号！`)
-          return
-        }else if(!customerShopName){
-          this.$alert(`请输入客户的店铺名称！`)
-          return
-        }else if(!address){
-          this.$alert(`请输入客户的店铺地址！`)
-          return
-        }else if(!salesPersonUserId){
-          this.$alert(`请输入客户的销售负责人！`)
-          return
+      activeIdx: null,
+      activeName: ""
+    };
+  },
+  components: {},
+  computed: {},
+  created() {
+    this.queryStaffs();
+  },
+  methods: {
+    //查询员工列表
+    queryStaffs() {
+      queryStaffList(this.filterParam).then(res => {
+        if (res.result === "success") {
+          this.saleList = res.data || [];
         }
-        this.saveAdd()
-      },
-      saveAdd(){
-        addCustomer(this.customerInfo).then(res => {
-          if (res.result === "success") {
-            //商品添加成功后回到商品管理列表页
-            this.$toast("添加成功！");
-            this.$router.push({ path: "/my/customerList" });
+      });
+    },
+    selectItem(item, idx) {
+      this.activeIdx = idx;
+    },
+    confirmSale() {
+      let activeItem = this.saleList[this.activeIdx];
+      this.activeName = activeItem.name;
+      this.customerInfo.salesPersonUserId = activeItem.userId;
+      this.rolePopShow = false;
+    },
+    rolePopToggle() {
+      this.rolePopShow = true;
+    },
+    //验证添加商品所需字段
+    verify() {
+      const {
+        name,
+        phone,
+        customerShopName,
+        address,
+        salesPersonUserId
+      } = this.customerInfo;
+      if (!name) {
+        this.$alert(`请输入客户姓名！`);
+        return;
+      } else if (!phone) {
+        this.$alert(`请输入客户手机号！`);
+        return;
+      } else if (!customerShopName) {
+        this.$alert(`请输入客户的店铺名称！`);
+        return;
+      } else if (!address) {
+        this.$alert(`请输入客户的店铺地址！`);
+        return;
+      } else if (!salesPersonUserId) {
+        this.$alert(`请输入客户的销售负责人！`);
+        return;
+      }
+      this.saveAdd();
+    },
+    saveAdd() {
+      addCustomer(this.customerInfo).then(res => {
+        if (res.result === "success") {
+          //商品添加成功后回到商品管理列表页
+          this.$toast("添加成功！");
+          const fromOrder = this.$route.query.fromOrder || false;
+          if (fromOrder) {
+            return this.$router.go(-1);
           }
-        });
-      },
+          this.$router.push({ path: "/my/customerList" });
+        }
+      });
     }
-  };
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
-  @import "./stylus/customer.styl"
+@import './stylus/customer.styl';
 </style>
 
