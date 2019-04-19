@@ -36,7 +36,39 @@
     }
   }
   .uiw-info,.uiw-pic{
+    flex()
+    justify-content flex-start
     align-items flex-start
+  }
+  .uiw-pic{
+    .img-list{
+      flex-1()
+      flex()
+      flex-wrap wrap
+      justify-content flex-start
+      >li{
+        position relative
+        img{
+          w(160)
+          h(160)
+          mr(20)
+          border-radius 6px
+          border 1PX solid #ededed
+          box-sizing border-box
+        }
+        i{
+          position absolute
+          right 8px
+          top -20px
+          w(40)
+          h(40)
+          background-image url(../../../assets/images/close_icon1.png)
+          background-size contain
+          background-repeat no-repeat
+          background-position center
+        }
+      }
+    }
   }
 }
 .user-info-edit{
