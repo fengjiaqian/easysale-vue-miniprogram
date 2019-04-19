@@ -57,6 +57,7 @@
           @click="selectRole(item)">{{item.roleName}}</li>
         </ul>
         <div class="btn" @click="rolePopShow=false">确定</div>
+        <div>{{JSON.stringify(passData)}}</div>
       </div>
       <div class="pop-mask"></div>
     </div>
@@ -84,6 +85,7 @@
         rolePopShow: false,
         activeRoleName: '',
         roleId: '',//角色id
+        passData: {'a':144},
       };
     },
     components: {
