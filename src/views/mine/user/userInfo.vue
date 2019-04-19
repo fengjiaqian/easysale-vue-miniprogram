@@ -15,9 +15,11 @@
       </li>
       <li class="uiw-pic">
         <div>店铺图片：</div>
-        <div>
-          <img v-lazy="shopInfo.logoIamgeUrl" >
-        </div>
+        <ul class="img-list">
+          <li v-for="item in shopInfo.logoIamgeUrls">
+            <img v-lazy="item" >
+          </li>
+        </ul>
       </li>
     </ul>
     <router-link to="/my/userInfoEdit">

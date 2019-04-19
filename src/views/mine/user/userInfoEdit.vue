@@ -19,12 +19,12 @@
           <img v-lazy="shopInfo.logoIamgeUrl" >
         </div>-->
         <ul class="img-list">
-          <li v-for="(item,index) in fileList">
-            <img :src="item.url">
+          <li v-for="(item,index) in stagImgList">
+            <img :src="item">
             <i @click="deleteUploadImg(index)"></i>
           </li>
           <el-upload class="upload-wrap"
-                     action="file/uploadDealerImg"
+                     action="/file/uploadProductImg"
                      list-type="picture-card"
                      :headers="headers"
                      :before-upload="onBeforeUpload"
@@ -49,8 +49,8 @@
         userId: '',
         shopInfo: {},
         domShow: false,
-        limitUploadNum: 3,//上传图片的限制张数
-        fileList: [],
+        limitUploadNum: 5,//上传图片的限制张数
+        stagImgList: [],//暂存的图片数组
       };
     },
     components: {
@@ -77,12 +77,14 @@
         queryShopInfo(param).then(res => {
           if (res.result === "success" && res.data) {
             this.shopInfo = res.data
+            this.stagImgList = res.data.logoIamgeUrls
             this.domShow = true
           }
         });
       },
       //保存修改
       saveEdit(){
+        this.shopInfo.logoIamgeUrls = this.stagImgList
         let param = this.shopInfo
         editShopInfo(param).then(res => {
           if (res.result === "success") {
@@ -107,23 +109,21 @@
       },
       //图片上传成功时
       fileSuccess(res, file) {
-        this.fileList.unshift(file)
-        if(this.fileList.length == this.limitUploadNum){
+        this.stagImgList.push(res.data)
+        if(this.stagImgList.length == this.limitUploadNum){
           document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
         }
-        //this.productModal.productImageUrl = res.data
       },
       fileFaild(){
-        this.$alert('图片上传失败！')
+        this.$alert('图片上传失败，请重试！')
       },
       deleteUploadImg(idx){
-        this.fileList = this.fileList.filter((item,index)=>{
+        this.stagImgList = this.stagImgList.filter((item,index)=>{
           return idx!=index
         })
-        if(this.fileList.length < this.limitUploadNum){
+        if(this.stagImgList.length < this.limitUploadNum){
           document.querySelector('.el-upload--picture-card').removeAttribute('style')
         }
-        //this.productModal.productImageUrl = ''
       },
     }
   };
