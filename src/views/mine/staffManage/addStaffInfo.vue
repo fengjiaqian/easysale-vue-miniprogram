@@ -23,7 +23,13 @@
       <div class="h20"></div>
       <li>
         <span>雇佣日期：</span>
-        <input v-model="staffInfo.hireDate" type="date" placeholder="请输入身份证号">
+        <el-date-picker
+                class="date-pick-wrap"
+                v-model="staffInfo.hireDate"
+                type="date"
+                clearable="false"
+                placeholder="请选择雇佣日期">
+        </el-date-picker>
         <i class="extension"></i>
       </li>
       <li>
@@ -67,7 +73,7 @@
           name: '',
           phone: '',
           cardId: '',
-          address: '测试地址',
+          address: '',
           hireDate: '',
           roleId: '',//选中的员工角色id
           discount: '',
@@ -78,6 +84,7 @@
         rolePopShow: false,
         activeRoleName: '',
         roleId: '',//角色id
+        passData: {},
       };
     },
     components: {
@@ -88,15 +95,18 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm=>{
-        console.log('进入')
+        let passData = to.query.passData ? to.query.passData : null
+        if(passData){
+          passData = JSON.parse(passData)
+          Object.assign(vm.staffInfo,passData.pageData)
+          vm.staffInfo.address = passData.addressData.address
+        }
       })
     },
     beforeRouteLeave (to, from, next) {
-      console.log('离开')
       next()
     },
     beforeRouteUpdate (to, from, next) {
-      console.log('路由变化')
       next()
     },
     created(){
@@ -122,6 +132,7 @@
         this.saveAdd()
       },
       saveAdd(){
+        this.staffInfo.hireDate = new Date(this.staffInfo.hireDate).getTime()
         addStaff(this.staffInfo).then(res => {
           if (res.result === "success") {
             //商品添加成功后回到商品管理列表页

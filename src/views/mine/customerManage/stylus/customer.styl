@@ -154,7 +154,7 @@ input{
         background-image url(../../../assets/images/icon-enter.png)
       }
       .discount-int{
-        w(130)
+        w(180)
         mr(10)
       }
     }
@@ -168,7 +168,7 @@ input{
     }
   }
   .staff-info-btn{
-    bg(#FF5638)
+    bg(#BDBDBD)
     width 100%
     lh(98)
     position fixed
@@ -177,6 +177,9 @@ input{
     text-c()
     ft(32)
     c(#fff)
+    &.achieve{
+      bg(#FF5638)
+    }
   }
 }
 
@@ -258,4 +261,22 @@ input{
     z-index 2
   }
 }
-
+.empty-wrap{
+  pt(250)
+  bg(#F6F6F6)
+  flex()
+  align-items center
+  flex-direction column
+  i{
+    w(340)
+    h(340)
+    background-image url(../../../assets/images/empty_icon_1.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+  }
+  span{
+    ft(30)
+    c-9()
+  }
+}

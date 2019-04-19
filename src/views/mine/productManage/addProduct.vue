@@ -118,8 +118,6 @@
       },
       saveAdd(){
         let param = {
-          dealerId: this.dealerId,
-          createUser: this.createUser,
           productList: [this.productModal]
         }
         addProduct(param).then(res => {
