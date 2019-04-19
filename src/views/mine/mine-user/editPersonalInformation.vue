@@ -10,7 +10,7 @@
       <input class="right" value="13555555555" type="text" v-model="tel">
     </div>
     <div class="address">
-      <div class="left">收货地址 :</div>
+      <div class="left">客户地址 :</div>
       <textarea rows="2" cols="20" class="right" v-model="address">湖北省 武汉市 洪山区 花城大道软件新城A3-401</textarea>
     </div>
     <div class="edit" @click="submite()">保存</div>

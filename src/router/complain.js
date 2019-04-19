@@ -1,4 +1,4 @@
-// 投诉的路由
+// 投诉+兑奖的路由
 
 //wx   终端客户的 “新建投诉”的页面
 const newComplaint = (resolve) => {  
@@ -22,6 +22,27 @@ const complaintList = (resolve) => {
 	})
 }
 
+ //wx   终端客户的 “新建兑奖”的页面
+ const newAward = (resolve) => { 
+	import('views/award/client/newAward.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+ //wx   终端客户的 “选择兑奖”的页面
+ const chooseAward = (resolve) => { 
+	import('views/award/client/chooseAward.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+//wx   终端客户的 “兑奖列表”的页面
+const awardList = (resolve) => { 
+	import('views/award/client/awardList.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 const complain = [
     {
         path: '/newComplaint',
@@ -41,9 +62,30 @@ const complain = [
         path: '/complaintDetail',
         name: 'complaintDetail',
         meta: {
-            title: '投诉列表',
+            title: '投诉详情',
         },
         component: complaintDetail,
+    },{
+        path: '/newAward',
+        name: 'newAward',
+        meta: {
+            title: '新建兑奖',
+        },
+        component: newAward,
+    },{
+        path: '/chooseAward',
+        name: 'chooseAward',
+        meta: {
+            title: '可选兑换商品',
+        },
+        component: chooseAward,
+    },{
+        path: '/awardList',
+        name: 'awardList',
+        meta: {
+            title: '兑奖列表',
+        },
+        component: awardList,
     }
 ]
 
