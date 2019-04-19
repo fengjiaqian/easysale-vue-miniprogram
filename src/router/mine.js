@@ -135,52 +135,6 @@ const applyDealer = (resolve) => { //wx 申请经销商
     })
 }
 
-// 销售人员
-
-const customerManage = (resolve) => { //wx 客户管理
-    import('views/mine/mine-sales/customerManage.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-const customerManageDetail = (resolve) => { //wx 客户管理详情
-    import('views/mine/mine-sales/customerManageDetail.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-
-const editCustomerInfor = (resolve) => { //wx 编辑客户信息
-    import('views/mine/mine-sales/editCustomerInfor.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-const addCustomerInfor = (resolve) => { //wx 新增客户信息
-    import('views/mine/mine-sales/addCustomerInfor.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-const invitationCode = (resolve) => { //wx 我的邀请码
-    import('views/mine/mine-sales/invitationCode.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-const changePassword = (resolve) => { //wx 修改密码
-    import('views/mine/mine-sales/changePassword.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-const performanceReport = (resolve) => { //wx 业绩报表
-    import('views/mine/mine-sales/performanceReport.vue').then((module) => {
-        resolve(module)
-    })
-}
-
-
 const mine = [
     {
         path: '/my',
@@ -340,62 +294,7 @@ const mine = [
                 },
                 component: AddCustomerInfo
             },
-            {  //wx 客户管理                       /////销售人员的路由
-                path: '/customerManage',
-                name: 'customerManage',
-                meta: {
-                    title: '客户管理'
-                },
-                component: customerManage
-            },
-            {  //wx 客户管理详情
-                path: '/customerManageDetail',
-                name: 'customerManageDetail',
-                meta: {
-                    title: '客户管理详情'
-                },
-                component: customerManageDetail
-            },
-            {  //wx 编辑客户信息
-                path: '/editCustomerInfor',
-                name: 'editCustomerInfor',
-                meta: {
-                    title: '编辑客户信息'
-                },
-                component: editCustomerInfor
-            },
-            {  //wx 新增客户信息
-                path: '/addCustomerInfor',
-                name: 'addCustomerInfor',
-                meta: {
-                    title: '新增客户信息'
-                },
-                component: addCustomerInfor
-            },
-            {  //wx 我的邀请码
-                path: '/invitationCode',
-                name: 'invitationCode',
-                meta: {
-                    title: '我的邀请码'
-                },
-                component: invitationCode
-            },
-            {  //wx 修改密码
-                path: '/changePassword',
-                name: 'changePassword',
-                meta: {
-                    title: '修改密码'
-                },
-                component: changePassword
-            },
-            {  //wx 业绩报表
-                path: '/performanceReport',
-                name: 'performanceReport',
-                meta: {
-                    title: '业绩报表'
-                },
-                component: performanceReport
-            },
+            // 终端用户Mine pages  
             {
                 path: '/customerInfo',
                 name: 'customerInfo',
@@ -430,7 +329,7 @@ const mine = [
                 },
                 component: writeApplicationInformation,
             },
-            { //wx 申请经销商   aaaa
+            { //wx 申请经销商   
                 path: '/applyDealer',
                 name: 'applyDealer',
                 meta: {
