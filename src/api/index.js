@@ -38,6 +38,9 @@ axios.interceptors.response.use(function (response) {
 	if (response.config.loading) {
 		$Loading && $Loading.close()
 	}
+	if (response.data.result != 'success') {
+		return Promise.reject(response);
+	}
 	// if (response.data && (response.data.message === '100102009'
 	// 	|| response.data.desc == '登录已过期，请重新登录~')) {
 

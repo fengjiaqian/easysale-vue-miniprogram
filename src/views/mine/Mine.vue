@@ -1,11 +1,12 @@
 <template>
   <div id="mine">
     <div class="user-info">
-      <div class="user-avart" @click="mineSkip('/my/userInfo')">
+      <div class="user-avart" @click="mineSkip('/customerInfo')">
         <img v-lazy="avatarUrl" alt>
       </div>
-      <div class="user-tel" @click="mineSkip('/my/userInfo')">
+      <div class="user-tel" @click="mineSkip('/customerInfo')">
         <h5>{{nickName || '访客'}}</h5>
+
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
       <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
@@ -36,6 +37,7 @@
 </template>
 
 <script>
+//TODO: 终端用户 申请经销商待审核状态显示
 import * as mineUtil from "./mineCommon";
 import storage from "common/storage";
 export default {
@@ -214,6 +216,10 @@ export default {
     lh(36);
     ft(26);
     c(#888);
+  }
+
+  span {
+    float: right;
   }
 }
 

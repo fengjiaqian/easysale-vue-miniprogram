@@ -160,12 +160,12 @@ export default {
   color: rgba(102, 102, 102, 1);
   line-height: 38px;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .common .support {
   width: 100%;
-  height: 192px;
+  height: 98px;
   background-color: #f6f6f6;
 }
 </style>
