@@ -143,7 +143,7 @@ export default {
       //TODO  加上userId
       storage.set("orderPrequeryParams", selectedProducts);
       this.$router.push({
-        path: "/OrderSubmit"
+        path: "/orderSubmit"
       });
     }
   }

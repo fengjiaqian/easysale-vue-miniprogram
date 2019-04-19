@@ -13,6 +13,10 @@
       <book-list :bookMenu="bookMenuData" :bookMenuType="bookMenuType"></book-list>
       <book-menu-side :bookMenu="bookMenuData"></book-menu-side>
     </section>
+    <section class="empty-wrap" v-if="customerList&&!customerList.length">
+      <i></i>
+      <span>暂无客户，快去添加吧！</span>
+    </section>
     <!--底部-->
     <section class="cl-footer" @click="skipTo">新增客户</section>
   </div>
@@ -23,6 +27,7 @@
   import bookMenuSide from "components/bookMenu/bookMenuSide.vue";
   import { queryCustomerList } from "api/fetch/mine";
   import { creatBookMenuData } from "common/createBookMenu";
+  import empty from "components/empty.vue";
   export default {
     data() {
       return {
@@ -32,12 +37,14 @@
           userId: 19990530,
           keyword: ''
         },
+        customerList: null,
         searchKey: '',//搜索关键字
       };
     },
     components: {
       BookList,
-      bookMenuSide
+      bookMenuSide,
+      empty
     },
     computed: {
 
@@ -50,8 +57,11 @@
       queryCustomer(){
         queryCustomerList(this.filterParam).then(res => {
           if (res.result === "success" && res.data) {
+            this.customerList = res.data
             this.bookMenuData = creatBookMenuData(res.data)
           }
+        }).catch(res => {
+          this.customerList = []
         });
       },
       handleChange($event){

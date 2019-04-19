@@ -26,6 +26,9 @@
 
 <script>
 /**
+ * TODO 如果是下单result页面返回首页，进来要刷新。
+ */
+/**
  *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成
  */
 const orderTab = [
@@ -71,6 +74,10 @@ export default {
     if (!this.isVisitor) {
       this._QueryOrders();
     }
+  },
+  activated() {
+    const refresh = this.$route.query.refresh || 0;
+    refresh && this._QueryOrders();
   },
   methods: {
     _QueryOrders(reset) {

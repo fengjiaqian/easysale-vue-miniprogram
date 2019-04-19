@@ -25,10 +25,6 @@
         <strong>{{currentDealer.shopName}}</strong>
         <em></em>
       </div>
-      <div class="right">
-        <em></em>
-        <span>分享</span>
-      </div>
     </div>
     <search-bar :jump="true" :class="{'top82': userType==3}"></search-bar>
     <!--  -->
@@ -401,26 +397,6 @@ export default {
 
     * {
       vm();
-    }
-  }
-
-  .right {
-    frt();
-
-    em {
-      inline();
-      squ(48);
-      mr(8);
-      vm();
-      background: url('./../assets/images/icon-share.png') no-repeat center center #FFF;
-      background-size: cover;
-    }
-
-    span {
-      vm();
-      ft(28);
-      c(#666);
-      lh(82);
     }
   }
 }

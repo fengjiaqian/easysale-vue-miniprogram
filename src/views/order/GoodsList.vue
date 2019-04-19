@@ -13,7 +13,7 @@
         <p class="name">{{product.productName}}</p>
         <div class="spec">规格 {{product.specification}}</div>
         <div class="price">
-          <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
+          <span class="c-yellow" v-html="$options.filters.price(product.price, product.priceUnit)"></span>
           <span class="fz28 c-6">X{{product.buyCount}}</span>
         </div>
       </div>

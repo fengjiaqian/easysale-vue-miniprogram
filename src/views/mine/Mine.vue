@@ -1,15 +1,15 @@
 <template>
   <div id="mine">
     <div class="user-info">
-      <div class="user-avart" @click="mineSkip('/editPersonalInformation')">
+      <div class="user-avart" @click="_jumpUserInfo">
         <img v-lazy="avatarUrl" alt>
       </div>
-      <div class="user-tel" @click="mineSkip('/editPersonalInformation')">
+      <div class="user-tel" @click="_jumpUserInfo">
         <h5>{{nickName || '访客'}}</h5>
-        
+
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
-      <div class="user-code" @click="mineSkip('/my/userInviteCode')">
+      <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
         <i></i>
         <span>邀请码</span>
       </div>
@@ -37,6 +37,12 @@
 </template>
 
 <script>
+/** 公共页面 三种角色 + 游客模式。
+ * isVisitor：展示差异 auth权限控制。
+ * userType default 3  终端用户
+ */
+
+//TODO: 终端用户 申请经销商待审核状态显示
 import * as mineUtil from "./mineCommon";
 import storage from "common/storage";
 export default {
@@ -66,6 +72,15 @@ export default {
     },
     _bindPhone() {
       this.navigateToLogin();
+    },
+    //分角色跳转个人信息
+    _jumpUserInfo() {
+      if (this.userType == 3) {
+        this.mineSkip("/customerInfo");
+      }
+      if (this.userType == 1) {
+        this.mineSkip("/my/userInfo");
+      }
     }
   },
   watch: {}
@@ -217,8 +232,8 @@ export default {
     c(#888);
   }
 
-  span{
-    float:right;
+  span {
+    float: right;
   }
 }
 

@@ -23,7 +23,12 @@
       <div class="h20"></div>
       <li>
         <span>雇佣日期：</span>
-        <div>{{staffInfo.date}}</div>
+        <el-date-picker
+                class="date-pick-wrap"
+                v-model="staffInfo.hireDate"
+                type="date"
+                placeholder="请选择雇佣日期">
+        </el-date-picker>
         <i class="extension"></i>
       </li>
       <li>

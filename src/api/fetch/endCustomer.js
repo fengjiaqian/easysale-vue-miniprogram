@@ -74,33 +74,20 @@ export function addConsigneer(param) {
 		return Promise.reject(res.data)
 	});
 }
-
-// 申请经销商   
-export function applyDealer(param) {
-
-	const url = "/dealer/updateDealer"
-	return axios({
-		method: 'post',
-		url: url,
-		data: param,
-		loading: true,
-	}).then((res) => {
-		return Promise.resolve(res.data)
-	}).catch(res => {
-		return Promise.reject(res.data)
-	});
-}
-
-// 客户登录时查看自己的详细信息（客户登录）
-export function findCustomerOwerInfo() {
+/**
+ * 客户登录时查看自己的详细信息(包含经销商查看required id)
+ * @param {*} id  客户id
+ */
+export function findCustomerOwerInfo(id = "") {
 
 	const url = "/customer/findCustomerOwerInfo"
 	return axios({
 		method: 'post',
 		url: url,
-		data: {},
+		data: { id },
 		loading: true,
 	}).then((res) => {
+
 		return Promise.resolve(res.data)
 	}).catch(res => {
 		return Promise.reject(res.data)
@@ -122,3 +109,48 @@ export function updateOwerCustomer(param) {
 		return Promise.reject(res.data)
 	});
 }
+
+
+/**
+ * 终端用户申请经销商  
+ * @param {*} params  Object {name,phone,shopName,address}
+ */
+
+export function applyDealer(params) {
+
+	const url = "/dealer/customerApplyToDealer"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+/**
+ *  查询客户收货人列表（客户登录）
+ * @param {*} keyword  string  
+ */
+export function queryAddressList(keyword) {
+
+	const url = "/consigneer/listConsigneerByNameOrPhone"
+	return axios({
+		method: 'post',
+		url: url,
+		data: {
+			keyword
+		},
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+
+

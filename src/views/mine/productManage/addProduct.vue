@@ -32,7 +32,7 @@
             <i @click="deleteUploadImg(index)"></i>
           </li>
           <el-upload class="upload-wrap"
-                     action="file/uploadImg"
+                     action="file/uploadProductImg"
                      list-type="picture-card"
                      :headers="headers"
                      :before-upload="onBeforeUpload"
@@ -118,8 +118,6 @@
       },
       saveAdd(){
         let param = {
-          dealerId: this.dealerId,
-          createUser: this.createUser,
           productList: [this.productModal]
         }
         addProduct(param).then(res => {

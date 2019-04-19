@@ -1,7 +1,7 @@
 <template>
   <div class="dealer-list">
     <search-bar></search-bar>
-    <div class="current-dealer">
+    <div class="current-dealer" v-if="currentDealer.phone">
       <div class="title">当前商贸公司</div>
       <div class="dealer-item">
         <div class="pic">
