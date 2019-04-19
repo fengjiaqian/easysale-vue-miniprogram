@@ -1,24 +1,82 @@
 <template>
   <div class="common">
-    <!-- wx  编辑个人信息的页面 editPersonalInformation-->
     <div class="name">
       <div class="left">您的姓名 :</div>
-      <input class="right" value="张栋" type="text">
+      <input class="right" value type="text" v-model="name">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value="13555555555" type="text">
+      <input class="right" value type="text" v-model="tel">
     </div>
     <div class="address">
       <div class="left">收货地址 :</div>
-      <textarea rows="2" cols="20" class="right">湖北省 武汉市 洪山区 花城大道软件新城A3-401</textarea>
+      <textarea rows="2" cols="20" class="right" v-model="address"></textarea>
     </div>
-    <div class="edit">保存</div>
+    <div class="edit" @click="submite()">保存</div>
   </div>
 </template>
 
 <script>
-export default {};
+import {
+  findCustomerOwerInfo,
+  updateOwerCustomer
+} from "api/fetch/endCustomer";
+
+export default {
+  data() {
+    return {
+      personData: "",
+      name: "",
+      tel: "",
+      address: ""
+    };
+  },
+  components: {},
+  mounted() {},
+  computed: {},
+  created() {
+    this._findCustomerOwerInfo();
+  },
+  methods: {
+    _findCustomerOwerInfo() {
+      findCustomerOwerInfo().then(res => {
+        if (res.result === "success") {
+          this.personData = res.data;
+          console.log(this.personData);
+          this.name = this.personData.name;
+          this.tel = this.personData.phone;
+          this.address = this.personData.address;
+        }
+      });
+    },
+    submite() {
+      let param = {
+        name: this.name,
+        phone: this.tel,
+        address: this.address
+      };
+      updateOwerCustomer(param).then(res => {
+        if (res.result === "success") {
+          console.log(222);
+        }
+        // this.$router.push({
+        // name: "/navi/mine",
+        // params: {
+        //   code: 1
+        //   }
+        // });
+      });
+    },
+    _addAddress() {
+      this.$router.push({
+        name: "updateConsignee",
+        params: {
+          code: 1
+        }
+      });
+    }
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
