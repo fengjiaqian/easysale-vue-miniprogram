@@ -23,7 +23,6 @@
       <div class="h20"></div>
       <li>
         <span>雇佣日期：</span>
-        <!--<input v-model="staffInfo.hireDate" type="date" placeholder="请选择雇佣日期">-->
         <el-date-picker
                 class="date-pick-wrap"
                 v-model="staffInfo.hireDate"
@@ -74,7 +73,7 @@
           name: '',
           phone: '',
           cardId: '',
-          address: '测试地址',
+          address: '',
           hireDate: '',
           roleId: '',//选中的员工角色id
           discount: '',
