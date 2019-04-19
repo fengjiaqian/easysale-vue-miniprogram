@@ -3,64 +3,72 @@
   <div class="common">
     <div class="name">
       <div class="left">客户姓名 :</div>
-      <input class="right" v-model="clientName" value type="text" placeholder="请输入姓名">
+      <input class="right" v-model="name" value type="text" placeholder="请输入姓名">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="clientTel" type="number" placeholder="请输入手机号码">
+      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码">
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" value v-model="storeName" type="text" placeholder="请输入店铺名称">
+      <input class="right" value v-model="shopName" type="text" placeholder="请输入店铺名称">
     </div>
     <div class="address">
       <div class="left">店铺地址 :</div>
-      <input class="right" value v-model="storeAddress" type="text" placeholder="请输入店铺地址">
+      <input class="right" value v-model="address" type="text" placeholder="请输入店铺地址">
       <img class="location" src="../../../assets/images/address_position_icon.png" alt>
     </div>
     <div class="license">
       <div class="left">营业执照 :</div>
       <div class="right"></div>
     </div>
-    <div class="edit" @click="referData()">保存</div>
+    <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
   </div>
 </template>
 
 <script>
-import { applyDealer } from "api/fetch/endCustomer";
+import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
 
 export default {
   data() {
     return {
-      clientName: "", //客户名字
-      clientTel: "", //电话
-      storeName: "", //店铺名字
-      storeAddress: "" //收货人地址
+      name: "",
+      phone: "",
+      shopName: "",
+      address: ""
     };
+  },
+  computed: {
+    canOperate() {
+      return this.name && this.phone && this.shopName && this.address;
+    }
   },
   created() {},
   methods: {
-    referData() {
-      //点击保存的时候
-      console.log(666);
-      let param = {
-        name: this.clientName,
-        id: 323232,
-        phone: this.clientTel,
-        shopName: this.storeName,
-        address: this.storeAddress
+    //TODO: 带入电话号码和姓名
+    //TODO: 上传参数加入图片
+    _applyDealer() {
+      if (!this.canOperate) return false;
+      const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
+      const regExp = new RegExp(partter);
+      if (!regExp.test(this.phone)) {
+        return this.$toast("手机号码格式不正确");
+      }
+      const params = {
+        name: this.name,
+        phone: this.phone,
+        shopName: this.shopName,
+        address: this.address
       };
-      applyDealer(param).then(res => {
-        if (res.result === "success") {
-          // bus.$emit('update',''); //刷新页面的东西
-          console.log("保存成功");
-        }
-      });
-      // this.$router.push({
-      //   path: "/navi/mineClient"
-      // });
-    },
-    step() {}
+      applyDealer(params)
+        .then(res => {
+          this.$toast("申请信息提交成功");
+          this.$router.go(-1);
+        })
+        .catch(err => {
+          this.$toast(err.message);
+        });
+    }
   }
 };
 </script>
@@ -175,15 +183,19 @@ export default {
   background-size: 64px 64px;
 }
 
-.common .edit {
+.edit {
   width: 100%;
   height: 98px;
-  background: rgba(255, 86, 56, 1);
+  background: #BDBDBD;
   position: fixed;
   bottom: 0;
   font-size: 32px;
-  color: rgba(255, 255, 255, 1);
+  color: #fff;
   line-height: 98px;
   text-align: center;
+}
+
+.can-operate {
+  bg(rgba(255, 86, 56, 1));
 }
 </style>

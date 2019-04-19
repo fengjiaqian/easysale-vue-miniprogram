@@ -106,18 +106,11 @@ const AddCustomerInfo = (resolve) => {
 }
 
 // 终端用户
-const addPersonalInformation = (resolve) => { //wx 新增个人信息的页面
-    import('views/mine/mine-user/addPersonalInformation.vue').then((module) => {
+const customerInfo = (resolve) => { //wx 个人信息
+    import('views/mine/mine-user/customerInfo.vue').then((module) => {
         resolve(module)
     })
 }
-
-const editPersonalInformation = (resolve) => { //wx 编辑个人信息的页面
-    import('views/mine/mine-user/editPersonalInformation.vue').then((module) => {
-        resolve(module)
-    })
-}
-
 const myConsignee = (resolve) => { //wx 我的收货人的页面
     import('views/mine/mine-user/myConsignee.vue').then((module) => {
         resolve(module)
@@ -403,21 +396,13 @@ const mine = [
                 },
                 component: performanceReport
             },
-            { //wx 新增个人信息的页面                     /////终端客户的路由
-                path: '/addPersonalInformation',
-                name: 'addPersonalInformation',
+            {
+                path: '/customerInfo',
+                name: 'customerInfo',
                 meta: {
                     title: '个人信息',
                 },
-                component: addPersonalInformation,
-            },
-            { //wx 编辑个人信息的页面
-                path: '/editPersonalInformation',
-                name: 'editPersonalInformation',
-                meta: {
-                    title: '编辑个人信息',
-                },
-                component: editPersonalInformation,
+                component: customerInfo
             },
             { //wx 我的收货人的页面
                 path: '/myConsignee',

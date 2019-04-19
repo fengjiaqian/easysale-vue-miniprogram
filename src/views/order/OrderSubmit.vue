@@ -118,14 +118,10 @@ export default {
       OrderSubmit(params)
         .then(res => {
           console.log(res);
-          if (res.result === "success") {
-            this.$router.push({ path: "/orderResult" });
-          } else {
-            enterFail.call(this, res.message);
-          }
+          this.$router.push({ path: "/orderResult" });
         })
         .catch(err => {
-          enterFail.call(this, res.message);
+          enterFail.call(this, err.message);
         });
     },
     _jumpGoodsList() {
