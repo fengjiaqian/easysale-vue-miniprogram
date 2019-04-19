@@ -61,11 +61,6 @@ export default {
           class: "staff",
           path: "/my/staffList"
         },
-        {
-          title: "设置",
-          class: "setting",
-          path: "/my/statistical"
-        }
       ]
     };
   },
