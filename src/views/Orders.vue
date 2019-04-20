@@ -5,7 +5,7 @@
     <!--  -->
     <div class="empty-page" v-if="isVisitor">
       <p class="fz30 c-3">您当前没有订单</p>
-      <a class="default-btn" href="javascript:;" @click="_jumpWX">立即登录</a>
+      <a class="default-btn" href="javascript:;" @click="navigateToLogin">立即登录</a>
     </div>
     <!--  -->
     <scroll
@@ -18,7 +18,7 @@
       ref="scrollOrders"
     >
       <div>
-        <order-item v-for="item in orderList" :order="item"></order-item>
+        <order-item v-for="item in orderList" :order="item" @operate="operateItem" :key="item.id"></order-item>
       </div>
     </scroll>
   </div>
@@ -27,22 +27,19 @@
 <script>
 /**
  * TODO 如果是下单result页面返回首页，进来要刷新。
+ *     如果从详情返回 refresh.
  */
 /**
- *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成
+ *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成 5=已取消
  */
 const orderTab = [
   { text: "待处理", state: 1 },
   { text: "已处理", state: 2 },
   { text: "已拒绝", state: 3 },
-  { text: "已完成", state: 4 }
+  { text: "已取消", state: 5 }
 ];
 const params = {
-  id: "",
-  // userId: "465273",
-  customerId: "",
-  orderState: "",
-  createUser: "",
+  orderState: 1,
   pageNum: 1,
   pageSize: 3
 };
@@ -52,6 +49,7 @@ import { getAllGoods } from "common/goodsStorage";
 import empty from "components/empty.vue";
 import scroll from "components/scroll.vue";
 import * as orderApi from "api/fetch/order";
+import { transformOrderList, orderOperate } from "./order/orderOperate";
 export default {
   name: "orders",
   data() {
@@ -77,7 +75,7 @@ export default {
   },
   activated() {
     const refresh = this.$route.query.refresh || 0;
-    refresh && this._QueryOrders();
+    refresh && this._QueryOrders(true);
   },
   methods: {
     _QueryOrders(reset) {
@@ -93,12 +91,12 @@ export default {
             const { dataList = [], pager } = res.data;
             const { currentPage, totalPage } = pager;
             if (currentPage === 1) {
-              this.orderList = this.transformOrders(dataList);
+              this.orderList = transformOrderList(dataList);
               this.totalPage = totalPage;
               this.empty = !this.orderList.length;
             } else {
               this.orderList = this.orderList.concat(
-                this.transformOrders(dataList)
+                transformOrderList(dataList)
               );
             }
             this.params.pageNum++;
@@ -109,17 +107,7 @@ export default {
           this.loading = false;
         });
     },
-    transformOrders(orderList) {
-      for (let order of orderList) {
-        order.totalQuantity = order.orderItem.reduce(
-          (acc, cur) => acc + cur.quantity,
-          0
-        );
-      }
-      return orderList;
-    },
     loadMoreOrders() {
-      //
       if (this.loading || this.params.pageNum > this.totalPage) return false;
       this._QueryOrders();
     },
@@ -127,15 +115,12 @@ export default {
       this.$refs.scrollOrders && this.$refs.scrollOrders.scrollTo(0, 0);
       this.currentState = state;
       this.params.orderState = state;
-      if (!this.isVisitor) return false;
+      if (this.isVisitor) return false;
       this._QueryOrders(true);
     },
-    _jumpWX() {
-      if (window.__wxjs_environment === "miniprogram") {
-        wx.miniProgram.navigateTo({
-          url: `/pages/mobile/mobile`
-        });
-      }
+    //订单操作
+    operateItem(options) {
+      orderOperate.call(this, options, this._QueryOrders.bind(this, true));
     }
   }
 };

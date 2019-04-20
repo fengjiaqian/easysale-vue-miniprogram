@@ -11,7 +11,12 @@
         placeholder="请输入姓名或者电话"
       >
     </div>
-    <address-list :addressList="addressList" @deletItem="_deletItem"></address-list>
+    <address-list
+      :addressList="addressList"
+      :showOperation="showOperation"
+      @deletItem="_deletItem"
+      @bindTap="_bindTap"
+    ></address-list>
     <div class="edit" @click="_addAddress()">新增收货人</div>
   </div>
 </template>
@@ -24,7 +29,8 @@ export default {
   data() {
     return {
       keyword: "",
-      addressList: []
+      addressList: [],
+      showOperation: true
     };
   },
   components: {
@@ -33,6 +39,7 @@ export default {
   mounted() {},
   computed: {},
   created() {
+    this.showOperation = !this.$route.query.fromOrder;
     this._queryCustomerConsigneeList();
   },
   methods: {
@@ -49,11 +56,25 @@ export default {
         this.addressList.splice(Idx, 1);
       }
     },
+    _bindTap(item) {
+      if (this.$route.query.fromOrder) {
+        this.$router.push({
+          path: "/orderSubmit",
+          query: {
+            customerInfo: this.encodeUrl(item)
+          }
+        });
+      }
+      return false;
+    },
     _addAddress() {
       this.$router.push({
         name: "updateConsignee",
         params: {
           code: 1
+        },
+        query: {
+          fromOrder: this.$route.query.fromOrder || false
         }
       });
     }
@@ -108,6 +129,6 @@ export default {
   color: rgba(255, 86, 56, 1);
   line-height: 98px;
   text-align: center;
-  border-top:1px solid #ededed;
+  border-top: 1px solid #ededed;
 }
 </style>

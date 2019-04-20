@@ -4,8 +4,8 @@
   <div class="O-item" @click="_jumpOrderDetail">
     <!--  -->
     <div class="O-item-header">
-      <div class="state">{{format(order.orderState)}}</div>
-      <div class="title">小王 -【良品铺子】</div>
+      <div class="state">{{order.orderState | orderState}}</div>
+      <div class="title">{{userType==3? order.dealerName: order.customer.name}}</div>
       <p class="time">{{order.createTime}}</p>
     </div>
     <!--  -->
@@ -43,15 +43,19 @@
       订单总金额：
       <span class="c-theme">&yen;{{order.orderAmount}}</span>
     </div>
-    <div class="O-item-btns">
-      <a href="javascript:;" class="btn">拒绝</a>
-      <a href="javascript:;" class="btn yes-btn">同意</a>
+    <div class="O-item-btns" v-if="userType!=3 && order.orderState==1">
+      <a href="javascript:;" class="btn" @click.stop="_operate(3)">拒绝</a>
+      <a href="javascript:;" class="btn yes-btn" @click.stop="_operate(2)">同意</a>
     </div>
   </div>
 </template>
 
 <script>
-import encodeUtil from "common/encodeUtil";
+/**
+ * 1.标题不同
+ * 2.操作项不同
+ */
+import { UpdateOrder } from "api/fetch/order";
 export default {
   name: "order-item",
   props: {
@@ -66,23 +70,16 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    format(state) {
-      const orderTab = [
-        { text: "待处理", state: 1 },
-        { text: "已处理", state: 2 },
-        { text: "已拒绝", state: 3 },
-        { text: "已完成", state: 4 }
-      ];
-      return orderTab.find(item => item.state === state).text || "";
-    },
     _jumpOrderDetail() {
-      const order = encodeURIComponent(JSON.stringify(this.order));
       this.$router.push({
         name: "orderDetail",
-        query: {
-          order
+        params: {
+          orderId: this.order.id
         }
       });
+    },
+    _operate(state) {
+      this.$emit("operate", { state, orderId: this.order.id });
     }
   }
 };

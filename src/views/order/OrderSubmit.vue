@@ -43,7 +43,7 @@
         <p>手机号码：{{currentCustomer.phone}}</p>
       </div>
       <div class="info-display" v-if="currentCustomer.name">
-        <p>店铺名称：{{currentCustomer.customerShopName}}</p>
+        <p>店铺名称：{{currentCustomer.shopName}}</p>
         <p>收货地址：{{currentCustomer.address}}</p>
       </div>
     </div>
@@ -135,31 +135,18 @@ export default {
     );
     //
     const customerInfo = this.$route.query.customerInfo || "";
-    customerInfo &&
-      (this.currentCustomer = JSON.parse(decodeURIComponent(customerInfo)));
-    this._initInRole();
+    customerInfo && (this.currentCustomer = this.decodeUrl(customerInfo));
   },
   mounted() {},
   methods: {
-    _initInRole() {
-      if (this.userType == 3) {
-        this.listAddress();
-      } else {
-        this.listCustomers();
-      }
-    },
     _OrderSubmit() {
-      const dealerId = 323232,
-        customerId = this.currentCustomer.id,
-        orderAmount = 90;
+      const customerId = this.currentCustomer.id,
+        orderAmount = this.totalMoney;
       const orderItem = transformOrderItems(this.products);
       const params = {
-        //dealerId,
         customerId,
         orderAmount,
         orderItem
-        // createUser: 465273,
-        // updateUser: 465273
       };
       OrderSubmit(params)
         .then(res => {
@@ -171,7 +158,7 @@ export default {
         });
     },
     _jumpGoodsList() {
-      const products = encodeURIComponent(JSON.stringify(this.products));
+      const products = this.encodeUrl(this.products);
       this.$router.push({
         path: "/goodsList",
         query: { products }
@@ -198,10 +185,10 @@ export default {
         });
     },
     _selectCustomer() {
-      if (!this.customers.length) {
-        //新增客户
+      if (!this.userType == 3) {
+        //选择客户
         return this.$router.push({
-          path: "/my/addCustomerInfo",
+          path: "/my/customerList",
           query: {
             fromOrder: true
           }
@@ -209,7 +196,7 @@ export default {
       }
       //选择客户
       this.$router.push({
-        path: "/my/customerList",
+        path: "/myConsignee",
         query: {
           fromOrder: true
         }

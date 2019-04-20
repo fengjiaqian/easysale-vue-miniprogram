@@ -69,7 +69,8 @@ export default {
       ListAllDealer().then(res => {
         if (res.data) {
           const { dataList, pager } = res.data;
-          this.currentDealer = dataList.find(item => item.id == this.currentId);
+          this.currentDealer =
+            dataList.find(item => item.id == this.currentId) || {};
           this.dealerList = dataList.filter(item => item.id != this.currentId);
           this.empty = !this.dealerList.length;
         }

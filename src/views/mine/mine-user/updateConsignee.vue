@@ -42,10 +42,12 @@ export default {
   },
   methods: {
     init() {
+      //是否从order页面
+      this.fromOrder = this.$route.query.fromOrder || false;
+      //
       this.code = this.$route.params.code;
       let addressInfo = this.$route.query.addressInfo;
-      addressInfo &&
-        (addressInfo = JSON.parse(decodeURIComponent(addressInfo)));
+      addressInfo && (addressInfo = this.decodeUrl(addressInfo));
       document.title = this.code == 1 ? "新增收货人" : "编辑收货人";
       if (this.code == 2 && addressInfo) {
         for (let preperty in addressInfo) {
@@ -61,14 +63,22 @@ export default {
       if (!regExp.test(phone)) {
         return this.$toast("手机号码格式不正确");
       }
+      const params = { name, phone, shopName, address };
       const operate = this.code == 1 ? "addConsigneer" : "modifyConsignee";
-      Operation[operate]({ name, phone, shopName, address })
+      Operation[operate](params)
         .then(res => {
-          if (res.result === "success") {
-            this.$router.push({
-              path: "/myConsignee"
+          //
+          if (this.code == 1 && this.fromOrder) {
+            return this.$router.push({
+              path: "/orderSubmit",
+              query: {
+                customerInfo: this.encodeUrl(params)
+              }
             });
           }
+          this.$router.push({
+            path: "/myConsignee"
+          });
         })
         .catch(err => {
           this.$toast(err.message);

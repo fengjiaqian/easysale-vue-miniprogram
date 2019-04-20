@@ -2,15 +2,15 @@
 <template>
   <div class="common">
     <ul class="list">
-      <li class="part" v-for="item in addressList" :key="item.id">
+      <li class="part" v-for="item in addressList" :key="item.id" @click="_bindTap(item)">
         <div class="info">
           <div class="name">{{item.name}}</div>
           <div class="tel">{{item.phone}}</div>
         </div>
         <div class="operate">
           <div class="shopname">{{item.shopName}}</div>
-          <div class="edit" @click="_modify(item)">编辑</div>
-          <div class="del" @click="_delet(item.id)">删除</div>
+          <div class="edit" @click.stop="_modify(item)" v-if="showOperation">编辑</div>
+          <div class="del" @click.stop="_delet(item.id)" v-if="showOperation">删除</div>
         </div>
         <div class="address">{{item.address}}</div>
       </li>
@@ -23,10 +23,17 @@
 import { deleteConsignee } from "api/fetch/endCustomer";
 export default {
   name: "address-list",
+  data() {
+    return {};
+  },
   props: {
     addressList: {
       type: Array,
       default: () => []
+    },
+    showOperation: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
@@ -48,6 +55,9 @@ export default {
           this.$emit("deletItem", id);
         }
       });
+    },
+    _bindTap(item) {
+      this.$emit("bindTap", item);
     }
   }
 };
