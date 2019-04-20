@@ -1,5 +1,5 @@
 <template>
-  <div id="orderDetail">
+  <div id="orderDetail" v-if="order.orderState">
     <div class="state">
       订单状态：
       <strong class="c-theme">{{order.orderState | orderState}}</strong>
@@ -42,7 +42,7 @@
     <div class="order-detail-area">
       <h5>收货人信息</h5>
       <div class="info-display pre">
-        <p>客户姓名：{{order.customer.label}}</p>
+        <p>客户姓名：{{order.customer.name}}</p>
         <p>手机号码：{{order.customer.phone}}</p>
         <a class="tel" :href="'tel:'+order.customer.phone"></a>
       </div>
@@ -56,18 +56,29 @@
       <h5>订单信息</h5>
       <div class="info-display">
         <p>下单人：{{order.createUser}}</p>
+        <p>下单店铺：{{order.dealerName}}</p>
         <p>下单时间：{{order.createTime}}</p>
       </div>
     </div>
     <!--  -->
-    <div class="bottom-wrap">
-      <a href="javascript:;" class="btn">拒绝</a>
-      <a href="javascript:;" class="btn">同意</a>
+    <div class="bottom-wrap" v-if="order.canRefuse">
+      <a href="javascript:;" class="btn" @click="_operate(3,order.id)">拒绝</a>
+      <a href="javascript:;" class="btn" @click="_operate(2,order.id)">同意</a>
+    </div>
+    <div class="bottom-wrap" v-if="order.canCancel">
+      <a href="javascript:;" class="btn" @click="_operate(5,order.id)" style="width:100%">取消申请</a>
     </div>
   </div>
 </template>
 
 <script>
+/**
+ * 1.标题不同
+ * 2.操作项不同
+ *
+ */
+import { UpdateOrder, QueryOrders } from "api/fetch/order";
+import { transformOrderList, orderOperate } from "./orderOperate";
 export default {
   name: "order-detail",
   data() {
@@ -76,18 +87,37 @@ export default {
     };
   },
   created() {
-    const { order } = this.$route.query;
-    this.order = JSON.parse(decodeURIComponent(order));
+    this._QueryOrders();
   },
   mounted() {},
   methods: {
+    _QueryOrders() {
+      const { orderId } = this.$route.params;
+      QueryOrders({
+        id: orderId
+      })
+        .then(res => {
+          const orders = transformOrderList(res.data.dataList);
+          orders.length && (this.order = orders[0]);
+        })
+        .catch(err => {
+          this.$toast(err.message);
+        });
+    },
     _jumpGoodsList() {
       let products = this.order.orderItem.map(item => item.product);
-      products = encodeURIComponent(JSON.stringify(products));
       this.$router.push({
         path: "/goodsList",
-        query: { products }
+        query: { products: this.encodeUrl(products) }
       });
+    },
+    //封装到operate
+    _operate(state, orderId) {
+      const options = {
+        state,
+        orderId
+      };
+      orderOperate.call(this, options, this._QueryOrders.bind(this));
     }
   }
 };

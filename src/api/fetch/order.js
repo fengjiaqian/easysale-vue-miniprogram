@@ -34,3 +34,23 @@ export function OrderSubmit(params = {}) {
         return Promise.reject(res.data)
     });
 }
+
+
+/**
+ * 订单或订单明细更新
+ * @param {*} params object {id ,orderState,orderAmount ,customerId ,dealerId}
+ */
+export function UpdateOrder(params = {}) {
+
+    const url = "/order/updateOrder";
+    return axios({
+        method: 'post',
+        url,
+        data: params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
