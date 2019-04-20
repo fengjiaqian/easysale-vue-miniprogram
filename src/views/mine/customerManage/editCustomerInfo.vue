@@ -17,8 +17,10 @@
       </li>
       <li class="special-li">
         <span>详细地址：</span>
-        <div>{{customerInfo.address}}</div>
-        <i class="position"></i>
+        <div>
+          <input v-model="customerInfo.address" type="text" maxlength="50" placeholder="请输入客户地址">
+        </div>
+        <i @click="obtainAddress" class="position"></i>
       </li>
       <div class="h20"></div>
       <li class="special-li">
@@ -50,6 +52,7 @@
 <script>
   import { editCustomer,queryStaffList } from "api/fetch/mine";
   import { verifyPhone } from "common/validate";
+  import { evokeWxLocation } from "common/location";
   export default {
     data() {
       return {
@@ -77,6 +80,16 @@
 
     },
     computed: {
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm=>{
+        let passData = to.query.passData ? to.query.passData : null
+        if(passData){
+          passData = JSON.parse(passData)
+          Object.assign(vm.customerInfo,passData.pageData)
+          vm.customerInfo.address = passData.addressData.address
+        }
+      })
     },
     created(){
       let customerInfo = JSON.parse(localStorage.getItem('customerInfo'))
@@ -143,6 +156,14 @@
             this.$router.go(-1)
           }
         });
+      },
+      //去定位地址
+      obtainAddress(){
+        let recordData = {
+          path: this.$route.path,
+          pageData: this.customerInfo
+        }
+        evokeWxLocation(recordData)
       },
     },
     watch: {

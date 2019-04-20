@@ -17,8 +17,10 @@
       </li>
       <li class="special-li">
         <span>详细地址：</span>
-        <div @click="obtainAddress">{{customerInfo.address}}</div>
-        <i class="position"></i>
+        <div>
+          <input v-model="customerInfo.address" type="text" maxlength="50" placeholder="请输入客户地址">
+        </div>
+        <i @click="obtainAddress" class="position"></i>
       </li>
       <div class="h20"></div>
       <li class="special-li">

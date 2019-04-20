@@ -15,9 +15,6 @@
       </li>
       <li class="uiw-pic">
         <div>店铺图片：</div>
-<!--        <div>
-          <img v-lazy="shopInfo.logoIamgeUrl" >
-        </div>-->
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
