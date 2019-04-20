@@ -138,7 +138,9 @@
                   //商品添加成功后回到商品管理列表页
                   this.$toast("导入成功！");
                   this.$router.push({ path: "/my/productList" });
-                }
+                }else if(res.result == "ERROR"){
+                  this.$toast(res.message);
+              }
             });
         },
     },

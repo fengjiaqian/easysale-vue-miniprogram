@@ -27,7 +27,7 @@
         <i class="extension"></i>
       </li>
     </ul>
-    <div class="staff-info-btn" :class="{'':achieve}" @click="verify">保存</div>
+    <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
     <!--角色设置弹出层-->
     <div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
@@ -70,7 +70,7 @@
         },
         activeIdx: null,
         activeName: '',
-        achieve: false,
+        achieve: false,//能否保存
       };
     },
     components: {

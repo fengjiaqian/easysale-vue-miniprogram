@@ -4,16 +4,16 @@
       <li>
         <span>员工姓名：</span>
         <input v-model="staffInfo.name" maxlength="20" type="text" placeholder="请输入姓名">
-        <i class="close"></i>
+        <!--<i class="close"></i>-->
       </li>
       <li class="special-li">
         <span>联系电话：</span>
-        <input v-model="staffInfo.phone" maxlength="11" minlength="11" type="tel" placeholder="请输入手机号码">
+        <input v-model="staffInfo.phone" @input="limitPhone" type="number" placeholder="请输入手机号码">
       </li>
       <div class="h20"></div>
       <li>
         <span>身份证号：</span>
-        <input v-model="staffInfo.cardId" maxlength="18" type="tel" placeholder="请输入身份证号">
+        <input v-model="staffInfo.cardId"  type="number" placeholder="请输入身份证号">
       </li>
       <li class="special-li">
         <span>详细地址：</span>
@@ -42,7 +42,7 @@
         <div><input class="discount-int" v-model="staffInfo.discount" type="number" placeholder="请输入折扣"><span>折</span></div>
       </li>
     </ul>
-    <div class="staff-info-btn" @click="verify">保存</div>
+    <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
 
     <!--角色设置弹出层-->
     <div class="popup-wrap" v-if="rolePopShow">
@@ -84,7 +84,7 @@
         rolePopShow: false,
         activeRoleName: '',
         roleId: '',//角色id
-        passData: {},
+        achieve: false,//能否保存
       };
     },
     components: {
@@ -113,6 +113,9 @@
       this._queryRole()
     },
     methods: {
+      limitPhone(e){
+        this.staffInfo.phone = e.target.value.slice(0,11);
+      },
       //验证添加商品所需字段
       verify(){
         const { name,phone,address,hireDate,cardId } = this.staffInfo
@@ -121,6 +124,9 @@
           return
         }else if(!phone){
           this.$alert(`请输入员工手机号！`)
+          return
+        }else if(!address){
+          this.$alert(`请选择员工的地址！`)
           return
         }else if(!cardId){
           this.$alert(`请输入员工身份证号！`)
@@ -171,6 +177,17 @@
         evokeWxLocation(recordData)
       },
     },
+    watch: {
+      staffInfo: {
+        handler(newVal, oldVal) {
+          const { name,phone,address,hireDate,cardId } = newVal
+          if(name && phone && hireDate && address && cardId){
+            this.achieve = true
+          }
+        },
+        deep: true
+      },
+    }
   };
 </script>
 

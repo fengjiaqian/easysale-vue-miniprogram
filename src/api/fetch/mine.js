@@ -74,7 +74,7 @@ function queryCustomerPerformance(params) {
 
 //我的模块-商品管理-商品列表查询
 function queryProductList(params) {
-	const url = "/product/productList"
+	const url = "/product/selectDealerProduct"
 	return axios({
 		method: 'post',
 		url: url,

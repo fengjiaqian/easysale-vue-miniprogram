@@ -78,7 +78,6 @@
         autoMoreData: false,
         domShow: false,
         filterParam: {
-          dealerId: '19990530',
           brandId: '',
           pageNum: 1,
           pageSize: 20,
@@ -107,8 +106,6 @@
         allSelected: false,//默认非全选
         oprateParam: {
           idList: [],
-          updateUser: '465273',
-          dealerId: "19990530",
           state: 0
         },//商品操作查询参数
       };
@@ -256,6 +253,19 @@
             this.filterParam.brandId = ''
             this.filterParam.searchKey = ''
             this.filterParam.state = null
+            //删除后从列表移除删除的商品
+            if(this.oprateParam.state==0){
+              let products = this.productList
+              for(let id of this.oprateParam.idList){
+                for(let i in products){
+                  if(id == products[i].id){
+                    products.splice(i,1)
+                    break;
+                  }
+                }
+              }
+              this.productList = products
+            }
           }
         });
       },
