@@ -43,6 +43,13 @@ const awardList = (resolve) => {
 	})
 }
 
+//wx   终端客户的 “兑奖详情”的页面
+const awardDetail = (resolve) => { 
+	import('views/award/client/awardDetail.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 const complain = [
     {
         path: '/newComplaint',
@@ -86,6 +93,13 @@ const complain = [
             title: '兑奖列表',
         },
         component: awardList,
+    },{
+        path: '/awardDetail',
+        name: 'awardDetail',
+        meta: {
+            title: '兑奖详情',
+        },
+        component: awardDetail,
     }
 ]
 

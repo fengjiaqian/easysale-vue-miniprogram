@@ -84,7 +84,7 @@ import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
 import ic4 from "../assets/images/ic-chenglie.png";
-// import scroll from "../components/slider.vue";
+import slider from "../components/slider.vue";
 
 const appIcons = [
   { imgUrl: ic1, value: "投诉管理" },
@@ -131,13 +131,13 @@ export default {
       scrollMenu: [],
       currentColumnPorducts: [],
       currentDealer: storage.get("currentDealer", "") || currentDealer,
-      // banners:[
-      //   {"bannerId":"1","imgUrl":"https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=tup&hs=2&pn=1&spn=0&di=140140&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&ie=utf-8&oe=utf-8&cl=2&lm=-1&cs=1033990994%2C1707738965&os=2966486800%2C1305663221&simid=3461226945%2C359519335&adpicid=0&lpn=0&ln=30&fr=ala&fm=&sme=&cg=&bdtype=0&oriquery=tup&objurl=http%3A%2F%2Fnres.ingdan.com%2Fuploads%2F20160201%2F1454287776483324.png&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Btg21wg_z%26e3Bv54AzdH3Fu6jjAzdH3F6jr56p_1jpwtsAzdH3Fmna0&gsm=0&islist=&querylist="},
-      //   {"bannerId":"2","imgUrl":"https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=tup&hs=2&pn=1&spn=0&di=140140&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&ie=utf-8&oe=utf-8&cl=2&lm=-1&cs=1033990994%2C1707738965&os=2966486800%2C1305663221&simid=3461226945%2C359519335&adpicid=0&lpn=0&ln=30&fr=ala&fm=&sme=&cg=&bdtype=0&oriquery=tup&objurl=http%3A%2F%2Fnres.ingdan.com%2Fuploads%2F20160201%2F1454287776483324.png&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Btg21wg_z%26e3Bv54AzdH3Fu6jjAzdH3F6jr56p_1jpwtsAzdH3Fmna0&gsm=0&islist=&querylist="},
-      //   {"bannerId":"3","imgUrl":"https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=tup&hs=2&pn=1&spn=0&di=140140&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&ie=utf-8&oe=utf-8&cl=2&lm=-1&cs=1033990994%2C1707738965&os=2966486800%2C1305663221&simid=3461226945%2C359519335&adpicid=0&lpn=0&ln=30&fr=ala&fm=&sme=&cg=&bdtype=0&oriquery=tup&objurl=http%3A%2F%2Fnres.ingdan.com%2Fuploads%2F20160201%2F1454287776483324.png&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Btg21wg_z%26e3Bv54AzdH3Fu6jjAzdH3F6jr56p_1jpwtsAzdH3Fmna0&gsm=0&islist=&querylist="},
-      //   {"bannerId":"4","imgUrl":"https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=tup&hs=2&pn=1&spn=0&di=140140&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&ie=utf-8&oe=utf-8&cl=2&lm=-1&cs=1033990994%2C1707738965&os=2966486800%2C1305663221&simid=3461226945%2C359519335&adpicid=0&lpn=0&ln=30&fr=ala&fm=&sme=&cg=&bdtype=0&oriquery=tup&objurl=http%3A%2F%2Fnres.ingdan.com%2Fuploads%2F20160201%2F1454287776483324.png&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Btg21wg_z%26e3Bv54AzdH3Fu6jjAzdH3F6jr56p_1jpwtsAzdH3Fmna0&gsm=0&islist=&querylist="}
+      banners:[
+        {"bannerId":"1","imgUrl":icBanner},
+        {"bannerId":"2","imgUrl":icBanner},
+        {"bannerId":"3","imgUrl":icBanner},
+        {"bannerId":"4","imgUrl":icBanner}
 
-      // ]
+      ]
     };
   },
   components: {
