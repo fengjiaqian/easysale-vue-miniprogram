@@ -60,7 +60,7 @@
           name: '',
           phone: '',
           customerShopName: '',
-          address: '地址',
+          address: '',
           salesPersonUserId: '',
           label:''
         },

@@ -76,7 +76,7 @@
           name: '',
           phone: '',
           cardId: '',
-          address: '地址',
+          address: '',
           hireDate: '',
           roleId: '',//选中的员工角色id
           discount: '',
