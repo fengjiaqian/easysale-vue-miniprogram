@@ -21,6 +21,7 @@
       </ul>
     </div>
     <!--  -->
+    <float-cart></float-cart>
     <div class="D-bottom">
       <div class="D-bottom-left">
         <dl class="D-link">
@@ -45,6 +46,8 @@ import storage from "common/storage";
 import numberPicker from "components/number-picker.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
 import { updateItem } from "common/goodsStorage";
+import floatCart from "components/floatCart.vue";
+
 export default {
   name: "detail",
   data() {
@@ -53,7 +56,8 @@ export default {
     };
   },
   components: {
-    numberPicker
+    numberPicker,
+    floatCart
   },
   created() {
     this._queryDetail();
