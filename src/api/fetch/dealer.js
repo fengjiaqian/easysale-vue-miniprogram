@@ -19,3 +19,26 @@ export function findCustomerList(keyword = "") {
         return Promise.reject(res.data)
     });
 }
+
+/**
+ * 客户或者经销商fetch店铺log 
+ * @param {*}  userId  经销商userId
+ */
+export function ListDealerLogs(userId = "") {
+
+    let url = "/dealer/findShopLogoListByDealer";
+    userId && (url = "/dealer/findShopLogoListByCustomer")
+    return axios({
+        method: 'post',
+        url,
+        data: {
+            fileType: 1,
+            userId
+        },
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}

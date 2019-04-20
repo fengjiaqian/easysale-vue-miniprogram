@@ -5,8 +5,8 @@
     <div class="home-banner">
       <div class="slider-body">
         <slider :loop="false" ref="slider_dom">
-          <div class="banner-item" v-for="item in 4">
-            <img :src="icBanner" alt>
+          <div class="banner-item" v-for="item in banners" :key="item.id">
+            <img :src="item.cloudSrc" alt>
           </div>
         </slider>
       </div>
@@ -107,6 +107,7 @@ import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import slider from "components/slider.vue";
 import { queryHomeProducts, ListProduct } from "api/fetch/home";
+import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
@@ -114,7 +115,6 @@ export default {
   name: "home",
   data() {
     return {
-      icBanner: icBanner,
       appIcons: appIcons,
       productList: [],
       currentColumnId: "",
@@ -122,6 +122,7 @@ export default {
       menuCanScroll: false,
       scrollMenu: [],
       currentColumnPorducts: [],
+      banners: [],
       currentDealer: storage.get("currentDealer", "") || currentDealer
     };
   },
@@ -136,6 +137,7 @@ export default {
   computed: {},
   created() {
     this._initAuth();
+    this._listDealerLogs();
     queryHomeProducts().then(res => {
       if (res.result === "success" && res.data) {
         this.scrollMenu = res.data.brands || [];
@@ -177,6 +179,11 @@ export default {
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
       }
+    },
+    _listDealerLogs() {
+      ListDealerLogs(currentDealer.userId || "").then(res => {
+        this.banners = res.data;
+      });
     },
     //
     _jumpDealerList() {

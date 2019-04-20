@@ -29,7 +29,7 @@ axios.interceptors.request.use(function (config) {
 	// 	}
 	// }
 	if (IS_PROD) {
-		config.url = "/easysalemini" + config.url
+		config.url = "/easysaleapi" + config.url
 	} 
 	return config;
 }, function (error) {
