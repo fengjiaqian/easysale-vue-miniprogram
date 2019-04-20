@@ -5,7 +5,7 @@
     </div>
     <div class="pw-r" @click="goToDetail">
       <div class="product-pic">
-        <img v-lazy="''" >
+        <img v-lazy="product.productImageUrl" >
       </div>
       <div class="product-info">
         <h5 class="name">

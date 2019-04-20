@@ -183,6 +183,8 @@
           const { name,phone,address,hireDate,cardId } = newVal
           if(name && phone && hireDate && address && cardId){
             this.achieve = true
+          }else{
+            this.achieve = false
           }
         },
         deep: true

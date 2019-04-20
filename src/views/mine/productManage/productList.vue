@@ -227,7 +227,10 @@
           if(product.select) selectedIds.push(product.id)
         })
         //没有勾选商品，直接return
-        if(!selectedIds.length) return
+        if(!selectedIds.length) {
+          this.$toast('请勾选需要操作的商品！');
+          return
+        }
         this.oprateParam.idList = selectedIds
         switch (type) {
           case 'delete':

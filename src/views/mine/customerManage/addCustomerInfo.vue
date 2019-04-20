@@ -160,7 +160,9 @@
           handler(newVal, oldVal) {
               const { name,phone,customerShopName,address,salesPersonUserId } = newVal
               if(name && phone && customerShopName && address && salesPersonUserId){
-                    this.achieve = true
+                this.achieve = true
+              }else{
+                this.achieve = false
               }
           },
           deep: true

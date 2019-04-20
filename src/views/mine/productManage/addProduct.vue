@@ -8,7 +8,7 @@
         </li>
         <li>
           <span>商品品牌：</span>
-          <input v-model="productModal.brandName" type="text" maxlength="30" placeholder="请输入商品品牌">
+          <input v-model="productModal.brandName" type="text" maxlength="20" placeholder="请输入商品品牌">
         </li>
         <li>
           <span>商品价格：</span>
@@ -49,7 +49,7 @@
       </div>
 
     </div>
-    <div class="confirm" @click="verify">确认</div>
+    <div class="confirm" :class="{'achieve':achieve}" @click="verify">确认</div>
   </div>
 </template>
 
@@ -75,6 +75,7 @@
         },
         limitUploadNum: 1,//上传图片的限制张数
         fileList: [],
+        achieve: false,//能否保存
       };
     },
     components: {
@@ -94,6 +95,7 @@
     methods: {
       //验证添加商品所需字段
       verify(){
+        if(!this.achieve) return;
         const { productName,brandName,price,priceUnit,specification,description } = this.productModal
         if(!productName){
           this.$alert(`请输入商品名称！`)
@@ -161,6 +163,19 @@
           document.querySelector('.el-upload--picture-card').removeAttribute('style')
         }
         this.productModal.productImageUrl = ''
+      },
+    },
+    watch: {
+      productModal: {
+        handler(newVal, oldVal) {
+          const { productName,brandName,price,priceUnit,specification,description } = newVal
+          if(productName && brandName && price && priceUnit && specification && description){
+            this.achieve = true
+          }else{
+            this.achieve = false
+          }
+        },
+        deep: true
       },
     }
   };

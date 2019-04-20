@@ -1,5 +1,5 @@
 <template>
-  <div id="detail">
+  <div id="detail" v-show="domShow">
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
@@ -28,6 +28,7 @@ import { productDetail,oprateManageProduct } from "api/fetch/mine";
 export default {
   data() {
     return {
+      domShow: false,
       id: '',//商品id
       product: {},//商品对象
       oprateParam: {
@@ -54,6 +55,7 @@ export default {
       }
       productDetail(param).then(res => {
         if (res.result === "success" && res.data) {
+          this.domShow = true
           this.product = res.data
         }
       });

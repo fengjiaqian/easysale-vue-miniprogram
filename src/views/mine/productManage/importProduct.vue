@@ -11,7 +11,7 @@
 
     <!--内容-->
     <section class="pi-content">
-      <product-manage-small v-for="product in productList" :key="product.productSpecificationId"  :product="product"></product-manage-small>
+      <product-manage-small v-for="(product,index) in productList" :key="product.productSpecificationId+index"  :product="product"></product-manage-small>
     </section>
 
     <!--底部-->
@@ -70,7 +70,7 @@
             queryJyProduct(this.filterParam).then(res => {
                 if (res.result === "success" && res.data) {
                     this.domShow = true
-                    this.totalPage = Math.ceil(res.totalCount/20)
+                    this.totalPage = Math.ceil(res.totalCount/20) > 10? 10 : Math.ceil(res.totalCount/20)
                     //当前加载的页码数大于等于最大页码数时，不在加载更多数据
                     if(this.filterParam.pageNum >= this.totalPage){
                         this.autoMoreData = false;
@@ -138,9 +138,9 @@
                   //商品添加成功后回到商品管理列表页
                   this.$toast("导入成功！");
                   this.$router.push({ path: "/my/productList" });
-                }else if(res.result == "ERROR"){
-                  this.$toast(res.message);
-              }
+                }
+            }).catch((err)=>{
+              this.$toast(err.message);
             });
         },
     },
