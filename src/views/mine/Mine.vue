@@ -9,10 +9,10 @@
 
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
-      <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
+      <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
         <i></i>
         <span>邀请码</span>
-      </div>
+      </div> -->
       <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
     </div>
     <!-- 功能模块 -->
@@ -75,6 +75,7 @@ export default {
     },
     //分角色跳转个人信息
     _jumpUserInfo() {
+       this.navigateToLogin();
       if (this.userType == 3) {
         this.mineSkip("/customerInfo");
       }

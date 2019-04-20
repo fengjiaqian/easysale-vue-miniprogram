@@ -1,6 +1,6 @@
 <template>
   <div
-    class="float-cart"
+    class="float-cart float-icon"
     @click="enterCart"
     @touchstart="down($event)"
     @touchmove.prevent="move($event)"
@@ -59,5 +59,9 @@ export default {
   color: #fff;
   border-radius: 50%;
   transform: scale(0.8);
+}
+
+.float-icon :nth-of-type(1) {
+  top: 70%;
 }
 </style>

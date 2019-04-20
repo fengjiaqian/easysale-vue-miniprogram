@@ -1,6 +1,6 @@
 <template>
   <div id="orders">
-    <empty v-if="empty" txt="暂无此类订单"></empty>
+    <empty v-if="empty" txt="暂无此类订单" :iconUrl="avatarUrl"></empty>
     <ui-table :orderTab="orderTab" :initialState="currentState" @swithTab="_switchOrderType"></ui-table>
     <!--  -->
     <div class="empty-page" v-if="isVisitor">
@@ -43,6 +43,7 @@ const params = {
   pageNum: 1,
   pageSize: 3
 };
+import avatarUrl from "@/assets/images/icon-product-empty.png";
 import orderItem from "components/order-item.vue";
 import uiTable from "components/ui-table.vue";
 import { getAllGoods } from "common/goodsStorage";
@@ -57,7 +58,8 @@ export default {
       orderTab: orderTab,
       currentState: 1,
       orderList: [],
-      empty: false
+      empty: false,
+      avatarUrl
     };
   },
   components: {
