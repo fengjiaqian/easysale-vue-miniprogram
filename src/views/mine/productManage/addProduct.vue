@@ -59,8 +59,6 @@
   export default {
     data() {
       return {
-        dealerId: '19990530',
-        createUser: '465273',
         productModal: {
           productSpecificationId: null,
           brandName: '',

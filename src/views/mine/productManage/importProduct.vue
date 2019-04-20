@@ -43,8 +43,6 @@
           productList: [],//商品列表
           totalPage: 0,//商品数据总页数(最多只展示10页，即前200条数据)
           searchKey: '',
-          dealerId: '19990530',//经销商id
-          createUser: '465273',//用户id
           allSelected: false,//默认非全选
       };
     },
@@ -129,8 +127,6 @@
               return
             }
             let param = {
-                dealerId: this.dealerId,
-                createUser: this.createUser,
                 productList: selectedProducts
             }
             addProduct(param).then(res => {

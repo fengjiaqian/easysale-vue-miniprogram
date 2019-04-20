@@ -154,10 +154,7 @@
       },
       //查询商品品牌
       initBrand(){
-        let param = {
-          dealerId: this.filterParam.dealerId
-        }
-        queryProductBrand(param).then(res => {
+        queryProductBrand({}).then(res => {
           if (res.result === "success" && res.data) {
             res.data.unshift({
               "brandName": '全部品牌',
@@ -268,6 +265,15 @@
                 }
               }
               this.productList = products
+            }
+            //上下架后重新请求(恢复默认)
+            else{
+              this.productList = []
+              this.activeBrandIdx= 0
+              this.activeBrandName= '全部品牌'
+              this.activeStateIdx= 0
+              this.activeStateName= '全部状态'
+              this.allSelected = false
             }
           }
         });

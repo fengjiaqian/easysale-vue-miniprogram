@@ -51,7 +51,6 @@
     data() {
       return {
         productModal: {
-          dealerId: '19990530',//经销商id
           id: '',//商品id
           brandName: '',//品牌
           productName: '',//商品名称
@@ -62,7 +61,6 @@
           productType: '',//商品类型
           specification: '',//产品规格
           effectiveDate: null,//生效时间
-          createUser: '465273',
         },
         productType: 0, //产品类型 0=酒批 1=经销商 ,酒批产品只能改价格
         limitUploadNum: 1,//上传图片的限制张数

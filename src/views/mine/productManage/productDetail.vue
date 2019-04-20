@@ -33,8 +33,6 @@ export default {
       product: {},//商品对象
       oprateParam: {
         idList: [],
-        updateUser: '465273',
-        dealerId: "19990530",
         state: 0  //状态 0:删除 1：已上架  2：已下架
       },//商品操作查询参数
     };
@@ -43,6 +41,7 @@ export default {
 
   },
   created() {
+    localStorage.removeItem('productInfo')
     this.id = this.$route.query.code
     this.oprateParam.idList = [this.id]
     this._queryDetail();
