@@ -1,5 +1,5 @@
 <template>
-  <div class="product-import-wrap">
+  <div class="product-import-wrap ddfgrf">
     <!--头部-->
     <section class="pi-header">
       <div class="search-bar">
@@ -11,7 +11,17 @@
 
     <!--内容-->
     <section class="pi-content">
-      <product-manage v-for="(product,index) in productList" :key="product.productSpecificationId+index"  :product="product"></product-manage>
+        <scroll
+                class="product-list-scroll"
+                :data="productList"
+                :probeType="3"
+                :pullup="true"
+                @scrollToEnd="loadMoreProducts"
+                ref="productScrollDom">
+          <div>
+            <product-manage v-for="(product,index) in productList" :key="product.productSpecificationId+index+product.productName"  :product="product"></product-manage>
+          </div>
+        </scroll>
     </section>
 
     <!--底部-->
@@ -28,12 +38,14 @@
 <script>
   import productManage from "components/productManage/product-manage.vue";
   import { queryJyProduct,addProduct } from "api/fetch/mine";
+  import scroll from "components/scroll.vue";
   export default {
     data() {
       return {
-          requestDone: true,
-          autoMoreData: false,
           domShow: false,
+          loading: false,
+          requestDone: false,
+          isEmpty: false,
           filterParam: {
               productInfoName: '',
               brandName: '',
@@ -47,57 +59,37 @@
       };
     },
     components: {
-      productManage
+      productManage,
+      scroll
     },
-    beforeCreate () {
-      document.getElementById('app').setAttribute('style', 'height:auto;')
-    },
-    beforeDestroy () {
-      document.getElementById('app').removeAttribute('style')
-    },
-    computed: {
-
-    },
+    beforeCreate () {},
+    beforeDestroy () {},
+    computed: {},
     created() {
         this.queryProducts()
     },
     methods: {
         //查询产品列表
         queryProducts(){
+            this.loading = true
             this.requestDone = false
             queryJyProduct(this.filterParam).then(res => {
                 if (res.result === "success" && res.data) {
                     this.domShow = true
                     this.totalPage = Math.ceil(res.totalCount/20) > 10? 10 : Math.ceil(res.totalCount/20)
                     //当前加载的页码数大于等于最大页码数时，不在加载更多数据
-                    if(this.filterParam.pageNum >= this.totalPage){
-                        this.autoMoreData = false;
-                    }else{
-                        this.autoMoreData = true;
-                    }
                     res.data.forEach((item)=>{
                         item.select = false
                     })
                     this.productList = this.productList.concat(res.data)
+                    this.loading = false
                     this.requestDone = true
                 }
             }).catch(err => {
-                this.autoMoreData = false
+                this.loading = false
                 this.requestDone = true
             })
             ;
-        },
-        //滑动底部加载更多
-        scrollMore(){
-            let that = this
-            window.addEventListener('scroll',function(){
-                let scrollTop = window.pageYOffset|| document.documentElement.scrollTop || document.body.scrollTop;
-                let scrollHeight = document.body.scrollHeight;
-                let windowHeight = document.documentElement.clientHeight;
-                if(scrollTop + windowHeight >= scrollHeight && that.requestDone && that.autoMoreData) {
-                    that.filterParam.pageNum += 1
-                }
-            })
         },
         //搜索关键字查询
         handleChange($event){
@@ -139,6 +131,10 @@
               this.$toast(err.message);
             });
         },
+        loadMoreProducts() {
+          if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
+            this.filterParam.pageNum += 1
+        },
     },
     watch: {
       filterParam: {
@@ -147,12 +143,14 @@
           },
           deep: true
       },
-      domShow: function(val) {
-          if(val) {
-              this.$nextTick(() => {
-                  this.scrollMore()
-              })
+      productList(val) {
+        if (this.requestDone) {
+          if(!val.length){
+            this.isEmpty = true
+          }else{
+            this.isEmpty = false
           }
+        }
       }
     }
   };

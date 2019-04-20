@@ -33,7 +33,17 @@
 
     <!--内容-->
     <section class="content">
-      <product-manage v-for="product in productList" :key="product.id"  :product="product"></product-manage>
+      <scroll
+              class="product-list-scroll"
+              :data="productList"
+              :probeType="3"
+              :pullup="true"
+              @scrollToEnd="loadMoreProducts"
+              ref="productScrollDom">
+        <div class="list-column">
+          <product-manage v-for="product in productList" :key="product.id+product.productName"  :product="product"></product-manage>
+        </div>
+      </scroll>
     </section>
 
     <!--底部-->
@@ -60,7 +70,10 @@
     <div class="mask-layer" @click="reset" v-if="popAddShow || brandFilterShow || stateFilterShow"></div>
 
     <!--空页面友好提示-->
-    <empty v-if="!productList.length&&domShow"></empty>
+    <section class="empty-product" v-if="isEmpty">
+      <i></i>
+      <span>暂无商品数据~</span>
+    </section>
   </div>
 </template>
 
@@ -68,15 +81,18 @@
   import productManage from "components/productManage/product-manage.vue";
   import empty from "components/empty.vue";
   import { queryProductList, queryProductBrand, oprateManageProduct } from "api/fetch/mine";
+  import scroll from "components/scroll.vue";
   export default {
     data() {
       return {
         popAddShow: false,
         brandFilterShow: false,
         stateFilterShow: false,
-        requestDone: true,
-        autoMoreData: false,
         domShow: false,
+        loading: false,
+        requestDone: false,
+        isEmpty: false,
+        totalPage: 0,
         filterParam: {
           brandId: '',
           pageNum: 1,
@@ -112,17 +128,12 @@
     },
     components: {
       productManage,
-      empty
+      empty,
+      scroll
     },
-    beforeCreate () {
-      document.getElementById('app').setAttribute('style', 'height:auto;')
-    },
-    beforeDestroy () {
-      document.getElementById('app').removeAttribute('style')
-    },
-    computed: {
-
-    },
+    beforeCreate () {},
+    beforeDestroy () {},
+    computed: {},
     created() {
       this.queryProducts()
       this.initBrand()
@@ -130,24 +141,25 @@
     methods: {
       //查询产品列表
       queryProducts(){
+        this.loading = true
         this.requestDone = false
         queryProductList(this.filterParam).then(res => {
           if (res.result === "success" && res.data) {
             this.domShow = true
-            //如果当前页的数据条数小于一页的列表数，则下次滑到最底部不再加载更多数据
-            if(res.data.dataList.length < this.filterParam.pageSize){
-              this.autoMoreData = false;
-            }else{
-              this.autoMoreData = true;
+            const { dataList = [], pager } = res.data;
+            const { currentPage, totalPage } = pager;
+            if(currentPage==1){
+              this.totalPage = totalPage
             }
-            res.data.dataList.forEach((item)=>{
+            dataList.forEach((item)=>{
               item.select = false
             })
-            this.productList = this.productList.concat(res.data.dataList)
+            this.productList = this.productList.concat(dataList)
+            this.loading = false
             this.requestDone = true
           }
         }).catch(err => {
-            this.autoMoreData = false
+            this.loading = false
             this.requestDone = true
           })
         ;
@@ -193,18 +205,6 @@
         this.allSelected = false
         this.domShow = false
         this.productList = []
-      },
-      //滑动底部加载更多
-      scrollMore(){
-        let that = this
-        window.addEventListener('scroll',function(){
-          let scrollTop = window.pageYOffset|| document.documentElement.scrollTop || document.body.scrollTop;
-          let scrollHeight = document.body.scrollHeight;
-          let windowHeight = document.documentElement.clientHeight;
-          if(scrollTop + windowHeight >= scrollHeight && that.requestDone && that.autoMoreData) {
-            that.filterParam.pageNum += 1
-          }
-        })
       },
       //全选
       allSelect(){
@@ -306,6 +306,11 @@
         if(type == 'add') this.$router.push({ path: "/my/addProduct" });
         if(type == 'import') this.$router.push({ path: "/my/importProduct" });
       },
+      //加载更多
+      loadMoreProducts() {
+        if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
+        this.filterParam.pageNum += 1
+      },
     },
     watch: {
       filterParam: {
@@ -314,11 +319,13 @@
         },
         deep: true
       },
-      domShow: function(val) {
-        if(val) {
-          this.$nextTick(() => {
-            this.scrollMore()
-          })
+      productList(val) {
+        if (this.requestDone) {
+          if(!val.length){
+            this.isEmpty = true
+          }else{
+            this.isEmpty = false
+          }
         }
       }
     }

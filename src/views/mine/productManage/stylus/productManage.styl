@@ -1,6 +1,7 @@
 
 //商品列表页
 .product-list-wrap{
+  height 100%
   bg(#fff)
   .header{
     border-bottom 1PX solid #EDEDED
@@ -9,6 +10,7 @@
     top 0
     width 100%
     bg(#fff)
+    z-index 1
   }
   .brand-head{
     .filter-bar{
@@ -40,7 +42,15 @@
     z-index 9
   }
   .content{
-    margin 198px 0 98px
+    padding 198px 0 98px
+    height 100%
+    bg(#f6f6f6)
+    .product-list-scroll{
+      height 100%
+      .list-column{
+        bg(#fff)
+      }
+    }
   }
 }
 .search-bar{
@@ -312,6 +322,7 @@
 //导入易酒批商品页面
 .product-import-wrap{
   bg(#fff)
+  height 100%
   .pi-header{
     border-bottom 1PX solid #EDEDED
     position fixed
@@ -319,9 +330,14 @@
     top 0
     width 100%
     bg(#fff)
+    z-index 1
   }
   .pi-content{
-    margin 100px 0 98px
+    padding  100px 0 98px
+    height 100%
+    .product-list-scroll{
+      height 100%
+    }
   }
   .pi-footer{
     position fixed
@@ -360,5 +376,27 @@
       text-c()
       bg(#FF5638)
     }
+  }
+}
+.empty-product{
+  position absolute
+  left 50%
+  top 50%
+  transform translate(-50%,-75%)
+  bg(#F6F6F6)
+  flex()
+  align-items center
+  flex-direction column
+  i{
+    w(340)
+    h(340)
+    background-image url(../../../assets/images/empty_icon_1.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+  }
+  span{
+    ft(30)
+    c-9()
   }
 }
