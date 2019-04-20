@@ -33,6 +33,18 @@ Vue.filter('priceToFixed', function (val) {
 	return value;
 })
 
+Vue.filter('normalPrice', function (val, unit = "") {
+	if (!val) {
+		return `&yen;<span class="fz38">?<span><span class="fz28">元/${unit}</span>`
+	}
+	let value = '0.00';
+	if (val) {
+		value = val.toFixed(2);
+	}
+	let nums = value.split('.');
+	return `<span class="fz32">${nums[0]}<span><span class="fz24">.${nums[1]}<span class="fz26 ml8">元/${unit}</span></span>`
+})
+
 Vue.directive('auth-interceptors', {
 	bind(el, binding) {
 		console.log(el)
@@ -48,6 +60,7 @@ Vue.directive('auth-interceptors', {
 
 	}
 })
+
 
 /**
  * route query 转义

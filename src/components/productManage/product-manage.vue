@@ -16,7 +16,7 @@
           <span>规格 {{product.specification}}</span>
         </div>
         <div style="flex:1;"></div>
-        <div class="price">¥{{product.price}}<span>元/{{product.priceUnit}}</span></div>
+        <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
       </div>
     </div>
   </div>

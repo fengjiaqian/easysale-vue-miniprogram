@@ -1,6 +1,16 @@
 .product-wrap{
   flex-center()
   padding 24px
+  position relative
+  &:before{
+    content ""
+    position absolute
+    bottom 0
+    left 35%
+    h(1)
+    width 100%
+    bg(#EDEDED)
+  }
   .pw-l{
     span{
       inline()
@@ -22,6 +32,7 @@
       w(166)
       h(166)
       bg(#F6F6F6)
+      min-width 166px
       margin 0 24px
       flex-center()
       img{
@@ -37,10 +48,12 @@
       .name{
         ft(32)
         c-3()
-        text-overflow-1()
         font-weight 600
         flex()
         align-items center
+        span{
+          text-overflow-2()
+        }
         i{
           bg(#FF5638)
           ft(22)

@@ -6,7 +6,7 @@
     <div class="D-name"><i>自有</i>{{product.productName}}</div>
     <div class="D-spec">规格：<span>{{product.specification}}</span></div>
     <div class="D-price">
-      <span class="c-yellow" v-html="$options.filters.price(product.price)"></span>
+      <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
     </div>
     <!--  -->
     <div class="D-info">

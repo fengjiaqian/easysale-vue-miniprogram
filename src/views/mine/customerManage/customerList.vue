@@ -71,6 +71,14 @@
           path: "/my/addCustomerInfo"
         });
       },
+    },
+    watch: {
+      filterParam: {
+        handler(newVal, oldVal) {
+          this.queryCustomer()
+        },
+        deep: true
+      },
     }
   };
 </script>

@@ -3,12 +3,12 @@
     <ul class="staff-info-list">
       <li>
         <span>员工姓名：</span>
-        <input v-model="customerInfo.name" type="text" placeholder="请输入姓名">
-        <i class="close"></i>
+        <input @input="limitName" v-model="customerInfo.name" type="text" placeholder="请输入姓名">
+        <!--<i class="close"></i>-->
       </li>
       <li class="special-li">
         <span>联系电话：</span>
-        <input v-model="customerInfo.phone" type="tel" placeholder="请输入手机号码">
+        <input v-model="customerInfo.phone" @input="limitPhone" type="tel" placeholder="请输入手机号码">
       </li>
       <div class="h20"></div>
       <li>
@@ -49,6 +49,7 @@
 
 <script>
   import { editCustomer,queryStaffList } from "api/fetch/mine";
+  import { verifyPhone } from "common/validate";
   export default {
     data() {
       return {
@@ -84,6 +85,14 @@
       this.queryStaffs()
     },
     methods: {
+      limitName(e){
+        let value = e.target.value
+        value=value.replace(/[^\a-\z\A-\Z\u4E00-\u9FA5]/g,'')
+        this.customerInfo.name = value
+      },
+      limitPhone(e){
+        this.customerInfo.phone = e.target.value.slice(0,11);
+      },
       //查询员工列表
       queryStaffs(){
         queryStaffList(this.filterParam).then(res => {
@@ -106,11 +115,12 @@
       },
       //验证添加商品所需字段
       verify(){
+        if(!this.achieve) return;
         const { name,phone,customerShopName,address,salesPersonUserId } = this.customerInfo
         if(!name){
           this.$alert(`请输入客户姓名！`)
           return
-        }else if(!phone){
+        }else if(!verifyPhone(phone)){
           this.$alert(`请输入客户手机号！`)
           return
         }else if(!customerShopName){

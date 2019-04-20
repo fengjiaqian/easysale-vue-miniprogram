@@ -7,7 +7,7 @@
       </li>
       <li class="mb-20">
         <div>联系电话：</div>
-        <input v-model="shopInfo.phone" type="tel" maxlength="11" placeholder="请输入您的联系电话">
+        <input @input="limitPhone" v-model="shopInfo.phone" type="tel" maxlength="11" placeholder="请输入您的联系电话">
       </li>
       <li class="mb-20 uiw-info">
         <div>店铺介绍：</div>
@@ -36,21 +36,22 @@
         </ul>
       </li>
     </ul>
-    <div class="user-info-edit save" @click="saveEdit">保存</div>
+    <div class="user-info-edit save" :class="[achieve ? 'save' : 'disable']"@click="verify">保存</div>
   </div>
 </template>
 
 <script>
   import { queryShopInfo,editShopInfo } from "api/fetch/mine";
   import storage from "common/storage";
+  import { verifyPhone } from "common/validate";
   export default {
     data() {
       return {
-        userId: '',
         shopInfo: {},
         domShow: false,
         limitUploadNum: 5,//上传图片的限制张数
         stagImgList: [],//暂存的图片数组
+        achieve: false
       };
     },
     components: {
@@ -65,22 +66,37 @@
       }
     },
     created() {
-      this.userId = '465273'
       this.initShopInfo()
     },
     mounted() {},
     methods: {
+      limitPhone(e){
+        this.shopInfo.phone = e.target.value.slice(0,11);
+      },
       initShopInfo(){
-        let param = {
-          userId: this.userId
-        }
-        queryShopInfo(param).then(res => {
+        queryShopInfo({}).then(res => {
           if (res.result === "success" && res.data) {
             this.shopInfo = res.data
             this.stagImgList = res.data.logoIamgeUrls
             this.domShow = true
           }
         });
+      },
+      //验证添加商品所需字段
+      verify(){
+        if(!this.achieve) return;
+        const { shopName,phone,instruction } = this.shopInfo
+        if(!shopName){
+          this.$alert(`请输入店铺名称！`)
+          return
+        }else if(!verifyPhone(phone)){
+          this.$alert(`请输入正确的手机号！`)
+          return
+        }else if(!instruction){
+          this.$alert(`请输入店铺介绍！`)
+          return
+        }
+        this.saveEdit()
       },
       //保存修改
       saveEdit(){
@@ -124,6 +140,19 @@
         if(this.stagImgList.length < this.limitUploadNum){
           document.querySelector('.el-upload--picture-card').removeAttribute('style')
         }
+      },
+    },
+    watch: {
+      shopInfo: {
+        handler(newVal, oldVal) {
+          const { shopName,phone,instruction } = newVal
+          if(shopName && phone && instruction){
+            this.achieve = true
+          }else{
+            this.achieve = false
+          }
+        },
+        deep: true
       },
     }
   };
