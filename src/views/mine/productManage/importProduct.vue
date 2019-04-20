@@ -32,6 +32,13 @@
       <div style="flex:1;"></div>
       <div class="import-btn" @click="batchImport">导入</div>
     </section>
+
+    <!--空页面友好提示-->
+    <section class="empty-product" v-if="isEmpty">
+      <i></i>
+      <span>暂无商品数据~</span>
+    </section>
+
   </div>
 </template>
 
