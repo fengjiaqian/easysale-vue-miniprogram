@@ -34,7 +34,6 @@
         bookMenuData: {},
         bookMenuType: 2,
         filterParam: {
-          userId: 19990530,
           keyword: ''
         },
         customerList: null,

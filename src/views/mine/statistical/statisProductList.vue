@@ -30,7 +30,11 @@
           </li>
         </ul>
       </div>
+    </section>
 
+    <section class="empty-icon" v-if="empty">
+      <i></i>
+      <span>暂无数据，快去下单吧！</span>
     </section>
 
   </div>
@@ -43,7 +47,6 @@
       return {
         activeIdx: 0,   //选中的区间
         filterParam: {
-          userId: "465273",
           dayNum: 1,
           pageNum: 1,
           pageSize: 20,
@@ -56,6 +59,7 @@
         requestDone: true,
         autoMoreData: false,
         domShow: false,
+        empty: false,
       }
     },
     computed: {
@@ -116,6 +120,7 @@
             })
             this.recordList = this.recordList.concat(res.data.dataList)
             this.requestDone = true
+            this.empty = !this.recordList.length
           }
         }).catch(err => {
           this.autoMoreData = false

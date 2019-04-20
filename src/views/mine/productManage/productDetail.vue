@@ -1,5 +1,5 @@
 <template>
-  <div id="detail">
+  <div id="detail" v-show="domShow">
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
@@ -28,12 +28,11 @@ import { productDetail,oprateManageProduct } from "api/fetch/mine";
 export default {
   data() {
     return {
+      domShow: false,
       id: '',//商品id
       product: {},//商品对象
       oprateParam: {
         idList: [],
-        updateUser: '465273',
-        dealerId: "19990530",
         state: 0  //状态 0:删除 1：已上架  2：已下架
       },//商品操作查询参数
     };
@@ -42,6 +41,7 @@ export default {
 
   },
   created() {
+    localStorage.removeItem('productInfo')
     this.id = this.$route.query.code
     this.oprateParam.idList = [this.id]
     this._queryDetail();
@@ -54,6 +54,7 @@ export default {
       }
       productDetail(param).then(res => {
         if (res.result === "success" && res.data) {
+          this.domShow = true
           this.product = res.data
         }
       });

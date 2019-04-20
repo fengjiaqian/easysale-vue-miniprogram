@@ -15,8 +15,6 @@ axios.interceptors.request.use(function (config) {
 	}
 	//一个终端用只匹配当前选择的dealerId
 	config.data.dealerId = default_dealerId;
-
-	
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();

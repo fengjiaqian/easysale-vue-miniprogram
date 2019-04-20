@@ -78,7 +78,6 @@
         autoMoreData: false,
         domShow: false,
         filterParam: {
-          dealerId: '19990530',
           brandId: '',
           pageNum: 1,
           pageSize: 20,
@@ -107,8 +106,6 @@
         allSelected: false,//默认非全选
         oprateParam: {
           idList: [],
-          updateUser: '465273',
-          dealerId: "19990530",
           state: 0
         },//商品操作查询参数
       };
@@ -157,10 +154,7 @@
       },
       //查询商品品牌
       initBrand(){
-        let param = {
-          dealerId: this.filterParam.dealerId
-        }
-        queryProductBrand(param).then(res => {
+        queryProductBrand({}).then(res => {
           if (res.result === "success" && res.data) {
             res.data.unshift({
               "brandName": '全部品牌',
@@ -230,7 +224,10 @@
           if(product.select) selectedIds.push(product.id)
         })
         //没有勾选商品，直接return
-        if(!selectedIds.length) return
+        if(!selectedIds.length) {
+          this.$toast('请勾选需要操作的商品！');
+          return
+        }
         this.oprateParam.idList = selectedIds
         switch (type) {
           case 'delete':
@@ -256,6 +253,28 @@
             this.filterParam.brandId = ''
             this.filterParam.searchKey = ''
             this.filterParam.state = null
+            //删除后从列表移除删除的商品
+            if(this.oprateParam.state==0){
+              let products = this.productList
+              for(let id of this.oprateParam.idList){
+                for(let i in products){
+                  if(id == products[i].id){
+                    products.splice(i,1)
+                    break;
+                  }
+                }
+              }
+              this.productList = products
+            }
+            //上下架后重新请求(恢复默认)
+            else{
+              this.productList = []
+              this.activeBrandIdx= 0
+              this.activeBrandName= '全部品牌'
+              this.activeStateIdx= 0
+              this.activeStateName= '全部状态'
+              this.allSelected = false
+            }
           }
         });
       },

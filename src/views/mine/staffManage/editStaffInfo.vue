@@ -41,7 +41,7 @@
         <div><input class="discount-int" v-model="staffInfo.discount" type="number" placeholder="请输入折扣"><span>折</span></div>
       </li>
     </ul>
-    <div class="staff-info-btn" @click="verify">保存</div>
+    <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
     <!--角色设置弹出层-->
     <div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
@@ -80,6 +80,7 @@
         rolePopShow: false,
         roleList: [],
         activeRoleName: '',
+        achieve: false,
       };
     },
     components: {
@@ -142,6 +143,19 @@
       rolePopToggle(){
         this.rolePopShow = true
       }
+    },
+    watch: {
+      staffInfo: {
+        handler(newVal, oldVal) {
+          const { name,phone,address,hireDate,cardId } = newVal
+          if(name && phone && hireDate && address && cardId){
+            this.achieve = true
+          }else{
+            this.achieve = false
+          }
+        },
+        deep: true
+      },
     }
   };
 </script>

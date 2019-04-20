@@ -11,7 +11,7 @@
 
     <!--内容-->
     <section class="pi-content">
-      <product-manage-small v-for="product in productList" :key="product.productSpecificationId"  :product="product"></product-manage-small>
+      <product-manage-small v-for="(product,index) in productList" :key="product.productSpecificationId+index"  :product="product"></product-manage-small>
     </section>
 
     <!--底部-->
@@ -43,8 +43,6 @@
           productList: [],//商品列表
           totalPage: 0,//商品数据总页数(最多只展示10页，即前200条数据)
           searchKey: '',
-          dealerId: '19990530',//经销商id
-          createUser: '465273',//用户id
           allSelected: false,//默认非全选
       };
     },
@@ -70,7 +68,7 @@
             queryJyProduct(this.filterParam).then(res => {
                 if (res.result === "success" && res.data) {
                     this.domShow = true
-                    this.totalPage = Math.ceil(res.totalCount/20)
+                    this.totalPage = Math.ceil(res.totalCount/20) > 10? 10 : Math.ceil(res.totalCount/20)
                     //当前加载的页码数大于等于最大页码数时，不在加载更多数据
                     if(this.filterParam.pageNum >= this.totalPage){
                         this.autoMoreData = false;
@@ -129,8 +127,6 @@
               return
             }
             let param = {
-                dealerId: this.dealerId,
-                createUser: this.createUser,
                 productList: selectedProducts
             }
             addProduct(param).then(res => {
@@ -139,6 +135,8 @@
                   this.$toast("导入成功！");
                   this.$router.push({ path: "/my/productList" });
                 }
+            }).catch((err)=>{
+              this.$toast(err.message);
             });
         },
     },

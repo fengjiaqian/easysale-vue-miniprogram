@@ -35,7 +35,8 @@ function queryStatisticalData(params) {
 	return axios({
 		method: 'post',
 		url: url,
-		data: params
+		data: params,
+		loading: true
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {
@@ -49,7 +50,8 @@ function queryProductPerformance(params) {
     return axios({
         method: 'post',
         url: url,
-        data: params
+        data: params,
+		loading: true
     }).then((res) => {
         return Promise.resolve(res.data)
     }).catch(res => {
@@ -63,7 +65,8 @@ function queryCustomerPerformance(params) {
     return axios({
         method: 'post',
         url: url,
-        data: params
+        data: params,
+		loading: true
     }).then((res) => {
         return Promise.resolve(res.data)
     }).catch(res => {
@@ -74,7 +77,7 @@ function queryCustomerPerformance(params) {
 
 //我的模块-商品管理-商品列表查询
 function queryProductList(params) {
-	const url = "/product/productList"
+	const url = "/product/selectDealerProduct"
 	return axios({
 		method: 'post',
 		url: url,
@@ -92,7 +95,8 @@ function queryProductBrand(params) {
 	return axios({
 		method: 'post',
 		url: url,
-		data: params
+		data: params,
+		loading: true
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {
@@ -120,7 +124,8 @@ function productDetail(params) {
 	return axios({
 		method: 'post',
 		url: url,
-		data: params
+		data: params,
+		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {
@@ -162,7 +167,8 @@ function queryJyProduct(params) {
 	return axios({
 		method: 'post',
 		url: url,
-		data: params
+		data: params,
+		loading: true
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {

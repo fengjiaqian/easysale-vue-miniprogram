@@ -172,7 +172,7 @@ export default {
   }
 
   .enter-item-txt {
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid #ededed !important;
   }
 }
 
