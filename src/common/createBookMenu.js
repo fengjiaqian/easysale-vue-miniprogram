@@ -1,4 +1,5 @@
 import { pinyin,interceptStr } from "./getPinyin";
+import { checkEnglish } from "./validate";
 
 //构造通讯录结构数据
 function creatBookMenuData(data) {
@@ -9,9 +10,15 @@ function creatBookMenuData(data) {
     }
     data.forEach((item)=>{
         //截取首个中文字符
-        let firstN = interceptStr(item.name) || '阿'
+        let firstN = interceptStr(item.name)
         //添加中文字符转拼音首字母的属性
-        item.initials = pinyin.getCamelChars(firstN)
+        //如果是英文字母，直接赋值
+        if(checkEnglish(firstN)){
+            item.initials = firstN
+        }else{
+            item.initials = pinyin.getCamelChars(firstN)
+        }
+        if(!item.initials) item.initials = 'A'
     })
     for(let keys in initBookMenuData){
         for(let item of data){

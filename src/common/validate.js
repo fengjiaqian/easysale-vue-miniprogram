@@ -12,15 +12,29 @@ function verifyIdCard(val) {
     return reg.test(val)
 }
 
-//验证名称是否带有中文
-function checkChinese(val){
-    if(!val) return false
-    let reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+
+//验证是否是中文
+function checkChinese(val) {
+    let reg = /^[\u4e00-\u9fa5]/;
+    return reg.test(val)
+}
+
+//验证是否是英文
+function checkEnglish(val) {
+    let reg = /^[a-zA-Z]/;
+    return reg.test(val)
+}
+
+//验证是否是数字
+function checkNumber (val) {
+    let reg = /^[0-9]+.?[0-9]*$/
     return reg.test(val)
 }
 
 export {
     verifyPhone,
     verifyIdCard,
-    checkChinese
+    checkNumber,
+    checkChinese,
+    checkEnglish
 }

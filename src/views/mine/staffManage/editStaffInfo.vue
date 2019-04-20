@@ -3,17 +3,17 @@
     <ul class="staff-info-list">
       <li>
         <span>员工姓名：</span>
-        <input v-model="staffInfo.name" type="text" placeholder="请输入姓名">
-        <i class="close"></i>
+        <input @input="limitName" v-model="staffInfo.name" type="text" placeholder="请输入姓名">
+        <!--<i class="close"></i>-->
       </li>
       <li class="special-li">
         <span>联系电话：</span>
-        <input v-model="staffInfo.phone" type="number" placeholder="请输入手机号码">
+        <input @input="limitPhone" v-model="staffInfo.phone" type="number" placeholder="请输入手机号码">
       </li>
       <div class="h20"></div>
       <li>
         <span>身份证号：</span>
-        <input v-model="staffInfo.cardId" type="number" placeholder="请输入身份证号">
+        <input @input="limitCardId" v-model="staffInfo.cardId" type="number" placeholder="请输入身份证号">
       </li>
       <li class="special-li">
         <span>详细地址：</span>
@@ -63,6 +63,7 @@
 
 <script>
   import { editStaff,queryRole } from "api/fetch/mine";
+  import { verifyPhone,verifyIdCard } from "common/validate";
   export default {
     data() {
       return {
@@ -74,7 +75,6 @@
           hireDate: '',
           roleId: '',//选中的员工角色id
           discount: '',
-          id: '19990530',//父id（对应所属经销商id）
           type: 2,//用户类型（1：经销商 2：员工）
         },
         rolePopShow: false,
@@ -96,17 +96,32 @@
       this._queryRole()
     },
     methods: {
+      limitName(e){
+        let value = e.target.value
+        value=value.replace(/[^\a-\z\A-\Z\u4E00-\u9FA5]/g,'')
+        this.staffInfo.name = value
+      },
+      limitPhone(e){
+        this.staffInfo.phone = e.target.value.slice(0,11);
+      },
+      limitCardId(e){
+        this.staffInfo.cardId = e.target.value.slice(0,18);
+      },
       //验证添加商品所需字段
       verify(){
+        if(!this.achieve) return;
         const { name,phone,address,hireDate,cardId } = this.staffInfo
         if(!name){
           this.$alert(`请输入员工姓名！`)
           return
-        }else if(!phone){
-          this.$alert(`请输入员工手机号！`)
+        }else if(!verifyPhone(phone)){
+          this.$alert(`请输入正确的员工手机号！`)
           return
-        }else if(!cardId){
-          this.$alert(`请输入员工身份证号！`)
+        }else if(!address){
+          this.$alert(`请选择员工的地址！`)
+          return
+        }else if(!verifyIdCard(cardId)){
+          this.$alert(`请输入正确的员工身份证号！`)
           return
         }else if(!hireDate){
           this.$alert(`请选择雇佣日期！`)
@@ -125,10 +140,7 @@
       },
       //查询所有角色
       _queryRole(){
-        let param = {
-          roleId: '5057183016061585359'
-        }
-        queryRole(param).then(res => {
+        queryRole({}).then(res => {
           if (res.result === "success") {
             this.roleList = res.data
           }
