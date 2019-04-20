@@ -45,7 +45,6 @@
       return {
         activeIdx: 0,   //选中的区间
         activeTitle: '今日', //选中的区间名称
-        userId: '',
         dayNum: 1,
         statisticalData: {},
       }
@@ -58,7 +57,6 @@
     },
 
     created() {
-      this.userId = '465273'
       this.initStatistical()
     },
     beforeDestory(){
@@ -94,7 +92,6 @@
       },
       initStatistical(){
         let param = {
-          userId: this.userId,
           dayNum: this.dayNum,
         }
         queryStatisticalData(param).then(res => {

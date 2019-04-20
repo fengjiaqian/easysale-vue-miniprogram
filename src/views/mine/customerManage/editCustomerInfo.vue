@@ -27,7 +27,7 @@
         <i class="extension"></i>
       </li>
     </ul>
-    <div class="staff-info-btn" @click="verify">保存</div>
+    <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
     <!--角色设置弹出层-->
     <div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
@@ -69,6 +69,7 @@
         },
         activeIdx: null,
         activeName: '',
+        achieve: false,
       };
     },
     components: {
@@ -132,6 +133,19 @@
             this.$router.go(-1)
           }
         });
+      },
+    },
+    watch: {
+      customerInfo: {
+        handler(newVal, oldVal) {
+          const { name,phone,customerShopName,address,salesPersonUserId } = newVal
+          if(name && phone && customerShopName && address && salesPersonUserId){
+            this.achieve = true
+          }else{
+            this.achieve = false
+          }
+        },
+        deep: true
       },
     }
   };

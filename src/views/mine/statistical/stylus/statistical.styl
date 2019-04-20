@@ -71,9 +71,24 @@
   li{
     lh(90)
     flex-center()
-    padding 0 52px 0 24px
+    margin  0 24px
+    &:first-child{
+      border-bottom 1PX solid #EDEDED
+    }
     >span:first-child{
       flex-1()
+    }
+    >span:last-child{
+      flex-center()
+      i{
+        w(20)
+        h(30)
+        ml(12)
+        background-image url(../../../assets/images/icon-enter.png)
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+      }
     }
   }
 }
@@ -83,7 +98,6 @@
   mt(98)
   inline()
   position relative
-  bg(#fff)
   .adsorb-bar{
     flex-center()
     lh(94)

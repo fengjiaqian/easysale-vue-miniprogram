@@ -15,21 +15,22 @@ axios.interceptors.request.use(function (config) {
 	}
 	//一个终端用只匹配当前选择的dealerId
 	config.data.dealerId = default_dealerId;
-
-	
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();
 	}
 	// //开发环境还是生产环境，生产环境通过nginx代理
 	// if (IS_PROD) {
-	// 	if (config.url && config.url.startsWith('ua')) {
+	//	if (config.url && config.url.startsWith('ua')) {
 	// 		config.url = config.url
 	// 		config.url = "/" + config.url.replace("ua/", "himalaya-ApiService-UA2/")
 	// 	} else {
 	// 		config.url = "/v31" + config.url
 	// 	}
 	// }
+	if (IS_PROD) {
+		config.url = "/easysalemini" + config.url
+	} 
 	return config;
 }, function (error) {
 	return Promise.reject(error);

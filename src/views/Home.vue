@@ -3,19 +3,12 @@
     <float-cart></float-cart>
     <!--  -->
     <div class="home-banner">
-      <div class="banner-item">
-        <img :src="icBanner" alt>
-        <!-- <div class="slider-wrapper bg-w" v-if="banners && banners.length">
-          <div class="slider-body">
-            <slider :loop="loop" ref="slider_dom">
-              <div class="banner-item" v-for="item in banners" :key="item.bannerId">
-                <a href="javascript:;" @click="_jumpBannerLink(item)">
-                  <img :src="item.imgUrl">
-                </a>
-              </div>
-            </slider>
+      <div class="slider-body">
+        <slider :loop="false" ref="slider_dom">
+          <div class="banner-item" v-for="item in 4">
+            <img :src="icBanner" alt>
           </div>
-        </div> -->
+        </slider>
       </div>
     </div>
     <!--  -->
@@ -114,6 +107,7 @@ import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
+import slider from "components/slider.vue";
 import { queryHomeProducts, ListProduct } from "api/fetch/home";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -144,7 +138,8 @@ export default {
     searchBar,
     scroll,
     product,
-    floatCart
+    floatCart,
+    slider
   },
   beforeCreate() {},
   computed: {},
@@ -341,12 +336,17 @@ export default {
   bg(#fff);
   padding: 0 24px;
 
-  .banner-item {
-    h(234);
+  .slider-body {
+    position: relative;
+    overflow: hidden;
 
-    img {
-      width: 100%;
-      height: 100%;
+    .banner-item {
+      h(234);
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

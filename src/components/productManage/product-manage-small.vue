@@ -5,7 +5,7 @@
     </div>
     <div class="pw-r">
       <div class="product-pic-small">
-        <img v-lazy="''" >
+        <img v-lazy="product.productImageUrl" >
       </div>
       <div class="product-info-small">
         <h5 class="name">{{product.productName}}</h5>

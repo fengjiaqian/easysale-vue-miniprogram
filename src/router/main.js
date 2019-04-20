@@ -131,7 +131,7 @@ const main = [{
 	},
 	component: productDetail,
 }, {
-	path: '/orderDetail',
+	path: '/orderDetail/:orderId',
 	name: 'orderDetail',
 	meta: {
 		title: '订单详情',
