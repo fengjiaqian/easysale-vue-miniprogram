@@ -1,6 +1,6 @@
 <template>
   <div id="cart">
-    <empty v-if="!products.length"></empty>
+    <empty v-if="!products.length" :txt="'购物车暂无商品'" ></empty>
     <div class="C-header" v-if="products.length">
       <strong>共{{products.length}}商品</strong>
       <a href="javascript:;" class="c-3" @click="_delete">删除</a>

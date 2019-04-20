@@ -1,6 +1,6 @@
 <template>
   <div
-    class="go-back"
+    class="go-back float-icon"
     @click="enterCart"
     @touchstart="down($event)"
     @touchmove.prevent="move($event)"

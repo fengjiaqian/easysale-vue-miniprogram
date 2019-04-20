@@ -21,14 +21,14 @@
     </div>
     <search-bar :jump="true" :class="{'top82': userType==3}"></search-bar>
     <!--  -->
-    <ul class="home-icons clearfix">
+    <!-- <ul class="home-icons clearfix">
       <li v-for="item in appIcons">
         <a @click="jumpSecondsort(item)">
           <img v-lazy="item.imgUrl || ''">
           <span>{{item.value}}</span>
         </a>
       </li>
-    </ul>
+    </ul>-->
     <!--  -->
     <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-if="scrollMenu.length">
       <div

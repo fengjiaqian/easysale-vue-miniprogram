@@ -58,7 +58,9 @@ export default {
         document.title = "编辑个人信息";
         this.isEdit = true;
         this.$refs.nameInput.focus();
+        return false;
       }
+      //todo 判断空
       //保存 如果没有更改项直接返回
       if (this.isMutated()) {
         const { name, phone, address } = this;
