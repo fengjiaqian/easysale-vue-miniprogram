@@ -21,7 +21,15 @@ export default {
   mounted() {},
   methods: {
     enterCart() {
-      this.$router.go(-1);
+      const { name } = this.$route
+      //地图定位后，点击返回上一页，手动返回到改页面的上一页面
+      if(name==`addCustomerInfo`){
+        this.$router.push({ path: "/my/customerList" });
+      }else if(name==`addStaffInfo`){
+        this.$router.push({ path: "/my/staffList" });
+      }else{
+        this.$router.go(-1);
+      }
     }
   }
 };
