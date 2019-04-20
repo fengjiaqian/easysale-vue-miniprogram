@@ -12,7 +12,7 @@
         <div style="flex:1;"></div>
         <div class="spec">
           <span>规格 {{product.specification}}</span>
-          <span class="price">{{product.price}} 元/{{product.priceUnit}}</span>
+          <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
         </div>
       </div>
     </div>

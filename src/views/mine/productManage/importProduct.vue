@@ -11,7 +11,7 @@
 
     <!--内容-->
     <section class="pi-content">
-      <product-manage-small v-for="(product,index) in productList" :key="product.productSpecificationId+index"  :product="product"></product-manage-small>
+      <product-manage v-for="(product,index) in productList" :key="product.productSpecificationId+index"  :product="product"></product-manage>
     </section>
 
     <!--底部-->
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import productManageSmall from "components/productManage/product-manage-small.vue";
+  import productManage from "components/productManage/product-manage.vue";
   import { queryJyProduct,addProduct } from "api/fetch/mine";
   export default {
     data() {
@@ -47,7 +47,7 @@
       };
     },
     components: {
-      productManageSmall
+      productManage
     },
     beforeCreate () {
       document.getElementById('app').setAttribute('style', 'height:auto;')
