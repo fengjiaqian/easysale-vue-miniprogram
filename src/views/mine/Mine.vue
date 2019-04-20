@@ -1,10 +1,10 @@
 <template>
   <div id="mine">
     <div class="user-info">
-      <div class="user-avart" @click="mineSkip('/customerInfo')">
+      <div class="user-avart" @click="_jumpUserInfo">
         <img v-lazy="avatarUrl" alt>
       </div>
-      <div class="user-tel" @click="mineSkip('/customerInfo')">
+      <div class="user-tel" @click="_jumpUserInfo">
         <h5>{{nickName || '访客'}}</h5>
 
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
@@ -37,6 +37,11 @@
 </template>
 
 <script>
+/** 公共页面 三种角色 + 游客模式。
+ * isVisitor：展示差异 auth权限控制。
+ * userType default 3  终端用户
+ */
+
 //TODO: 终端用户 申请经销商待审核状态显示
 import * as mineUtil from "./mineCommon";
 import storage from "common/storage";
@@ -67,6 +72,15 @@ export default {
     },
     _bindPhone() {
       this.navigateToLogin();
+    },
+    //分角色跳转个人信息
+    _jumpUserInfo() {
+      if (this.userType == 3) {
+        this.mineSkip("/customerInfo");
+      }
+      if (this.userType == 1) {
+        this.mineSkip("/my/userInfo");
+      }
     }
   },
   watch: {}

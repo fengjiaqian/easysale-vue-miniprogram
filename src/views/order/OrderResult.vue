@@ -40,7 +40,12 @@ export default {
           this.$router.push({ path: "/navi/home" });
           break;
         case 2:
-          this.$router.push({ path: "/navi/orders" });
+          this.$router.push({
+            path: "/navi/orders",
+            query: {
+              refresh: true
+            }
+          });
           break;
         case 3:
           this.$router.go(-1);

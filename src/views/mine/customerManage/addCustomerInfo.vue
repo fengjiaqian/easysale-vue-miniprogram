@@ -81,21 +81,21 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm=>{
-          let passData = to.query.passData ? to.query.passData : null
-          if(passData){
-              passData = JSON.parse(passData)
-              Object.assign(vm.customerInfo,passData.pageData)
-              vm.customerInfo.address = passData.addressData.address
-          }
+        let passData = to.query.passData ? to.query.passData : null
+        if(passData){
+          passData = JSON.parse(passData)
+          Object.assign(vm.customerInfo,passData.pageData)
+          vm.customerInfo.address = passData.addressData.address
+        }
       })
     },
     created(){
       this.queryStaffs()
     },
     methods: {
-        limitPhone(e){
-            this.customerInfo.phone = e.target.value.slice(0,11);
-        },
+      limitPhone(e){
+        this.customerInfo.phone = e.target.value.slice(0,11);
+      },
       //查询员工列表
       queryStaffs(){
         queryStaffList(this.filterParam).then(res => {
@@ -146,26 +146,26 @@
           }
         });
       },
-        //去定位地址
-        obtainAddress(){
-            let recordData = {
-                path: this.$route.path,
-                pageData: this.customerInfo
-            }
-            evokeWxLocation(recordData)
-        },
+      //去定位地址
+      obtainAddress(){
+        let recordData = {
+          path: this.$route.path,
+          pageData: this.customerInfo
+        }
+        evokeWxLocation(recordData)
+      },
     },
     watch: {
-        customerInfo: {
-          handler(newVal, oldVal) {
-              const { name,phone,customerShopName,address,salesPersonUserId } = newVal
-              if(name && phone && customerShopName && address && salesPersonUserId){
-                this.achieve = true
-              }else{
-                this.achieve = false
-              }
-          },
-          deep: true
+      customerInfo: {
+        handler(newVal, oldVal) {
+          const { name,phone,customerShopName,address,salesPersonUserId } = newVal
+          if(name && phone && customerShopName && address && salesPersonUserId){
+            this.achieve = true
+          }else{
+            this.achieve = false
+          }
+        },
+        deep: true
       },
     }
   };
@@ -174,4 +174,3 @@
 <style lang="stylus" scoped>
   @import "./stylus/customer.styl"
 </style>
-

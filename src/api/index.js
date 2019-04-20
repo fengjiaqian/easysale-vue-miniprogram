@@ -14,7 +14,7 @@ axios.interceptors.request.use(function (config) {
 		config.headers.token = token;
 	}
 	//一个终端用只匹配当前选择的dealerId
-	//config.data.dealerId = default_dealerId;
+	config.data.dealerId = default_dealerId;
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();
@@ -41,6 +41,8 @@ axios.interceptors.response.use(function (response) {
 	if (response.data.result != 'success') {
 		return Promise.reject(response);
 	}
+
+
 	// if (response.data && (response.data.message === '100102009'
 	// 	|| response.data.desc == '登录已过期，请重新登录~')) {
 
