@@ -77,7 +77,7 @@ import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
 import ic4 from "../assets/images/ic-chenglie.png";
-import slider from "../components/slider.vue";
+// import slider from "../components/slider.vue";
 
 const appIcons = [
   { imgUrl: ic1, value: "投诉管理" },
