@@ -30,17 +30,16 @@
           <img :src="item">
           <i @click="deleteUploadImg(index)"></i>
         </li>
-        <el-upload
-          class="upload-wrap"
-          action="/file/uploadProductImg"
-          list-type="picture-card"
-          :headers="headers"
-          :before-upload="onBeforeUpload"
-          :on-change="changeLoad"
-          :on-success="fileSuccess"
-          :on-error="fileFaild"
-          accept="image/*"
-        ></el-upload>
+        <el-upload class="upload-wrap"
+                   :action="uploadImgUrl"
+                   list-type="picture-card"
+                   :headers="headers"
+                   :before-upload="onBeforeUpload"
+                   :on-change="changeLoad"
+                   :on-success="fileSuccess"
+                   :on-error="fileFaild"
+                   accept="image/*">
+        </el-upload>
       </ul>
     </div>
     <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
@@ -51,6 +50,7 @@
 import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
 import storage from "common/storage";
 import { evokeWxLocation } from "common/location";
+import { compress } from "common/util";
 
 export default {
   data() {
@@ -113,16 +113,24 @@ export default {
         });
     },
     //图片上传前验证
-    onBeforeUpload(file) {
-      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
-      const isLt1M = file.size / 1024 / 1024 < 1;
+    onBeforeUpload(file){
+      const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
+      const isLt1M = file.size / 1024 / 1024 < 10;
       if (!isIMAGE) {
         this.$alert("上传文件只能是图片格式!");
       }
       if (!isLt1M) {
-        this.$alert("上传文件大小不能超过 1MB!");
+        this.$alert('上传文件大小不能超过 10MB!');
       }
-      return isIMAGE && isLt1M;
+      if(isIMAGE && isLt1M){
+        return new Promise((resolve, reject)=>{
+          compress(file, function(val) {
+            resolve(val)
+          })
+        })
+      }else{
+        return false
+      }
     },
     //图片上传成功时
     fileSuccess(res, file) {
