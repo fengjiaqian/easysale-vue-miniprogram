@@ -21,14 +21,14 @@
     </div>
     <search-bar :jump="true" :class="{'top82': userType==3}"></search-bar>
     <!--  -->
-    <!-- <ul class="home-icons clearfix">
+    <ul class="home-icons clearfix">
       <li v-for="item in appIcons">
         <a @click="jumpSecondsort(item)">
           <img v-lazy="item.imgUrl || ''">
           <span>{{item.value}}</span>
         </a>
       </li>
-    </ul>-->
+    </ul>
     <!--  -->
     <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-if="scrollMenu.length">
       <div
@@ -111,6 +111,7 @@ import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "home",
   data() {
@@ -121,7 +122,6 @@ export default {
       showSqure: false,
       menuCanScroll: false,
       scrollMenu: [],
-      currentColumnPorducts: [],
       banners: [],
       currentDealer: storage.get("currentDealer", "") || currentDealer
     };
@@ -135,29 +135,24 @@ export default {
   },
   beforeCreate() {},
   computed: {},
+  activated() {
+    this.saveCartCount();
+    if (storage.get("homeRefresh", false)) {
+      this._listDealerLogs();
+      this._queryHomeProducts();
+      storage.set("homeRefresh", false);
+    } else {
+      this.productList = transformProductList(this.productList);
+    }
+  },
   created() {
     this._initAuth();
     this._listDealerLogs();
-    queryHomeProducts().then(res => {
-      if (res.result === "success" && res.data) {
-        this.scrollMenu = res.data.brands || [];
-        if (!this.scrollMenu.length) {
-          return this.$toast("当前经销商暂无商品，请重新选择经销商");
-        }
-        this.scrollMenu.length &&
-          (this.currentColumnId = this.scrollMenu[0].brandId);
-        this.productList = transformProductList(res.data.products);
-        //
-        this.scrollMenu[0].products = this.productList;
-        this.$nextTick(() => {
-          this.calculateScrollRect();
-          this.watchScroll();
-        });
-      }
-    });
+    this._queryHomeProducts();
   },
   mounted() {},
   methods: {
+    ...mapActions(["saveCartCount"]),
     //初始化auth
     _initAuth() {
       const {
@@ -183,6 +178,25 @@ export default {
     _listDealerLogs() {
       ListDealerLogs(currentDealer.userId || "").then(res => {
         this.banners = res.data;
+      });
+    },
+    _queryHomeProducts() {
+      queryHomeProducts().then(res => {
+        if (res.result === "success" && res.data) {
+          this.scrollMenu = res.data.brands || [];
+          if (!this.scrollMenu.length) {
+            return this.$toast("当前经销商暂无商品，请重新选择经销商");
+          }
+          this.scrollMenu.length &&
+            (this.currentColumnId = this.scrollMenu[0].brandId);
+          this.productList = transformProductList(res.data.products);
+          //
+          this.scrollMenu[0].products = this.productList;
+          this.$nextTick(() => {
+            this.calculateScrollRect();
+            this.watchScroll();
+          });
+        }
       });
     },
     //
@@ -276,7 +290,7 @@ export default {
         if (!ticking) {
           window.requestAnimationFrame(() => {
             var cls = this.userType == 3 ? "fixed-customer" : "fixed-dealer";
-            if (last_known_scroll_position > this.distance) {
+            if (last_known_scroll_position > Math.abs(this.distance)) {
               addClass(this.$refs.scrollMenuWrap, cls);
             } else {
               removeClass(this.$refs.scrollMenuWrap, cls);

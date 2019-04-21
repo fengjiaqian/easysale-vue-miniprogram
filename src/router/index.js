@@ -12,9 +12,20 @@ const routes = [
 Vue.use(Router);
 
 const router = new Router({
-    //	mode: 'history',
     routes
 })
+
+/**
+ * from 经销商商品管理后 返回首页刷新 
+ */
+const isNeedRefreshHome = function () {
+    const userType = storage.get('userType', 3);
+    if (userType != 1) return false;
+    const routes = ['productList', "editProduct", 'addProduct', 'importProduct'];
+    if (routes.includes(this.name)) {
+        storage.set("homeRefresh", true)
+    }
+}
 router.beforeEach((to, from, next) => {
 
     let $el = document.querySelector('.loading-message');
@@ -31,6 +42,7 @@ router.beforeEach((to, from, next) => {
             });
         }
     } else {
+        isNeedRefreshHome.call(from);
         to.meta.title && (document.title = to.meta.title)
         next()
     }

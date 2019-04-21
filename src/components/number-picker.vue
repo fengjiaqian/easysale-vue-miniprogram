@@ -15,6 +15,7 @@
 <script>
 import { updateItem } from "common/goodsStorage";
 import Bus from "common/Bus";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "number-picker",
   props: {
@@ -29,6 +30,7 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    ...mapActions(["saveCartCount"]),
     decrease(product) {
       const { minBuyNum, maxBuyNum } = product;
       //if (product.buyCount <= minBuyNum) return false;
@@ -38,17 +40,20 @@ export default {
       }
       product.buyCount--;
       updateItem(product, product.buyCount);
+      this.saveCartCount();
     },
     increase(product) {
       const { minBuyNum, maxBuyNum } = product;
       if (product.buyCount >= maxBuyNum) return false;
       product.buyCount++;
       updateItem(product, product.buyCount);
+      this.saveCartCount();
     },
     handleChange(product, $event) {
       let currentVal = parseInt($event.target.value) || 0;
       product.buyCount = currentVal ? currentVal : 1;
       updateItem(product, product.buyCount);
+      this.saveCartCount();
     },
     isInCart() {
       return this.$route.path === "/cart";
