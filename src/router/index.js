@@ -21,7 +21,7 @@ const router = new Router({
 const isNeedRefreshHome = function () {
     const userType = storage.get('userType', 3);
     if (userType != 1) return false;
-    const routes = ['productList', "editProduct", 'addProduct', 'importProduct'];
+    const routes = ['cart', 'productList', "editProduct", 'addProduct', 'importProduct'];
     if (routes.includes(this.name)) {
         storage.set("homeRefresh", true)
     }
