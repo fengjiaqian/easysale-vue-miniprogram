@@ -26,6 +26,16 @@ const isNeedRefreshHome = function () {
         storage.set("homeRefresh", true)
     }
 }
+/**
+ * 
+ */
+const isNeedRefreshOrder = function () {
+    const routes = ['orderResult', 'orderDetail'];
+    if (routes.includes(this.name)) {
+        storage.set("orderRefresh", true)
+    }
+}
+
 router.beforeEach((to, from, next) => {
 
     let $el = document.querySelector('.loading-message');
@@ -43,6 +53,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         isNeedRefreshHome.call(from);
+        isNeedRefreshOrder.call(from);
         to.meta.title && (document.title = to.meta.title)
         next()
     }

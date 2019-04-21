@@ -160,19 +160,24 @@ export default {
         avatarUrl,
         mobileNo,
         token,
-        userType
+        userType,
+        shareDealerId
       } = this.$route.query;
       // 以登录身份访问
       if (mobileNo && token && userType) {
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("userType", userType);
+        shareDealerId && storage.set("currentDealerId", shareDealerId);
         this.userType = userType;
       }
       //只有nickName和avatarUrl,cache for mine page。以终端访客身份访问
       if (nickName && avatarUrl) {
+        storage.remove("token");
+        storage.remove("userType");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
+        shareDealerId && storage.set("currentDealerId", shareDealerId);
       }
     },
     _listDealerLogs() {
