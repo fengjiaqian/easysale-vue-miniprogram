@@ -43,6 +43,7 @@
     }
     .product-info{
       h(166)
+      flex-1()
       flex()
       flex-direction column
       .name{
@@ -52,7 +53,7 @@
         flex()
         align-items center
         span{
-          text-overflow-2()
+          text-overflow-1()
         }
         i{
           bg(#FF5638)
@@ -62,12 +63,13 @@
           padding 0 8px
           mr(12)
           lh(34)
+          word-break keep-all
         }
       }
       .spec{
         ft(26)
         c-9()
-        mt(8)
+        mt(6)
       }
       .price{
         ft(32)
@@ -76,6 +78,31 @@
         span{
           ft(24)
           ml(8)
+        }
+      }
+      .grama{
+        ft(26)
+        c-9()
+        mt(8)
+        flex-center()
+        .brand{
+          flex-1()
+        }
+        .state{
+          flex-center()
+          i{
+            padding 0 3PX
+            border-radius 4px
+            c(#fff)
+            ft(24)
+            ml(6)
+            &.s-success{
+              bg(#FF5638)
+            }
+            &.s-fail{
+              bg(#BDBDBD)
+            }
+          }
         }
       }
     }
@@ -112,4 +139,10 @@
       }
     }
   }
+}
+.s-success{
+  background #FF5638 !important
+}
+.s-fail{
+  background #BDBDBD !important
 }

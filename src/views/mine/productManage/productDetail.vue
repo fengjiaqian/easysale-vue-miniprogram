@@ -3,7 +3,14 @@
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
-    <div class="D-name"><i>自有</i>{{product.productName}}</div>
+    <div class="D-name">
+      <i>自有</i>
+      <i :class="[product.state==1 ? 's-success' : 's-fail']">{{product.state==1?'上架':'下架'}}</i>
+      {{product.productName}}
+    </div>
+    <div class="D-grama">
+      <span class="brand">品牌：{{product.brandName}}</span>
+    </div>
     <div class="D-spec">规格：<span>{{product.specification}}</span></div>
     <div class="D-price">
       <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
@@ -165,6 +172,33 @@ export default {
     lh(34)
   }
 }
+.D-grama{
+  padding 24px
+  ft(30)
+  c-9()
+  mt(8)
+  flex-center()
+  bg(#fff)
+  .brand{
+    flex-1()
+  }
+  .state{
+    flex-center()
+    i{
+      padding 0 3PX
+      border-radius 4px
+      c(#fff)
+      ft(28)
+      ml(8)
+      &.s-success{
+        bg(#FF5638)
+      }
+      &.s-fail{
+        bg(#BDBDBD)
+      }
+    }
+  }
+}
 .D-spec{
   bg(#fff);
   pl(24);
@@ -204,6 +238,12 @@ export default {
   .edit{
     c(#FF5638)
   }
+}
+.s-success{
+  background #FF5638 !important
+}
+.s-fail{
+  background #BDBDBD !important
 }
 </style>
 
