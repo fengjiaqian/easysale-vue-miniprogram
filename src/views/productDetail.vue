@@ -44,6 +44,7 @@
 <script>
 import storage from "common/storage";
 import numberPicker from "components/number-picker.vue";
+import floatCart from "components/floatCart.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
 import { updateItem, getAllGoods } from "common/goodsStorage";
 export default {

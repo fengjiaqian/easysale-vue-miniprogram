@@ -10,13 +10,13 @@
     </div>
     <div class="license">
       <div class="trade">营业执照</div>
-      <div class="carousel">
-        <div class="slider-wrapper bg-w">
+      <div class="carousel-special">
+        <div class="slider-wrapper bg-w" style="height:170px;">
           <div class="slider-body">
             <slider ref="slider_dom">
               <div class="banner-item" v-for="item in 4">
                 <a href="javascript:;">
-                  <img :src="icBanner">
+                  <img :src="icBanner" style="height:170px;">
                 </a>
               </div>
             </slider>
@@ -149,4 +149,18 @@ export default {
 .common .infor .news .name, .common .infor .detail .name {
   margin-bottom: 10px;
 }
+
+.carousel-special{
+  width:50%;
+  margin:50px 25% 0px 25%;
+  padding-bottom :50px;
+}
+
+// .carousel-special .bg-w{
+//   height:170x;
+// }
+
+// .carousel-special .bg-w img{
+//   height:170x;
+// }
 </style>
