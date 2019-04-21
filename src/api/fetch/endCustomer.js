@@ -102,6 +102,7 @@ export function findApplyDealerInfo() {
 	return axios({
 		method: 'post',
 		url: url,
+		data: {},
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)

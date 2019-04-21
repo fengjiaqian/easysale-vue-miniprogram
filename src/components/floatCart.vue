@@ -38,7 +38,7 @@ export default {
 .float-cart {
   position: fixed;
   left: 80%;
-  top: 80%;
+  top: 82%;
   width: 96px;
   height: 96px;
   border-radius: 50%;

@@ -17,7 +17,7 @@
     <!--  -->
     <empty class="scroll-list" :txt="'当前没有可选经销商店铺'" v-if="empty"></empty>
     <!--  -->
-    <div class="scroll-list">
+    <div class="scroll-list" :class="{'pt0': !currentDealer.phone }">
       <scroll class="scroll-dom">
         <section>
           <div
@@ -41,6 +41,9 @@
 </template>
 
 <script>
+/**
+ * 首次选择和切换2种状态
+ */
 import searchBar from "components/searchBar.vue";
 import scroll from "components/scroll.vue";
 import empty from "components/empty.vue";
@@ -61,7 +64,7 @@ export default {
     empty
   },
   created() {
-    this.currentId = this.$route.params.id || "";
+    this.currentId = this.$route.query.id || "";
     this._ListAllDealer();
   },
   methods: {
@@ -77,10 +80,15 @@ export default {
       });
     },
     _chooseDealer(dealer) {
+      // storage.set("currentDealerId", dealer.id);
+      // storage.set("currentDealer", dealer);
+      // location.href = location.origin + "/#/navi/home";
+      // location.reload();
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
-      location.href = location.origin + "/#/navi/home";
-      location.reload();
+      this.$router.push({
+        path: "/navi/home"
+      });
     }
   }
 };
@@ -104,6 +112,10 @@ export default {
 .scroll-list {
   pt(233 + 20);
   height: 100%;
+}
+
+.pt0 {
+  pt(0);
 }
 
 .scroll-dom {

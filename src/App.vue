@@ -39,10 +39,4 @@ export default {
 };
 </script>
 
-<style lang="stylus">
-.float-icon {
-  &:nth-of-type(2) {
-    top: 70%;
-  }
-}
-</style>
+<style lang="stylus"></style>

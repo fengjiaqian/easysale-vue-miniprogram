@@ -167,7 +167,7 @@ const main = [{
 	},
 	component: Search,
 }, {
-	path: '/dealerList/:id',
+	path: '/dealerList',
 	name: 'dealerList',
 	meta: {
 		title: '选择商贸公司',

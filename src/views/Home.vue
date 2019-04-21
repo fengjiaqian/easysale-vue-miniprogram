@@ -77,7 +77,6 @@ import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
 import ic4 from "../assets/images/ic-chenglie.png";
-// import slider from "../components/slider.vue";
 
 const appIcons = [
   { imgUrl: ic1, value: "投诉管理" },
@@ -85,24 +84,6 @@ const appIcons = [
   { imgUrl: ic3, value: "退货管理" },
   { imgUrl: ic4, value: "陈列管理" }
 ];
-
-const currentDealer = {
-  id: 19990530,
-  shopName: "青春店铺",
-  phone: "13311112222",
-  address: "海南按",
-  userId: 19990530,
-  hireDate: 1597449600000,
-  discount: 0.99,
-  cardId: "55555",
-  parentId: 1111,
-  type: 1,
-  createDate: 1555126727000,
-  name: "青春作",
-  state: 1,
-  logoIamgeUrl:
-    "http://yjp-dev-articlesharing.ufile.ucloud.cn/easysale/2019/04/2d2e6bf8fe1a438a85da853eac9c3d59.png"
-};
 import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
@@ -125,7 +106,7 @@ export default {
       menuCanScroll: false,
       scrollMenu: [],
       banners: [],
-      currentDealer: storage.get("currentDealer", "") || currentDealer
+      currentDealer: storage.get("currentDealer", {})
     };
   },
   components: {
@@ -140,6 +121,7 @@ export default {
   activated() {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
+      this.currentDealer = storage.get("currentDealer", {});
       this._listDealerLogs();
       this._queryHomeProducts();
       storage.set("homeRefresh", false);
@@ -148,7 +130,13 @@ export default {
     }
   },
   created() {
+    this.currentDealerId = storage.get("currentDealerId", "");
     this._initAuth();
+    if (!this.currentDealerId) {
+      return this.$router.push({
+        path: "/dealerList"
+      });
+    }
     this._listDealerLogs();
     this._queryHomeProducts();
   },
@@ -183,7 +171,7 @@ export default {
       }
     },
     _listDealerLogs() {
-      ListDealerLogs(currentDealer.userId || "").then(res => {
+      ListDealerLogs(this.currentDealerId).then(res => {
         this.banners = res.data;
       });
     },
@@ -210,7 +198,7 @@ export default {
     _jumpDealerList() {
       this.$router.push({
         name: "dealerList",
-        params: {
+        query: {
           id: this.currentDealer.id
         }
       });

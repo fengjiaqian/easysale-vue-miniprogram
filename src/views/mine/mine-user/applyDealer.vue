@@ -8,15 +8,15 @@
       </div>
       <!-- <div class="describe">经销商正在处理您的问题，请耐心等待！</div> -->
     </div>
-    <div class="license">
+    <div class="license" v-if="applyDealerInfo.logoIamgeUrls.length">
       <div class="trade">营业执照</div>
       <div class="carousel">
         <div class="slider-wrapper bg-w">
           <div class="slider-body">
             <slider ref="slider_dom">
-              <div class="banner-item" v-for="item in 4">
+              <div class="banner-item" v-for="item in applyDealerInfo.logoIamgeUrls">
                 <a href="javascript:;">
-                  <img :src="icBanner">
+                  <img :src="item">
                 </a>
               </div>
             </slider>
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="infor">
+    <div class="infor" v-if="applyDealerInfo.name">
       <div class="trade">个人信息</div>
       <div class="news">
         <div class="name">姓名 : {{applyDealerInfo.name}}</div>

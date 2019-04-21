@@ -81,7 +81,7 @@
         <span class="c-theme">&yen;{{totalMoney.toFixed(2)}}</span>
       </div>
     </div>
-    <div class="select-customer">
+    <div class="select-customer" v-if="userType!=3">
       <strong class="fz30">优惠</strong>
       <input
         type="number"
@@ -197,7 +197,7 @@ export default {
         });
     },
     _selectCustomer() {
-      if (!this.userType == 3) {
+      if (this.userType != 3) {
         //选择客户
         return this.$router.push({
           path: "/my/customerList",

@@ -19,9 +19,7 @@ const router = new Router({
  * from 经销商商品管理后 返回首页刷新 
  */
 const isNeedRefreshHome = function () {
-    const userType = storage.get('userType', 3);
-    if (userType != 1) return false;
-    const routes = ['cart', 'productList', "editProduct", 'addProduct', 'importProduct'];
+    const routes = ['cart','dealerList', 'productList', "editProduct", 'addProduct', 'importProduct'];
     if (routes.includes(this.name)) {
         storage.set("homeRefresh", true)
     }
