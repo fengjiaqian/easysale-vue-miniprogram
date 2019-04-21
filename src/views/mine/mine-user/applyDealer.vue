@@ -10,17 +10,15 @@
     </div>
     <div class="license" v-if="applyDealerInfo.logoIamgeUrls.length">
       <div class="trade">营业执照</div>
-      <div class="carousel">
-        <div class="slider-wrapper bg-w">
-          <div class="slider-body">
-            <slider ref="slider_dom">
-              <div class="banner-item" v-for="item in applyDealerInfo.logoIamgeUrls">
-                <a href="javascript:;">
-                  <img :src="item">
-                </a>
-              </div>
-            </slider>
-          </div>
+      <div class="slider-wrapper bg-w">
+        <div class="slider-body">
+          <slider ref="slider_dom">
+            <div class="banner-item" v-for="item in applyDealerInfo.logoIamgeUrls">
+              <a href="javascript:;">
+                <img :src="item">
+              </a>
+            </div>
+          </slider>
         </div>
       </div>
     </div>
