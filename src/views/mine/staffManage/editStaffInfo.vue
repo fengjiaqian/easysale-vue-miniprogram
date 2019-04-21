@@ -17,8 +17,10 @@
       </li>
       <li class="special-li">
         <span>详细地址：</span>
-        <div>{{staffInfo.address}}</div>
-        <i class="position"></i>
+        <div>
+          <input v-model="staffInfo.address" type="text" maxlength="50" placeholder="请输入员工地址">
+        </div>
+        <i @click="obtainAddress" class="position"></i>
       </li>
       <div class="h20"></div>
       <li>
@@ -64,6 +66,7 @@
 <script>
   import { editStaff,queryRole } from "api/fetch/mine";
   import { verifyPhone,verifyIdCard } from "common/validate";
+  import { evokeWxLocation } from "common/location";
   export default {
     data() {
       return {
@@ -71,7 +74,7 @@
           name: '',
           phone: '',
           cardId: '',
-          address: '测试地址',
+          address: '',
           hireDate: '',
           roleId: '',//选中的员工角色id
           discount: '',
@@ -88,6 +91,16 @@
     },
     computed: {
 
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm=>{
+        let passData = to.query.passData ? to.query.passData : null
+        if(passData){
+          passData = JSON.parse(passData)
+          Object.assign(vm.staffInfo,passData.pageData)
+          vm.staffInfo.address = passData.addressData.address
+        }
+      })
     },
     created(){
       let staffInfo = JSON.parse(localStorage.getItem('staffInfo'))
@@ -154,7 +167,15 @@
       },
       rolePopToggle(){
         this.rolePopShow = true
-      }
+      },
+      //去小程序定位
+      obtainAddress(){
+        let recordData = {
+          path: this.$route.path,
+          pageData: this.staffInfo
+        }
+        evokeWxLocation(recordData)
+      },
     },
     watch: {
       staffInfo: {
