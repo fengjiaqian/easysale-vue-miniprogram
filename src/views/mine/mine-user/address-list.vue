@@ -15,7 +15,7 @@
         <div class="address">{{item.address}}</div>
       </li>
     </ul>
-    <div class="support"></div>
+    <!-- <div class="support"></div> -->
   </div>
 </template>
 
@@ -73,7 +73,10 @@ export default {
 
 .common .list {
   width: 100%;
-  height: 90%;
+  // height: 93%;
+  height:calc(100% - 98px);
+  height: -moz-calc(100% - 98px);
+  height: -webkit-calc(100% - 98px);
   padding: 0 24px 0 24px;
   overflow: scroll;
   display: border-box;
