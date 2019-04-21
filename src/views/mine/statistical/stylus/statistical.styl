@@ -149,3 +149,118 @@
     }
   }
 }
+
+
+
+
+//数据列表页样式
+.list-wrap{
+  height 100%
+  .list-head-wrap{
+    position fixed
+    left 0
+    top 0
+    width 100%
+    z-index 1
+    bg(#fff)
+    .list-top-bar{
+      bg(#fff)
+      border-bottom 1PX solid #EDEDED
+      flex-center()
+      width 100%
+      h(98)
+      box-sizing border-box
+      span{
+        width 25%
+        text-c()
+        lh(98)
+        c-6()
+        ft(28)
+      }
+      .active{
+        font-weight 600
+        ft(34)
+        c-3()
+        position relative
+        &:before{
+          content ""
+          position absolute
+          left 50%
+          bottom 0
+          transform translateX(-50%)
+          w(40)
+          h(6)
+          bg(#FF5638)
+        }
+      }
+    }
+    .adsorb-bar{
+      flex-center()
+      lh(94)
+      border-bottom 1PX solid #EDEDED
+      ft(28)
+      c-3()
+      padding 0 24px
+      .ab-l{
+        width 50%
+      }
+      .ab-m,.ab-r{
+        width 25%
+        text-align right
+        span{
+          inline()
+          w(22)
+          h(28)
+          mr(8)
+          background-image url(../../../assets/images/icon_sort1.png)
+          background-size contain
+          background-repeat no-repeat
+          background-position center
+          &.litre{
+            background-image url(../../../assets/images/icon_sort3.png)
+          }
+          &.drop{
+            background-image url(../../../assets/images/icon_sort2.png)
+          }
+        }
+      }
+    }
+  }
+  .list-content-wrap{
+    width 100%
+    height 100%
+    pt(192)
+    inline()
+    position relative
+    .product-list-scroll{
+      height 100%
+    }
+    .list{
+      padding 0 24px
+      bg(#fff)
+      li{
+        lh(84)
+        flex-center()
+        border-bottom 1PX solid #EDEDED
+        ft(26)
+        c-6()
+        >div{
+          width 25%
+          text-align right
+        }
+        >div:first-child{
+          width 50%
+          text-align left
+          text-overflow-1()
+        }
+      }
+    }
+  }
+}
+
+.empty-icon{
+  position absolute
+  left 50%
+  top 50%
+  transform translate(-50%,-75%)
+}

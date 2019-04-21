@@ -1,27 +1,34 @@
 <template>
-  <div>
-    <section class="top-bar">
-      <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">今日</span>
-      <span :class="{'active': activeIdx == 1}" @click="switchBar(1)">7天</span>
-      <span :class="{'active': activeIdx == 2}" @click="switchBar(2)">30天</span>
-      <span :class="{'active': activeIdx == 3}" @click="switchBar(3)">总计</span>
+  <div class="list-wrap">
+    <section class="list-head-wrap">
+      <div class="list-top-bar">
+        <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">今日</span>
+        <span :class="{'active': activeIdx == 1}" @click="switchBar(1)">7天</span>
+        <span :class="{'active': activeIdx == 2}" @click="switchBar(2)">30天</span>
+        <span :class="{'active': activeIdx == 3}" @click="switchBar(3)">总计</span>
+      </div>
+      <div class="adsorb-bar">
+        <div class="ab-l">商品名称</div>
+        <div class="ab-m" @click="sortList('num')">
+          下单件数
+          <span :class="{'drop':filterParam.numOrderType=='desc','litre':filterParam.numOrderType=='asc'}"></span>
+        </div>
+        <div class="ab-r" @click="sortList('amount')">
+          下单金额
+          <span :class="{'drop':filterParam.amountOrderType=='desc','litre':filterParam.amountOrderType=='asc'}"></span>
+        </div>
+      </div>
     </section>
 
-    <section class="content-wrap">
-
+    <section class="list-content-wrap">
       <!--累计下单商品数据-->
-      <div>
-        <div class="adsorb-bar">
-          <div class="ab-l">商品名称</div>
-          <div class="ab-m" @click="sortList('num')">
-            下单件数
-            <span :class="{'drop':filterParam.numOrderType=='desc','litre':filterParam.numOrderType=='asc'}"></span>
-          </div>
-          <div class="ab-r" @click="sortList('amount')">
-            下单金额
-            <span :class="{'drop':filterParam.amountOrderType=='desc','litre':filterParam.amountOrderType=='asc'}"></span>
-          </div>
-        </div>
+      <scroll
+              class="product-list-scroll"
+              :data="recordList"
+              :probeType="3"
+              :pullup="true"
+              @scrollToEnd="loadMoreProducts"
+              ref="productScrollDom">
         <ul class="list">
           <li v-for="item in recordList" :key="item.productId" >
             <div>{{item.productName}}</div>
@@ -29,12 +36,12 @@
             <div>¥{{item.totalAmount}}</div>
           </li>
         </ul>
-      </div>
+      </scroll>
     </section>
 
     <section class="empty-icon" v-if="empty">
       <i></i>
-      <span>暂无数据，快去下单吧！</span>
+      <span>暂无数据~</span>
     </section>
 
   </div>
@@ -42,6 +49,7 @@
 
 <script>
   import { queryProductPerformance } from "api/fetch/mine";
+  import scroll from "components/scroll.vue";
   export default {
     data() {
       return {
@@ -56,8 +64,8 @@
           amountOrderType: null,//"desc"降序 " asc"升序
         },
         recordList: [],
+        totalPage: 0,//总页数
         requestDone: true,
-        autoMoreData: false,
         domShow: false,
         empty: false,
       }
@@ -66,21 +74,15 @@
 
     },
     components: {
-
+      scroll
     },
 
     created() {
       this.queryRecordList()
     },
-    beforeCreate () {
-      document.getElementById('app').setAttribute('style', 'height:auto;')
-    },
-    beforeDestroy () {
-      document.getElementById('app').removeAttribute('style')
-    },
-    mounted() {
-
-    },
+    beforeCreate () {},
+    beforeDestroy () {},
+    mounted() {},
     methods: {
       //切换时间区间
       switchBar(idx) {
@@ -109,35 +111,21 @@
         queryProductPerformance(this.filterParam).then(res => {
           if (res.result === "success") {
             this.domShow = true
-            //如果当前页的数据条数小于一页的列表数，则下次滑到最底部不再加载更多数据
-            if(res.data.dataList.length < this.filterParam.pageSize){
-              this.autoMoreData = false;
-            }else{
-              this.autoMoreData = true;
+            const { dataList = [], pager } = res.data;
+            const { currentPage, totalPage } = pager;
+            if(currentPage==1){
+              this.totalPage = totalPage
             }
-            res.data.dataList.forEach((item)=>{
+            dataList.forEach((item)=>{
               item.totalAmount = Number(item.totalAmount).toFixed(2)
             })
-            this.recordList = this.recordList.concat(res.data.dataList)
+            this.recordList = this.recordList.concat(dataList)
             this.requestDone = true
             this.empty = !this.recordList.length
           }
         }).catch(err => {
-          this.autoMoreData = false
           this.requestDone = true
         });
-      },
-      //滑动底部加载更多
-      scrollMore(){
-        let that = this
-        window.addEventListener('scroll',function(){
-          let scrollTop = window.pageYOffset|| document.documentElement.scrollTop || document.body.scrollTop;
-          let scrollHeight = document.body.scrollHeight;
-          let windowHeight = document.documentElement.clientHeight;
-          if(scrollTop + windowHeight >= scrollHeight && that.requestDone && that.autoMoreData) {
-            that.filterParam.pageNum += 1
-          }
-        })
       },
       //列表排序
       sortList(type){
@@ -168,6 +156,11 @@
         this.filterParam.pageNum = 1
         this.recordList = []
       },
+      //加载更多
+      loadMoreProducts() {
+        if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
+        this.filterParam.pageNum += 1
+      },
     },
     watch: {
       filterParam: {
@@ -176,13 +169,6 @@
         },
         deep: true
       },
-      domShow: function(val) {
-        if(val) {
-          this.$nextTick(() => {
-            this.scrollMore()
-          })
-        }
-      }
     }
   }
 </script>
