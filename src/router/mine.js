@@ -312,7 +312,7 @@ const mine = [
                 },
                 component: myConsignee,
             },
-            {
+            {  //wx  编辑收货人+新增收货人公用的页面
                 path: '/updateConsignee/:code',
                 name: 'updateConsignee',
                 meta: {

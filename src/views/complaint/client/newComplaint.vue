@@ -8,7 +8,7 @@
       <div class="descrip">
           <div class="title">内容描述</div>
           <textarea class="nav" name="" id="" cols="30" rows="12" placeholder="输入投诉内容"></textarea>
-          <div></div>
+          <div class="count">0/100</div>
       </div>
       <div class="remark">
           <div class="title">备注</div>
@@ -99,6 +99,12 @@
         overflow : hidden;
     }
 
+    #new .descrip .count{
+        text-align :right;
+        c(#999);
+        margin-bottom:20px;
+    }
+    
     #new .descrip .nav,
     #new .remark .nav{
         width:100%;

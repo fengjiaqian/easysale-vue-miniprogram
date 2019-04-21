@@ -1,7 +1,6 @@
-
 <template>
     <div id="common">
-         <!--终端客户  投诉列表  complaintList -->
+        <!--   终端客户 awardList 兑奖列表-->
         <section class="top-bar">
             <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">待处理</span>
             <span :class="{'active': activeIdx == 1}" @click="switchBar(1)">已处理</span>
@@ -17,14 +16,19 @@
             </ul>
         </div>
         <!-- <div v-if="judgeDeal==0"> -->
-            <div class="message" v-for="x in [1,1,1]">
+            <div class="message" v-for="x in [1,1,1,1,1,1]">
                 <div class="title">
                     <div class="t-name">茅台商贸公司</div>
                     <div class="t-type">待处理</div>
                 </div>
                 <div class="time">2019-03-23 20:43</div>
-                <div class="apply">销售人员态度不好</div>
-                <div class="descript">我在这里下了一个单，销售人员态度非常不好，很不耐烦，没说几句还发脾气我在这里下了一个单，销售人…</div>
+                <div class="apply">兑奖申请</div>
+                <div class="goods-list" v-for="x in [1,1,1,1,1,1]">
+                    <div class="goods-name">洋河蓝色经典 梦之蓝M6 52度</div>
+                    <div class="goods-count">X2</div>
+                </div>
+                <div class="type-2" v-if="typeCode==2" @click="tooMore()">展开更多</div>
+                <div class="type-2" v-if="typeCode==3" @click="tooLess()">收起</div>
                 <div class="type" v-if="activeIdx==0">商贸公司已经把您的退货转交给销售人员-小黑进行处理， 请耐心等待哦！</div>
                 <div class="continue" v-if="activeIdx==1">
                     <div class="triangle"></div>
@@ -187,27 +191,20 @@ export default {
         font-weight:bold;
     }
 
-  #common .message .descript{
+    #common .message .goods-list{
+        overflow :hidden;
         c(#666)
-        font-size:28px;
-        // margin-top:24px;
-        // font-weight:bold;
+        font-size :28px;
+        margin-top:8px;
     }
 
-    // #common .message .goods-list{
-    //     overflow :hidden;
-    //     c(#666)
-    //     font-size :28px;
-    //     margin-top:8px;
-    // }
+    #common .message .goods-list .goods-name{
+        float:left;
+    }
 
-    // #common .message .goods-list .goods-name{
-    //     float:left;
-    // }
-
-    // #common .message .goods-list .goods-count{
-    //     float:right;
-    // }
+    #common .message .goods-list .goods-count{
+        float:right;
+    }
 
     #common .message .type{
         c(#FF5638)
@@ -217,14 +214,14 @@ export default {
         border-bottom :1px solid #f6f6f6;
     }
 
-    //  #common .message .type-2{
-    //     c(#0096FF);
-    //     font-size :28px;
-    //     padding-top:16px;
-    //     padding-bottom :16px;
-    //     // border-bottom :1px solid #f6f6f6;
+     #common .message .type-2{
+        c(#0096FF);
+        font-size :28px;
+        padding-top:16px;
+        padding-bottom :16px;
+        // border-bottom :1px solid #f6f6f6;
         
-    // }
+    }
 
     #common .message .bottom{
         padding:16px 0 16px 0;

@@ -4,21 +4,24 @@
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
     <div class="D-name">{{product.productName}}</div>
+    <!-- wx 新增加的div  描述规格 -->
+    <div class="D-norm">规格 :  {{product.specification}}</div>  
     <div class="D-price">
       <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
     </div>
     <div class="D-number">
-      <span class="c-3 fz30">数量</span>
+      <span class="c-3 fz30" style="font-weight:bold">数量</span>
       <number-picker :product="product"></number-picker>
     </div>
     <!--  -->
-    <div class="D-info">
+    <div class="D-info" v-if="product.description">
       <h3>商品介绍</h3>
       <ul class="D-info-list">
         <li>{{product.description}}</li>
       </ul>
     </div>
     <!--  -->
+    <float-cart></float-cart>
     <div class="D-bottom">
       <div class="D-bottom-left">
         <dl class="D-link">
@@ -51,7 +54,8 @@ export default {
     };
   },
   components: {
-    numberPicker
+    numberPicker,
+    floatCart
   },
   created() {
     this._queryDetail();
@@ -133,6 +137,7 @@ export default {
   width: 100%;
   h(98);
   bg(#fff);
+  display :none;
 }
 
 .D-bottom-left {
@@ -169,6 +174,7 @@ export default {
     c(#333);
     ft(30);
     border-bottom: 1px solid #EDEDED;
+    font-weight :bold;
   }
 }
 
@@ -196,9 +202,19 @@ export default {
 .D-name {
   bg(#fff);
   pl(24);
-  lh(94);
+  // lh(94);
+  lh(70)
   c(#333);
   ft(34);
+  font-weight:bold;
+}
+
+.D-norm{
+  bg(#fff);
+  c(#999);
+  ft(30);
+  pl(24);
+  padding-bottom :24px;
 }
 
 .D-price {

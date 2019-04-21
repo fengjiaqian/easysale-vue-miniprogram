@@ -29,7 +29,8 @@ export default {
       name: "",
       phone: "",
       shopName: "",
-      address: ""
+      address: "",
+      id:""
     };
   },
   computed: {
@@ -48,6 +49,7 @@ export default {
       this.code = this.$route.params.code;
       let addressInfo = this.$route.query.addressInfo;
       addressInfo && (addressInfo = this.decodeUrl(addressInfo));
+       console.log(addressInfo);
       document.title = this.code == 1 ? "新增收货人" : "编辑收货人";
       if (this.code == 2 && addressInfo) {
         for (let preperty in addressInfo) {
@@ -59,11 +61,11 @@ export default {
       if (!this.canOperate) return false;
       const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
       const regExp = new RegExp(partter);
-      const { name, phone, shopName, address } = this;
+      const { name, phone, shopName, address ,id } = this;
       if (!regExp.test(phone)) {
         return this.$toast("手机号码格式不正确");
       }
-      const params = { name, phone, shopName, address };
+      const params = { name, phone, shopName, address ,id };
       const operate = this.code == 1 ? "addConsigneer" : "modifyConsignee";
       Operation[operate](params)
         .then(res => {

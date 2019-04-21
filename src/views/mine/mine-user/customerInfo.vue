@@ -53,6 +53,15 @@ export default {
           this.$toast(err.message);
         });
     },
+    checkData(){   // wx 检验数据是否都存在
+      // /都是空的
+      if(this.name&&this.phone&&this.address){
+          return true;
+        }else{
+          return false;
+        }
+      
+    },
     _operate() {
       if (!this.isEdit) {
         document.title = "编辑个人信息";
@@ -61,6 +70,10 @@ export default {
         return false;
       }
       //todo 判断空
+      if(!this.checkData){
+       return  this.$toast('信息不能为空');
+
+      }
       //保存 如果没有更改项直接返回
       if (this.isMutated()) {
         const { name, phone, address } = this;

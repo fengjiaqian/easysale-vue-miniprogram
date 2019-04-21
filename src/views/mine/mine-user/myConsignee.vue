@@ -11,6 +11,7 @@
         placeholder="请输入姓名或者电话"
       >
     </div>
+    <empty v-if="empty" txt="暂无收货人数据" :iconUrl="avatarUrl"></empty>
     <address-list
       :addressList="addressList"
       :showOperation="showOperation"
@@ -18,11 +19,14 @@
       @bindTap="_bindTap"
     ></address-list>
     <div class="edit" @click="_addAddress()">新增收货人</div>
+    <div class="support"></div>
   </div>
 </template>
 
 <script>
 import AddressList from "./address-list.vue";
+import empty from "components/empty.vue";
+import avatarUrl from "@/assets/images/icon-product-empty.png";
 import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
 
 export default {
@@ -30,11 +34,14 @@ export default {
     return {
       keyword: "",
       addressList: [],
-      showOperation: true
+      showOperation: true,
+      empty: false,
+      avatarUrl
     };
   },
   components: {
-    AddressList
+    AddressList,
+    empty
   },
   mounted() {},
   computed: {},
@@ -47,6 +54,7 @@ export default {
       queryCustomerConsigneeList(this.keyword).then(res => {
         if (res.result === "success" && res.data) {
           this.addressList = res.data;
+          this.empty = !this.addressList.length;
         }
       });
     },
@@ -130,5 +138,9 @@ export default {
   line-height: 98px;
   text-align: center;
   border-top: 1px solid #ededed;
+}
+
+.common .support{
+  h(98)
 }
 </style>
