@@ -26,10 +26,6 @@
 
 <script>
 /**
- * TODO 如果是下单result页面返回首页，进来要刷新。
- *     如果从详情返回 refresh.
- */
-/**
  *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成 5=已取消
  */
 const orderTab = [
@@ -46,6 +42,7 @@ const params = {
 import avatarUrl from "@/assets/images/icon-product-empty.png";
 import orderItem from "components/order-item.vue";
 import uiTable from "components/ui-table.vue";
+import storage from "common/storage";
 import { getAllGoods } from "common/goodsStorage";
 import empty from "components/empty.vue";
 import scroll from "components/scroll.vue";
@@ -76,8 +73,9 @@ export default {
     }
   },
   activated() {
-    const refresh = this.$route.query.refresh || 0;
+    const refresh = storage.get("orderRefresh", false);
     refresh && this._QueryOrders(true);
+    storage.set("orderRefresh", false);
   },
   methods: {
     _QueryOrders(reset) {

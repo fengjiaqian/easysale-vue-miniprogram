@@ -41,10 +41,7 @@ export default {
           break;
         case 2:
           this.$router.push({
-            path: "/navi/orders",
-            query: {
-              refresh: true
-            }
+            path: "/navi/orders"
           });
           break;
         case 3:

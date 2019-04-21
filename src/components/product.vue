@@ -18,6 +18,7 @@
 
 <script>
 import numberPicker from "./number-picker.vue";
+
 export default {
   name: "product",
   props: {

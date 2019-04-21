@@ -42,7 +42,7 @@
 import storage from "common/storage";
 import numberPicker from "components/number-picker.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
-import { updateItem } from "common/goodsStorage";
+import { updateItem, getAllGoods } from "common/goodsStorage";
 export default {
   name: "detail",
   data() {
@@ -66,8 +66,15 @@ export default {
         }
       });
     },
+    //TODO如果缓存中有数据 直接取
     initPorduct(product) {
-      product.buyCount = 1;
+      const storageGoods = getAllGoods();
+      if (storageGoods && storageGoods.length) {
+        const itemInStore = storageGoods.find(item => item.id === product.id);
+        product.buyCount = itemInStore ? itemInStore.buyCount : 1;
+      } else {
+        product.buyCount = 1;
+      }
       product.minBuyNum = 1;
       product.maxBuyNum = 9999;
       return product;
@@ -81,7 +88,7 @@ export default {
       //TODO  加上userId
       storage.set("orderPrequeryParams", [product]);
       this.$router.push({
-        path: "/OrderSubmit"
+        path: "/orderSubmit"
       });
     }
   }

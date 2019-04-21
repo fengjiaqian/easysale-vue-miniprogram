@@ -6,14 +6,14 @@
     @touchmove.prevent="move($event)"
     @touchend="end"
   >
-    <!-- <span class="cart-count" v-show="count>0">{{count>99 ? '99+' : count}}</span> -->
+    <span class="cart-count" v-show="count>0">{{cartCount}}</span>
   </div>
 </template>
 
 <script>
 import mixin from "common/floatMixin";
 import { getGoodsCount } from "common/goodsStorage";
-
+import { mapGetters, mapActions } from "vuex";
 export default {
   mixins: [mixin],
   data() {
@@ -21,7 +21,9 @@ export default {
       count: 8
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["cartCount"])
+  },
   created() {},
   mounted() {},
   methods: {
@@ -51,7 +53,7 @@ export default {
   height: 40px;
   position: absolute;
   right: 0px;
-  top: -6px;
+  top: -6px !important;
   font-size: 22px;
   text-align: center;
   line-height: 40px;

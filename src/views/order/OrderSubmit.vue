@@ -99,15 +99,8 @@
  * 经销商下单  1 选择客户  同销售人员
  *
  */
-const enterFail = function(msg) {
-  this.$router.push({
-    path: "/orderResult",
-    query: {
-      err: msg
-    }
-  });
-};
 import storage from "common/storage";
+import { batchRemoveItem } from "common/goodsStorage";
 import { OrderSubmit } from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
 import { queryAddressList } from "api/fetch/endCustomer";
@@ -140,8 +133,13 @@ export default {
   mounted() {},
   methods: {
     _OrderSubmit() {
+  
       const customerId = this.currentCustomer.id,
         orderAmount = this.totalMoney;
+      if (!customerId) {
+        const msg = this.userType == 3 ? "请选择收货人" : "请选择客户";
+        return this.$toast(msg);
+      }
       const orderItem = transformOrderItems(this.products);
       const params = {
         customerId,
@@ -151,10 +149,17 @@ export default {
       OrderSubmit(params)
         .then(res => {
           console.log(res);
+          //批量删除购物车中商品
+          batchRemoveItem(this.products);
           this.$router.push({ path: "/orderResult" });
         })
         .catch(err => {
-          enterFail.call(this, err.message);
+          this.$router.push({
+            path: "/orderResult",
+            query: {
+              err: err.message
+            }
+          });
         });
     },
     _jumpGoodsList() {
