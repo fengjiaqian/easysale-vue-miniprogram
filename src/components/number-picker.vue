@@ -15,6 +15,7 @@
 <script>
 import { updateItem } from "common/goodsStorage";
 import Bus from "common/Bus";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "number-picker",
   props: {
@@ -29,26 +30,31 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    ...mapActions(["saveCartCount"]),
     decrease(product) {
       const { minBuyNum, maxBuyNum } = product;
       //if (product.buyCount <= minBuyNum) return false;
       //购物车是否删除此商品提示
       if (product.buyCount === 1 && this.isInCart()) {
+        console.log("$emit deleteOneInCart");
         return Bus.$emit("deleteOneInCart", product.id);
       }
       product.buyCount--;
       updateItem(product, product.buyCount);
+      this.saveCartCount();
     },
     increase(product) {
       const { minBuyNum, maxBuyNum } = product;
       if (product.buyCount >= maxBuyNum) return false;
       product.buyCount++;
       updateItem(product, product.buyCount);
+      this.saveCartCount();
     },
     handleChange(product, $event) {
       let currentVal = parseInt($event.target.value) || 0;
       product.buyCount = currentVal ? currentVal : 1;
       updateItem(product, product.buyCount);
+      this.saveCartCount();
     },
     isInCart() {
       return this.$route.path === "/cart";

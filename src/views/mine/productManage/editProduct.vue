@@ -31,7 +31,7 @@
                      :on-change="changeLoad"
                      :on-success="fileSuccess"
                      :on-error="fileFaild"
-                     accept="image/jpeg,image/gif,image/png">
+                     accept="image/*">
           </el-upload>
         </ul>
       </div>

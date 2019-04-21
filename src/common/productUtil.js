@@ -25,3 +25,28 @@ export function transformOrderItems(list) {
         return { productId: id, quantity: buyCount, salePrice: price }
     })
 }
+
+/**
+ * 首页激活时，改变数量 
+ * @param {*} productList 
+ */
+export function RefreshProductsInActivated(productList) {
+    const storageGoods = getAllGoods();
+    if (!storageGoods.length) {
+        //
+        this.productList.forEach(item => {
+            item.buyCount = 0;
+        })
+        return false;
+    }
+    for (let [index, product] of productList.entries()) {
+        const itemInStore = storageGoods.find(
+            item =>
+                item.id === product.id
+        );
+        if (itemInStore) {
+            this.productList.splice(index, 1, itemInStore)
+        }
+    }
+}
+

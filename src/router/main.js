@@ -141,7 +141,7 @@ const main = [{
 	path: '/orderSubmit',
 	name: 'orderSubmit',
 	meta: {
-		title: '订单详情',
+		title: '订单提交',
 	},
 	component: OrderSubmit,
 }, {

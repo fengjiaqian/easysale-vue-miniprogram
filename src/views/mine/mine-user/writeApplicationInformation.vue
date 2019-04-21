@@ -7,7 +7,7 @@
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码">
+      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码" readonly>
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
@@ -16,11 +16,32 @@
     <div class="address">
       <div class="left">店铺地址 :</div>
       <input class="right" value v-model="address" type="text" placeholder="请输入店铺地址">
-      <img class="location" src="../../../assets/images/address_position_icon.png" alt>
+      <img
+        class="location"
+        @click.stop="obtainAddress"
+        src="../../../assets/images/address_position_icon.png"
+        alt
+      >
     </div>
-    <div class="license">
+    <div class="uiw-pic">
       <div class="left">营业执照 :</div>
-      <div class="right"></div>
+      <ul class="img-list">
+        <li v-for="(item,index) in stagImgList">
+          <img :src="item">
+          <i @click="deleteUploadImg(index)"></i>
+        </li>
+        <el-upload
+          class="upload-wrap"
+          action="/file/uploadProductImg"
+          list-type="picture-card"
+          :headers="headers"
+          :before-upload="onBeforeUpload"
+          :on-change="changeLoad"
+          :on-success="fileSuccess"
+          :on-error="fileFaild"
+          accept="image/*"
+        ></el-upload>
+      </ul>
     </div>
     <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
   </div>
@@ -28,6 +49,8 @@
 
 <script>
 import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
+import storage from "common/storage";
+import { evokeWxLocation } from "common/location";
 
 export default {
   data() {
@@ -35,15 +58,34 @@ export default {
       name: "",
       phone: "",
       shopName: "",
-      address: ""
+      address: "",
+      stagImgList: [], //暂存的图片数组
+      limitUploadNum: 3 //上传图片的限制张数
     };
   },
   computed: {
     canOperate() {
       return this.name && this.phone && this.shopName && this.address;
+    },
+    headers() {
+      const token = storage.get("token", "");
+      return {
+        token: token
+      };
     }
   },
-  created() {},
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      let passData = to.query.passData ? to.query.passData : null;
+      if (passData) {
+        passData = JSON.parse(passData);
+        vm.address = passData.addressData.address;
+      }
+    });
+  },
+  created() {
+    this.phone = this.$route.query.mobileNo;
+  },
   methods: {
     //TODO: 带入电话号码和姓名
     //TODO: 上传参数加入图片
@@ -58,17 +100,63 @@ export default {
         name: this.name,
         phone: this.phone,
         shopName: this.shopName,
-        address: this.address
+        address: this.address,
+        logoIamgeUrls: this.stagImgList
       };
       applyDealer(params)
         .then(res => {
           this.$toast("申请信息提交成功");
-          this.$router.go(-1);
+          this.$router.push({ path: "/navi/mine" });
         })
         .catch(err => {
           this.$toast(err.message);
         });
-    }
+    },
+    //图片上传前验证
+    onBeforeUpload(file) {
+      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
+      const isLt1M = file.size / 1024 / 1024 < 1;
+      if (!isIMAGE) {
+        this.$alert("上传文件只能是图片格式!");
+      }
+      if (!isLt1M) {
+        this.$alert("上传文件大小不能超过 1MB!");
+      }
+      return isIMAGE && isLt1M;
+    },
+    //图片上传成功时
+    fileSuccess(res, file) {
+      this.stagImgList.push(res.data);
+      if (this.stagImgList.length == this.limitUploadNum) {
+        document
+          .querySelector(".el-upload--picture-card")
+          .setAttribute("style", "display:none;");
+      }
+    },
+    //图片上传失败
+    fileFaild() {
+      this.$alert("图片上传失败，请重试！");
+    },
+    //删除图片
+    deleteUploadImg(idx) {
+      this.stagImgList = this.stagImgList.filter((item, index) => {
+        return idx != index;
+      });
+      if (this.stagImgList.length < this.limitUploadNum) {
+        document
+          .querySelector(".el-upload--picture-card")
+          .removeAttribute("style");
+      }
+    },
+    //去小程序定位地址
+    obtainAddress() {
+      let recordData = {
+        path: this.$route.path,
+        pageData: {}
+      };
+      evokeWxLocation(recordData);
+    },
+    changeLoad() {}
   }
 };
 </script>
@@ -153,36 +241,6 @@ export default {
   top: 24px;
 }
 
-.common .license {
-  width: 100%;
-  height: 208px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 1);
-  margin-top: 20px;
-}
-
-.common .license .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 24px 24px;
-}
-
-.common .license .right {
-  float: left;
-  width: 160px;
-  height: 160px;
-  border-radius: 6px;
-  border: 1px dashed rgba(221, 221, 221, 1);
-  margin-top: 24px;
-  background: rgba(246, 246, 246, 1) url('../../../assets/images/ic_jiahao.png.jpg') no-repeat center;
-  background-size: 64px 64px;
-}
-
 .edit {
   width: 100%;
   height: 98px;
@@ -197,5 +255,53 @@ export default {
 
 .can-operate {
   bg(rgba(255, 86, 56, 1));
+}
+
+.uiw-pic {
+  mt(20);
+  bg(#fff);
+  padding: 24px;
+  flex();
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .left {
+    ft(30);
+    c-6();
+    w(150);
+    word-break: keep-all;
+  }
+
+  .img-list {
+    flex-1();
+    flex();
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    >li {
+      position: relative;
+
+      img {
+        w(160);
+        h(160);
+        mr(20);
+        border-radius: 6px;
+        border: 1PX solid #ededed;
+        box-sizing: border-box;
+      }
+
+      i {
+        position: absolute;
+        right: 8px;
+        top: -20px;
+        w(40);
+        h(40);
+        background-image: url('../../../assets/images/close_icon1.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+  }
 }
 </style>

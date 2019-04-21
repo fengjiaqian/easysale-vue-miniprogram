@@ -15,9 +15,6 @@
       </li>
       <li class="uiw-pic">
         <div>店铺图片：</div>
-<!--        <div>
-          <img v-lazy="shopInfo.logoIamgeUrl" >
-        </div>-->
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
@@ -31,7 +28,7 @@
                      :on-change="changeLoad"
                      :on-success="fileSuccess"
                      :on-error="fileFaild"
-                     accept="image/jpeg,image/gif,image/png">
+                     accept="image/*">
           </el-upload>
         </ul>
       </li>

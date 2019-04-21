@@ -87,7 +87,23 @@ export function findCustomerOwerInfo(id = "") {
 		data: { id },
 		loading: true,
 	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
 
+/**
+ * 客户查看自己申请的经销商详细信息（客户登录）
+ */
+export function findApplyDealerInfo() {
+
+	const url = "/customer/findApplyDealerInfo"
+	return axios({
+		method: 'post',
+		url: url,
+		loading: true,
+	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {
 		return Promise.reject(res.data)
