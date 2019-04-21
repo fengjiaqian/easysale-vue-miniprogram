@@ -24,7 +24,7 @@
             <i @click="deleteUploadImg(index)" v-if="productType==1"></i>
           </li>
           <el-upload class="upload-wrap"
-                     action="/file/uploadProductImg"
+                     :action="uploadImgUrl"
                      list-type="picture-card"
                      :headers="headers"
                      :before-upload="onBeforeUpload"
@@ -47,6 +47,7 @@
 <script>
   import { editProduct } from "api/fetch/mine";
   import storage from "common/storage";
+  import { compress } from "common/util";
   export default {
     data() {
       return {
@@ -132,14 +133,22 @@
       //图片上传前验证
       onBeforeUpload(file){
         const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
-        const isLt1M = file.size / 1024 / 1024 < 1;
+        const isLt1M = file.size / 1024 / 1024 < 10;
         if (!isIMAGE) {
           this.$alert('上传文件只能是图片格式!');
         }
         if (!isLt1M) {
-          this.$alert('上传文件大小不能超过 1MB!');
+          this.$alert('上传文件大小不能超过 10MB!');
         }
-        return isIMAGE && isLt1M;
+        if(isIMAGE && isLt1M){
+          return new Promise((resolve, reject)=>{
+            compress(file, function(val) {
+              resolve(val)
+            })
+          })
+        }else{
+          return false
+        }
       },
       changeLoad(file, fileList){
 
