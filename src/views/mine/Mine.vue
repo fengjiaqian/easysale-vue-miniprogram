@@ -12,7 +12,7 @@
       <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
         <i></i>
         <span>邀请码</span>
-      </div> -->
+      </div>-->
       <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
     </div>
     <!-- 功能模块 -->
@@ -29,7 +29,13 @@
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <em></em>
+          <div>
+            <span
+              class="mr-12 c-theme"
+              v-if="item.path=='/writeApplicationInformation' && !applyDealerState"
+            >审核中</span>
+            <em></em>
+          </div>
         </div>
       </li>
     </ul>
@@ -41,17 +47,18 @@
  * isVisitor：展示差异 auth权限控制。
  * userType default 3  终端用户
  */
-
 //TODO: 终端用户 申请经销商待审核状态显示
 import * as mineUtil from "./mineCommon";
 import storage from "common/storage";
+import { findCustomerOwerInfo } from "api/fetch/endCustomer";
 export default {
   data() {
     return {
       mobileNo: storage.get("mobileNo", ""),
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
-      mineMenu: []
+      mineMenu: [],
+      applyDealerState: 1 //0:正在申请成为经销商 1：没有申请
     };
   },
   computed: {},
@@ -59,29 +66,58 @@ export default {
   beforeCreate: function() {},
   created: function() {
     this.mineMenu = mineUtil.initAccessModule(this.userType);
+    this._findCustomerOwerInfo();
   },
   beforeDestory() {},
   destoryed() {},
   mounted() {},
+  activated() {
+    const refresh = storage.get("mineRefresh", false);
+    refresh && this._findCustomerOwerInfo();
+    storage.set("mineRefresh", false);
+  },
   methods: {
     mineSkip(path) {
       if (this.navigateToLogin()) {
         return false;
+      }
+      //如果是看查看申请状态
+      if (!this.applyDealerState && path == "/writeApplicationInformation") {
+        path = "/applyDealer";
+      }
+      //mobileNo  带过去手机号码
+      if (path == "/writeApplicationInformation") {
+        return this.$router.push({
+          path,
+          query: {
+            mobileNo: this.mobileNo
+          }
+        });
       }
       this.$router.push(path);
     },
     _bindPhone() {
       this.navigateToLogin();
     },
+    //TODO 销售人员
     //分角色跳转个人信息
     _jumpUserInfo() {
-       this.navigateToLogin();
+      this.navigateToLogin();
       if (this.userType == 3) {
         this.mineSkip("/customerInfo");
       }
       if (this.userType == 1) {
         this.mineSkip("/my/userInfo");
       }
+    },
+    //申请经销商后 刷新申请中的状态
+    _findCustomerOwerInfo() {
+      findCustomerOwerInfo()
+        .then(res => {
+          this.applyDealerState = res.data.applyDealerState; //0:正在申请成为经销商 1：没有申请
+          this.mobileNo = res.data.phone;
+        })
+        .catch(err => {});
     }
   },
   watch: {}
@@ -96,7 +132,7 @@ export default {
 .enter-item {
   bg(#fff);
 
-  &:nth-last-of-type(1), &:nth-last-of-type(2) {
+  &:nth-last-of-type(1) {
     .enter-item-txt {
       border: 0;
     }
@@ -133,12 +169,16 @@ export default {
     justify-content: space-between;
 
     em {
-      block();
+      inline();
       w(16);
       h(26);
       mr(24);
       background: url('./../../assets/images/icon-enter.png') no-repeat center;
       background-size: contain;
+    }
+
+    .mr-12 {
+      mr(12);
     }
   }
 }
@@ -170,10 +210,6 @@ export default {
     span {
       background-image: url('../../assets/images/customer_icon.png');
     }
-  }
-
-  .enter-item-txt {
-    border-bottom: 1px solid #ededed !important;
   }
 }
 
