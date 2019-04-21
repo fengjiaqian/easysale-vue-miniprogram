@@ -39,7 +39,8 @@
                      :on-change="changeLoad"
                      :on-success="fileSuccess"
                      :on-error="fileFaild"
-                     accept="image/jpeg,image/gif,image/png">
+                     accept="image/*"
+                     >
           </el-upload>
         </ul>
       </div>
@@ -56,6 +57,7 @@
 <script>
   import { addProduct,uploadImg } from "api/fetch/mine";
   import storage from "common/storage";
+  import { compress } from "common/util";
   export default {
     data() {
       return {
@@ -137,7 +139,15 @@
         if (!isLt1M) {
           this.$alert('上传文件大小不能超过 1MB!');
         }
-        return isIMAGE && isLt1M;
+        return isIMAGE && isLt1M
+/*        if(isIMAGE && isLt1M){
+          compress(file, function(val) {
+            console.log(val)
+            return val
+          })
+        }else{
+          return false
+        }*/
       },
       changeLoad(file, fileList){
 
