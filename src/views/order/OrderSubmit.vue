@@ -82,8 +82,15 @@
       </div>
     </div>
     <div class="select-customer">
-      <strong class="fz30">折扣</strong>
-      <input type="number" placeholder="请输入折扣">
+      <strong class="fz30">优惠</strong>
+      <input
+        type="number"
+        placeholder="请输入金额"
+        value
+        @click.stop
+        @change="handleReduce($event)"
+        :class="{'c-theme':reduce>0}"
+      >
     </div>
     <!--  -->
     <div class="bottom">
@@ -97,7 +104,6 @@
 /**
  * 终端用户下单 3  选择收货人
  * 经销商下单  1 选择客户  同销售人员
- *
  */
 import storage from "common/storage";
 import { batchRemoveItem } from "common/goodsStorage";
@@ -109,6 +115,7 @@ export default {
   name: "order-submit",
   data() {
     return {
+      reduce: 0,
       products: [],
       amount: 0,
       totalMoney: 0,
@@ -126,6 +133,7 @@ export default {
       (ac, cur) => (ac += cur.buyCount * cur.price),
       0
     );
+    this.originTotalMoney = this.totalMoney;
     //
     const customerInfo = this.$route.query.customerInfo || "";
     customerInfo && (this.currentCustomer = this.decodeUrl(customerInfo));
@@ -133,7 +141,6 @@ export default {
   mounted() {},
   methods: {
     _OrderSubmit() {
-  
       const customerId = this.currentCustomer.id,
         orderAmount = this.totalMoney;
       if (!customerId) {
@@ -206,6 +213,11 @@ export default {
           fromOrder: true
         }
       });
+    },
+    //
+    handleReduce($event) {
+      this.reduce = parseInt($event.target.value) || 0;
+      this.totalMoney = this.originTotalMoney - this.reduce;
     }
   }
 };
@@ -263,6 +275,13 @@ export default {
     w(150);
     h(42);
     text-indent: 5px;
+    ft(28);
+    c(#333);
+    text-align: right;
+  }
+
+  .c-theme {
+    c($color-theme);
   }
 }
 

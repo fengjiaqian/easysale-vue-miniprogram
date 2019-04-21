@@ -35,9 +35,10 @@ const orderTab = [
   { text: "已取消", state: 5 }
 ];
 const params = {
-  orderState: 1,
+  //orderState: 1,
   pageNum: 1,
-  pageSize: 3
+  pageSize: 3,
+  oids: [2, 3]
 };
 import avatarUrl from "@/assets/images/icon-product-empty.png";
 import orderItem from "components/order-item.vue";
