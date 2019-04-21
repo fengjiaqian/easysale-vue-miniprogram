@@ -7,7 +7,7 @@
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码">
+      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码" readonly>
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
@@ -16,7 +16,12 @@
     <div class="address">
       <div class="left">店铺地址 :</div>
       <input class="right" value v-model="address" type="text" placeholder="请输入店铺地址">
-      <img class="location" @click="obtainAddress" src="../../../assets/images/address_position_icon.png" alt>
+      <img
+        class="location"
+        @click.stop="obtainAddress"
+        src="../../../assets/images/address_position_icon.png"
+        alt
+      >
     </div>
     <div class="uiw-pic">
       <div class="left">营业执照 :</div>
@@ -54,8 +59,8 @@ export default {
       phone: "",
       shopName: "",
       address: "",
-      stagImgList: [],//暂存的图片数组
-      limitUploadNum: 3,//上传图片的限制张数
+      stagImgList: [], //暂存的图片数组
+      limitUploadNum: 3 //上传图片的限制张数
     };
   },
   computed: {
@@ -65,20 +70,22 @@ export default {
     headers() {
       const token = storage.get("token", "");
       return {
-        'token': token,
-      }
+        token: token
+      };
     }
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm=>{
-      let passData = to.query.passData ? to.query.passData : null
-      if(passData){
-        passData = JSON.parse(passData)
-        vm.address = passData.addressData.address
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      let passData = to.query.passData ? to.query.passData : null;
+      if (passData) {
+        passData = JSON.parse(passData);
+        vm.address = passData.addressData.address;
       }
-    })
+    });
   },
-  created() {},
+  created() {
+    this.phone = this.$route.query.mobileNo;
+  },
   methods: {
     //TODO: 带入电话号码和姓名
     //TODO: 上传参数加入图片
@@ -110,7 +117,7 @@ export default {
       const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
       const isLt1M = file.size / 1024 / 1024 < 10;
       if (!isIMAGE) {
-        this.$alert('上传文件只能是图片格式!');
+        this.$alert("上传文件只能是图片格式!");
       }
       if (!isLt1M) {
         this.$alert('上传文件大小不能超过 10MB!');
@@ -127,32 +134,37 @@ export default {
     },
     //图片上传成功时
     fileSuccess(res, file) {
-      this.stagImgList.push(res.data)
-      if(this.stagImgList.length == this.limitUploadNum){
-        document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
+      this.stagImgList.push(res.data);
+      if (this.stagImgList.length == this.limitUploadNum) {
+        document
+          .querySelector(".el-upload--picture-card")
+          .setAttribute("style", "display:none;");
       }
     },
     //图片上传失败
-    fileFaild(){
-      this.$alert('图片上传失败，请重试！')
+    fileFaild() {
+      this.$alert("图片上传失败，请重试！");
     },
     //删除图片
-    deleteUploadImg(idx){
-      this.stagImgList = this.stagImgList.filter((item,index)=>{
-        return idx!=index
-      })
-      if(this.stagImgList.length < this.limitUploadNum){
-        document.querySelector('.el-upload--picture-card').removeAttribute('style')
+    deleteUploadImg(idx) {
+      this.stagImgList = this.stagImgList.filter((item, index) => {
+        return idx != index;
+      });
+      if (this.stagImgList.length < this.limitUploadNum) {
+        document
+          .querySelector(".el-upload--picture-card")
+          .removeAttribute("style");
       }
     },
     //去小程序定位地址
-    obtainAddress(){
+    obtainAddress() {
       let recordData = {
         path: this.$route.path,
         pageData: {}
-      }
-      evokeWxLocation(recordData)
+      };
+      evokeWxLocation(recordData);
     },
+    changeLoad() {}
   }
 };
 </script>
@@ -253,44 +265,49 @@ export default {
   bg(rgba(255, 86, 56, 1));
 }
 
-.uiw-pic{
-  mt(20)
-  bg(#fff)
-  padding 24px
-  flex()
-  justify-content flex-start
-  align-items flex-start
-  .left{
-    ft(30)
-    c-6()
-    w(150)
-    word-break keep-all
+.uiw-pic {
+  mt(20);
+  bg(#fff);
+  padding: 24px;
+  flex();
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .left {
+    ft(30);
+    c-6();
+    w(150);
+    word-break: keep-all;
   }
-  .img-list{
-    flex-1()
-    flex()
-    flex-wrap wrap
-    justify-content flex-start
-    >li{
-      position relative
-      img{
-        w(160)
-        h(160)
-        mr(20)
-        border-radius 6px
-        border 1PX solid #ededed
-        box-sizing border-box
+
+  .img-list {
+    flex-1();
+    flex();
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    >li {
+      position: relative;
+
+      img {
+        w(160);
+        h(160);
+        mr(20);
+        border-radius: 6px;
+        border: 1PX solid #ededed;
+        box-sizing: border-box;
       }
-      i{
-        position absolute
-        right 8px
-        top -20px
-        w(40)
-        h(40)
-        background-image url(../../../assets/images/close_icon1.png)
-        background-size contain
-        background-repeat no-repeat
-        background-position center
+
+      i {
+        position: absolute;
+        right: 8px;
+        top: -20px;
+        w(40);
+        h(40);
+        background-image: url('../../../assets/images/close_icon1.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
       }
     }
   }

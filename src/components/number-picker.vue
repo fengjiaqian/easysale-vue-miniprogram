@@ -36,6 +36,7 @@ export default {
       //if (product.buyCount <= minBuyNum) return false;
       //购物车是否删除此商品提示
       if (product.buyCount === 1 && this.isInCart()) {
+        console.log("$emit deleteOneInCart");
         return Bus.$emit("deleteOneInCart", product.id);
       }
       product.buyCount--;

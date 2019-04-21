@@ -329,7 +329,7 @@ const mine = [
                 },
                 component: writeApplicationInformation,
             },
-            { //wx 申请经销商   
+            { // 申请经销商查看   
                 path: '/applyDealer',
                 name: 'applyDealer',
                 meta: {

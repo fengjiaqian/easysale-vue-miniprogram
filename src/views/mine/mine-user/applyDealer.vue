@@ -3,21 +3,20 @@
   <div class="common">
     <div class="status">
       <div class="mode">
-        <div class="way">退货状态:</div>
+        <div class="way">申请状态：:</div>
         <div class="fettle">审核中</div>
       </div>
-      <div class="describe">经销商正在处理您的问题，请耐心等待！</div>
+      <!-- <div class="describe">经销商正在处理您的问题，请耐心等待！</div> -->
     </div>
     <div class="license">
       <div class="trade">营业执照</div>
       <div class="carousel">
-        1111222333
-        <div class="slider-wrapper bg-w" v-if="banners && banners.length">
+        <div class="slider-wrapper bg-w">
           <div class="slider-body">
-            <slider :loop="loop" ref="slider_dom">
-              <div class="banner-item" v-for="item in banners" :key="item.bannerId">
-                <a href="javascript:;" @click="_jumpBannerLink(item)">
-                  <img :src="item.imgUrl">
+            <slider ref="slider_dom">
+              <div class="banner-item" v-for="item in 4">
+                <a href="javascript:;">
+                  <img :src="icBanner">
                 </a>
               </div>
             </slider>
@@ -28,30 +27,53 @@
     <div class="infor">
       <div class="trade">个人信息</div>
       <div class="news">
-        <div class="name">姓名 : 张栋</div>
-        <div>联系电话 : 13555555555</div>
+        <div class="name">姓名 : {{applyDealerInfo.name}}</div>
+        <div>联系电话 : {{applyDealerInfo.phone}}</div>
       </div>
       <div class="detail">
-        <div class="name">老王的店铺</div>
-        <div>湖北省 武汉市 洪山区 花城大道软件新城 A3-401湖北省 武汉市 洪山区</div>
+        <div class="name">{{applyDealerInfo.shopName}}</div>
+        <div>{{applyDealerInfo.address}}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import icBanner from "@/assets/images/ic-banner.png";
+import { findApplyDealerInfo } from "api/fetch/endCustomer";
+import slider from "components/slider.vue";
 export default {
   data() {
-    return {};
+    return {
+      applyDealerInfo: { logoIamgeUrls: [] },
+      icBanner: icBanner
+    };
   },
-  components: {},
+  components: {
+    slider
+  },
   computed: {},
-  created() {},
-  methods: {}
+  created() {
+    this._findApplyDealerInfo();
+  },
+  methods: {
+    _findApplyDealerInfo() {
+      findApplyDealerInfo()
+        .then(res => {
+          this.applyDealerInfo = res.data;
+        })
+        .catch(err => {});
+    }
+  }
 };
 </script>
 
 <style lang="stylus" scoped>
+.slider-body {
+  pos(relative);
+  overflow: hidden;
+}
+
 .common {
   background-color: #F6F6F6;
   position: relative;
@@ -61,8 +83,6 @@ export default {
 
 .common .status {
   padding: 40px 24px 15px 24px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box; /* Firefox */
   background: white;
 }
 

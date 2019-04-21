@@ -21,7 +21,7 @@ const router = new Router({
 const isNeedRefreshHome = function () {
     const userType = storage.get('userType', 3);
     if (userType != 1) return false;
-    const routes = ['productList', "editProduct", 'addProduct', 'importProduct'];
+    const routes = ['cart', 'productList', "editProduct", 'addProduct', 'importProduct'];
     if (routes.includes(this.name)) {
         storage.set("homeRefresh", true)
     }
@@ -33,6 +33,13 @@ const isNeedRefreshOrder = function () {
     const routes = ['orderResult', 'orderDetail'];
     if (routes.includes(this.name)) {
         storage.set("orderRefresh", true)
+    }
+}
+
+const isNeedRefreshMine = function () {
+    const routes = ['writeApplicationInformation'];
+    if (routes.includes(this.name)) {
+        storage.set("mineRefresh", true)
     }
 }
 
@@ -54,6 +61,7 @@ router.beforeEach((to, from, next) => {
     } else {
         isNeedRefreshHome.call(from);
         isNeedRefreshOrder.call(from);
+        isNeedRefreshMine.call(from)
         to.meta.title && (document.title = to.meta.title)
         next()
     }
