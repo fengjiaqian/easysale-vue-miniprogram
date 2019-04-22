@@ -50,6 +50,15 @@ const awardDetail = (resolve) => {
 	})
 }
 
+// 以上是终端客户的“兑奖”+“投诉”的路由
+
+// wx 经销商 “投诉管理”的页面
+const complaintManagement = (resolve) => { 
+	import('views/complaint/dealer/complaintManagement.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 const complain = [
     {
         path: '/newComplaint',
@@ -100,6 +109,13 @@ const complain = [
             title: '兑奖详情',
         },
         component: awardDetail,
+    },{
+        path: '/complaintManagement',
+        name: 'complaintManagement',
+        meta: {
+            title: '投诉管理',
+        },
+        component: complaintManagement,
     }
 ]
 

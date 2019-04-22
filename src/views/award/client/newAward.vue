@@ -24,7 +24,7 @@
         </div>
         <div class="nav">
             <div class="title">备注</div>
-            <textarea  cols="30" rows="10" class="report"></textarea>
+            <textarea  cols="30" rows="10" class="report" placeholder="请输入内容"></textarea>
         </div>
         <div class="bot-surport"></div>
         <button class="sure-btn">提交</button>
