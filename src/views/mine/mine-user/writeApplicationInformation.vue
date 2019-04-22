@@ -96,7 +96,7 @@ export default {
       if (!this.canOperate) return false;
       const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
       const regExp = new RegExp(partter);
-      if (!regExp.test(this.phone)) {
+      if (!regExp.test(this.applyInfo.phone)) {
         return this.$toast("手机号码格式不正确");
       }
       const {name,phone,shopName,address} = this.applyInfo
