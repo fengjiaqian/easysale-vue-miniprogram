@@ -22,18 +22,16 @@ export function findCustomerList(keyword = "") {
 
 /**
  * 客户或者经销商fetch店铺log 
- * @param {*}  userId  经销商userId
  */
-export function ListDealerLogs(userId = "") {
-
+export function ListDealerLogs() {
+    const userType = localStorage.getItem('userType');
     let url = "/dealer/findShopLogoListByDealer";
-    userId && (url = "/dealer/findShopLogoListByCustomer")
+    userType == 3 && (url = "/dealer/findShopLogoListByCustomer");
     return axios({
         method: 'post',
         url,
         data: {
             fileType: 1,
-            userId
         },
         loading: true,
     }).then((res) => {

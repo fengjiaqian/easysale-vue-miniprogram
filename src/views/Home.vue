@@ -2,9 +2,9 @@
   <div id="home" ref="scrollDom" :class="{'pt174': userType==3}">
     <float-cart></float-cart>
     <!--  -->
-    <div class="home-banner">
+    <div class="home-banner" v-if="banners.length">
       <div class="slider-body">
-        <slider :loop="false" ref="slider_dom">
+        <slider :loop="true" ref="slider_dom">
           <div class="banner-item" v-for="item in banners" :key="item.id">
             <img :src="item.cloudSrc" alt>
           </div>
@@ -130,9 +130,10 @@ export default {
     }
   },
   created() {
+    this._initAuth(); //该步骤有判断有没有带入shareDealerId，有则缓存currentDealerId
     this.currentDealerId = storage.get("currentDealerId", "");
-    this._initAuth();
     if (!this.currentDealerId) {
+      //如果没有currentDealerId的话，跳转选择经销商。
       return this.$router.push({
         path: "/dealerList"
       });
@@ -171,7 +172,7 @@ export default {
       }
     },
     _listDealerLogs() {
-      ListDealerLogs(this.currentDealerId).then(res => {
+      ListDealerLogs().then(res => {
         this.banners = res.data;
       });
     },
@@ -348,7 +349,8 @@ export default {
     overflow: hidden;
 
     .banner-item {
-      h(234);
+      width: 100%;
+      h(250);
 
       img {
         width: 100%;

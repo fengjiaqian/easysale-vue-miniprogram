@@ -1,11 +1,12 @@
 <template>
-  <div id="detail">
+  <div id="detail" style="height:140%;">
+    <m-header></m-header>
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
     <div class="D-name">{{product.productName}}</div>
     <!-- wx 新增加的div  描述规格 -->
-    <div class="D-norm">规格 :  {{product.specification}}</div>  
+    <div class="D-norm">规格 : {{product.specification}}</div>
     <div class="D-price">
       <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
     </div>
@@ -47,6 +48,7 @@ import numberPicker from "components/number-picker.vue";
 import floatCart from "components/floatCart.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
 import { updateItem, getAllGoods } from "common/goodsStorage";
+import mHeader from "components/header.vue";
 export default {
   name: "detail",
   data() {
@@ -56,7 +58,8 @@ export default {
   },
   components: {
     numberPicker,
-    floatCart
+    floatCart,
+    mHeader
   },
   created() {
     this._queryDetail();
@@ -138,7 +141,7 @@ export default {
   width: 100%;
   h(98);
   bg(#fff);
-  display :none;
+  display: none;
 }
 
 .D-bottom-left {
@@ -175,7 +178,7 @@ export default {
     c(#333);
     ft(30);
     border-bottom: 1px solid #EDEDED;
-    font-weight :bold;
+    font-weight: bold;
   }
 }
 
@@ -204,18 +207,18 @@ export default {
   bg(#fff);
   pl(24);
   // lh(94);
-  lh(70)
+  lh(70);
   c(#333);
   ft(34);
-  font-weight:bold;
+  font-weight: bold;
 }
 
-.D-norm{
+.D-norm {
   bg(#fff);
   c(#999);
   ft(30);
   pl(24);
-  padding-bottom :24px;
+  padding-bottom: 24px;
 }
 
 .D-price {

@@ -17,8 +17,8 @@
     <!--  -->
     <empty class="scroll-list" :txt="'当前没有可选经销商店铺'" v-if="empty"></empty>
     <!--  -->
-    <div class="scroll-list" :class="{'pt0': !currentDealer.phone }">
-      <scroll class="scroll-dom">
+    <div class="scroll-list" :class="{'pt0': !currentDealer.phone }" v-if="dealerList.length">
+      <scroll class="scroll-dom" :data="dealerList">
         <section>
           <div
             class="dealer-item"
@@ -80,10 +80,6 @@ export default {
       });
     },
     _chooseDealer(dealer) {
-      // storage.set("currentDealerId", dealer.id);
-      // storage.set("currentDealer", dealer);
-      // location.href = location.origin + "/#/navi/home";
-      // location.reload();
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
       this.$router.push({
