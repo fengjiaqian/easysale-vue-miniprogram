@@ -37,6 +37,7 @@ export default {
         case 'staffList':
         case 'customerList':
         case 'userInfo':
+        case 'writeApplicationInformation':
           this.$router.push({ path: "/navi/mine" });
           break;
         default :

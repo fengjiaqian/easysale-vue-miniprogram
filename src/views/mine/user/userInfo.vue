@@ -33,7 +33,6 @@
   export default {
     data() {
       return {
-        userId: '',
         shopInfo: {},
       };
     },
@@ -41,15 +40,12 @@
 
     },
     created() {
-      this.userId = '465273'
       this.initShopInfo()
     },
     mounted() {},
     methods: {
       initShopInfo(){
-        let param = {
-          userId: this.userId
-        }
+        let param = {}
         queryShopInfo(param).then(res => {
           if (res.result === "success" && res.data) {
             this.shopInfo = res.data
