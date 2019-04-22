@@ -3,19 +3,19 @@
   <div class="common">
     <div class="name">
       <div class="left">客户姓名 :</div>
-      <input class="right" v-model="name" value type="text" placeholder="请输入姓名">
+      <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入姓名">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="phone" type="number" placeholder="请输入手机号码" readonly>
+      <input class="right" value v-model="applyInfo.phone" type="number" placeholder="请输入手机号码" readonly>
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" value v-model="shopName" type="text" placeholder="请输入店铺名称">
+      <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入店铺名称">
     </div>
     <div class="address">
       <div class="left">店铺地址 :</div>
-      <input class="right" value v-model="address" type="text" placeholder="请输入店铺地址">
+      <input class="right" value v-model="applyInfo.address" type="text" placeholder="请输入店铺地址">
       <img
         class="location"
         @click.stop="obtainAddress"
@@ -55,17 +55,19 @@ import { compress } from "common/util";
 export default {
   data() {
     return {
-      name: "",
-      phone: "",
-      shopName: "",
-      address: "",
+      applyInfo: {
+          name: "",
+          phone: "",
+          shopName: "",
+          address: "",
+      },
       stagImgList: [], //暂存的图片数组
       limitUploadNum: 3 //上传图片的限制张数
     };
   },
   computed: {
     canOperate() {
-      return this.name && this.phone && this.shopName && this.address;
+      return this.applyInfo.name && this.applyInfo.phone && this.applyInfo.shopName && this.applyInfo.address;
     },
     headers() {
       const token = storage.get("token", "");
@@ -79,12 +81,13 @@ export default {
       let passData = to.query.passData ? to.query.passData : null;
       if (passData) {
         passData = JSON.parse(passData);
-        vm.address = passData.addressData.address;
+        Object.assign(vm.applyInfo,passData.pageData)
+        vm.applyInfo.address = passData.addressData.address;
       }
     });
   },
   created() {
-    this.phone = this.$route.query.mobileNo;
+    this.applyInfo.phone = this.$route.query.mobileNo;
   },
   methods: {
     //TODO: 带入电话号码和姓名
@@ -96,11 +99,12 @@ export default {
       if (!regExp.test(this.phone)) {
         return this.$toast("手机号码格式不正确");
       }
+      const {name,phone,shopName,address} = this.applyInfo
       const params = {
-        name: this.name,
-        phone: this.phone,
-        shopName: this.shopName,
-        address: this.address,
+        name,
+        phone,
+        shopName,
+        address,
         logoIamgeUrls: this.stagImgList
       };
       applyDealer(params)
@@ -160,7 +164,7 @@ export default {
     obtainAddress() {
       let recordData = {
         path: this.$route.path,
-        pageData: {}
+        pageData: this.applyInfo
       };
       evokeWxLocation(recordData);
     },

@@ -211,6 +211,9 @@ export default {
       background-image: url('../../assets/images/customer_icon.png');
     }
   }
+  .enter-item-txt {
+    border-bottom: 1px solid #ededed;
+  }
 }
 
 .staff {
