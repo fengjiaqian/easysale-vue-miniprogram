@@ -72,6 +72,7 @@
         },
         activeIdx: null,
         activeName: '',
+        currentDealerId: '',//
         achieve: false,//能否保存
       };
     },
@@ -92,6 +93,7 @@
       })
     },
     created(){
+      this.currentDealerId = storage.get("currentDealerId", "");
       this.queryStaffs()
     },
     methods: {
@@ -126,7 +128,7 @@
       //验证添加商品所需字段
       verify(){
         if(!this.achieve) return;
-        const { name,phone,customerShopName,address,salesPersonUserId } = this.customerInfo
+        const { name,phone,customerShopName,address } = this.customerInfo
         if(!name){
           this.$alert(`请输入客户的姓名！`)
           return
@@ -139,13 +141,12 @@
         }else if(!address){
           this.$alert(`请输入客户的店铺地址！`)
           return
-        }else if(!salesPersonUserId){
-          this.$alert(`请选择客户的销售负责人！`)
-          return
         }
         this.saveAdd()
       },
       saveAdd(){
+        //经销商客户管理  新增客户 销售负责人 非必填   为空时 默认为  当前登录人id （经销商id），如果指定销售人员那就属于那个销售人员
+        this.customerInfo.salesPersonUserId = this.customerInfo.salesPersonUserId || this.currentDealerId
         addCustomer(this.customerInfo).then(res => {
           if (res.result === "success") {
             this.$toast("添加成功！");
@@ -167,8 +168,8 @@
     watch: {
       customerInfo: {
         handler(newVal, oldVal) {
-          const { name,phone,customerShopName,address,salesPersonUserId } = newVal
-          if(name && phone && customerShopName && address && salesPersonUserId){
+          const { name,phone,customerShopName,address } = newVal
+          if(name && phone && customerShopName && address){
             this.achieve = true
           }else{
             this.achieve = false
