@@ -124,6 +124,7 @@
           idList: [],
           state: 0
         },//商品操作查询参数
+        resetFilter: false,//重置查询请求
       };
     },
     components: {
@@ -157,10 +158,12 @@
             this.productList = this.productList.concat(dataList)
             this.loading = false
             this.requestDone = true
+            this.resetFilter = false
           }
         }).catch(err => {
             this.loading = false
             this.requestDone = true
+            this.resetFilter = false
           })
         ;
       },
@@ -268,15 +271,21 @@
             }
             //上下架后重新请求(恢复默认)
             else{
-              this.productList = []
-              this.activeBrandIdx= 0
-              this.activeBrandName= '全部品牌'
-              this.activeStateIdx= 0
-              this.activeStateName= '全部状态'
-              this.allSelected = false
+              this.resetRequest()
             }
           }
         });
+      },
+      resetRequest(){
+        this.resetFilter = true
+        this.productList = []
+        this.activeBrandIdx= 0
+        this.activeBrandName= '全部品牌'
+        this.activeStateIdx= 0
+        this.activeStateName= '全部状态'
+        this.allSelected = false
+        this.filterParam.pageNum = 1
+        this.queryProducts()
       },
       handleChange($event){
         this.filterParam.searchKey = $event.target.value
@@ -315,7 +324,9 @@
     watch: {
       filterParam: {
         handler(newVal, oldVal) {
-          this.queryProducts()
+          if(!this.resetFilter){
+            this.queryProducts()
+          }
         },
         deep: true
       },

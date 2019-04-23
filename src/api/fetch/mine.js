@@ -92,7 +92,7 @@ function queryProductList(params) {
 
 //我的模块-商品管理-商品品牌查询
 function queryProductBrand(params) {
-	const url = "/product/productBrandList"
+	const url = "/product/selectBrandList"
 	return axios({
 		method: 'post',
 		url: url,
