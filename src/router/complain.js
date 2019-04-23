@@ -59,6 +59,20 @@ const complaintManagement = (resolve) => {
 	})
 }
 
+// wx 经销商 “投诉详情”的页面
+const dealerComplaintDetail = (resolve) => { 
+	import('views/complaint/dealer/dealerComplaintDetail.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+// wx 经销商 “兑奖管理”的页面
+const dealerAwardManage = (resolve) => { 
+	import('views/award/dealer/dealerAwardManage.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 const complain = [
     {
         path: '/newComplaint',
@@ -116,6 +130,20 @@ const complain = [
             title: '投诉管理',
         },
         component: complaintManagement,
+    },{
+        path: '/dealerComplaintDetail',
+        name: 'dealerComplaintDetail',
+        meta: {
+            title: '投诉详情',
+        },
+        component: dealerComplaintDetail,
+    },{
+        path: '/dealerAwardManage',
+        name: 'dealerAwardManage',
+        meta: {
+            title: '兑奖管理',
+        },
+        component: dealerAwardManage,
     }
 ]
 
