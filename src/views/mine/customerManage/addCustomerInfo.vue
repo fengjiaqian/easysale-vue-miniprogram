@@ -120,7 +120,7 @@
       confirmSale(){
         let activeItem = this.saleList[this.activeIdx]
         this.activeName = activeItem.name
-        this.customerInfo.salesPersonUserId = activeItem.userId
+        this.customerInfo.salesPersonUserId = activeItem.id
         this.rolePopShow = false
       },
       rolePopToggle(){
