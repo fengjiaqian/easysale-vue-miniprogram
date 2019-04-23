@@ -95,10 +95,10 @@ export default {
           query: { userId: item.userId }
         });
       } else if (this.bookMenuType == 2) {
-        //如果是从订单界面过来的 返回订单 带入信息
-        const fromOrder = this.$route.query.fromOrder || false;
+        //如果是从订单界面过来的  返回订单 带入信息
+        const fromOrder = storage.set("fromOrder", false);
         if (fromOrder) {
-          const customerInfo = encodeURIComponent(JSON.stringify(item));
+          const customerInfo = this.encodeUrl(item);
           return this.$router.push({
             path: "/orderSubmit",
             query: {

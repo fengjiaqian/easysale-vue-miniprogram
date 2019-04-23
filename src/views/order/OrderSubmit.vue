@@ -6,7 +6,7 @@
         class="c-theme"
         href="javascript:;"
         @click="_selectCustomer"
-      >{{customers.length?'选择客户':'新增客户'}}</a>
+      >{{'选择客户'}}</a>
     </div>-->
 
     <!--  -->
@@ -119,8 +119,6 @@ export default {
       products: [],
       amount: 0,
       totalMoney: 0,
-      addresList: [], //收货人列表 userType3
-      customers: [], //客户列表   userType1 2
       currentCustomer: {} //当前客户
     };
   },
@@ -137,6 +135,7 @@ export default {
     //
     const customerInfo = this.$route.query.customerInfo || "";
     customerInfo && (this.currentCustomer = this.decodeUrl(customerInfo));
+    storage.set("fromOrder", false);
   },
   mounted() {},
   methods: {
@@ -176,34 +175,12 @@ export default {
         query: { products }
       });
     },
-    //收货人列表
-    listAddress() {
-      queryAddressList()
-        .then(res => {
-          this.addresList = res.data || [];
-        })
-        .catch(err => {
-          this.$toast(err.message);
-        });
-    },
-    //客户列表
-    listCustomers() {
-      findCustomerList()
-        .then(res => {
-          this.customers = res.data || [];
-        })
-        .catch(err => {
-          this.$toast(err.message);
-        });
-    },
     _selectCustomer() {
       if (this.userType != 3) {
         //选择客户
+        storage.set("fromOrder", true);
         return this.$router.push({
-          path: "/my/customerList",
-          query: {
-            fromOrder: true
-          }
+          path: "/my/customerList"
         });
       }
       //选择客户
