@@ -53,6 +53,7 @@
   import { addCustomer,queryStaffList } from "api/fetch/mine";
   import { verifyPhone } from "common/validate";
   import { evokeWxLocation } from "common/location";
+  import storage from "common/storage";
   export default {
     data() {
       return {
