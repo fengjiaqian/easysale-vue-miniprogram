@@ -12,7 +12,7 @@
       <div class="trade">营业执照</div>
       <div class="slider-wrapper bg-w">
         <div class="slider-body">
-          <slider ref="slider_dom">
+          <slider ref="slider_dom" :loop="applyDealerInfo.logoIamgeUrls.length>1?true:false">
             <div class="banner-item" v-for="item in applyDealerInfo.logoIamgeUrls">
               <a href="javascript:;">
                 <img :src="item">
