@@ -196,7 +196,7 @@ export default {
 .item-list {
   padding: 16px 24px;
   flex-center();
-
+  bg(#fff)
   .il-l {
     w(100);
     h(100);
