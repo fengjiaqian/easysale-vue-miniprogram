@@ -5,7 +5,8 @@
     </div>
     <!--  -->
     <div class="center-area">
-      <div class="title">{{title}}</div>
+       <!-- <div class="title">{{title}}</div> -->
+       <slot></slot>
     </div>
     <!-- slot -->
     <div class="icon-shortcut" @click.stop="showShortcutList">
@@ -93,7 +94,7 @@ export default {
         ticking = false;
       var distance = (clientWidth * 90) / 750;
 
-      const scrollDom = document.querySelector("#app");
+      const scrollDom = document.querySelector("#app");//
       scrollDom.addEventListener("scroll", e => {
         this.show = false;
         last_known_scroll_position = scrollDom.scrollTop;

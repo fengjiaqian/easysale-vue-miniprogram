@@ -26,7 +26,6 @@
 
 <script>
 let paramsData = {
-  dealerId: 19990530,
   pageNum: 1,
   pageSize: 8,
   searchKey: null
@@ -44,7 +43,7 @@ export default {
   data() {
     return {
       products: [],
-      empty: false,
+      empty: false
     };
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div id="detail" style="height:140%;">
-    <m-header></m-header>
+    <!-- <m-header></m-header> -->
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
@@ -49,6 +49,7 @@ import floatCart from "components/floatCart.vue";
 import { queryProductDetail, test } from "api/fetch/productDetail";
 import { updateItem, getAllGoods } from "common/goodsStorage";
 import mHeader from "components/header.vue";
+import searchBar from "components/searchBar.vue";
 export default {
   name: "detail",
   data() {
@@ -59,7 +60,8 @@ export default {
   components: {
     numberPicker,
     floatCart,
-    mHeader
+    mHeader,
+    searchBar
   },
   created() {
     this._queryDetail();
