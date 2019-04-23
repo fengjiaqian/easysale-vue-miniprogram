@@ -136,6 +136,8 @@ export default {
     line-height: 78px;
     background: #eee;
     pl(32);
+    ft(28)
+    c-9()
   }
 
   .button-list {

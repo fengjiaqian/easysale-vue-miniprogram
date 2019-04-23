@@ -163,7 +163,7 @@ export default {
   c(#333);
   ft(34);
   i{
-    bg(#FF5638)
+    bg(#ffbd38)
     ft(22)
     c(#fff)
     border-radius 4px
