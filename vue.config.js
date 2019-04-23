@@ -86,17 +86,11 @@ module.exports = {
         hotOnly: true,
         disableHostCheck: true,
         proxy: {
-            // '/ua': {
-            //     target: 'http://ua2.release.yijiupidev.com/himalaya-ApiService-UA2/',
-            //     changeOrigin: true,
-            //     ws: false,
-            //     pathRewrite: { '^/ua': '' }
-            // },
             '/': {
                 //target: 'http://192.168.0.25:5201/', //lidengfeng
                 //target: 'http://192.168.0.221:5201/', //chenchuxiang
                 //target: 'http://192.168.0.133:5201/', //dev
-                //target: 'http://192.168.0.74:5201/', //lilijuan
+                // target: 'http://192.168.0.74:5201/', //lilijuan
                 target: 'http://easysalemini.release.yijiupidev.com/easysaleapi/',
                 ws: false,
                 changeOrigin: true,
