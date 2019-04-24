@@ -1,5 +1,6 @@
 <template>
-  <div class="staff-edit-wrap">
+  <div class="staff-edit-wrap pt90">
+    <m-header :isFixed="true"></m-header>
     <ul class="staff-info-list">
       <li>
         <span>客户姓名：</span>

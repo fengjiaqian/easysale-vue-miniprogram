@@ -1,6 +1,7 @@
 
 <template>
-  <div class="common">
+  <div class="common pt90">
+    <m-header :isFixed="true"></m-header>
     <div class="status">
       <div class="mode">
         <div class="way">申请状态：:</div>

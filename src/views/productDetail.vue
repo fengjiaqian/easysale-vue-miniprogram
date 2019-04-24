@@ -1,6 +1,6 @@
 <template>
-  <div id="detail" style="height:140%;">
-    <!-- <m-header></m-header> -->
+  <div id="detail">
+    <m-header :isFixed="true"></m-header>
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
@@ -15,10 +15,11 @@
       <number-picker :product="product"></number-picker>
     </div>
     <!--  -->
-    <div class="D-info" v-if="product.description">
+    <div class="D-info">
       <h3>商品介绍</h3>
       <ul class="D-info-list">
-        <li>{{product.description}}</li>
+        <li>品牌：{{product.brandName}}</li>
+        <li v-if="product.description">简介：{{product.description}}</li>
       </ul>
     </div>
     <!--  -->
@@ -106,6 +107,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+#detail {
+  pt(90);
+}
+
 .D-link {
   inline();
   width: 50%;
@@ -220,12 +225,13 @@ export default {
   c(#999);
   ft(30);
   pl(24);
-  padding-bottom: 24px;
+  lh(46)
 }
 
 .D-price {
+  pt(16)
   bg(#fff);
-  pb(16);
+  pb(24);
   pl(24);
   h(66);
 }

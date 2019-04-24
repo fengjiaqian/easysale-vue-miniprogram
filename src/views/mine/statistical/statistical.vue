@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="pt90">
+     <m-header :isFixed="true"></m-header>
     <section class="top-bar">
       <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">今日</span>
       <span :class="{'active': activeIdx == 1}" @click="switchBar(1)">7天</span>

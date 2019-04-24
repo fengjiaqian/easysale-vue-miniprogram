@@ -1,5 +1,6 @@
 <template>
   <div id="orderDetail" v-if="order.orderState">
+    <m-header :isFixed="true"></m-header>
     <div class="state">
       订单状态：
       <strong class="c-theme">{{order.orderState | orderState}}</strong>
@@ -124,6 +125,10 @@ export default {
 
 <style lang='stylus' scoped>
 @import './common.styl';
+
+#orderDetail {
+  pt(90);
+}
 
 .remark-txt {
   padding: 12px;

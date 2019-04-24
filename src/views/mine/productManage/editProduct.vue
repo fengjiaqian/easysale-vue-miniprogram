@@ -1,5 +1,6 @@
 <template>
-  <div class="product-add-wrap">
+  <div class="product-add-wrap pt90">
+       <m-header :isFixed="true"></m-header>
     <div>
       <ul class="add-column">
         <li>

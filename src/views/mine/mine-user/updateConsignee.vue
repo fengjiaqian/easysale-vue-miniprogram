@@ -1,5 +1,6 @@
 <template>
-  <div class="common">
+  <div class="common pt90">
+    <m-header :isFixed="true"></m-header>
     <div class="name">
       <div class="left">姓名 :</div>
       <input class="right" type="text" v-model="name" placeholder="请输入姓名">

@@ -1,12 +1,8 @@
 <template>
   <div id="search">
+    <m-header :isSearch="true" placeholder="茅台 五粮液" @emitEvt="_searchKeyChange"></m-header>
     <empty v-if="empty"></empty>
     <float-cart></float-cart>
-    <div class="search-area">
-      <span class="btn" @click="_doSearch">搜索</span>
-      <search-bar @emitEvt="_searchKeyChange" :emit="true"></search-bar>
-    </div>
-    <!--  -->
     <div class="product-list-wrap">
       <scroll
         class="product-list-scroll"
@@ -27,7 +23,7 @@
 <script>
 let paramsData = {
   pageNum: 1,
-  pageSize: 8,
+  pageSize: 10,
   searchKey: null
 };
 import { ListProduct } from "api/fetch/home";
@@ -37,6 +33,7 @@ import searchBar from "components/searchBar.vue";
 import scroll from "components/scroll.vue";
 import floatCart from "components/floatCart.vue";
 import { transformProductList } from "common/productUtil";
+import mHeader from "components/header.vue";
 export default {
   name: "search",
   props: {},
@@ -51,7 +48,8 @@ export default {
     product,
     scroll,
     floatCart,
-    empty
+    empty,
+    mHeader
   },
   created() {
     this.params = paramsData;
@@ -133,11 +131,11 @@ export default {
 
 .product-list-wrap {
   height: 100%;
-  pt(92);
 }
 
 .product-list-scroll {
   height: 100%;
+  overflow: hidden;
 
   .H-product-item:nth-last-of-type(1) .H-product-content {
     border: 0;

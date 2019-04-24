@@ -34,13 +34,6 @@ const Cart = (resolve) => {
 		resolve(module)
 	})
 }
-const UserInfo = (resolve) => {
-	import('views/mine/user/userInfo.vue').then((module) => {
-		resolve(module)
-	})
-}
-
-
 const OrderDetail = (resolve) => {
 	import('views/order/OrderDetail.vue').then((module) => {
 		resolve(module)
