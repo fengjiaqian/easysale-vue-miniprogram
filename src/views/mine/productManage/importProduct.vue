@@ -1,5 +1,5 @@
 <template>
-  <div class="product-import-wrap ddfgrf">
+  <div class="product-import-wrap">
     <!--头部-->
     <section class="pi-header">
       <div class="search-bar">
