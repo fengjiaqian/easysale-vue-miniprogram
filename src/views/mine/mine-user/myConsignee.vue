@@ -1,7 +1,7 @@
 
 <template>
   <div class="common">
-    <div class="search">
+    <!-- <div class="search">
       <input
         class="case"
         type="text"
@@ -10,7 +10,8 @@
         v-model="keyword"
         placeholder="请输入姓名或者电话"
       >
-    </div>
+    </div>-->
+    <m-header :isSearch="true" placeholder="请输入姓名或者电话" @emitEvt="_queryCustomerConsigneeList"></m-header>
     <empty v-if="empty" txt="暂无收货人数据" :iconUrl="avatarUrl"></empty>
     <address-list
       :addressList="addressList"
@@ -32,7 +33,6 @@ import storage from "common/storage";
 export default {
   data() {
     return {
-      keyword: "",
       addressList: [],
       showOperation: true,
       empty: false,
@@ -50,8 +50,8 @@ export default {
     this._queryCustomerConsigneeList();
   },
   methods: {
-    _queryCustomerConsigneeList() {
-      queryCustomerConsigneeList(this.keyword).then(res => {
+    _queryCustomerConsigneeList(keyword = "") {
+      queryCustomerConsigneeList(keyword).then(res => {
         if (res.result === "success" && res.data) {
           this.addressList = res.data;
           this.empty = !this.addressList.length;

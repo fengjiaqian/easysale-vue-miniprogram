@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="pt90">
+    <m-header :isFixed="true"></m-header>
     <ul class="user-info-wrap">
       <li>
         <div>店铺名称：</div>
@@ -17,49 +18,44 @@
         <div>店铺图片：</div>
         <ul class="img-list">
           <li v-for="item in shopInfo.logoIamgeUrls">
-            <img v-lazy="item" >
+            <img v-lazy="item || ''">
           </li>
         </ul>
       </li>
     </ul>
     <router-link to="/my/userInfoEdit">
-      <div class="user-info-edit" @click="skipTo">编辑</div>
+      <div class="user-info-edit">编辑</div>
     </router-link>
   </div>
 </template>
 
 <script>
-  import { queryShopInfo } from "api/fetch/mine";
-  export default {
-    data() {
-      return {
-        shopInfo: {},
-      };
-    },
-    components: {
-
-    },
-    created() {
-      this.initShopInfo()
-    },
-    mounted() {},
-    methods: {
-      initShopInfo(){
-        let param = {}
-        queryShopInfo(param).then(res => {
-          if (res.result === "success" && res.data) {
-            this.shopInfo = res.data
-          }
-        });
-      },
-      skipTo(){
-
-      }
+import { queryShopInfo } from "api/fetch/mine";
+export default {
+  data() {
+    return {
+      shopInfo: {}
+    };
+  },
+  components: {},
+  created() {
+    this.initShopInfo();
+  },
+  mounted() {},
+  methods: {
+    initShopInfo() {
+      let param = {};
+      queryShopInfo(param).then(res => {
+        if (res.result === "success" && res.data) {
+          this.shopInfo = res.data;
+        }
+      });
     }
-  };
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
-  @import "./stylus/user.styl"
+@import './stylus/user.styl';
 </style>
 

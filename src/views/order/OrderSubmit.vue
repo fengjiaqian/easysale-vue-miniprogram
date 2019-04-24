@@ -1,5 +1,6 @@
 <template>
   <div class="order-submit">
+    <m-header :isFixed="true"></m-header>
     <!--  -->
     <div class="order-detail-area">
       <h5>
@@ -47,8 +48,8 @@
           class="remark-txt"
           name="remark"
           id="remark"
-          cols="50"
-          rows="4"
+          cols="60"
+          rows="3"
           placeholder="请输入备注"
           v-model="remark"
         ></textarea>
@@ -202,10 +203,12 @@ export default {
 @import './common.styl';
 
 .order-submit {
+  pt(90);
   pb(92);
 }
 
 .remark-txt {
+  width: 100%;
   padding: 12px;
   ft(28);
   c(#999);
