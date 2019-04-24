@@ -60,6 +60,24 @@
         <p>下单时间：{{order.createTime}}</p>
       </div>
     </div>
+    <!-- 备注 -->
+    <div class="order-detail-area" v-if="order.canRefuse">
+      <h5>
+        备注
+        <span class="c-9 fz28">(若拒绝，则必须填写拒绝原因)</span>
+      </h5>
+      <div class="info-display">
+        <textarea
+          class="remark-txt"
+          name="remark"
+          id="remark"
+          cols="50"
+          rows="4"
+          placeholder="请输入内容"
+          v-model="remark"
+        ></textarea>
+      </div>
+    </div>
     <!--  -->
     <div class="bottom-wrap" v-if="order.canRefuse">
       <a href="javascript:;" class="btn" @click="_operate(3,order.id)">拒绝</a>
@@ -83,7 +101,8 @@ export default {
   name: "order-detail",
   data() {
     return {
-      order: {}
+      order: {},
+      remark: ""
     };
   },
   created() {
@@ -125,6 +144,13 @@ export default {
 
 <style lang='stylus' scoped>
 @import './common.styl';
+
+.remark-txt {
+  padding: 12px;
+  ft(28);
+  c(#999);
+  line-height: 1.2;
+}
 
 .bottom-wrap {
   pos(fixed);

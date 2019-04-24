@@ -56,6 +56,10 @@ export default {
     speed: {
       type: Number,
       default: 400
+    },
+    data: {
+      type: Array,
+      default: null
     }
   },
   data() {
@@ -155,7 +159,7 @@ export default {
         scrollY: false,
         momentum: false,
         freeScroll: true,
-        eventPassthrough: 'vertical',
+        eventPassthrough: "vertical",
         snap: {
           loop: this.loop,
           threshold: this.threshold,
@@ -206,12 +210,14 @@ export default {
     },
     threshold() {
       this.update();
+    },
+    data() {
+      this.update();
     }
   }
 };
 </script>
 <style lang="stylus"  scoped>
-
 .slide {
   min-height: 1px;
 
@@ -252,14 +258,14 @@ export default {
   .dot {
     display: inline-block;
     margin: 0 4px;
-    width:10px;
-    height:6px;
-    background:rgba(189,189,189,1);
-    border-radius:4px;
+    width: 10px;
+    height: 6px;
+    background: rgba(189, 189, 189, 1);
+    border-radius: 4px;
 
     &.active {
-      width:21px;
-      background: rgba(229,57,53,0.8);
+      width: 21px;
+      background: rgba(229, 57, 53, 0.8);
     }
   }
 }

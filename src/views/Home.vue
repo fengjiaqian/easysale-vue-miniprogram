@@ -4,7 +4,7 @@
     <!--  -->
     <div class="home-banner" v-if="banners.length">
       <div class="slider-body">
-        <slider :loop="true" ref="slider_dom">
+        <slider :loop="true" :data="banners" ref="slider_dom">
           <div class="banner-item" v-for="item in banners" :key="item.id">
             <img :src="item.cloudSrc" alt>
           </div>
