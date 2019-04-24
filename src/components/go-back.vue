@@ -33,12 +33,16 @@ export default {
           break;
         case 'addStaffInfo':
           this.$router.push({ path: "/my/staffList" });
+          break;
         case 'productList':
         case 'staffList':
         case 'customerList':
         case 'userInfo':
         case 'writeApplicationInformation':
           this.$router.push({ path: "/navi/mine" });
+          break;
+        case 'updateConsignee':
+          this.$router.push({ path: "/myConsignee" });
           break;
         default :
           this.$router.go(-1);
