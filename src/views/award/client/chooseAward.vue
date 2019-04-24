@@ -5,7 +5,7 @@
             <input type="text" class="search" placeholder="请输入商品名称">
         </div>
         <div class="top-support"></div>
-        <div class="list" v-for="x in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
+        <div class="list" v-for="x in [1,1,1,1,1,1]">
             <img src="../../../assets/images/icon-checked.png" alt="" class="type">
             <!-- <img src="'../../../assets/images/icon-check.png'" alt="" class="type"> -->
             <img src="../../../assets/images/user_code_icon.png" alt="" class="boot"> 

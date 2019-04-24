@@ -41,7 +41,7 @@
   export default {
     data() {
       return {
-        judgeCode :1,
+        judgeCode :2,
       }
     },
     computed: {
