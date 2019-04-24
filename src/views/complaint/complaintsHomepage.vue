@@ -9,7 +9,7 @@
 <script>
     import TopTabs from "../../components/topTabs";
     export default {
-        name: '',
+        name: 'complaintsHomepage',
         components: {TopTabs},
         data() {
             return {
