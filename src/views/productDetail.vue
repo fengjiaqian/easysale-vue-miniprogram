@@ -225,15 +225,14 @@ export default {
   c(#999);
   ft(30);
   pl(24);
-  lh(46)
+  lh(46);
 }
 
 .D-price {
-  pt(16)
+  pt(16);
   bg(#fff);
   pb(24);
   pl(24);
-  h(66);
 }
 
 .D-number {

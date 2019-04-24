@@ -209,7 +209,8 @@ export default {
 .center-area {
   width: 100%;
   h(90);
-  padding: 0 88px;
+  padding: 15px 100px 0;
+  bg(#fff);
 
   .title {
     lh(90);
@@ -272,12 +273,12 @@ export default {
 
 .search-bar {
   flex-1();
-  height: 100%;
   display: flex;
   align-items: center;
   border: 1PX solid #ededed;
-  border-radius: 8px;
+  radius(8);
   background: #f2f2f2;
+  overflow: hidden;
 
   .s-b-l {
     display: inline-block;

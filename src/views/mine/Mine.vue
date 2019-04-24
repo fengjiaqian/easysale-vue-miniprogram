@@ -5,7 +5,7 @@
         <img v-lazy="avatarUrl" alt>
       </div>
       <div class="user-tel" @click="_jumpUserInfo">
-        <h5>{{nickName || '访客'}}</h5>
+        <h5>{{nickName || '未命名'}}</h5>
 
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
