@@ -90,7 +90,7 @@ export default {
   overflow: hidden;
   display: border-box;
   background-color: #fff;
-  border-bottom: 1px solid #f6f6f6;
+  border-bottom: 1PX solid #f6f6f6;
 }
 
 // .common .list .part:last-child{
@@ -144,7 +144,7 @@ export default {
   width: 88px;
   height: 56px;
   border-radius: 8px;
-  border: 1px solid rgba(221, 221, 221, 1);
+  border: 1PX solid rgba(221, 221, 221, 1);
   font-size: 28px;
   color: rgba(102, 102, 102, 1);
   line-height: 56px;
@@ -157,7 +157,7 @@ export default {
   width: 88px;
   height: 56px;
   border-radius: 8px;
-  border: 1px solid rgba(221, 221, 221, 1);
+  border: 1PX solid rgba(221, 221, 221, 1);
   font-size: 28px;
   color: rgba(102, 102, 102, 1);
   line-height: 56px;

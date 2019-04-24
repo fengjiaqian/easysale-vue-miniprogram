@@ -134,7 +134,7 @@ export default {
   color: rgba(255, 86, 56, 1);
   line-height: 98px;
   text-align: center;
-  border-top: 1px solid #ededed;
+  border-top: 1PX solid #ededed;
 }
 
 .common .support {

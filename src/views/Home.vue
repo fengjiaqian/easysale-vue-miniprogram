@@ -451,7 +451,7 @@ export default {
   width: 100%;
   h(88);
   bg(#fff);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1PX solid rgba(0, 0, 0, 0.1);
 
   .scroll-menu-area {
     mr(88);
@@ -464,7 +464,7 @@ export default {
     height: 88px;
     position: relative;
     z-index: 1;
-    box-shadow: -1px 0px 4px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: -1PX 0px 4px 0px rgba(0, 0, 0, 0.1);
     background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
     background-size: 42px 42px;
     transition: all 0.2s;
@@ -514,18 +514,18 @@ export default {
       font-size: 30px;
       color: #666;
       border-radius: 2px;
-      border: 1px solid rgba(189, 189, 189, 1);
+      border: 1PX solid rgba(189, 189, 189, 1);
       text-align: center;
 
       &.active {
         color: #E53935;
-        border: 1px solid #E53935;
+        border: 1PX solid #E53935;
       }
     }
 
     .squre-item-active {
       color: #E53935;
-      border: 1px solid #E53935;
+      border: 1PX solid #E53935;
     }
   }
 

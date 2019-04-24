@@ -35,7 +35,7 @@ export default {
     display: border-box;
     padding: 24px;
     padding: 24px 24px 10px 24px;
-    border-bottom :1px solid #f6f6f6;
+    border-bottom :1PX solid #f6f6f6;
     position: fixed;
     top: 0;
     z-index: 100;

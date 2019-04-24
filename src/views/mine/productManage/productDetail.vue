@@ -128,7 +128,7 @@ export default {
     pl(24);
     c(#333);
     ft(30);
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
   }
 }
 

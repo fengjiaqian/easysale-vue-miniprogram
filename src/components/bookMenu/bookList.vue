@@ -151,7 +151,7 @@ export default {
         margin: 5px;
         padding: 5px;
         font-size: 12px;
-        border: 1px solid #ccc;
+        border: 1PX solid #ccc;
         border-radius: 3px;
         text-align: center;
       }

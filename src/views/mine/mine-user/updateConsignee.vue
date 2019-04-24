@@ -89,7 +89,7 @@ export default {
   height: 90px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
-  border-bottom: 1px solid #f6f6f6;
+  border-bottom: 1PX solid #f6f6f6;
 }
 
 .common .tele {

@@ -131,7 +131,7 @@ export default {
   font-weight: bold;
   color: rgba(51, 51, 51, 1);
   line-height: 42px;
-  border-bottom: 1px solid #f6f6f6;
+  border-bottom: 1PX solid #f6f6f6;
 }
 
 .common .infor .news, .common .infor .detail {
@@ -141,7 +141,7 @@ export default {
   font-weight: 400;
   color: rgba(102, 102, 102, 1);
   line-height: 42px;
-  border-bottom: 1px solid #f6f6f6;
+  border-bottom: 1PX solid #f6f6f6;
 }
 
 .common .infor .news .name, .common .infor .detail .name {

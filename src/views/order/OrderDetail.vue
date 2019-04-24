@@ -136,7 +136,7 @@ export default {
   pos(fixed);
   width: 100%;
   bottom: 0;
-  border-top: 1px solid #EDEDED;
+  border-top: 1PX solid #EDEDED;
 }
 
 .btn {
@@ -182,12 +182,12 @@ export default {
   h5 {
     lh(90);
     ft(30);
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
   }
 
   .info-display {
     &:nth-of-type(2) {
-      border-top: 1px solid #EDEDED;
+      border-top: 1PX solid #EDEDED;
     }
   }
 }
@@ -200,7 +200,7 @@ export default {
     ft(30);
     c(#333);
     text-align: right;
-    border-top: 1px solid #EDEDED;
+    border-top: 1PX solid #EDEDED;
 
     .order-price {
       ft(26);

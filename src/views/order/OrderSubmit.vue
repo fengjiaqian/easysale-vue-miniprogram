@@ -280,12 +280,12 @@ export default {
     lh(90);
     ft(30);
     fb();
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
   }
 
   .info-display {
     &:nth-of-type(2) {
-      border-top: 1px solid #EDEDED;
+      border-top: 1PX solid #EDEDED;
     }
   }
 }
@@ -296,7 +296,7 @@ export default {
     ft(30);
     c(#333);
     text-align: right;
-    border-top: 1px solid #EDEDED;
+    border-top: 1PX solid #EDEDED;
   }
 }
 </style>

@@ -121,7 +121,7 @@ export default {
   h(90);
   bg(#fff);
   pos(relative);
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1PX solid #e5e5e5;
 }
 
 .header-fixed {
@@ -188,7 +188,7 @@ export default {
     position: absolute;
     top: -10px;
     right: 10px;
-    width: 21px;
+    width: 21PX;
     height: 10px;
     background: url('../assets/images/icon-sanjiao.png') no-repeat;
     background-size: 100% 100%;
@@ -200,7 +200,7 @@ export default {
   display: block;
   position: relative;
   margin-left: 80px;
-  border-bottom: 1px solid hsla(0, 0%, 100%, 0.2);
+  border-bottom: 1PX solid hsla(0, 0%, 100%, 0.2);
   height: 80px;
   line-height: 80px;
   z-index: 1000;

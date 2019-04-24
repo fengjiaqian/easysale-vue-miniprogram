@@ -68,12 +68,22 @@ module.exports = {
     },
     css: {
         modules: false,
-        extract: IS_PROD, //IS_PROD ==>true
+        extract: false,
         sourceMap: false,
-        loaderOptions: {}
+        loaderOptions: {
+          stylus: {
+            'resolve url': true,
+            'import': [
+              './src/theme'
+            ]
+          }
+        }
     },
     pluginOptions: {
-
+      'cube-ui': {
+        postCompile: true,
+        theme: true
+      }
     },
     parallel: require('os').cpus().length > 1,
     pwa: {},

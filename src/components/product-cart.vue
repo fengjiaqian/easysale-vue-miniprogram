@@ -100,7 +100,7 @@ export default {
   pr(24);
   pb(24);
   ml(168);
-  border-bottom: 1px solid #EDEDED;
+  border-bottom: 1PX solid #EDEDED;
 
   .name {
     pr(30);
