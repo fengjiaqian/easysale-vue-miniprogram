@@ -125,7 +125,7 @@ export default {
   pl(24);
   ft(26);
   c(#333);
-  border-bottom: 1px solid #F2F2F2;
+  border-bottom: 1PX solid #F2F2F2;
 }
 
 .dealer-item {
@@ -166,7 +166,7 @@ export default {
   .content {
     ml(124);
     h(148);
-    border-bottom: 1px solid #F2F2F2;
+    border-bottom: 1PX solid #F2F2F2;
 
     p {
       &:nth-of-type(1) {

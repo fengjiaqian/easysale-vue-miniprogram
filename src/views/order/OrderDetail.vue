@@ -6,39 +6,20 @@
     </div>
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
-      <!-- 单个产品 -->
-      <div class="single-sku clearfix" v-if="order.orderItem.length===1">
-        <div class="s-s-img">
-          <img v-lazy="order.orderItem[0].product.productImageUrl" alt>
-        </div>
-        <div class="s-s-main">
-          <p class="name">{{order.orderItem[0].product.productName}}</p>
-          <div
-            class="price"
-          >{{order.orderItem[0].product.price}}元/{{order.orderItem[0].product.priceUnit}}</div>
-          <div class="price">
-            <span>规格：{{order.orderItem[0].product.specification}}</span>
-            <span class="frt fz28">X{{order.orderItem[0].quantity}}</span>
-          </div>
-        </div>
-      </div>
-      <!-- 多个产品 -->
-      <div class="multiple-skus" v-else @click="_jumpGoodsList">
-        <div class="m-s-amount">共{{order.totalQuantity}}></div>
-        <ul class="m-s-skus clearfix">
-          <li v-for="item in order.orderItem" :key="item.orderId">
-            <a href="javascript:;">
-              <img v-lazy="item.product.productImageUrl" alt>
-              <span>X{{item.quantity}}{{item.product.priceUnit}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <order-products v-if="products.length" :products="products"></order-products>
+      <!--  -->
       <div class="order-detail-amount">
-        订单总金额：
-        <span class="c-theme">&yen;{{order.orderAmount}}</span>
+        <div class="order-price" v-if="order.reduceAmount">
+          <span>原价：&yen;{{order.orderAmount | priceToFixed}}</span>
+          <span>优惠：&yen;{{order.reduceAmount | priceToFixed}}</span>
+        </div>
+        <div class="fz30">
+          实付：
+          <span class="c-theme">&yen;{{order.payableAmount | priceToFixed}}</span>
+        </div>
       </div>
     </div>
+    <!--  -->
     <div class="order-detail-area">
       <h5>收货人信息</h5>
       <div class="info-display pre">
@@ -74,7 +55,7 @@
           cols="50"
           rows="4"
           placeholder="请输入内容"
-          v-model="remark"
+          v-model="reason"
         ></textarea>
       </div>
     </div>
@@ -93,17 +74,21 @@
 /**
  * 1.标题不同
  * 2.操作项不同
- *
  */
 import { UpdateOrder, QueryOrders } from "api/fetch/order";
-import { transformOrderList, orderOperate } from "./orderOperate";
+import { orderOperate, pullProductsFromOrder } from "./orderOperate";
+import orderProducts from "components/order-products.vue";
 export default {
   name: "order-detail",
   data() {
     return {
       order: {},
-      remark: ""
+      products: [],
+      reason: ""
     };
+  },
+  components: {
+    orderProducts
   },
   created() {
     this._QueryOrders();
@@ -116,25 +101,20 @@ export default {
         id: orderId
       })
         .then(res => {
-          const orders = transformOrderList(res.data.dataList);
+          const orders = res.data.dataList;
           orders.length && (this.order = orders[0]);
+          this.products = pullProductsFromOrder(this.order);
         })
         .catch(err => {
           this.$toast(err.message);
         });
     },
-    _jumpGoodsList() {
-      let products = this.order.orderItem.map(item => item.product);
-      this.$router.push({
-        path: "/goodsList",
-        query: { products: this.encodeUrl(products) }
-      });
-    },
     //封装到operate
     _operate(state, orderId) {
       const options = {
         state,
-        orderId
+        orderId,
+        audit_remark: this.reason
       };
       orderOperate.call(this, options, this._QueryOrders.bind(this));
     }
@@ -156,7 +136,7 @@ export default {
   pos(fixed);
   width: 100%;
   bottom: 0;
-  border-top: 1px solid #EDEDED;
+  border-top: 1PX solid #EDEDED;
 }
 
 .btn {
@@ -202,23 +182,34 @@ export default {
   h5 {
     lh(90);
     ft(30);
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
   }
 
   .info-display {
     &:nth-of-type(2) {
-      border-top: 1px solid #EDEDED;
+      border-top: 1PX solid #EDEDED;
     }
   }
 }
 
 .product-Info {
   .order-detail-amount {
-    lh(90);
+    pt(16);
+    pb(16);
+    lh(42);
     ft(30);
     c(#333);
     text-align: right;
-    border-top: 1px solid #EDEDED;
+    border-top: 1PX solid #EDEDED;
+
+    .order-price {
+      ft(26);
+      c(#666);
+
+      span:nth-of-type(2) {
+        ml(24);
+      }
+    }
   }
 }
 

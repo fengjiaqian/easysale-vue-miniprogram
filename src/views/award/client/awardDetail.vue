@@ -116,7 +116,7 @@
     #common .content .list{
         h(130)
         bg(white);
-        border-top: 1px solid #f6f6f6;
+        border-top: 1PX solid #f6f6f6;
         padding-top: 24px;
         overflow :hidden;
         margin-bottom: 24px;
@@ -169,13 +169,13 @@
         font-size:30px;
         font-weight :bold;
         margin-bottom :24px;
-        // border-bottom :1px solid #f6f6f6;
+        // border-bottom :1PX solid #f6f6f6;
     }
 
     #common .company .type,
     #common .time .title,
     #common .remark .title{
-        border-bottom :1px solid #f6f6f6;
+        border-bottom :1PX solid #f6f6f6;
          margin-bottom :0;
         lh(90);
     }

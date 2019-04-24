@@ -2,14 +2,14 @@ import Vue from 'vue'
 
 Vue.filter('price', function (val, unit = "") {
 	if (!val) {
-		return `&yen;<span class="fz38">?<span><span class="fz28">元/${unit}</span>`
+		return `<em class="fz28">&yen;</em><span class="fz38">?<span><span class="fz28">元/${unit}</span>`
 	}
 	let value = '0.00';
 	if (val) {
 		value = val.toFixed(2);
 	}
 	let nums = value.split('.');
-	return `&yen;<span class="fz38">${nums[0]}<span><span class="fz28">.${nums[1]}<span class="fz28">元/${unit}</span></span>`
+	return `<em class="fz28">&yen;</em><span class="fz38">${nums[0]}<span><span class="fz28">.${nums[1]}<span class="fz28">元/${unit}</span></span>`
 })
 
 Vue.filter('orderState', function (state) {

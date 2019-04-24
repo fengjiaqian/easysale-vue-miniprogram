@@ -77,8 +77,8 @@
   left: 0;
   top: 0;
   right: 0;
-  height: 1px;
-  border-top: 1px solid #D5D5D6;
+  height: 1PX;
+  border-top: 1PX solid #D5D5D6;
   color: #D5D5D6;
   transform-origin: 0 0;
   transform: scaleY(0.5);

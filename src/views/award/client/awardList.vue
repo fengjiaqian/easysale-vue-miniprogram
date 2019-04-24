@@ -128,7 +128,7 @@ export default {
     // opt
     #common .opt{
         overflow:hidden;
-        border-top:1px solid #f6f6f6;
+        border-top:1PX solid #f6f6f6;
     }
 
     #common .opt .nav{
@@ -211,7 +211,7 @@ export default {
         font-size :28px;
         padding-top:16px;
         padding-bottom :16px;
-        border-bottom :1px solid #f6f6f6;
+        border-bottom :1PX solid #f6f6f6;
     }
 
      #common .message .type-2{
@@ -219,7 +219,7 @@ export default {
         font-size :28px;
         padding-top:16px;
         padding-bottom :16px;
-        // border-bottom :1px solid #f6f6f6;
+        // border-bottom :1PX solid #f6f6f6;
         
     }
 
@@ -232,7 +232,7 @@ export default {
         w(160)
         h(64)
         float:right;
-        border:1px solid #f6f6f6;
+        border:1PX solid #f6f6f6;
         c(#333)
         text-align :center;
         lh(64)
@@ -248,7 +248,7 @@ export default {
         color: rgba(255, 86, 56, 1);
         line-height: 98px;
         text-align: center;
-        border-top:1px solid #ededed;
+        border-top:1PX solid #ededed;
     }
     #common .support{
         h(98)

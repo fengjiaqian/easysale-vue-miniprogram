@@ -170,7 +170,7 @@ export default {
   c(#333);
   flex-center();
   justify-content: space-between;
-  border-bottom: 1px solid #EDEDED;
+  border-bottom: 1PX solid #EDEDED;
 
   strong {
     ft(34);

@@ -40,8 +40,14 @@
       </div>
     </div>
     <div class="O-item-amount">
-      订单总金额：
-      <span class="c-theme">&yen;{{order.orderAmount}}</span>
+      <div class="order-price" v-if="order.reduceAmount">
+        <span>原价：&yen;{{order.orderAmount | priceToFixed}}</span>
+        <span>优惠：&yen;{{order.reduceAmount | priceToFixed}}</span>
+      </div>
+      <div class="fz30">
+        实付：
+        <span class="c-theme">&yen;{{order.payableAmount | priceToFixed}}</span>
+      </div>
     </div>
     <div class="O-item-btns" v-if="userType!=3 && order.orderState==1">
       <a href="javascript:;" class="btn" @click.stop="_operate(3)">拒绝</a>
@@ -155,17 +161,23 @@ export default {
 
   .O-item-skus {
     padding: 24px;
-    bg(#FAFAFB);
   }
 
   .O-item-amount {
-    h(88);
-    lh(88);
-    padding: 0 24px;
+    lh(42);
+    padding: 16px 24px;
     text-align: right;
-    ft(28);
     c(#333);
     border-bottom: 1PX solid rgba(0, 0, 0, 0.1);
+
+    .order-price {
+      ft(26);
+      c(#666);
+
+      span:nth-of-type(2) {
+        ml(24);
+      }
+    }
   }
 
   .O-item-btns {

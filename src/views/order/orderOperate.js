@@ -1,9 +1,5 @@
-/**
- * 
- * @param {*} list  初始订单列表
- */
 import storage from 'common/storage'
-import { UpdateOrder, QueryOrders } from "api/fetch/order";
+import { UpdateOrder } from "api/fetch/order";
 
 export function transformOrderList(list) {
 
@@ -24,6 +20,16 @@ export function transformOrderList(list) {
         }
     }
     return list;
+}
+/**
+ * 从订单详情中得到products
+ * @param {*} order 
+ */
+export function pullProductsFromOrder(order) {
+    return order.orderItem.map(item => {
+        item.product.buyCount = item.quantity;
+        return item.product
+    })
 }
 /**
  *  订单操作

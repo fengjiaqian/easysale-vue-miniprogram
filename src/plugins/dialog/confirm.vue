@@ -67,7 +67,7 @@
   left: 0;
   top: 0;
   right: 0;
-  height: 1px;
+  height: 1PX;
   border-top: 1PX solid #D5D5D6;
   color: #D5D5D6;
   -webkit-transform-origin: 0 0;
@@ -99,7 +99,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 1px;
+  width: 1PX;
   bottom: 0;
   border-left: 1PX solid #D5D5D6;
   color: #D5D5D6;

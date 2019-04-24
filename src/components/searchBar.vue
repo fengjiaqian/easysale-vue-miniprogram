@@ -4,7 +4,7 @@
       <span class="s-b-l"></span>
       <input
         ref="inputDom"
-        type="text"
+        type="search"
         :value="searchKey"
         @click="_searchBarJump"
         placeholder="茅台 五粮液"
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { setTimeout } from "timers";
 export default {
   name: "search-bar",
   data() {
@@ -33,7 +34,9 @@ export default {
       //是否点击跳转 首页
       type: Boolean,
       default: false
-    }
+    },
+  },
+  mounted() {
   },
   methods: {
     _searchBarJump() {

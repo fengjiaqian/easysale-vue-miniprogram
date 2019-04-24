@@ -3,7 +3,7 @@
     <li v-for="item in orderTab" :key="item.state">
       <a
         href="javascript:;"
-        :class="{'active': item.state === initialState}"
+        :class="{'active': item.state == initialState }"
         @click.stop="_switchOrderType(item.state)"
       >{{item.text}}</a>
     </li>
@@ -19,12 +19,9 @@ export default {
   props: {
     orderTab: {
       type: Array,
-      default: () => []  //{text,state}[]
+      default: () => [] //{text,state}[]
     },
-    initialState: {
-      type: Number,
-      default: 1
-    }
+    initialState: [String, Number]
   },
   created() {},
   mounted() {},
@@ -54,7 +51,7 @@ export default {
       inline();
       lh(80);
       padding: 0 28px;
-      ft(30);  
+      ft(30);
       c(#333);
 
       &.active {

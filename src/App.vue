@@ -18,7 +18,16 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    document.body.addEventListener("touchend", function(el) {
+      if (el.target.tagName != "INPUT") {
+        const els = document.querySelectorAll("input");
+        Array.prototype.slice.call(els).forEach(input => {
+          input.blur();
+        });
+      }
+    });
+  },
   components: {
     goBack
   },
