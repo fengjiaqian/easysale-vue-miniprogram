@@ -24,9 +24,7 @@ export function findCustomerList(keyword = "") {
  * 客户或者经销商fetch店铺log 
  */
 export function ListDealerLogs() {
-    const token = localStorage.getItem('token') || '';
     let url = "/dealer/findShopLogoListByCustomer";
-    token && (url = "/dealer/findShopLogoListByDealer");
     return axios({
         method: 'post',
         url,

@@ -95,10 +95,12 @@ import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
 import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "home",
   data() {
     return {
+      loop: true,
       appIcons: appIcons,
       productList: [],
       currentColumnId: "",
@@ -166,6 +168,7 @@ export default {
       if (nickName && avatarUrl) {
         storage.remove("token");
         storage.remove("userType");
+        storage.remove("currentDealerId");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
@@ -174,6 +177,7 @@ export default {
     _listDealerLogs() {
       ListDealerLogs().then(res => {
         this.banners = res.data;
+        this.loop = this.banners.length > 1;
       });
     },
     _queryHomeProducts() {

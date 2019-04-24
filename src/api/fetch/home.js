@@ -8,7 +8,7 @@ export function ListProduct(params = {}) {
 		pageNum: params.pageNum || 1,
 		pageSize: params.pageSize || 20,
 		searchKey: params.searchKey || '',
-		state: params.state || 1,
+		state: 1
 	}
 	const url = "/product/productList"
 	return axios({

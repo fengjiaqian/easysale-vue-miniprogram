@@ -90,6 +90,7 @@ export default {
     _searchKeyChange(searchKey) {
       this.params.searchKey = searchKey;
       this.params.pageNum = 1;
+      this._doSearch();
     },
     _doSearch() {
       this._listProduct(this.params);
@@ -137,5 +138,9 @@ export default {
 
 .product-list-scroll {
   height: 100%;
+
+  .H-product-item:nth-last-of-type(1) .H-product-content {
+    border: 0;
+  }
 }
 </style>

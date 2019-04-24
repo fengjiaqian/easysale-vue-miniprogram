@@ -6,6 +6,7 @@
     </div>
     <div class="C-product-content">
       <p class="name">{{product.productName}}</p>
+      <div class="spec">规格： {{product.specification}}</div>
       <div class="price">
         <div>
           <span class="c-yellow" v-html="$options.filters.price( product.price, product.priceUnit)"></span>
@@ -110,11 +111,10 @@ export default {
   }
 
   .spec {
-    mt(25);
     h(36);
     lh(36);
     ft(26);
-    c(#999);
+    c(#666);
   }
 
   .price {

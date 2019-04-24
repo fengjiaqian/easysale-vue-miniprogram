@@ -57,6 +57,7 @@
 <script>
 import Bscroll from "better-scroll";
 import bus from "common/Bus";
+import storage from "common/storage";
 export default {
   name: "bookList",
   props: {
@@ -96,7 +97,7 @@ export default {
         });
       } else if (this.bookMenuType == 2) {
         //如果是从订单界面过来的  返回订单 带入信息
-        const fromOrder = storage.set("fromOrder", false);
+        const fromOrder = storage.get("fromOrder", false);
         if (fromOrder) {
           const customerInfo = this.encodeUrl(item);
           return this.$router.push({

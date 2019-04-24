@@ -28,7 +28,7 @@ import AddressList from "./address-list.vue";
 import empty from "components/empty.vue";
 import avatarUrl from "@/assets/images/icon-product-empty.png";
 import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
-
+import storage from "common/storage";
 export default {
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
   mounted() {},
   computed: {},
   created() {
-    this.showOperation = !this.$route.query.fromOrder;
+    this.showOperation = storage.get("fromOrder", false);
     this._queryCustomerConsigneeList();
   },
   methods: {
@@ -65,7 +65,7 @@ export default {
       }
     },
     _bindTap(item) {
-      if (this.$route.query.fromOrder) {
+      if (storage.get("fromOrder", false)) {
         this.$router.push({
           path: "/orderSubmit",
           query: {
@@ -80,9 +80,6 @@ export default {
         name: "updateConsignee",
         params: {
           code: 1
-        },
-        query: {
-          fromOrder: this.$route.query.fromOrder || false
         }
       });
     }
@@ -140,7 +137,7 @@ export default {
   border-top: 1px solid #ededed;
 }
 
-.common .support{
-  h(98)
+.common .support {
+  h(98);
 }
 </style>

@@ -43,9 +43,6 @@ export default {
   },
   methods: {
     init() {
-      //是否从order页面
-      this.fromOrder = this.$route.query.fromOrder || false;
-      //
       this.code = this.$route.params.code;
       let addressInfo = this.$route.query.addressInfo;
       addressInfo && (addressInfo = this.decodeUrl(addressInfo));
@@ -69,15 +66,6 @@ export default {
       const operate = this.code == 1 ? "addConsigneer" : "modifyConsignee";
       Operation[operate](params)
         .then(res => {
-          //TODO 跳到orderSubmit无法带上id
-          if (this.code == 1 && this.fromOrder) {
-            return this.$router.push({
-              path: "/myConsignee",
-              query: {
-                fromOrder: true
-              }
-            });
-          }
           this.$router.push({
             path: "/myConsignee"
           });

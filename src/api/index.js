@@ -8,13 +8,11 @@ axios.interceptors.request.use(function (config) {
 
 	const token = storage.get("token", "");
 	const userType = storage.get("userType", "");
-	//如果缓存里面没有token userId  ，req 默认带一个 default_dealerId （类似酒批默认城市 南京）。
-	const default_dealerId = storage.get("currentDealerId", "") || "19990530";  //default_dealerId
+	const currentDealerId = storage.get("currentDealerId", "") || "";
 	if (token) {
 		config.headers.token = token;
 	}
-	//一个终端用只匹配当前选择的dealerId
-	config.data.dealerId = default_dealerId;
+	config.data.dealerId = currentDealerId;
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();
@@ -30,7 +28,7 @@ axios.interceptors.request.use(function (config) {
 	// }
 	if (IS_PROD) {
 		config.url = "/easysaleapi" + config.url
-	} 
+	}
 	return config;
 }, function (error) {
 	return Promise.reject(error);
@@ -44,8 +42,6 @@ axios.interceptors.response.use(function (response) {
 	if (response.data.result != 'success') {
 		return Promise.reject(response);
 	}
-
-
 	// if (response.data && (response.data.message === '100102009'
 	// 	|| response.data.desc == '登录已过期，请重新登录~')) {
 

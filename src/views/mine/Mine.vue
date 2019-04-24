@@ -112,6 +112,7 @@ export default {
     },
     //申请经销商后 刷新申请中的状态
     _findCustomerOwerInfo() {
+      if (this.isVisitor) return false;
       findCustomerOwerInfo()
         .then(res => {
           this.applyDealerState = res.data.applyDealerState; //0:正在申请成为经销商 1：没有申请
@@ -211,6 +212,7 @@ export default {
       background-image: url('../../assets/images/customer_icon.png');
     }
   }
+
   .enter-item-txt {
     border-bottom: 1px solid #ededed;
   }
