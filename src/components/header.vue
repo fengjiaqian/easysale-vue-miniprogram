@@ -81,7 +81,6 @@ export default {
     return {
       show: false,
       searchKey: "",
-      title: document.title,
       fixedStyleObj: fixedStyleObj
     };
   },
