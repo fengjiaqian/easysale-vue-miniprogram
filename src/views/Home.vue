@@ -1,86 +1,133 @@
 <template>
-  <div id="home" ref="scrollDom" :class="{'pt174': userType==3}">
+  <div id="home" ref="scrollDom">
     <float-cart></float-cart>
-    <!--  -->
-    <div class="home-banner" v-if="banners.length">
-      <div class="slider-body">
-        <slider :loop="true" :data="banners" ref="slider_dom">
-          <div class="banner-item" v-for="item in banners" :key="item.id">
-            <img :src="item.cloudSrc" alt>
+    <search-bar :jump="true"></search-bar>
+    <div class="view-wrapper">
+      <!-- 定位导航 -->
+      <div class="fixed-nav">
+        <div class="scroll-menu-wrap clearfix" v-show="showFixed">
+          <div
+            class="s-m-btn"
+            v-if="menuCanScroll"
+            @click="showSqure=!showSqure"
+            :class="{'active':showSqure}"
+          ></div>
+          <div class="scroll-menu-area">
+            <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu2">
+              <ul ref="scroll_menu_content2" class="scroll-menu-ul">
+                <li
+                  v-for="(menu, index) in scrollMenu"
+                  :key="menu.brandId"
+                  :id="'menu'+menu.brandId"
+                >
+                  <a
+                    href="javascript:;"
+                    class="c-3 fz30"
+                    @click="bindClickMenu(index)"
+                    :class="{'active':currentIndex == index}"
+                  >{{menu.brandName}}</a>
+                </li>
+              </ul>
+            </scroll>
           </div>
-        </slider>
-      </div>
-    </div>
-    <!--  -->
-    <div class="select-dealer" v-if="userType==3">
-      <div class="left" @click="_jumpDealerList">
-        <img v-lazy="currentDealer.logoIamgeUrl" alt>
-        <strong>{{currentDealer.shopName}}</strong>
-        <em></em>
-      </div>
-    </div>
-    <search-bar :jump="true" :class="{'top82': userType==3}"></search-bar>
-    <!--  -->
-    <ul class="home-icons clearfix">
-      <li v-for="item in appIcons">
-        <a @click="jumpSecondsort(item)">
-          <img v-lazy="item.imgUrl || ''">
-          <span>{{item.value}}</span>
-        </a>
-      </li>
-    </ul>
-    <!--  -->
-    <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-if="scrollMenu.length">
-      <div
-        class="s-m-btn"
-        v-if="menuCanScroll"
-        @click="showSqure=!showSqure"
-        :class="{'active':showSqure}"
-      ></div>
-      <div class="scroll-menu-area">
-        <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu">
-          <ul ref="scroll_menu_content" class="scroll-menu-ul">
-            <li v-for="(menu, index) in scrollMenu" :key="menu.brandId" :id="'menu'+menu.brandId">
-              <a
-                href="javascript:;"
-                class="c-3 fz30"
-                @click="bindClickMenu(index)"
-                :class="{'active':currentIndex == index}"
-              >{{menu.brandName}}</a>
-            </li>
-          </ul>
-        </scroll>
-      </div>
 
-      <transition name="squre">
-        <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
-          <div class="squre-item-wrap flt" v-for="(item, index) in scrollMenu" :key="item.brandId">
-            <div
-              class="squre-item"
-              @click="bindClickMenu(index)"
-              :class="{'squre-item-active':currentIndex == index}"
-            >{{item.brandName}}</div>
-          </div>
+          <transition name="squre">
+            <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
+              <div
+                class="squre-item-wrap flt"
+                v-for="(item, index) in scrollMenu"
+                :key="item.brandId"
+              >
+                <div
+                  class="squre-item"
+                  @click="bindClickMenu(index)"
+                  :class="{'squre-item-active':currentIndex == index}"
+                >{{item.brandName}}</div>
+              </div>
+            </div>
+          </transition>
         </div>
-      </transition>
-    </div>
-    <!--  -->
-    <div style="height:680px;">
+      </div>
       <scroll
         ref="scrollProduct"
-        :click="true"
-        :probeType="3"
         :data="scrollProducts"
+        :probeType="3"
+        :click="true"
         :listenScroll="true"
         @scroll="listenScroll"
-        class="scroll-products"
+        class="view-wrapper"
       >
-        <div class="home-product-list">
+        <main>
+          <!--  -->
+          <div class="home-banner" v-if="banners.length">
+            <div class="slider-body">
+              <slider :loop="true" :data="banners" ref="slider_dom">
+                <div class="banner-item" v-for="item in banners" :key="item.id">
+                  <img :src="item.cloudSrc" alt>
+                </div>
+              </slider>
+            </div>
+          </div>
+          <!--  -->
+          <ul class="home-icons clearfix">
+            <li v-for="item in appIcons">
+              <a @click="jumpSecondsort(item)">
+                <img v-lazy="item.imgUrl || ''">
+                <span>{{item.value}}</span>
+              </a>
+            </li>
+          </ul>
+          <!--  -->
+          <div class="mune-wrapper">
+            <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-show="!showFixed">
+              <div
+                class="s-m-btn"
+                v-if="menuCanScroll"
+                @click="showSqure=!showSqure"
+                :class="{'active':showSqure}"
+              ></div>
+              <div class="scroll-menu-area">
+                <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu">
+                  <ul ref="scroll_menu_content" class="scroll-menu-ul">
+                    <li
+                      v-for="(menu, index) in scrollMenu"
+                      :key="menu.brandId"
+                      :id="'menu'+menu.brandId"
+                    >
+                      <a
+                        href="javascript:;"
+                        class="c-3 fz30"
+                        @click="bindClickMenu(index)"
+                        :class="{'active':currentIndex == index}"
+                      >{{menu.brandName}}</a>
+                    </li>
+                  </ul>
+                </scroll>
+              </div>
+
+              <transition name="squre">
+                <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
+                  <div
+                    class="squre-item-wrap flt"
+                    v-for="(item, index) in scrollMenu"
+                    :key="item.brandId"
+                  >
+                    <div
+                      class="squre-item"
+                      @click="bindClickMenu(index)"
+                      :class="{'squre-item-active':currentIndex == index}"
+                    >{{item.brandName}}</div>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
+          <!--  -->
           <div class="scroll-item" v-for="item in scrollProducts" :key="item.brandId">
             <div :id="'dom'+item.brandId"></div>
             <product v-for="product in item.products " :product="product" :key="product.id"></product>
           </div>
-        </div>
+        </main>
       </scroll>
     </div>
   </div>
@@ -115,6 +162,7 @@ export default {
   name: "home",
   data() {
     return {
+      showFixed: false,
       loop: true,
       appIcons: appIcons,
       showSqure: false,
@@ -153,9 +201,7 @@ export default {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
       this.currentDealer = storage.get("currentDealer", {});
-      this._listDealerLogs();
       this._queryHomeProducts();
-      storage.set("homeRefresh", false);
     } else {
       this.scrollProducts.forEach(item => {
         item.products = transformProductList(item.products);
@@ -226,10 +272,13 @@ export default {
             return this.$toast(msg);
           }
           this.$nextTick(() => {
-            this.calculateScrollRect();
-            this.calculateScrollProductHeight();
-            this.calculateHeightList();
-            this.watchScroll();
+            if (!storage.get("homeRefresh", false)) {
+              this.calculateScrollRect();
+              setTimeout(() => {
+                this.calculateHeightList();
+              }, 1000);
+            }
+            storage.set("homeRefresh", false);
           });
         }
       });
@@ -244,17 +293,11 @@ export default {
         w += el.getBoundingClientRect().width;
       }
       this.$refs.scroll_menu_content.style.width = w + "px";
+      //todo
+      this.$refs.scroll_menu_content2 &&
+        (this.$refs.scroll_menu_content2.style.width = w + "px");
       //判断menu是否能滑动
       this.menuCanScroll = w > clientWidth - (clientWidth * 88) / 750;
-    },
-    //计算 scroll-product 的高度
-    calculateScrollProductHeight() {
-      const clientWidth =
-        document.body.clientWidth || document.documentElement.clientWidth;
-      const clientHeight =
-        document.body.clientHeight || document.documentElement.clientHeight;
-      const height = clientHeight - (clientWidth * 98 + 90 + 88) / 750;
-      // this.$refs.scrollProduct.$el.style.height = height + "px";
     },
     bindClickMenu(Index) {
       this.showSqure = false;
@@ -265,57 +308,13 @@ export default {
       );
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
-      this.$refs.ScrollMenu.scrollToElement(
-        document.getElementById(menuId),
-        150
-      );
-    },
-    watchScroll() {
-      if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
-          return setTimeout(callback, 17);
-        };
-      }
-      const clientWidth =
-        document.body.clientWidth || document.documentElement.clientWidth;
-      var last_known_scroll_position = 0,
-        ticking = false;
-      var d = this.userType == 3 ? 174 : 92;
-      this.distance =
-        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * d) / 750;
 
-      this.$refs.scrollDom.addEventListener("scroll", e => {
-        last_known_scroll_position = this.$refs.scrollDom.scrollTop;
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            var cls = this.userType == 3 ? "fixed-customer" : "fixed-dealer";
-            if (last_known_scroll_position > Math.abs(this.distance)) {
-              addClass(this.$refs.scrollMenuWrap, cls);
-            } else {
-              removeClass(this.$refs.scrollMenuWrap, cls);
-            }
-            ticking = false;
-          });
-        }
-        ticking = true;
-      });
-    },
-    scrollSmoothTo(el, position) {
-      var distance = el.scrollTop;
-      if (distance <= position) {
-        return false;
-      }
-      var step = function() {
-        // 距离目标滚动距离
-        distance -= 200;
-        if (Math.abs(distance) < position) {
-          el.scrollTop = position;
-        } else {
-          el.scrollTop = distance;
-          window.requestAnimationFrame(step);
-        }
-      };
-      step();
+      const thisScroll = this.showFixed
+        ? this.$refs.ScrollMenu2
+        : this.$refs.ScrollMenu;
+      //
+      thisScroll &&
+        thisScroll.scrollToElement(document.getElementById(menuId), 150);
     },
     /***
      *处理首页展示数据
@@ -333,10 +332,10 @@ export default {
       }));
       return { menu, brands };
     },
-    // scroll-item
+    // scroll-items
     calculateHeightList() {
-      let h = 0,
-        heightList = [0];
+      let h = this.$refs.scrollMenuWrap.offsetTop;
+      let heightList = [h];
       const els = document.querySelectorAll(".scroll-item");
       for (let el of Array.prototype.slice.call(els)) {
         h += el.clientHeight;
@@ -346,7 +345,13 @@ export default {
       this.heightList = heightList;
     },
     listenScroll(pos) {
+      console.log(pos);
       this.posY = Math.abs(pos.y);
+      if (this.posY > this.heightList[0]) {
+        this.showFixed = true;
+      } else {
+        this.showFixed = false;
+      }
     },
     _jumpDealerList() {
       this.$router.push({
@@ -362,6 +367,28 @@ export default {
 </script>
 
 <style lang="stylus">
+.view-wrapper {
+  width: 100%;
+  height: 100%;
+  pos(relative);
+  top: 0;
+  left: 0;
+}
+
+.fixed-nav {
+  width: 100%;
+  h(88);
+  pos(absolute);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.mune-wrapper{
+  h(88);
+  bg(#fff)
+}
+
+/* ** */
 .fixed-dealer {
   position: fixed !important;
   top: 92px;
