@@ -1,16 +1,8 @@
 <template>
   <div class="order-submit">
-    <!-- <div class="select-customer">
-      <strong class="fz30">收货人信息</strong>
-      <a
-        class="c-theme"
-        href="javascript:;"
-        @click="_selectCustomer"
-      >{{customers.length?'选择客户':'新增客户'}}</a>
-    </div>-->
-
+    <m-header :isFixed="true"></m-header>
     <!--  -->
-    <div class="order-detail-area" v-if="!userType==3">
+    <div class="order-detail-area">
       <h5>
         收货人信息
         <a
@@ -29,78 +21,52 @@
       </div>
     </div>
     <!--  -->
-    <div class="order-detail-area" v-else>
-      <h5>
-        收货人信息
-        <a
-          href="javascript:;"
-          class="frt c-theme fz28"
-          @click="_selectCustomer"
-        >{{userType==3?'选择收货人':'选择客户'}}</a>
-      </h5>
-      <div class="info-display pre" v-if="currentCustomer.name">
-        <p>客户姓名：{{currentCustomer.name}}</p>
-        <p>手机号码：{{currentCustomer.phone}}</p>
-      </div>
-      <div class="info-display" v-if="currentCustomer.name">
-        <p>店铺名称：{{currentCustomer.shopName}}</p>
-        <p>收货地址：{{currentCustomer.address}}</p>
-      </div>
-    </div>
-    <!--  -->
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
-      <!-- 单个产品 -->
-      <div class="single-sku clearfix" v-if="products.length===1">
-        <div class="s-s-img">
-          <img v-lazy="products[0].productImageUrl" alt>
-        </div>
-        <div class="s-s-main">
-          <p class="name">{{products[0].productName}}</p>
-          <div class="price">{{products[0].price}}元/{{products[0].priceUnit}}</div>
-          <div class="price">
-            <span>规格：{{products[0].specification}}</span>
-            <span class="frt fz28">X{{products[0].buyCount}}</span>
-          </div>
-        </div>
-      </div>
-      <!-- 多个产品 -->
-      <div class="multiple-skus" v-else @click="_jumpGoodsList">
-        <div class="m-s-amount">共{{amount}}></div>
-        <ul class="m-s-skus clearfix">
-          <li v-for="item in products" :key="item.id">
-            <a href="javascript:;">
-              <img v-lazy="item.productImageUrl || ''" alt>
-              <span>X{{item.buyCount}}{{item.priceUnit}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <order-products v-if="products.length" :products="products"></order-products>
       <div class="order-detail-amount">
         订单总金额：
-        <span class="c-theme">&yen;{{totalMoney.toFixed(2)}}</span>
+        <span class="c-theme">&yen;{{payableAmount | priceToFixed}}</span>
       </div>
     </div>
     <div class="select-customer" v-if="userType!=3">
       <strong class="fz30">优惠</strong>
       <input
+        ref="reduce"
         type="number"
         placeholder="请输入金额"
-        value
-        @click.stop
-        @change="handleReduce($event)"
-        :class="{'c-theme':reduce>0}"
+        :value="reduce"
+        @change="handleChange"
+        :class="{'c-theme':!!reduce}"
       >
     </div>
+    <!-- 备注 -->
+    <div class="order-detail-area">
+      <h5>备注</h5>
+      <div class="info-display">
+        <textarea
+          class="remark-txt"
+          name="remark"
+          id="remark"
+          cols="60"
+          rows="3"
+          placeholder="请输入备注"
+          v-model="remark"
+        ></textarea>
+      </div>
+    </div>
     <!--  -->
-    <div class="bottom">
+    <div class="bottom" ref="bottomDom">
       <a href="javascript:;" @click="_OrderSubmit">提交订单</a>
-      &yen;{{totalMoney.toFixed(2)}}
+      &yen;{{payableAmount | priceToFixed}}
     </div>
   </div>
 </template>
 
 <script>
+function isValueNumber(value) {
+  return /(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/.test(value);
+}
 /**
  * 终端用户下单 3  选择收货人
  * 经销商下单  1 选择客户  同销售人员
@@ -111,38 +77,54 @@ import { OrderSubmit } from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
 import { queryAddressList } from "api/fetch/endCustomer";
 import { findCustomerList } from "api/fetch/dealer";
+import orderProducts from "components/order-products.vue";
 export default {
   name: "order-submit",
   data() {
     return {
       reduce: 0,
       products: [],
-      amount: 0,
-      totalMoney: 0,
-      addresList: [], //收货人列表 userType3
-      customers: [], //客户列表   userType1 2
-      currentCustomer: {} //当前客户
+      orderAmount: 0,
+      currentCustomer: {},
+      remark: ""
     };
+  },
+  computed: {
+    payableAmount() {
+      return this.orderAmount - this.reduce;
+    }
+  },
+  components: {
+    orderProducts
   },
   beforeCreate() {},
   created() {
-    //TODO prefix userId
-    this.products = storage.get("orderPrequeryParams", []);
-    this.amount = this.products.reduce((ac, cur) => (ac += cur.buyCount), 0);
-    this.totalMoney = this.products.reduce(
-      (ac, cur) => (ac += cur.buyCount * cur.price),
-      0
-    );
-    this.originTotalMoney = this.totalMoney;
-    //
-    const customerInfo = this.$route.query.customerInfo || "";
-    customerInfo && (this.currentCustomer = this.decodeUrl(customerInfo));
+    this._initOrderInfo();
   },
-  mounted() {},
+  mounted() {
+    this.hanlderBottomDom();
+  },
+  destroyed() {},
   methods: {
+    _initOrderInfo() {
+      /**
+       * 初始化商品信息，优惠，备注，客户收货人信息。
+       */
+      this.products = storage.get("orderPrequeryParams", []);
+      const orderExtraParams = storage.get("orderExtraParams", {});
+      this.reduce = orderExtraParams.reduce || "";
+      this.remark = orderExtraParams.remark || "";
+      this.orderAmount = this.products.reduce(
+        (ac, cur) => (ac += cur.buyCount * cur.price),
+        0
+      );
+      const customerInfo = this.$route.query.customerInfo || "";
+      customerInfo && (this.currentCustomer = this.decodeUrl(customerInfo));
+      storage.set("fromOrder", false);
+      storage.set("orderExtraParams", {});
+    },
     _OrderSubmit() {
-      const customerId = this.currentCustomer.id,
-        orderAmount = this.totalMoney;
+      const customerId = this.currentCustomer.id;
       if (!customerId) {
         const msg = this.userType == 3 ? "请选择收货人" : "请选择客户";
         return this.$toast(msg);
@@ -150,8 +132,11 @@ export default {
       const orderItem = transformOrderItems(this.products);
       const params = {
         customerId,
-        orderAmount,
-        orderItem
+        orderItem,
+        orderAmount: this.orderAmount,
+        reduceAmount: this.reduce || 0,
+        payableAmount: this.payableAmount, //应付
+        order_remark: this.remark
       };
       OrderSubmit(params)
         .then(res => {
@@ -169,55 +154,46 @@ export default {
           });
         });
     },
-    _jumpGoodsList() {
-      const products = this.encodeUrl(this.products);
-      this.$router.push({
-        path: "/goodsList",
-        query: { products }
-      });
-    },
-    //收货人列表
-    listAddress() {
-      queryAddressList()
-        .then(res => {
-          this.addresList = res.data || [];
-        })
-        .catch(err => {
-          this.$toast(err.message);
-        });
-    },
-    //客户列表
-    listCustomers() {
-      findCustomerList()
-        .then(res => {
-          this.customers = res.data || [];
-        })
-        .catch(err => {
-          this.$toast(err.message);
-        });
-    },
     _selectCustomer() {
-      if (this.userType != 3) {
-        //选择客户
-        return this.$router.push({
-          path: "/my/customerList",
-          query: {
-            fromOrder: true
-          }
-        });
-      }
-      //选择客户
+      storage.set("fromOrder", true);
+      //记录优惠和备注信息
+      const orderExtraParams = {
+        reduce: this.reduce,
+        remark: this.remark
+      };
+      storage.set("orderExtraParams", orderExtraParams);
+      const path = this.userType == 3 ? "/myConsignee" : "/my/customerList";
       this.$router.push({
-        path: "/myConsignee",
-        query: {
-          fromOrder: true
-        }
+        path
       });
     },
-    //
-    handleReduce($event) {
-      this.reduce = parseInt($event.target.value) || 0;
-      this.totalMoney = this.originTotalMoney - this.reduce;
+    hanlderBottomDom() {
+      const el = this.$refs.bottomDom;
+      const clientHeight =
+        document.body.clientHeight || document.documentElement.clientHeight;
+      var resizeFn = function() {
+        const thisHeight =
+          document.body.clientHeight || document.documentElement.clientHeight;
+        if (clientHeight - thisHeight > 140) {
+          el.style.position = "static";
+        } else {
+          el.style.position = "fixed";
+        }
+      };
+      window.addEventListener("resize", resizeFn);
+    },
+    handleChange: function(event) {
+      var val = event.target.value.trim();
+      if (isValueNumber(val)) {
+        var max = this.orderAmount;
+        val = Number(val);
+        this.reduce = val;
+        if (val > max) this.reduce = max;
+        if (val < 0) this.reduce = 0;
+      } else {
+        // 如果输入的非数字，则保留之前的数据
+        event.target.value = this.reduce;
+      }
     }
   }
 };
@@ -225,6 +201,19 @@ export default {
 
 <style lang="stylus" scoped>
 @import './common.styl';
+
+.order-submit {
+  pt(90);
+  pb(92);
+}
+
+.remark-txt {
+  width: 100%;
+  padding: 12px;
+  ft(28);
+  c(#999);
+  line-height: 1.2;
+}
 
 .info-display {
   padding: 20px 0;
@@ -294,12 +283,12 @@ export default {
     lh(90);
     ft(30);
     fb();
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
   }
 
   .info-display {
     &:nth-of-type(2) {
-      border-top: 1px solid #EDEDED;
+      border-top: 1PX solid #EDEDED;
     }
   }
 }
@@ -310,7 +299,7 @@ export default {
     ft(30);
     c(#333);
     text-align: right;
-    border-top: 1px solid #EDEDED;
+    border-top: 1PX solid #EDEDED;
   }
 }
 </style>

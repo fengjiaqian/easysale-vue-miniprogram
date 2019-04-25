@@ -1,4 +1,5 @@
 import storage from "common/storage";
+import mHeader from "components/header.vue";
 const mixin = {
     data() {
         const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
@@ -12,6 +13,9 @@ const mixin = {
             isVisitor: !storage.get("token", ''),
             uploadImgUrl: uploadUrl
         }
+    },
+    components: {
+        mHeader
     },
     methods: {
         //auth权限控制

@@ -1,5 +1,6 @@
 <template>
   <div class="goods-list">
+    <m-header :isFixed="true"></m-header>
     <div
       class="G-product-item clearfix"
       @click="_enterDetail(product)"
@@ -49,6 +50,10 @@ export default {
 </script>
 
 <style lang="stylus">
+.goods-list {
+  pt(90);
+}
+
 .G-product-item {
   padding: 24px 0 0 24px;
   bg(#fff);
@@ -69,7 +74,7 @@ export default {
   pr(24);
   pb(24);
   ml(224);
-  border-bottom: 1px solid #EDEDED;
+  border-bottom: 1PX solid #EDEDED;
 
   .name {
     ft(32);

@@ -1,7 +1,7 @@
 <template>
   <div id="orders">
     <empty v-if="empty" txt="暂无此类订单" :iconUrl="avatarUrl"></empty>
-    <ui-table :orderTab="orderTab" :initialState="currentState" @swithTab="_switchOrderType"></ui-table>
+    <ui-table :orderTab="orderTab" :initialState="currentState " @swithTab="_switchOrderType"></ui-table>
     <!--  -->
     <div class="empty-page" v-if="isVisitor">
       <p class="fz30 c-3">您当前没有订单</p>
@@ -27,17 +27,17 @@
 <script>
 /**
  *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成 5=已取消
+ 查列表的时候1=待处理，2=已处理+已拒绝，5=已取消
  */
 const orderTab = [
   { text: "待处理", state: 1 },
   { text: "已处理", state: 2 },
-  { text: "已拒绝", state: 3 },
   { text: "已取消", state: 5 }
 ];
 const params = {
   orderState: 1,
   pageNum: 1,
-  pageSize: 3
+  pageSize: 6
 };
 import avatarUrl from "@/assets/images/icon-product-empty.png";
 import orderItem from "components/order-item.vue";
@@ -73,6 +73,11 @@ export default {
     }
   },
   activated() {
+    const state = this.$route.query.state || "";
+    if (state) {
+      this.currentState = state;
+      this.params.orderState = state;
+    }
     const refresh = storage.get("orderRefresh", false);
     refresh && this._QueryOrders(true);
     storage.set("orderRefresh", false);

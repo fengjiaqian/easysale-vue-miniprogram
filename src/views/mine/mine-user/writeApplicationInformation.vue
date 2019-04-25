@@ -1,6 +1,7 @@
 
 <template>
-  <div class="common">
+  <div class="common pt90">
+     <m-header :isFixed="true"></m-header>
     <div class="name">
       <div class="left">客户姓名 :</div>
       <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入姓名">
@@ -184,7 +185,7 @@ export default {
   height: 90px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
-  border-bottom: 1px solid #f6f6f6;
+  border-bottom: 1PX solid #f6f6f6;
 }
 
 .common .tele {

@@ -1,5 +1,6 @@
 <template>
-  <div class="staff-detail-wrap" v-show="domShow">
+  <div class="staff-detail-wrap pt90" v-show="domShow">
+      <m-header :isFixed="true"></m-header>
     <ul class="sd-info">
       <li class="header-pic">
         <img v-lazy="customerInfo.imageUrl">

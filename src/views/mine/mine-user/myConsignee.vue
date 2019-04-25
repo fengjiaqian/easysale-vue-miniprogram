@@ -1,7 +1,7 @@
 
 <template>
   <div class="common">
-    <div class="search">
+    <!-- <div class="search">
       <input
         class="case"
         type="text"
@@ -10,7 +10,8 @@
         v-model="keyword"
         placeholder="请输入姓名或者电话"
       >
-    </div>
+    </div>-->
+    <m-header :isSearch="true" placeholder="请输入姓名或者电话" @emitEvt="_queryCustomerConsigneeList"></m-header>
     <empty v-if="empty" txt="暂无收货人数据" :iconUrl="avatarUrl"></empty>
     <address-list
       :addressList="addressList"
@@ -28,11 +29,10 @@ import AddressList from "./address-list.vue";
 import empty from "components/empty.vue";
 import avatarUrl from "@/assets/images/icon-product-empty.png";
 import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
-
+import storage from "common/storage";
 export default {
   data() {
     return {
-      keyword: "",
       addressList: [],
       showOperation: true,
       empty: false,
@@ -46,12 +46,12 @@ export default {
   mounted() {},
   computed: {},
   created() {
-    this.showOperation = !this.$route.query.fromOrder;
+    this.showOperation = storage.get("fromOrder", false);
     this._queryCustomerConsigneeList();
   },
   methods: {
-    _queryCustomerConsigneeList() {
-      queryCustomerConsigneeList(this.keyword).then(res => {
+    _queryCustomerConsigneeList(keyword = "") {
+      queryCustomerConsigneeList(keyword).then(res => {
         if (res.result === "success" && res.data) {
           this.addressList = res.data;
           this.empty = !this.addressList.length;
@@ -65,7 +65,7 @@ export default {
       }
     },
     _bindTap(item) {
-      if (this.$route.query.fromOrder) {
+      if (storage.get("fromOrder", false)) {
         this.$router.push({
           path: "/orderSubmit",
           query: {
@@ -80,9 +80,6 @@ export default {
         name: "updateConsignee",
         params: {
           code: 1
-        },
-        query: {
-          fromOrder: this.$route.query.fromOrder || false
         }
       });
     }
@@ -137,10 +134,10 @@ export default {
   color: rgba(255, 86, 56, 1);
   line-height: 98px;
   text-align: center;
-  border-top: 1px solid #ededed;
+  border-top: 1PX solid #ededed;
 }
 
-.common .support{
-  h(98)
+.common .support {
+  h(98);
 }
 </style>

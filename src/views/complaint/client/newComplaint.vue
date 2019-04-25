@@ -75,7 +75,7 @@
     #new .descrip .title,
     #new .remark .title{
         h(110)
-        border-bottom:1px solid #f6f6f6;
+        border-bottom:1PX solid #f6f6f6;
         font-size :30px;
         c(#333);
         font-weight :bold;

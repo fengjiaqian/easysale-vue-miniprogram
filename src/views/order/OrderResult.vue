@@ -40,8 +40,12 @@ export default {
           this.$router.push({ path: "/navi/home" });
           break;
         case 2:
+          const state = this.userType == 3 ? 1 : 2;
           this.$router.push({
-            path: "/navi/orders"
+            path: "/navi/orders",
+            query: {
+              state
+            }
           });
           break;
         case 3:

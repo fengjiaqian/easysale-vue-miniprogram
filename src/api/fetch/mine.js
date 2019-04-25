@@ -213,7 +213,8 @@ function deleteStaff(params) {
 	return axios({
 		method: 'post',
 		url: url,
-		data: params
+		data: params,
+		loading: true
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {

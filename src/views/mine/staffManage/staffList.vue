@@ -2,11 +2,10 @@
   <div class="staff-list-wrap">
     <!--头部-->
     <section class="sl-header">
-      <div class="search-bar">
-        <input v-model="searchKey"
-               placeholder="请输入姓名或手机号"
-               @change="handleChange($event)">
-      </div>
+      <m-header :isSearch="true" placeholder="请输入姓名或手机号" @emitEvt="handleChange"></m-header>
+      <!-- <div class="search-bar">
+        <input v-model="searchKey" placeholder="请输入姓名或手机号" @change="handleChange($event)">
+      </div>-->
     </section>
     <!--内容-->
     <section class="sl-content">
@@ -23,69 +22,68 @@
 </template>
 
 <script>
-  import BookList from "components/bookMenu/bookList.vue";
-  import bookMenuSide from "components/bookMenu/bookMenuSide.vue";
-  import { queryStaffList } from "api/fetch/mine";
-  import { creatBookMenuData } from "common/createBookMenu";
-  import empty from "components/empty.vue";
-  export default {
-
-    data() {
-      return {
-        bookMenuData: {},
-        bookMenuType: 1,
-        filterParam: {
-          parentId: 19990530,
-          keyword: ''
-        },
-        staffList: null,//员工列表
-        searchKey: '',//搜索关键字
-      };
-    },
-    components: {
-      BookList,
-      bookMenuSide,
-      empty
-    },
-    computed: {
-
-    },
-    created() {
-      this.queryStaffs()
-    },
-    methods: {
-      //查询员工列表
-      queryStaffs(){
-        queryStaffList(this.filterParam).then(res => {
-          if (res.result === "success" && res.data) {
-            this.staffList = res.data
-            this.bookMenuData = creatBookMenuData(res.data)
-          }
-        }).catch(res => {
-          this.staffList = []
-        });
-      },
-      handleChange($event){
-        this.filterParam.keyword = $event.target.value
-      },
-      skipTo(){
-        this.$router.push({
-          path: "/my/addStaffInfo"
-        });
-      },
-    },
-    watch: {
+import BookList from "components/bookMenu/bookList.vue";
+import bookMenuSide from "components/bookMenu/bookMenuSide.vue";
+import { queryStaffList } from "api/fetch/mine";
+import { creatBookMenuData } from "common/createBookMenu";
+import empty from "components/empty.vue";
+export default {
+  data() {
+    return {
+      bookMenuData: {},
+      bookMenuType: 1,
       filterParam: {
-        handler(newVal, oldVal) {
-          this.queryStaffs()
-        },
-        deep: true
+        parentId: "",
+        keyword: ""
       },
+      staffList: null, //员工列表
+      searchKey: "" //搜索关键字
+    };
+  },
+  components: {
+    BookList,
+    bookMenuSide,
+    empty
+  },
+  computed: {},
+  created() {
+    this.queryStaffs();
+  },
+  methods: {
+    //查询员工列表
+    queryStaffs() {
+      queryStaffList(this.filterParam)
+        .then(res => {
+          if (res.result === "success" && res.data) {
+            this.staffList = res.data;
+            this.bookMenuData = creatBookMenuData(res.data);
+          }
+        })
+        .catch(res => {
+          this.staffList = [];
+        });
+    },
+    handleChange(keyword) {
+      this.filterParam.keyword = keyword;
+    },
+    skipTo() {
+      this.$router.push({
+        path: "/my/addStaffInfo"
+      });
     }
-  };
+  },
+  watch: {
+    filterParam: {
+      handler(newVal, oldVal) {
+        this.queryStaffs();
+      },
+      deep: true
+    }
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
-  @import "./stylus/staff.styl"
+@import './stylus/staff.styl';
 </style>
 

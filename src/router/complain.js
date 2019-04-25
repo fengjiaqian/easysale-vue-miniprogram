@@ -50,6 +50,29 @@ const awardDetail = (resolve) => {
 	})
 }
 
+// 以上是终端客户的“兑奖”+“投诉”的路由
+
+// wx 经销商 “投诉管理”的页面
+const complaintManagement = (resolve) => { 
+	import('views/complaint/dealer/complaintManagement.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+// wx 经销商 “投诉详情”的页面
+const dealerComplaintDetail = (resolve) => { 
+	import('views/complaint/dealer/dealerComplaintDetail.vue').then((module) => {
+		resolve(module)
+	})
+}
+
+// wx 经销商 “兑奖管理”的页面
+const dealerAwardManage = (resolve) => { 
+	import('views/award/dealer/dealerAwardManage.vue').then((module) => {
+		resolve(module)
+	})
+}
+
 const complain = [
     {
         path: '/newComplaint',
@@ -100,6 +123,27 @@ const complain = [
             title: '兑奖详情',
         },
         component: awardDetail,
+    },{
+        path: '/complaintManagement',
+        name: 'complaintManagement',
+        meta: {
+            title: '投诉管理',
+        },
+        component: complaintManagement,
+    },{
+        path: '/dealerComplaintDetail',
+        name: 'dealerComplaintDetail',
+        meta: {
+            title: '投诉详情',
+        },
+        component: dealerComplaintDetail,
+    },{
+        path: '/dealerAwardManage',
+        name: 'dealerAwardManage',
+        meta: {
+            title: '兑奖管理',
+        },
+        component: dealerAwardManage,
     }
 ]
 

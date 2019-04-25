@@ -1,17 +1,17 @@
 <template>
-  <div id="detail" v-show="domShow">
+  <div id="detail pt90" v-show="domShow">
+    <m-header :isFixed="true"></m-header>
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
-    <div class="D-name">
-      <i>自有</i>
-      <i :class="[product.state==1 ? 's-success' : 's-fail']">{{product.state==1?'上架':'下架'}}</i>
-      {{product.productName}}
-    </div>
+    <div class="D-name">{{product.productName}}</div>
     <div class="D-grama">
       <span class="brand">品牌：{{product.brandName}}</span>
     </div>
-    <div class="D-spec">规格：<span>{{product.specification}}</span></div>
+    <div class="D-spec">
+      规格：
+      <span>{{product.specification}}</span>
+    </div>
     <div class="D-price">
       <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
     </div>
@@ -30,27 +30,25 @@
 </template>
 
 <script>
-import { productDetail,oprateManageProduct } from "api/fetch/mine";
+import { productDetail, oprateManageProduct } from "api/fetch/mine";
 
 export default {
   data() {
     return {
       domShow: false,
-      id: '',//商品id
-      product: {},//商品对象
+      id: "", //商品id
+      product: {}, //商品对象
       oprateParam: {
         idList: [],
-        state: 0  //状态 0:删除 1：已上架  2：已下架
-      },//商品操作查询参数
+        state: 0 //状态 0:删除 1：已上架  2：已下架
+      } //商品操作查询参数
     };
   },
-  components: {
-
-  },
+  components: {},
   created() {
-    localStorage.removeItem('productInfo')
-    this.id = this.$route.query.code
-    this.oprateParam.idList = [this.id]
+    localStorage.removeItem("productInfo");
+    this.id = this.$route.query.code;
+    this.oprateParam.idList = [this.id];
     this._queryDetail();
   },
   mounted() {},
@@ -58,27 +56,27 @@ export default {
     _queryDetail() {
       let param = {
         id: this.id
-      }
+      };
       productDetail(param).then(res => {
         if (res.result === "success" && res.data) {
-          this.domShow = true
-          this.product = res.data
+          this.domShow = true;
+          this.product = res.data;
         }
       });
     },
-    deleteProduct(){
+    deleteProduct() {
       oprateManageProduct(this.oprateParam).then(res => {
         if (res.result === "success") {
-          this.$toast("操作成功")
+          this.$toast("操作成功");
           //操作成功后返回商品管理列表
-          this.$router.push({ path: "/my/productList" })
+          this.$router.push({ path: "/my/productList" });
         }
       });
     },
-    editProduct(){
-      localStorage.setItem('productInfo',JSON.stringify(this.product))
-      this.$router.push({ path: "/my/editProduct" })
-    },
+    editProduct() {
+      localStorage.setItem("productInfo", JSON.stringify(this.product));
+      this.$router.push({ path: "/my/editProduct" });
+    }
   }
 };
 </script>
@@ -114,7 +112,6 @@ export default {
   }
 }
 
-
 .immediately {
   bg(#FFBD38);
 }
@@ -128,12 +125,12 @@ export default {
     pl(24);
     c(#333);
     ft(30);
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
   }
 }
 
 .D-info-list {
-  min-height 200px
+  min-height: 200px;
   padding: 20px 20px 20px 24px;
 
   li {
@@ -155,57 +152,56 @@ export default {
 }
 
 .D-name {
-  flex()
-  align-items center
+  flex();
+  align-items: center;
   bg(#fff);
   pl(24);
   lh(80);
   c(#333);
   ft(34);
-  i{
-    bg(#ffbd38)
-    ft(22)
-    c(#fff)
-    border-radius 4px
-    padding 0 8px
-    mr(12)
-    lh(34)
-  }
 }
-.D-grama{
-  padding 24px
-  ft(30)
-  c-9()
-  mt(8)
-  flex-center()
-  bg(#fff)
-  .brand{
-    flex-1()
+
+.D-grama {
+  padding: 24px;
+  ft(30);
+  c-9();
+  mt(8);
+  flex-center();
+  bg(#fff);
+
+  .brand {
+    flex-1();
   }
-  .state{
-    flex-center()
-    i{
-      padding 0 3PX
-      border-radius 4px
-      c(#fff)
-      ft(28)
-      ml(8)
-      &.s-success{
-        bg(#FF5638)
+
+  .state {
+    flex-center();
+
+    i {
+      padding: 0 3PX;
+      border-radius: 4px;
+      c(#fff);
+      ft(28);
+      ml(8);
+
+      &.s-success {
+        bg(#FF5638);
       }
-      &.s-fail{
-        bg(#BDBDBD)
+
+      &.s-fail {
+        bg(#BDBDBD);
       }
     }
   }
 }
-.D-spec{
+
+.D-spec {
   bg(#fff);
   pl(24);
   c(#999);
   ft(30);
-  pb(16)
+  pb(16);
 }
+
 .D-price {
   bg(#fff);
   pb(16);
@@ -221,29 +217,34 @@ export default {
   flex-center();
   justify-content: space-between;
 }
-.D-bottom{
-  position fixed
-  left 0
-  bottom 0
-  width 100%
-  lh(98)
-  bg(#fff)
-  ft(30)
-  c-6()
-  flex-center()
-  span{
-    width 50%
-    text-c()
+
+.D-bottom {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  lh(98);
+  bg(#fff);
+  ft(30);
+  c-6();
+  flex-center();
+
+  span {
+    width: 50%;
+    text-c();
   }
-  .edit{
-    c(#FF5638)
+
+  .edit {
+    c(#FF5638);
   }
 }
-.s-success{
-  background #FF5638 !important
+
+.s-success {
+  background: #FF5638 !important;
 }
-.s-fail{
-  background #BDBDBD !important
+
+.s-fail {
+  background: #BDBDBD !important;
 }
 </style>
 

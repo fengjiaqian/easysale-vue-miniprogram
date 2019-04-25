@@ -1,5 +1,6 @@
 <template>
   <div id="cart">
+    <m-header :isFixed="true"></m-header>
     <empty v-if="!products.length" :txt="'购物车暂无商品'"></empty>
     <div class="C-header" v-if="products.length">
       <strong>共{{products.length}}商品</strong>
@@ -34,6 +35,7 @@ import {
 import empty from "components/empty.vue";
 import storage from "common/storage";
 import Bus from "common/Bus";
+import mHeader from "components/header.vue";
 export default {
   name: "cart",
   data() {
@@ -44,7 +46,8 @@ export default {
   },
   components: {
     productCart,
-    empty
+    empty,
+    mHeader
   },
   computed: {
     amount() {
@@ -153,14 +156,14 @@ export default {
 
 <style lang="stylus">
 #cart {
-  pt(92);
+  pt(92 + 90);
   pb(98);
 }
 
 .C-header {
   width: 100%;
   pos(fixed);
-  top: 0;
+  top: 90px;
   left: 0;
   z-index: 10;
   h(92);
@@ -170,7 +173,7 @@ export default {
   c(#333);
   flex-center();
   justify-content: space-between;
-  border-bottom: 1px solid #EDEDED;
+  border-bottom: 1PX solid #EDEDED;
 
   strong {
     ft(34);
@@ -202,6 +205,7 @@ export default {
 }
 
 .C-bottom-right {
+  height: 100%;
   w(224);
   lh(98);
   frt();

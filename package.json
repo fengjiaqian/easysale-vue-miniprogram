@@ -10,8 +10,8 @@
     "axios": "^0.18.0",
     "better-scroll": "^1.15.1",
     "core-js": "^2.6.5",
+    "cube-ui": "~1.12.15",
     "element-ui": "^2.7.2",
-    "postcss-pxtorem": "^4.0.1",
     "style-resources-loader": "^1.2.1",
     "vconsole": "^3.3.0",
     "vue": "^2.6.6",
@@ -23,9 +23,17 @@
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-service": "^3.5.0",
     "babel-plugin-component": "^1.1.1",
+    "postcss-px2rem": "^0.3.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "uglifyjs-webpack-plugin": "^2.1.2",
+    "vue-cli-plugin-cube-ui": "^0.2.5",
     "vue-template-compiler": "^2.5.21"
+  },
+  "transformModules": {
+    "cube-ui": {
+      "transform": "cube-ui/src/modules/${member}",
+      "kebabCase": true
+    }
   }
 }

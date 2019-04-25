@@ -57,6 +57,7 @@
 <script>
 import Bscroll from "better-scroll";
 import bus from "common/Bus";
+import storage from "common/storage";
 export default {
   name: "bookList",
   props: {
@@ -95,10 +96,10 @@ export default {
           query: { userId: item.userId }
         });
       } else if (this.bookMenuType == 2) {
-        //如果是从订单界面过来的 返回订单 带入信息
-        const fromOrder = this.$route.query.fromOrder || false;
+        //如果是从订单界面过来的  返回订单 带入信息
+        const fromOrder = storage.get("fromOrder", false);
         if (fromOrder) {
-          const customerInfo = encodeURIComponent(JSON.stringify(item));
+          const customerInfo = this.encodeUrl(item);
           return this.$router.push({
             path: "/orderSubmit",
             query: {
@@ -152,7 +153,7 @@ export default {
         margin: 5px;
         padding: 5px;
         font-size: 12px;
-        border: 1px solid #ccc;
+        border: 1PX solid #ccc;
         border-radius: 3px;
         text-align: center;
       }

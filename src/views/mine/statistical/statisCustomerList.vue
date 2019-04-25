@@ -1,5 +1,6 @@
 <template>
-  <div class="list-wrap">
+  <div class="list-wrap pt90">
+      <m-header :isFixed="true"></m-header>
     <section class="list-head-wrap">
       <div class="list-top-bar">
         <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">今日</span>

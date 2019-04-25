@@ -41,7 +41,7 @@
   export default {
     data() {
       return {
-        judgeCode :1,
+        judgeCode :2,
       }
     },
     computed: {
@@ -124,7 +124,7 @@
     #common .company .type,
     #common .time .title,
     #common .remark .title{
-        border-bottom :1px solid #f6f6f6;
+        border-bottom :1PX solid #f6f6f6;
          margin-bottom :0;
         lh(90);
     }

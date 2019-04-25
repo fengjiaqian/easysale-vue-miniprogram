@@ -1,29 +1,34 @@
 <template>
-  <div id="detail" style="height:140%;">
-    <!-- <m-header></m-header> -->
-    <div class="D-img">
-      <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
-    </div>
-    <div class="D-name">{{product.productName}}</div>
-    <!-- wx 新增加的div  描述规格 -->
-    <div class="D-norm">规格 : {{product.specification}}</div>
-    <div class="D-price">
-      <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
-    </div>
-    <div class="D-number">
-      <span class="c-3 fz30" style="font-weight:bold">数量</span>
-      <number-picker :product="product"></number-picker>
-    </div>
-    <!--  -->
-    <div class="D-info" v-if="product.description">
-      <h3>商品介绍</h3>
-      <ul class="D-info-list">
-        <li>{{product.description}}</li>
-      </ul>
-    </div>
+  <div id="detail">
     <!--  -->
     <float-cart></float-cart>
-    <div class="D-bottom">
+    <m-header :isFixed="true"></m-header>
+    <div v-if="product.productName">
+      <div class="D-img">
+        <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
+      </div>
+      <div class="D-name">{{product.productName}}</div>
+      <!-- wx 新增加的div  描述规格 -->
+      <div class="D-norm">规格 : {{product.specification}}</div>
+      <div class="D-price">
+        <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
+      </div>
+      <div class="fill"></div>
+      <div class="D-number">
+        <span class="c-3 fz30" style="font-weight:bold">数量</span>
+        <number-picker :product="product"></number-picker>
+      </div>
+      <!--  -->
+      <div class="D-info">
+        <div class="fill"></div>
+        <h3>商品介绍</h3>
+        <ul class="D-info-list">
+          <li>品牌：{{product.brandName}}</li>
+          <li v-if="product.description">简介：{{product.description}}</li>
+        </ul>
+      </div>
+    </div>
+    <!-- <div class="D-bottom">
       <div class="D-bottom-left">
         <dl class="D-link">
           <dt class="shouye"></dt>
@@ -38,7 +43,7 @@
         <a href="javascript:;" class="normal-btn immediately" @click="_immediatelyBuy(product)">立即下单</a>
         <a href="javascript:;" class="normal-btn" @click="_addToCart(product)">加入购物车</a>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -46,7 +51,7 @@
 import storage from "common/storage";
 import numberPicker from "components/number-picker.vue";
 import floatCart from "components/floatCart.vue";
-import { queryProductDetail, test } from "api/fetch/productDetail";
+import { queryProductDetail } from "api/fetch/productDetail";
 import { updateItem, getAllGoods } from "common/goodsStorage";
 import mHeader from "components/header.vue";
 import searchBar from "components/searchBar.vue";
@@ -106,6 +111,18 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+#detail {
+  pt(90);
+  height: 100%;
+  background: #fff;
+}
+
+.fill {
+  width: 100%;
+  h(20);
+  bg(#F6F6F6);
+}
+
 .D-link {
   inline();
   width: 50%;
@@ -179,7 +196,7 @@ export default {
     pl(24);
     c(#333);
     ft(30);
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1PX solid #EDEDED;
     font-weight: bold;
   }
 }
@@ -220,19 +237,18 @@ export default {
   c(#999);
   ft(30);
   pl(24);
-  padding-bottom: 24px;
+  lh(46);
 }
 
 .D-price {
+  pt(16);
   bg(#fff);
-  pb(16);
+  pb(24);
   pl(24);
-  h(66);
 }
 
 .D-number {
   h(90);
-  mt(20);
   bg(#fff);
   padding: 0 24px;
   flex-center();

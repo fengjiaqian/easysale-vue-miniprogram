@@ -219,7 +219,7 @@ export default {
 </script>
 <style lang="stylus"  scoped>
 .slide {
-  min-height: 1px;
+  min-height: 1PX;
 
   .slide-group {
     position: relative;
@@ -264,7 +264,7 @@ export default {
     border-radius: 4px;
 
     &.active {
-      width: 21px;
+      width: 21PX;
       background: rgba(229, 57, 53, 0.8);
     }
   }

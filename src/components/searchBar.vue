@@ -4,7 +4,7 @@
       <span class="s-b-l"></span>
       <input
         ref="inputDom"
-        type="text"
+        type="search"
         :value="searchKey"
         @click="_searchBarJump"
         placeholder="茅台 五粮液"
@@ -35,6 +35,7 @@ export default {
       default: false
     }
   },
+  mounted() {},
   methods: {
     _searchBarJump() {
       if (this.jump) {

@@ -24,7 +24,7 @@
         </div>
         <div class="nav">
             <div class="title">备注</div>
-            <textarea  cols="30" rows="10" class="report"></textarea>
+            <textarea  cols="30" rows="10" class="report" placeholder="请输入内容"></textarea>
         </div>
         <div class="bot-surport"></div>
         <button class="sure-btn">提交</button>
@@ -56,14 +56,14 @@ export default {
     font-weight :bold;
     c(#333);
     padding-left:24px;
-    border-bottom :1px solid #f6f6f6;
+    border-bottom :1PX solid #f6f6f6;
 }
 
 // list
 #common .nav .list{
     padding:24px 24px 0px 24px;
     bg(white);
-    // border-bottom :1px solid #f6f6f6;
+    // border-bottom :1PX solid #f6f6f6;
     overflow :hidden;
 }
 
@@ -100,13 +100,13 @@ export default {
     w(70px);
     c(#999);
     font-size :22px;
-    border:1px solid #999;
+    border:1PX solid #999;
     border-radius :10px;
     text-align :center;
 }
 
 #common .nav .list .right .r-bot{
-    border-bottom :1px solid #f6f6f6;
+    border-bottom :1PX solid #f6f6f6;
     padding-bottom :24px;
     float:right;
     padding-left: 200px;
@@ -149,7 +149,7 @@ export default {
     font-size:28px;
     font-weight :bold;
     bg(white);
-    border-top:1px solid #f6f6f6;
+    border-top:1PX solid #f6f6f6;
 }
 
 #common .nav .report{
