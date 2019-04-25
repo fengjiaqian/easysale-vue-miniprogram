@@ -1,0 +1,759 @@
+//陈列管理列表
+.exhibit-list{
+  li{
+    bg(#fff)
+    mb(20)
+  }
+  .el-t{
+    padding 24px 0 0 24px
+    flex()
+    align-content center
+    justify-content space-between
+    .title{
+      flex()
+      flex-direction column
+      h5{
+        ft(32)
+        c-3()
+        font-weight 600
+      }
+      span{
+        mt(6)
+        ft(24)
+        c-9()
+      }
+    }
+    .tag{
+      h(60)
+      lh(60)
+      bg(#FFF2D7)
+      border-radius:100px 0px 0px 100px;
+      ft(26)
+      c(#D08C02)
+      padding 0 24px
+      &.end{
+        bg(#F6F6F6)
+        c-9()
+      }
+    }
+  }
+  .el-m{
+    padding 24px
+    ft(28)
+    border-bottom 1px solid #EDEDED
+    p{
+      ft(28)
+      c-6()
+      text-overflow-2()
+      line-height 1.5
+    }
+    .apply-info{
+      mt(10)
+      c(#FF5638)
+    }
+  }
+  .el-b{
+    padding 26px 0
+    flex-center()
+    span{
+      flex-center()
+      width 50%
+      text-c()
+      ft(28)
+      c-6()
+      position relative
+      &:nth-of-type(2):before{
+        content ""
+        position absolute
+        left 0
+        top 0
+        w(1)
+        h(40)
+        bg(#EDEDED)
+      }
+      i{
+        ft(26)
+        c(#fff)
+        bg(#FF5638)
+        h(32)
+        w(32)
+        border-radius 50%
+        ml(10)
+      }
+    }
+  }
+}
+.exhibit-footer{
+  position fixed
+  left 0
+  bottom 0
+  bg(#fff)
+  width 100%
+  lh(98)
+  ft(32)
+  c(#FF5638)
+  text-c()
+  z-index 2
+}
+
+
+
+//陈列任务详情
+.exhibit-task-info{
+  .et-content{
+    padding 20px 16px 0
+    mb(118)
+    >li{
+      bg(#fff)
+      border-radius 2px
+      mb(20)
+      h5{
+        margin 0 24px
+        padding 24px 0
+        ft(30)
+        c-3()
+        font-weight 600
+        border-bottom 1px solid #EDEDED
+      }
+      .product{
+        flex-center()
+        flex-direction column
+        img{
+          margin 50px auto 35px
+          w(170)
+          h(170)
+        }
+        p{
+          ft(30)
+          c-3()
+          font-weight 600
+          mb(40)
+        }
+      }
+      .require{
+        padding 24px
+        ft(30)
+        c-6()
+        .reward{
+          mt(12)
+        }
+      }
+      .t-content{
+        padding 24px
+        ft(30)
+        c-6()
+      }
+    }
+  }
+  .et-footer{
+    position fixed
+    left 0
+    bottom 0
+    width 100%
+    z-index 2
+    bg(#fff)
+    flex-center()
+    lh(98)
+    span{
+      lh(98)
+      text-c()
+      width 50%
+      ft(32)
+      c-6()
+      position relative
+      &:nth-of-type(2):before{
+        content ""
+        position absolute
+        left 0
+        top 21px
+        w(1)
+        h(56)
+        bg(#EDEDED)
+      }
+      &.edit{
+        c(#FF5638)
+      }
+    }
+  }
+}
+
+
+
+//新建陈列任务
+.add-exhibit-task{
+  .et-content{
+    padding 20px 16px 0
+    mb(118)
+    >li{
+      bg(#fff)
+      border-radius 2px
+      mb(20)
+      h5{
+        margin 0 24px
+        padding 24px 0
+        ft(30)
+        c-3()
+        font-weight 600
+        border-bottom 1px solid #EDEDED
+      }
+      textarea{
+        padding 24px
+        ft(30)
+        c-3()
+      }
+      .add-product{
+        text-c()
+        c(#FF5638)
+        padding 32px 0
+        ft(28)
+      }
+      .product{
+        flex-center()
+        flex-direction column
+        img{
+          margin 50px auto 35px
+          w(170)
+          h(170)
+        }
+        p{
+          ft(30)
+          c-3()
+          font-weight 600
+          mb(40)
+        }
+      }
+      .require{
+        padding 24px
+        ft(30)
+        c-6()
+        .reward{
+          mt(12)
+        }
+      }
+      .t-content{
+        padding 24px
+        ft(30)
+        c-6()
+      }
+    }
+    .cycle{
+      .cycle-column{
+        padding 24px
+        flex-center()
+        c-3()
+        ft(30)
+        .title{
+          flex-1()
+          font-weight 600
+        }
+        input{
+          w(180)
+          text-align right
+          mr(10)
+        }
+      }
+    }
+    .apply-date{
+      flex-center()
+      ft(30)
+      c-3()
+      padding 24px
+      .title{
+        font-weight 600
+        flex-1()
+      }
+      .date-pick-wrap{
+        w(300)
+      }
+      .extension{
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+        w(16)
+        h(26)
+        background-image url(../../assets/images/icon-enter.png)
+      }
+    }
+  }
+  .et-footer{
+    position fixed
+    left 0
+    bottom 0
+    width 100%
+    z-index 2
+    bg(#BDBDBD)
+    flex-center()
+    lh(98)
+    c(#fff)
+    ft(32)
+    text-c()
+    &.achieve{
+      bg(#FF5638)
+    }
+  }
+}
+
+
+//可选商品列表
+.product-wrap{
+  bg(#fff)
+  height 100%
+  .search-bar{
+    padding 14px 24px
+    input{
+      outline none
+      width 100%
+      bg(#F6F6F6)
+      h(72)
+      lh(72)
+      ft(28)
+      c(#888)
+      text-c()
+    }
+  }
+  .pi-header{
+    border-bottom 1PX solid #EDEDED
+    position fixed
+    left 0
+    top 0
+    width 100%
+    bg(#fff)
+    z-index 1
+  }
+  .pi-content{
+    padding  100px 0 98px
+    height 100%
+    .product-list-scroll{
+      height 100%
+    }
+  }
+  .footer{
+    position fixed
+    left 0
+    bottom 0
+    width 100%
+    z-index 2
+    bg(#BDBDBD)
+    flex-center()
+    lh(98)
+    c(#fff)
+    ft(32)
+    text-c()
+    &.achieve{
+      bg(#FF5638)
+    }
+  }
+}
+
+
+
+//陈列情况列表
+.exhibit-state-wrap{
+  .exhibit-state-content{
+    pt(98)
+  }
+  .top-bar{
+    bg(#fff)
+    border-bottom 1PX solid #EDEDED
+    flex-center()
+    width 100%
+    h(98)
+    box-sizing border-box
+    position fixed
+    left 0
+    top 0
+    span{
+      width 25%
+      text-c()
+      lh(98)
+      c-6()
+      ft(28)
+    }
+    .active{
+      font-weight 600
+      ft(34)
+      c-3()
+      position relative
+      &:before{
+        content ""
+        position absolute
+        left 50%
+        bottom 0
+        transform translateX(-50%)
+        w(40)
+        h(6)
+        bg(#FF5638)
+      }
+    }
+  }
+  .footer{
+    position fixed
+    left 0
+    bottom 0
+    width 100%
+    h(98)
+    bg(#fff)
+    z-index 2
+    padding 0 24px
+    .oprate{
+      mt(17)
+      flex()
+      align-content center
+      justify-content space-between
+      .all-select{
+        flex-center()
+        ft(30)
+        c-3()
+        i{
+          mr(18)
+        }
+      }
+      .agree{
+        w(160)
+        text-c()
+        lh(64)
+        bg(#FF5638)
+        border-radius 8px
+        ft(28)
+        c(#fff)
+      }
+    }
+  }
+
+}
+
+
+.state-audit{
+  bg(#fff)
+  mt(20)
+  position relative
+  .sa-t{
+    padding 24px
+    border-bottom 1px solid #EDEDED
+    flex()
+    >i{
+     mr(24)
+     mt(10)
+    }
+    .st-content{
+      flex-1()
+      width 100%
+      .stc-t{
+        flex()
+        flex-direction column
+        ft(24)
+        c-9()
+        mb(24)
+        .shop-name{
+          ft(28)
+          c-3()
+          mb(6)
+        }
+      }
+      .stc-b{
+        flex()
+        flex-direction column
+        ft(28)
+        c-6()
+        .task{
+          ft(32)
+          c-3()
+          mb(8)
+          font-weight 600
+        }
+        .warn-tips{
+          c(#FF5638)
+          mt(14)
+        }
+        .nper{
+          mt(30)
+          flex()
+          flex-wrap nowrap
+          overflow-x scroll
+          i{
+            bg(#F6F6F6)
+            ft(24)
+            c(#6892BB)
+            min-width 116px
+            w(116)
+            lh(48)
+            text-c()
+            border-radius 24px
+            mr(24)
+            word-break keep-all
+            &.warn{
+              c(#FF5638)
+            }
+          }
+        }
+      }
+    }
+  }
+  .sa-b{
+    flex()
+    justify-content flex-end
+    padding 16px 0
+    span{
+      border-radius 8px
+      border 1px solid #DDDDDD
+      ft(28)
+      c-6()
+      w(160)
+      h(64)
+      lh(64)
+      box-sizing border-box
+      mr(24)
+      text-c()
+      &.red{
+        c(#FF5638)
+        border 1px solid #FF5638
+      }
+    }
+  }
+  .state-tag{
+    position absolute
+    right 24px
+    top 24px
+    c(#FF5638)
+    ft(26)
+  }
+}
+
+
+//陈列执行详情
+.perform-wrap{
+  .perform-title{
+    ft(34)
+    c-3()
+    padding 16px 24px
+    bg(#fff)
+    font-weight 600
+    p{
+      ft(26)
+      c-9()
+      mt(8)
+    }
+    span{
+      c(#FF5638)
+    }
+  }
+  .et-content{
+    padding 20px 16px 0
+    mb(118)
+    >li{
+      bg(#fff)
+      border-radius 2px
+      mb(20)
+      h5{
+        margin 0 24px
+        padding 24px 0
+        ft(30)
+        c-3()
+        font-weight 600
+        border-bottom 1px solid #EDEDED
+      }
+      .product{
+        flex-center()
+        flex-direction column
+        img{
+          margin 50px auto 35px
+          w(170)
+          h(170)
+        }
+        p{
+          ft(30)
+          c-3()
+          font-weight 600
+          mb(40)
+        }
+      }
+      .require{
+        padding 24px
+        ft(30)
+        c-6()
+        .reward{
+          mt(12)
+        }
+      }
+      .t-content{
+        padding 24px
+        ft(30)
+        c-6()
+      }
+      .customer-info{
+        padding 24px
+        ft(30)
+        c-6()
+        p{
+          mb(8)
+        }
+      }
+    }
+    .remark{
+      h5{
+        span{
+          ml(8)
+          c-9()
+        }
+      }
+      textarea{
+        padding 24px
+      }
+    }
+    .perform-case{
+      .pc-title{
+        margin 0 24px
+        padding 24px 0
+        ft(30)
+        c-3()
+        border-bottom 1px solid #EDEDED
+        flex()
+        align-content center
+        justify-content space-between
+        span{
+          font-weight 600
+        }
+        .detail{
+          ft(26)
+          c-9()
+          font-weight normal
+        }
+      }
+      .pc-content{
+        padding 24px
+        p{
+          ft(30)
+          c-3()
+          i{
+            c(#FF5638)
+          }
+        }
+        .nper-column{
+          flex()
+          flex-wrap wrap
+          padding 0 16px 24px
+          span{
+            w(84)
+            h(84)
+            lh(84)
+            text-c()
+            bg(#F6F6F6)
+            mt(32)
+            mr(50)
+            ft(36)
+            c-9()
+            border-radius 50%
+            position relative
+            &:nth-child(5n+5){
+             margin-right 0
+            }
+            i{
+              position absolute
+              right 0
+              bottom 0
+              w(32)
+              h(32)
+              background-image url(../../assets/images/success_exhibit_icon.png)
+              background-size contain
+              background-repeat no-repeat
+              background-position center
+            }
+          }
+        }
+        .scale-btn{
+          text-c()
+          ft(28)
+          c(#0096FF)
+        }
+      }
+    }
+  }
+  .et-footer{
+    position fixed
+    left 0
+    bottom 0
+    width 100%
+    z-index 2
+    bg(#fff)
+    flex-center()
+    lh(98)
+    span {
+      lh(98)
+      text-c()
+      width 50%
+      ft(32)
+      c-6()
+      &.refuse{
+        bg(#fff)
+        c(#FF5638)
+      }
+      &.agree{
+        bg(#FF5638)
+        c(#fff)
+      }
+    }
+  }
+}
+
+
+
+//陈列执行记录
+.exhibit-record-wrap{
+  .record-list{
+    padding 0 16px
+    >li{
+      padding 24px
+      mt(20)
+      bg(#fff)
+      border-radius 2px
+      flex()
+      img{
+        w(120)
+        h(120)
+      }
+      .info{
+        ml(24)
+        h5{
+          mt(6)
+          mb(24)
+          ft(30)
+          c-3()
+        }
+        p{
+          ft(26)
+          c-9()
+          &.red{
+            c(#FF5638)
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+textarea{
+  outline none
+  border none
+  resize none
+  &::-webkit-textarea-placeholder{
+    c(#bdbdbd)
+  }
+}
+input{
+  outline none
+  border none
+}
+.select{
+  inline()
+  w(40)
+  h(40)
+  background-image url(../../assets/images/icon-check.png)
+  background-size contain
+  background-repeat no-repeat
+  background-position center
+  &.selected{
+    background-image url(../../assets/images/icon-checked.png)
+  }
+}

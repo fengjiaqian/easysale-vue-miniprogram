@@ -10,7 +10,7 @@
       <div class="product-info">
         <h5 class="name">
           <i v-if="product.productType == 1" class="tag">自有</i>
-          <i :class="[product.state==1 ? 's-success' : 's-fail']">{{product.state==1?'上架':'下架'}}</i>
+          <i v-if="product.state" :class="[product.state==1 ? 's-success' : 's-fail']">{{product.state==1?'上架':'下架'}}</i>
           <span>{{product.productName}}</span>
         </h5>
         <div class="grama">
