@@ -9,7 +9,6 @@ import store from './store/store.js'
 import VueLazyload from 'vue-lazyload'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
 import 'api/index'
 import 'common/appConfig'
 import './assets/stylus/index.styl'
