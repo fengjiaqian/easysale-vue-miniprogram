@@ -7,7 +7,7 @@
     position absolute
     bottom 0
     left 35%
-    h(1)
+    height 1PX
     width 100%
     bg(#EDEDED)
   }
@@ -106,18 +106,6 @@
         }
       }
     }
-    .product-pic-small{
-      w(126)
-      h(126)
-      bg(#F6F6F6)
-      margin 0 24px
-      flex-center()
-      img{
-        w(108)
-        h(108)
-        margin auto
-      }
-    }
     .product-info-small{
       h(126)
       flex()
@@ -136,6 +124,74 @@
           c(#FF5638)
           ft(26)
         }
+      }
+    }
+    .product-pic-normal{
+      ml(24)
+      w(120)
+      h(120)
+      border-radius 6px
+      img{
+        w(120)
+        h(120)
+      }
+    }
+  }
+}
+.product-wrap-noraml{
+  flex-center()
+  padding 0 24px
+  mt(24)
+  .pw-l{
+      span{
+        inline()
+        w(40)
+        h(40)
+        background-image url(../../assets/images/icon-check.png)
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+      }
+      .selected{
+        background-image url(../../assets/images/icon-checked.png)
+      }
+    }
+  .pw-r{
+    flex-1()
+    flex()
+    .product-pic{
+      w(166)
+      h(166)
+      bg(#fff)
+      min-width 166px
+      margin 0 24px
+      flex-center()
+      img{
+        w(166)
+        h(166)
+        margin auto
+      }
+    }
+    .product-info-normal{
+      flex-1()
+      flex()
+      flex-direction column
+      .name{
+        ft(30)
+        c-3()
+        font-weight 600
+        text-overflow-2()
+      }
+    }
+    .product-pic-normal{
+      ml(24)
+      mr(24)
+      w(120)
+      h(120)
+      border-radius 6px
+      img{
+        w(120)
+        h(120)
       }
     }
   }

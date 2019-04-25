@@ -1,4 +1,9 @@
 //陈列管理列表
+.exhibit-list-scroll{
+  padding 110px 0 118px
+  width 100%
+  height 100%
+}
 .exhibit-list{
   li{
     bg(#fff)
@@ -100,6 +105,7 @@
 
 //陈列任务详情
 .exhibit-task-info{
+  pt(90)
   .et-content{
     padding 20px 16px 0
     mb(118)
@@ -192,14 +198,23 @@
         margin 0 24px
         padding 24px 0
         ft(30)
-        c-3()
-        font-weight 600
         border-bottom 1px solid #EDEDED
+        flex()
+        align-content center
+        justify-content space-between
+        .title{
+          font-weight 600
+          c-3()
+        }
+        .change{
+          c(#FF5638)
+        }
       }
       textarea{
         padding 24px
         ft(30)
         c-3()
+        width 100%
       }
       .add-product{
         text-c()
@@ -349,8 +364,13 @@
 
 //陈列情况列表
 .exhibit-state-wrap{
+  height 100%
   .exhibit-state-content{
-    pt(98)
+    pt(180)
+    height 100%
+    .exhibit-state-scroll{
+      height 100%
+    }
   }
   .top-bar{
     bg(#fff)
@@ -361,7 +381,8 @@
     box-sizing border-box
     position fixed
     left 0
-    top 0
+    top 90px
+    z-index 2
     span{
       width 25%
       text-c()
@@ -422,102 +443,6 @@
 
 }
 
-
-.state-audit{
-  bg(#fff)
-  mt(20)
-  position relative
-  .sa-t{
-    padding 24px
-    border-bottom 1px solid #EDEDED
-    flex()
-    >i{
-     mr(24)
-     mt(10)
-    }
-    .st-content{
-      flex-1()
-      width 100%
-      .stc-t{
-        flex()
-        flex-direction column
-        ft(24)
-        c-9()
-        mb(24)
-        .shop-name{
-          ft(28)
-          c-3()
-          mb(6)
-        }
-      }
-      .stc-b{
-        flex()
-        flex-direction column
-        ft(28)
-        c-6()
-        .task{
-          ft(32)
-          c-3()
-          mb(8)
-          font-weight 600
-        }
-        .warn-tips{
-          c(#FF5638)
-          mt(14)
-        }
-        .nper{
-          mt(30)
-          flex()
-          flex-wrap nowrap
-          overflow-x scroll
-          i{
-            bg(#F6F6F6)
-            ft(24)
-            c(#6892BB)
-            min-width 116px
-            w(116)
-            lh(48)
-            text-c()
-            border-radius 24px
-            mr(24)
-            word-break keep-all
-            &.warn{
-              c(#FF5638)
-            }
-          }
-        }
-      }
-    }
-  }
-  .sa-b{
-    flex()
-    justify-content flex-end
-    padding 16px 0
-    span{
-      border-radius 8px
-      border 1px solid #DDDDDD
-      ft(28)
-      c-6()
-      w(160)
-      h(64)
-      lh(64)
-      box-sizing border-box
-      mr(24)
-      text-c()
-      &.red{
-        c(#FF5638)
-        border 1px solid #FF5638
-      }
-    }
-  }
-  .state-tag{
-    position absolute
-    right 24px
-    top 24px
-    c(#FF5638)
-    ft(26)
-  }
-}
 
 
 //陈列执行详情
@@ -755,5 +680,30 @@ input{
   background-position center
   &.selected{
     background-image url(../../assets/images/icon-checked.png)
+  }
+}
+
+
+
+.empty-exhibit{
+  position absolute
+  left 50%
+  top 50%
+  transform translate(-50%,-75%)
+  bg(#F6F6F6)
+  flex()
+  align-items center
+  flex-direction column
+  i{
+    w(340)
+    h(340)
+    background-image url(../../assets/images/empty_icon_1.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+  }
+  span{
+    ft(30)
+    c-9()
   }
 }
