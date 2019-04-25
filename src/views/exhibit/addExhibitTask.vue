@@ -48,6 +48,7 @@
 </template>
 
 <script>
+  import { AddExhibitActivity } from "api/fetch/exhibit";
   export default {
     data() {
       return {
