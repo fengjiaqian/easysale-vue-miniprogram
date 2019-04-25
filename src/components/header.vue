@@ -1,14 +1,22 @@
 <template>
-  <div class="m-header" ref="mHeaderDom">
+  <div class="m-header" ref="mHeaderDom" :style="fixedStyleObj">
     <div class="icon-back" @click.stop="goBack">
       <span></span>
     </div>
     <!--  -->
     <div class="center-area">
-       <!-- <div class="title">{{title}}</div> -->
-       <slot></slot>
+      <div class="search-bar" v-if="isSearch">
+        <span class="s-b-l"></span>
+        <input
+          type="search"
+          :value="searchKey"
+          :placeholder="placeholder"
+          @change="handleChange($event)"
+        >
+      </div>
+      <div class="title" v-else>{{title || ''}}</div>
     </div>
-    <!-- slot -->
+    <!--  -->
     <div class="icon-shortcut" @click.stop="showShortcutList">
       <span></span>
     </div>
@@ -44,10 +52,36 @@
 import { addClass, removeClass } from "common/dom";
 export default {
   name: "m-header",
+  props: {
+    //是否带搜索bar
+    isSearch: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
+    //是否需要定位在顶部
+    isFixed: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
+    var fixedStyleObj = {};
+    if (this.isFixed) {
+      fixedStyleObj = {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 1000
+      };
+    }
     return {
       show: false,
-      title: document.title || ""
+      searchKey: "",
+      fixedStyleObj: fixedStyleObj
     };
   },
   computed: {},
@@ -83,6 +117,9 @@ export default {
       this.show = !this.show;
     },
     watchScroll() {
+      if (this.isFixed) {
+        return false;
+      }
       if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
           return setTimeout(callback, 17);
@@ -94,22 +131,27 @@ export default {
         ticking = false;
       var distance = (clientWidth * 90) / 750;
 
-      const scrollDom = document.querySelector("#app");//
+      const scrollDom = document.querySelector("#app"); //
       scrollDom.addEventListener("scroll", e => {
         this.show = false;
         last_known_scroll_position = scrollDom.scrollTop;
         if (!ticking) {
           window.requestAnimationFrame(() => {
+            const el = this.$refs.mHeaderDom;
             if (last_known_scroll_position > Math.abs(distance)) {
-              addClass(this.$refs.mHeaderDom, "header-fixed");
+              el && addClass(el, "header-fixed");
             } else {
-              removeClass(this.$refs.mHeaderDom, "header-fixed");
+              el && removeClass(el, "header-fixed");
             }
             ticking = false;
           });
         }
         ticking = true;
       });
+    },
+    handleChange($event) {
+      this.searchKey = $event.target.value;
+      this.$emit("emitEvt", this.searchKey);
     }
   }
 };
@@ -165,7 +207,9 @@ export default {
 
 .center-area {
   width: 100%;
-  padding: 0 88px;
+  h(90);
+  padding: 15px 100px 0;
+  bg(#fff);
 
   .title {
     lh(90);
@@ -223,6 +267,34 @@ export default {
     height: 80px;
     background: url('../assets/images/ic-shoucurt-home.png') no-repeat center;
     background-size: 40% 40%;
+  }
+}
+
+.search-bar {
+  flex-1();
+  display: flex;
+  align-items: center;
+  border: 1PX solid #ededed;
+  radius(8);
+  background: #f2f2f2;
+  overflow: hidden;
+
+  .s-b-l {
+    display: inline-block;
+    squ(33);
+    margin: 0 16px;
+    background: url('../assets/images/ic_sousuo@2x.png') no-repeat center;
+    background-size: contain;
+  }
+
+  input {
+    flex-1();
+    border: 0;
+    height: 56px;
+    line-height: 56px;
+    font-size: 26px;
+    color: #333;
+    background: #f2f2f2;
   }
 }
 </style>

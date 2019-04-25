@@ -1,20 +1,24 @@
 <template>
-  <div class="common">
+  <div class="common pt90">
+    <m-header :isFixed="true"></m-header>
     <div class="name">
       <div class="left">姓名 :</div>
-      <input class="right" type="text" v-model="name" placeholder="请输入姓名">
+      <input class="right" type="text" v-model="consigneeInfo.name" placeholder="请输入姓名">
     </div>
     <div class="tele">
       <div class="left">联系电话 :</div>
-      <input class="right" type="number" v-model="phone" placeholder="请输入手机号码">
+      <input class="right" type="number" v-model="consigneeInfo.phone" placeholder="请输入手机号码">
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" type="text" v-model="shopName" placeholder="请输入店铺名称">
+      <input class="right" type="text" v-model="consigneeInfo.customerShopName" placeholder="请输入店铺名称">
     </div>
-    <div class="address">
-      <div class="left">收货地址 :</div>
-      <textarea rows="2" cols="20" class="right" v-model="address" placeholder="请输入店铺名称"></textarea>
+    <div class="address-column">
+      <span>收货地址 :</span>
+      <div>
+        <input v-model="consigneeInfo.address" type="text" maxlength="50" placeholder="请输入店铺地址">
+      </div>
+      <i @click="obtainAddress" class="position"></i>
     </div>
     <div class="edit" @click="_operate" :class="{'can-operate': canOperate}">保存</div>
   </div>
@@ -22,21 +26,35 @@
 
 <script>
 import * as Operation from "api/fetch/endCustomer";
+import { evokeWxLocation } from "common/location";
 export default {
   data() {
     return {
       code: 1, //新增1  编辑2
-      name: "",
-      phone: "",
-      shopName: "",
-      address: "",
-      id: ""
+      consigneeInfo: {
+        name: "",
+        phone: "",
+        customerShopName: "",
+        address: "",
+        id: ""
+      },
     };
   },
   computed: {
     canOperate() {
-      return this.name && this.phone && this.shopName && this.address;
+      const { name,phone,customerShopName,address } = this.consigneeInfo
+      return name && phone && customerShopName && address;
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm=>{
+      let passData = to.query.passData ? to.query.passData : null
+      if(passData){
+        passData = JSON.parse(passData)
+        Object.assign(vm.consigneeInfo,passData.pageData)
+        vm.consigneeInfo.address = passData.addressData.address
+      }
+    })
   },
   created() {
     this.init();
@@ -50,7 +68,7 @@ export default {
       document.title = this.code == 1 ? "新增收货人" : "编辑收货人";
       if (this.code == 2 && addressInfo) {
         for (let preperty in addressInfo) {
-          this[preperty] = addressInfo[preperty];
+          this.consigneeInfo[preperty] = addressInfo[preperty];
         }
       }
     },
@@ -58,11 +76,11 @@ export default {
       if (!this.canOperate) return false;
       const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
       const regExp = new RegExp(partter);
-      const { name, phone, shopName, address, id } = this;
+      const { name, phone, customerShopName, address, id } = this.consigneeInfo;
       if (!regExp.test(phone)) {
         return this.$toast("手机号码格式不正确");
       }
-      const params = { name, phone, shopName, address, id };
+      const params = { name, phone, customerShopName, address, id };
       const operate = this.code == 1 ? "addConsigneer" : "modifyConsignee";
       Operation[operate](params)
         .then(res => {
@@ -73,7 +91,15 @@ export default {
         .catch(err => {
           this.$toast(err.message);
         });
-    }
+    },
+    //去定位地址
+    obtainAddress(){
+      let recordData = {
+        path: this.$route.path,
+        pageData: this.consigneeInfo
+      }
+      evokeWxLocation(recordData)
+    },
   }
 };
 </script>
@@ -121,6 +147,18 @@ export default {
   height: 132px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
+  .position{
+    float right
+    display inline-block
+    mt(24)
+    mr(24)
+    w(48)
+    h(48)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+    background-image url(../../../assets/images/address_position_icon.png)
+  }
 }
 
 .common .address .left {
@@ -159,5 +197,44 @@ export default {
 
 .can-operate {
   bg(rgba(255, 86, 56, 1));
+}
+.address-column{
+  padding 0 24px
+  bg(#fff)
+  flex()
+  align-items center
+  justify-content flex-start
+  lh(90)
+  ft(30)
+  c-3()
+  span{
+    c-6()
+    mr(12)
+    min-width 150px
+  }
+  input{
+    flex-1()
+    outline none
+    border none
+  }
+  div{
+    flex-1()
+    lh(90)
+    h(90)
+    input{
+      width 100%
+      height 100%
+    }
+  }
+  i{
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+  }
+  .position{
+    w(48)
+    h(48)
+    background-image url(../../../assets/images/address_position_icon.png)
+  }
 }
 </style>

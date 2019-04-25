@@ -1,5 +1,6 @@
 <template>
-  <div class="staff-detail-wrap" v-show="domShow">
+  <div class="staff-detail-wrap pt90" v-show="domShow">
+    <m-header :isFixed="true"></m-header>
     <ul class="sd-info">
       <li class="header-pic">
         <img v-lazy="staffInfo.logoIamgeUrl || ''">
@@ -35,50 +36,46 @@
 </template>
 
 <script>
-  import { queryStaffDetail,deleteStaff } from "api/fetch/mine";
-  export default {
-    data() {
-      return {
-        userId: '',//员工id
-        staffInfo: {},//员工详细信息
-        domShow: false,
-      };
+import { queryStaffDetail, deleteStaff } from "api/fetch/mine";
+export default {
+  data() {
+    return {
+      userId: "", //员工id
+      staffInfo: {}, //员工详细信息
+      domShow: false
+    };
+  },
+  components: {},
+  computed: {},
+  created() {
+    localStorage.removeItem("staffInfo");
+    this.userId = this.$route.query.userId;
+    this._queryStaffDetail();
+  },
+  methods: {
+    _queryStaffDetail() {
+      let param = { userId: this.userId };
+      queryStaffDetail(param).then(res => {
+        if (res.result === "success") {
+          this.domShow = true;
+          this.staffInfo = res.data;
+        }
+      });
     },
-    components: {
-
+    skipTo() {
+      localStorage.setItem("staffInfo", JSON.stringify(this.staffInfo));
+      this.$router.push({
+        path: "/my/editStaffInfo"
+      });
     },
-    computed: {
-
-    },
-    created(){
-      localStorage.removeItem('staffInfo')
-      this.userId = this.$route.query.userId
-      this._queryStaffDetail()
-    },
-    methods: {
-      _queryStaffDetail(){
-        let param = { userId: this.userId }
-        queryStaffDetail(param).then(res => {
-          if (res.result === "success" ) {
-            this.domShow = true
-            this.staffInfo = res.data
-          }
-        });
-      },
-      skipTo(){
-        localStorage.setItem('staffInfo',JSON.stringify(this.staffInfo))
-        this.$router.push({
-          path: "/my/editStaffInfo"
-        });
-      },
-      freeze(){
-        this.$confirm('确定要删除该员工吗？')
+    freeze() {
+      this.$confirm("确定要删除该员工吗？")
         .then(() => {
           let param = {
             id: this.staffInfo.id
-          }
+          };
           deleteStaff(param).then(res => {
-            if (res.result === "success" ) {
+            if (res.result === "success") {
               //删除成功返回员工列表页
               this.$toast("删除成功！");
               this.$router.push({
@@ -88,12 +85,12 @@
           });
         })
         .catch(() => {});
-      },
     }
-  };
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
-  @import "./stylus/staff.styl"
+@import './stylus/staff.styl';
 </style>
 

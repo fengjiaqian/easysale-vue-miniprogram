@@ -1,5 +1,6 @@
 <template>
-  <div class="staff-edit-wrap">
+  <div class="staff-edit-wrap pt90">
+    <m-header :isFixed="true"></m-header>
     <ul class="staff-info-list">
       <li>
         <span>客户姓名：</span>
@@ -34,7 +35,7 @@
         <i @click="obtainAddress" class="position"></i>
       </li>
       <div class="h20"></div>
-      <li class="special-li">
+      <li class="special-li" v-if="userType==1">
         <span>销售负责人：</span>
         <div @click="rolePopToggle">{{activeName}}</div>
         <i class="extension"></i>
@@ -105,7 +106,8 @@ export default {
   },
   created() {
     this.currentDealerId = storage.get("currentDealerId", "");
-    this.queryStaffs();
+    //经销商时才查询销售负责人列表
+    if (this.userType == 1) this.queryStaffs();
   },
   methods: {
     limitName(e) {

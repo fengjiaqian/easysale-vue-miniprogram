@@ -153,7 +153,7 @@ const mine = [
                 path: 'userInfoEdit',
                 name: 'userInfoEdit',
                 meta: {
-                    title: '店铺信息'
+                    title: '修改店铺信息'
                 },
                 component: UserInfoEdit
             },

@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { setTimeout } from "timers";
 export default {
   name: "search-bar",
   data() {
@@ -34,10 +33,9 @@ export default {
       //是否点击跳转 首页
       type: Boolean,
       default: false
-    },
+    }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     _searchBarJump() {
       if (this.jump) {

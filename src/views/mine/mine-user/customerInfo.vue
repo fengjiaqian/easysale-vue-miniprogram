@@ -1,5 +1,6 @@
 <template>
-  <div class="common">
+  <div class="common pt">
+    <m-header :isFixed="true"></m-header>
     <div class="name">
       <div class="left">您的姓名 :</div>
       <input class="right" value type="text" v-model="name" placeholder="请输入姓名" ref="nameInput">
@@ -53,14 +54,14 @@ export default {
           this.$toast(err.message);
         });
     },
-    checkData(){   // wx 检验数据是否都存在
+    checkData() {
+      // wx 检验数据是否都存在
       // /都是空的
-      if(this.name&&this.phone&&this.address){
-          return true;
-        }else{
-          return false;
-        }
-      
+      if (this.name && this.phone && this.address) {
+        return true;
+      } else {
+        return false;
+      }
     },
     _operate() {
       if (!this.isEdit) {
@@ -70,9 +71,8 @@ export default {
         return false;
       }
       //todo 判断空
-      if(!this.checkData){
-       return  this.$toast('信息不能为空');
-
+      if (!this.checkData) {
+        return this.$toast("信息不能为空");
       }
       //保存 如果没有更改项直接返回
       if (this.isMutated()) {

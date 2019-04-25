@@ -8,8 +8,9 @@
           @click="handleLetterClick"
           @touchstart="handleTouchStart"
           @touchmove="handleTouchMove"
-          @touchend="handleTouchEnd"
-      >{{item}}</li>
+          @touchend="handleTouchEnd">
+        <span>{{item}}</span>
+      </li>
     </ul>
   </div>
 </template>
@@ -72,15 +73,24 @@
     justify-content center
     align-items center
     position absolute
-    top 80px
-    width 20px
+    top 40px
+    width 80px
     right 16px
     bottom 0
-    .item
-      text-align center
-      lh(44)
-      ft(30)
+    ul{
+      width 100%
+    }
+    .item{
+      flex()
+      justify-content flex-end
+      lh(40)
+      ft(28)
       c-6()
+      span{
+        w(28)
+        text-align center
+      }
+    }
 </style>
 
 
