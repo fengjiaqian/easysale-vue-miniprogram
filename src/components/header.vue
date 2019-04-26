@@ -177,10 +177,10 @@ export default {
 
 .icon-back {
   position: absolute;
-  w(88);
-  h(88);
+  w(50);
+  h(50);
   top: 0;
-  left: 0;
+  left: 10px;
 
   span {
     block();
@@ -217,8 +217,8 @@ export default {
   bg(#fff);
 
   .title {
-    lh(90);
-    ft(32);
+    ft(38);
+    fb();
     c(#333);
     text-c();
   }

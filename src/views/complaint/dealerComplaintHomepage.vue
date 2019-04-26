@@ -1,9 +1,9 @@
 <template>
     <div id="complaint">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <top-tabs  v-if="isDealer"  :topTabsList="topTabsList" @switchTab="switchTab" class="top"></top-tabs>
-        <empty :class="[isDealer?'content':'',tabState==0&&isDealer?'mb':'']" :txt="'暂无相关投诉单'" v-if="empty" :iconUrl="iconUrl"></empty>
-        <div :class="[isDealer?'content':'',tabState==0&&isDealer?'mb':'',isSaleMan?'mt':'']">
+        <top-tabs  v-if="!isSaleMan"  :topTabsList="topTabsList" @switchTab="switchTab" class="top"></top-tabs>
+        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关投诉单'" v-if="empty" :iconUrl="iconUrl"></empty>
+        <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
             <scroll
                     v-if="complaintsList.length"
                     class="c-list"
@@ -22,6 +22,7 @@
             </div>
             <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
         </div>
+        <button class="footer-btn" @click="addComplaints()" v-if="isCustomer">新建投诉</button>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
                      @submitQuery="submitQuery"></saleman-pop>
     </div>
@@ -58,7 +59,7 @@
         },
         created() {
             console.log(this.userType)
-            this.$route.meta.title = this.userType=='3'?'投诉列表':'投诉管理';
+            this.title = this.userType=='3'?'投诉列表':'投诉管理';
             this._QueryComplaintList();
         },
         computed: {
@@ -183,6 +184,16 @@
                     this._QueryComplaintList()
                 });
             },
+
+            /**
+             * 跳转新增投诉与建议
+             * @param id-投诉单id
+             */
+            addComplaints() {
+                this.$router.push({
+                    name: "addNewComplaint",
+                });
+            },
         }
     }
 </script>
@@ -190,6 +201,7 @@
 <style lang="stylus" scoped>
     #complaint {
         width: 100vw;
+        height :100vh;
         bg(#f6f6f6);
         .top {
             width 100vw;
@@ -200,7 +212,6 @@
         }
         .content {
             margin-top 185px;
-            border-top 2px solid #EDEDED
         }
         .mb{
             margin-bottom 110px;
@@ -259,6 +270,21 @@
             top: 40px;
             left 24px;
 
+        }
+        .footer-btn {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            border: 0;
+            outline: none;
+            width: 100%;
+            h(98);
+            lh(98);
+            bg(#fff)
+            font-size: 32px;
+            c(#FF5638);
+            text-align: center;
+            z-index 44
         }
     }
 
