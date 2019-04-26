@@ -362,7 +362,15 @@ export default {
         }
       });
     },
-    jumpSecondsort(item) {}
+    jumpSecondsort(item) {
+      switch (item.value) {
+        case `陈列管理`:
+          this.$router.push({path: "/exhibitList"});
+          break;
+        default:
+          break;
+      }
+    }
   }
 };
 </script>

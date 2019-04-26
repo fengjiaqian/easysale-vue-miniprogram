@@ -511,6 +511,16 @@
         c-6()
         p{
           mb(8)
+          position relative
+          .tel{
+            block();
+            pos(absolute);
+            bottom: 0;
+            right: 0;
+            squ(40);
+            background: url('../../assets/images/icon-tel.png') no-repeat center;
+            background-size: contain;
+          }
         }
       }
     }
@@ -523,6 +533,7 @@
       }
       textarea{
         padding 24px
+        width 100%
       }
     }
     .perform-case{
@@ -582,6 +593,9 @@
               background-size contain
               background-repeat no-repeat
               background-position center
+              &.faild{
+                background-image url(../../assets/images/faild_exhibit_icon.png)
+              }
             }
           }
         }
@@ -705,5 +719,21 @@ input{
   span{
     ft(30)
     c-9()
+  }
+}
+.perform-column{
+  position relative
+  i{
+    position absolute
+    right 24px
+    top 50%
+    transform translateY(-50%)
+    w(30)
+    h(30)
+    background-image url(../../assets/images/icon-enter.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+    z-index 2
   }
 }

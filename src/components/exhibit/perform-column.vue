@@ -1,13 +1,14 @@
 <template>
   <div>
+    <slot></slot>
     <!--陈列状态-->
     <!--待审核-->
     <div class="state-audit" v-if="exhibit.state==0">
       <div class="sa-t">
-        <i class="select"></i>
-        <div class="st-content">
+        <i class="select" :class="{'selected':exhibit.select}" @click="select"></i>
+        <div class="st-content" @click="goDetail">
           <div class="stc-t">
-            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName}}</span>
+            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b">
@@ -16,17 +17,17 @@
           </div>
         </div>
       </div>
-      <div class="sa-b">
-        <span>查看详情</span>
-      </div>
+<!--      <div class="sa-b">
+        <span @click="goDetail">查看详情</span>
+      </div>-->
       <div class="state-tag">待审核</div>
     </div>
     <!--执行中-->
-    <div class="state-audit" v-if="exhibit.state==2">
+    <div class="state-audit" v-if="exhibit.state==2" @click="goDetail">
       <div class="sa-t">
         <div class="st-content">
           <div class="stc-t">
-            <!--<span class="shop-name">{{exhibit.customerInfoDTO.customerShopName}}</span>-->
+            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b">
@@ -41,17 +42,17 @@
           </div>
         </div>
       </div>
-      <div class="sa-b">
-        <span>查看详情</span>
-      </div>
+<!--      <div class="sa-b">
+        <span @click="goDetail">查看详情</span>
+      </div>-->
       <div class="state-tag">执行中</div>
     </div>
     <!--已到期-->
-    <div class="state-audit" v-if="exhibit.state==3">
+    <div class="state-audit" v-if="exhibit.state==3" @click="goDetail">
       <div class="sa-t">
         <div class="st-content">
           <div class="stc-t">
-            <!--<span class="shop-name">{{exhibit.customerInfoDTO.customerShopName}}</span>-->
+            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b">
@@ -60,30 +61,34 @@
           </div>
         </div>
       </div>
-      <div class="sa-b">
-        <span>查看详情</span>
+<!--      <div class="sa-b">
+        <span class="red" @click="goDetail">查看详情</span>
         <span class="red" v-if="exhibit.unloadedNum">处理</span>
         <span class="red" v-else>发放奖励</span>
-      </div>
+      </div>-->
       <div class="state-tag">已到期</div>
     </div>
     <!--已完成-->
-    <div class="state-audit" v-if="exhibit.state==4||exhibit.state==5">
+    <div class="state-audit" v-if="exhibit.state==4||exhibit.state==5" @click="goDetail">
       <div class="sa-t">
         <div class="st-content">
           <div class="stc-t">
-            <!--<span class="shop-name">{{exhibit.customerInfoDTO.customerShopName}}</span>-->
+            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
-          <div class="stc-b">
+          <div class="stc-b" v-if="exhibit.state==4">
             <span class="task">陈列奖品已发放</span>
-            <span>奖品：</span>
+            <span>奖品：{{exhibit.shopDisplayItemDto.display_reward}}</span>
+          </div>
+          <div class="stc-b" v-if="exhibit.state==5">
+            <span class="task">陈列奖品未发放</span>
+            <span>未发放原因：{{exhibit.comments}}</span>
           </div>
         </div>
       </div>
-      <div class="sa-b">
-        <span>查看详情</span>
-      </div>
+<!--      <div class="sa-b">
+        <span @click="goDetail">查看详情</span>
+      </div>-->
       <div class="state-tag">已完成</div>
     </div>
   </div>
@@ -135,7 +140,17 @@
           uploadedNum,
           unloadedNum
         }
-      }
+      },
+      //产看详情
+      goDetail(){
+        this.$router.push({
+          path: "/performDetail",
+          query: {id: this.exhibit.id}
+        });
+      },
+      select(){
+        this.exhibit.select = !this.exhibit.select
+      },
     },
   };
 </script>

@@ -18,7 +18,10 @@
                 v-for="exhibit in performList"
                 :key="exhibit.id"
                 :exhibit="exhibit"
-        ></perform-column>
+                class="perform-column"
+        >
+          <i></i>
+        </perform-column>
       </scroll>
     </section>
 
@@ -28,7 +31,7 @@
           <i class="select"></i>
           <span>全选</span>
         </div>
-        <div class="agree">同意</div>
+        <div class="agree" @click="batchOprate">同意</div>
       </div>
     </section>
 
@@ -41,7 +44,7 @@
 </template>
 
 <script>
-  import { queryPerformList } from "api/fetch/exhibit";
+  import { queryPerformList,oprateExhibit } from "api/fetch/exhibit";
   import performColumn from "components/exhibit/perform-column.vue";
   import scroll from "components/scroll.vue";
   export default {
@@ -118,6 +121,12 @@
             if(currentPage==1){
               this.totalPage = totalPage
             }
+            //待审核的列表项可以勾选
+            if(this.activeIdx==0){
+              dataList.forEach((item)=>{
+                item.select = false
+              })
+            }
             this.performList = this.performList.concat(dataList)
             this.loading = false
             this.requestDone = true
@@ -125,6 +134,35 @@
         }).catch(err => {
           this.loading = false
           this.requestDone = true
+        })
+      },
+      //批量操作
+      batchOprate(){
+        let cids = []
+        this.performList.forEach((item)=>{
+          if(item.select){
+            cids.push(item.id)
+          }
+        })
+        if(!cids.length) return this.$toast(`请选择需要同意的陈列`)
+        let param = {
+          cids,
+          state: 2
+        }
+        oprateExhibit(param,'').then(res => {
+          if (res.result === "success") {
+            this.$toast(`操作成功！`)
+            //操作成功后刷新列表页
+            if(this.filterParam.pageNum==1){
+              this.performList = []
+              this.queryPerforms()
+            }else{
+              this.performList = []
+              this.filterParam.pageNum = 1
+            }
+          }
+        }).catch(err => {
+          this.$toast(err.message)
         })
       },
       loadMoreData() {

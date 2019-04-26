@@ -96,7 +96,38 @@ function queryPerformDetail(id) {
 }
 
 
+//陈列管理-处理陈列申请（拒绝/同意）,处理陈列任务（同意发放奖励/拒绝发放奖励）
+function oprateExhibit(params,type) {
+	let url = `customer/batchupdisplaysign`
+	if(type==`refuseReward`||type==`agreeReward`) url = `customer/cusdisplaysignup`
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+//陈列管理-陈列活动情况执行列表
+function queryPerformRecordList(params) {
+	const url = `shopdisplayphoto/diaplayPhotoList`
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 export {
 	queryDisplayList,addExhibitActivity,queryExhibitDetail,deleteExhibit,
-	queryPerformList,queryPerformDetail
+	queryPerformList,queryPerformDetail,oprateExhibit,queryPerformRecordList
 }
