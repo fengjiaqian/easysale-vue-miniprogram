@@ -1,5 +1,5 @@
 <template>
-  <section class="perform-wrap">
+  <section class="perform-wrap" v-if="domShow">
     <div class="perform-title">
       <div>陈列状态：<span>待审核</span></div>
       <p>该客户已提交3期，有6期未按时提交。</p>
@@ -55,21 +55,33 @@
 </template>
 
 <script>
+  import { queryPerformList } from "api/fetch/exhibit";
   export default {
     data() {
       return {
-
+        performInfo: {},
+        domShow: false
       };
     },
     components: {
 
     },
     created() {
-
+      this.id = this.$route.query.id
+      this.queryDetail()
     },
     mounted() {},
     methods: {
-
+      queryDetail(){
+        queryPerformList(this.id).then(res => {
+          if (res.result === "success") {
+            this.exhibitInfo = res.data
+            this.domShow = true
+          }
+        }).catch(err => {
+          this.$toast(err.message)
+        })
+      }
     }
   };
 </script>

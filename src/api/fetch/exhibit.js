@@ -80,9 +80,23 @@ function queryPerformList(params) {
 	});
 }
 
+//陈列管理-陈列跟踪详情
+function queryPerformDetail(id) {
+	const url = `/customer/diaPlaySignInfo/${id}`
+	return axios({
+		method: 'get',
+		url: url,
+		data: {},
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
 
 
 export {
 	queryDisplayList,addExhibitActivity,queryExhibitDetail,deleteExhibit,
-	queryPerformList,
+	queryPerformList,queryPerformDetail
 }
