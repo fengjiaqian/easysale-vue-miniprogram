@@ -161,6 +161,9 @@ export default {
       //经销商客户管理  新增客户 销售负责人 非必填   为空时 默认为  当前登录人id （经销商id），如果指定销售人员那就属于那个销售人员
       this.customerInfo.salesPersonUserId =
         this.customerInfo.salesPersonUserId || this.currentDealerId;
+      if(this.userType == 2){
+        this.customerInfo.salesPersonUserId = ''
+      }
       addCustomer(this.customerInfo)
         .then(res => {
           if (res.result === "success") {

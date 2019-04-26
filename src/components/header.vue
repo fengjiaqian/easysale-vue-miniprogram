@@ -295,6 +295,7 @@ export default {
     font-size: 26px;
     color: #333;
     background: #f2f2f2;
+    outline none
   }
 }
 </style>
