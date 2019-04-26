@@ -9,7 +9,7 @@
                         <p class="dealer">小丽</p>
                         <p class="replyTime">2019-03-23 20:43</p>
                         <p class="redemptionHeadLine">兑奖申请</p>
-                        <ul >
+                        <ul>
                             <li v-for="(applyItem, index) in [1,2,3]">
                                 <div class="redemption-box" v-if="index<2">
                                     <span>洋河蓝色经典 梦之蓝M6 52度</span>
@@ -64,8 +64,8 @@
                 topTabsList: ['待处理', '已处理'],
                 stateList: ['待处理', '已处理', '已取消'],
                 selectImg: selectImg,
-                tabState:0,
-                isShowMore:false,
+                tabState: 0,
+                isShowMore: false,
 
             }
         },
@@ -76,13 +76,13 @@
              * @param state:0-待处理，1-已处理
              */
             switchTab(state) {
-                this.tabState=state
+                this.tabState = state
             },
 
 
             // 是否展示更多信息
-            isShowMoreInfo(){
-              this.isShowMore = !this.isShowMore
+            isShowMoreInfo() {
+                this.isShowMore = !this.isShowMore
             },
 
 
@@ -113,7 +113,7 @@
     }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     #redemption {
         width: 100vw;
         bg(#f6f6f6);
@@ -135,120 +135,120 @@
             padding 24px 24px 0 88px;
             position relative;
             mt(20)
-            .dealer {
-                c(#333);
-                ft(28);
-            }
-            .replyTime {
-                c(#999);
-                ft(24);
-            }
-            .redemptionHeadLine {
-                c(#333);
-                ft(32);
-                fb();
-                mt(20)
 
-            }
-            .redemptionContent {
-                c(#666);
-                ft(28);
-                mt(6);
-                text-overflow-1()
-            }
-            .replyContent {
-                c(#FF5638);
-                ft(28);
-                mt(16);
-                text-overflow-1()
-            }
-            .state {
-                position absolute;
-                c(#FF5638);
-                ft(26);
-                top: 24px;
-                right 24px;
+        }
+        .dealer {
+            c(#333);
+            ft(28);
+        }
+        .replyTime {
+            c(#999);
+            ft(24);
+        }
+        .redemptionHeadLine {
+            c(#333);
+            ft(32);
+            fb();
+            mt(20)
 
-            }
-            .btn-warp {
-                position: relative
-                border-top 1px solid #F6F6F6;
-                mt(24);
-                display: flex;
-                justify-content flex-end
-            }
-            .go-detail {
-                c(#333);
-                ft(28);
-                padding 12px 24px;
-                border: 2px solid #DDDDDD;
-                outline: none;
-                border-radius: 8px;
-                bg(#fff);
-                margin: 16px 0
+        }
+        .redemptionContent {
+            c(#666);
+            ft(28);
+            mt(6);
+            text-overflow-1()
+        }
+        .replyContent {
+            c(#FF5638);
+            ft(28);
+            mt(16);
+            text-overflow-1()
+        }
+        .state {
+            position absolute;
+            c(#FF5638);
+            ft(26);
+            top: 24px;
+            right 24px;
 
-            }
-            .select-img {
-                position absolute
-                w(40)
-                h(40)
-                top: 40px;
-                left 24px;
+        }
+        .btn-warp {
+            position: relative
+            border-top 1px solid #F6F6F6;
+            mt(24);
+            display: flex;
+            justify-content flex-end
+        }
+        .go-detail {
+            c(#333);
+            ft(28);
+            padding 12px 24px;
+            border: 2px solid #DDDDDD;
+            outline: none;
+            border-radius: 8px;
+            bg(#fff);
+            margin: 16px 0
 
-            }
-            .continue {
-                bg(#f6f6f6);
-                mt(24);
-                border-radius: 10px;
-                padding: 24px;
-                position: relative;
-            }
-            .report {
-                overflow: hidden;
-                margin-bottom: 16px;
-            }
-            .left {
-                float: left;
-                c(#FF5638)
-                font-size: 26px;
-                height: 34px;
-            }
+        }
+        .select-img {
+            position absolute
+            w(40)
+            h(40)
+            top: 40px;
+            left 24px;
 
-            .right {
-                float: right;
-                c(#999)
-                font-size: 26px;
-                height: 34px;
-                lh(34);
-            }
-            .tips {
-                c(#666);
-            }
-            .triangle {
-                width: 0;
-                height: 0;
-                border-bottom: 22px solid #f6f6f6;
-                border-left: 16px solid transparent;
-                border-right: 16px solid transparent;
-                position: absolute;
-                top: -22px;
-                left: 50px;
-            }
-            .redemption-box{
-                display:flex;
-                justify-content space-between;
-                align-items center
-                ft(28);
-                c(#666);
-                mt(8)
+        }
+        .continue {
+            bg(#f6f6f6);
+            mt(24);
+            border-radius: 10px;
+            padding: 24px;
+            position: relative;
+        }
+        .report {
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .left {
+            float: left;
+            c(#FF5638)
+            font-size: 26px;
+            height: 34px;
+        }
 
-            }
-            .expand{
-                ft(28);
-                c(#0096FF);
-                mt(16)
-            }
+        .right {
+            float: right;
+            c(#999)
+            font-size: 26px;
+            height: 34px;
+            lh(34);
+        }
+        .tips {
+            c(#666);
+        }
+        .triangle {
+            width: 0;
+            height: 0;
+            border-bottom: 22px solid #f6f6f6;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            position: absolute;
+            top: -22px;
+            left: 50px;
+        }
+        .redemption-box {
+            display: flex;
+            justify-content space-between;
+            align-items center
+            ft(28);
+            c(#666);
+            mt(8)
 
+        }
+        .expand {
+            ft(28);
+            c(#0096FF);
+            mt(16)
         }
         .footer {
             position: fixed;

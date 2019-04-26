@@ -86,7 +86,7 @@
     }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     #complaintDetail {
         bg(#f6f6f6);
         .content {
@@ -97,46 +97,45 @@
             width: 100%;
             padding: 24px 24px 24px 24px;
             bg(white);
-            .state-title {
-                c(#333);
-                ft(34);
-                font-weight: bold;
-            }
-            .descrip {
-                c(#999);
-                font-size: 26px;
-                lh(36);
-                mt(8);
-            }
-            .continue {
-                bg(#f6f6f6);
-                mt(24);
-                border-radius: 10px;
-                padding: 24px;
-                position: relative;
-            }
-            .report {
-                overflow: hidden;
-                margin-bottom: 16px;
-            }
-            .left {
-                float: left;
-                c(#FF5638)
-                font-size: 26px;
-                height: 34px;
-            }
+        }
+        .state-title {
+            c(#333);
+            ft(34);
+            font-weight: bold;
+        }
+        .descrip {
+            c(#999);
+            font-size: 26px;
+            lh(36);
+            mt(8);
+        }
+        .continue {
+            bg(#f6f6f6);
+            mt(24);
+            border-radius: 10px;
+            padding: 24px;
+            position: relative;
+        }
+        .report {
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .left {
+            float: left;
+            c(#FF5638)
+            font-size: 26px;
+            height: 34px;
+        }
 
-            .right {
-                float: right;
-                c(#999)
-                font-size: 26px;
-                height: 34px;
-                lh(34);
-            }
-            .tips {
-                c(#666);
-            }
-
+        .right {
+            float: right;
+            c(#999)
+            font-size: 26px;
+            height: 34px;
+            lh(34);
+        }
+        .tips {
+            c(#666);
         }
 
         .title-box {

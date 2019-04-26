@@ -24,7 +24,9 @@
                         </li>
                     </ul>
                 </div>
-                <p class="add-tip" :style="{marginTop:redemptionGoods.length?'12px':'0',borderWidth:redemptionGoods.length?'0.5px':'0.01px'}" @click="toAddRedemptionGoods()">+添加兑奖商品</p>
+                <p class="add-tip"
+                   :style="{marginTop:redemptionGoods.length?'12px':'0',borderWidth:redemptionGoods.length?'0.5px':'0.01px'}"
+                   @click="toAddRedemptionGoods()">+添加兑奖商品</p>
             </div>
         </div>
         <div class="remark-box">
@@ -72,7 +74,7 @@
     }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     #addNewRedemption {
         width 100%;
         height 100%;
@@ -135,63 +137,64 @@
         .goods-list-box {
             display flex;
             flex-direction column;
-            .goods-info {
-                position relative;
-                display flex;
-                flex-direction row;
-                padding 24px 0
-                .img-box {
-                    w(120)
-                    h(120)
-                    mr(24)
-                    border-radius: 6px
-                }
-                 img {
-                    w(120)
-                    h(120)
 
-                }
-                .goods-name {
-                    c(#333);
-                    ft(30);
-                    text-overflow-2();
-                    mr(149)
-                }
-                .del-btn {
-                    position absolute;
-                    right 0;
-                    w(80);
-                    h(40);
-                    lh(40)
-                    border-radius: 16px;
-                    border: 2px solid rgba(221, 221, 221, 1);
-                    c(#999);
-                    font-size 22px;
-                    text-align center
-                }
-            }
-            .count-box{
-                display flex;
-                flex-direction row;
-                align-items center;
-                justify-content flex-end
-                .font-30-333{
-                    ft(30);
-                    c(#333)
-                }
-            }
-            .dividing-line{
-                h(2);
-                bg(#EDEDED);
-                ml(168)
-                mt(24)
-            }
-            .dividing-line-2{
-                h(2);
-                bg(#EDEDED);
+        }
+        .dividing-line {
+            h(2);
+            bg(#EDEDED);
+            ml(168)
+            mt(24)
+        }
+        .dividing-line-2 {
+            h(2);
+            bg(#EDEDED);
+        }
+        .goods-info {
+            position relative;
+            display flex;
+            flex-direction row;
+            padding 24px 0
+
+            img {
+                w(120)
+                h(120)
             }
         }
+        .goods-name {
+            c(#333);
+            ft(30);
+            text-overflow-2();
+            mr(149)
+        }
+        .del-btn {
+            position absolute;
+            right 0;
+            w(80);
+            h(40);
+            lh(40)
+            border-radius: 16px;
+            border: 2px solid rgba(221, 221, 221, 1);
+            c(#999);
+            font-size 22px;
+            text-align center
+        }
+        .img-box {
+            w(120)
+            h(120)
+            mr(24)
+            border-radius: 6px
+        }
+        .count-box {
+            display flex;
+            flex-direction row;
+            align-items center;
+            justify-content flex-end
 
+        }
+        .font-30-333 {
+            ft(30);
+            c(#333)
+        }
     }
 
 </style>

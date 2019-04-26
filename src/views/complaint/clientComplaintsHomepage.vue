@@ -120,7 +120,7 @@
     }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     #complaint {
         width: 100vw;
         bg(#f6f6f6);
@@ -173,61 +173,61 @@
             bg(#fff);
             padding 0 24px;
             position relative;
-            .dealer {
-                c(#333);
-                ft(28);
-            }
-            .replyTime {
-                c(#999);
-                ft(24);
-            }
-            .complaintHeadLine {
-                c(#333);
-                ft(32);
-                fb();
-                mt(20)
-
-            }
-            .complaintContent {
-                c(#666);
-                ft(28);
-                mt(6);
-                text-overflow-1()
-            }
-            .replyContent {
-                c(#FF5638);
-                ft(28);
-                mt(16);
-                text-overflow-1()
-            }
-            .state {
-                position absolute;
-                c(#FF5638);
-                ft(26);
-                top: 24px;
-                right 24px;
-
-            }
-            .btn-warp {
-                position: relative
-                border-top 1px solid #F6F6F6;
-                mt(24);
-                display: flex;
-                justify-content flex-end
-            }
-            .go-detail {
-                c(#333);
-                ft(28);
-                padding 12px 24px;
-                border: 2px solid #DDDDDD;
-                outline: none;
-                border-radius: 8px;
-                bg(#fff);
-                margin: 16px 0
-
-            }
+        }
+        .dealer {
+            c(#333);
+            ft(28);
+        }
+        .replyTime {
+            c(#999);
+            ft(24);
+        }
+        .complaintHeadLine {
+            c(#333);
+            ft(32);
+            fb();
+            mt(20)
 
         }
+        .complaintContent {
+            c(#666);
+            ft(28);
+            mt(6);
+            text-overflow-2()
+        }
+        .replyContent {
+            c(#FF5638);
+            ft(28);
+            mt(16);
+            text-overflow-2()
+        }
+        .state {
+            position absolute;
+            c(#FF5638);
+            ft(26);
+            top: 24px;
+            right 24px;
+
+        }
+        .btn-warp {
+            position: relative
+            border-top 1px solid #F6F6F6;
+            mt(24);
+            display: flex;
+            justify-content flex-end
+        }
+        .go-detail {
+            c(#333);
+            ft(28);
+            padding 12px 24px;
+            border: 2px solid #DDDDDD;
+            outline: none;
+            border-radius: 8px;
+            bg(#fff);
+            margin: 16px 0
+
+        }
+
         .footer {
             position: fixed;
             bottom: 0;

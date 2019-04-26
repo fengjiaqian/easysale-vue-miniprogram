@@ -21,7 +21,7 @@
                                         <div class="del-btn">删除</div>
                                     </div>
                                     <div class="count-box">
-                                        <span class="font-30-333">兑奖数量：</span>
+                                        <span class="font-30-333">退货数量：</span>
                                         <number-picker :product="item"></number-picker>
                                     </div>
                                     <p class="dividing-line" v-show="index<(redemptionGoods.length-1)"></p>
@@ -63,7 +63,8 @@
                         buyCount: 2,
                     }
                 ],
-                remark: ''
+                remark: '',
+                reason: ''
             }
         },
         components: {
@@ -81,17 +82,17 @@
     }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     #addNewReturnOrder {
         width 100%;
         height 100%;
         bg(#f6f6f6);
         overflow scroll
-        .content{
+        .content {
             overflow scroll
             mb(100)
         }
-        .reason-box,.goods-box, .remark-box {
+        .reason-box, .goods-box, .remark-box {
             margin 24px;
             padding 24px 24px 32px;
             bg(#fff);
@@ -149,61 +150,62 @@
         .goods-list-box {
             display flex;
             flex-direction column;
-            .goods-info {
-                position relative;
-                display flex;
-                flex-direction row;
-                padding 24px 0
-                .img-box {
-                    w(120)
-                    h(120)
-                    mr(24)
-                    border-radius: 6px
-                }
-                img {
-                    w(120)
-                    h(120)
 
-                }
-                .goods-name {
-                    c(#333);
-                    ft(30);
-                    text-overflow-2();
-                    mr(149)
-                }
-                .del-btn {
-                    position absolute;
-                    right 0;
-                    w(80);
-                    h(40);
-                    lh(40)
-                    border-radius: 16px;
-                    border: 2px solid rgba(221, 221, 221, 1);
-                    c(#999);
-                    font-size 22px;
-                    text-align center
-                }
+        }
+        .goods-info {
+            position relative;
+            display flex;
+            flex-direction row;
+            padding 24px 0
+            img {
+                w(120)
+                h(120)
             }
-            .count-box {
-                display flex;
-                flex-direction row;
-                align-items center;
-                justify-content flex-end
-                .font-30-333 {
-                    ft(30);
-                    c(#333)
-                }
-            }
-            .dividing-line {
-                h(2);
-                bg(#EDEDED);
-                ml(168)
-                mt(24)
-            }
-            .dividing-line-2 {
-                h(2);
-                bg(#EDEDED);
-            }
+        }
+        .goods-name {
+            c(#333);
+            ft(30);
+            text-overflow-2();
+            mr(149)
+        }
+        .del-btn {
+            position absolute;
+            right 0;
+            w(80);
+            h(40);
+            lh(40)
+            border-radius: 16px;
+            border: 2px solid rgba(221, 221, 221, 1);
+            c(#999);
+            font-size 22px;
+            text-align center
+        }
+        .img-box {
+            w(120)
+            h(120)
+            mr(24)
+            border-radius: 6px
+        }
+        .count-box {
+            display flex;
+            flex-direction row;
+            align-items center;
+            justify-content flex-end
+
+        }
+        .font-30-333 {
+            ft(30);
+            c(#333)
+        }
+        .dividing-line {
+            h(2);
+            bg(#EDEDED);
+            ml(168)
+            mt(24)
+        }
+        .dividing-line-2 {
+            h(2);
+            bg(#EDEDED);
         }
         input:
         :-webkit-input-placeholder {

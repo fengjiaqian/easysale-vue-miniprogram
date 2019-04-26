@@ -94,7 +94,7 @@
     }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
     #complaint {
         width: 100vw;
         bg(#f6f6f6);
@@ -116,106 +116,105 @@
             padding 24px 24px 0 88px;
             position relative;
             mt(20)
-            .dealer {
-                c(#333);
-                ft(28);
-            }
-            .replyTime {
-                c(#999);
-                ft(24);
-            }
-            .complaintHeadLine {
-                c(#333);
-                ft(32);
-                fb();
-                mt(20)
+        }
+        .dealer {
+            c(#333);
+            ft(28);
+        }
+        .replyTime {
+            c(#999);
+            ft(24);
+        }
+        .complaintHeadLine {
+            c(#333);
+            ft(32);
+            fb();
+            mt(20)
 
-            }
-            .complaintContent {
-                c(#666);
-                ft(28);
-                mt(6);
-                text-overflow-1()
-            }
-            .replyContent {
-                c(#FF5638);
-                ft(28);
-                mt(16);
-                text-overflow-1()
-            }
-            .state {
-                position absolute;
-                c(#FF5638);
-                ft(26);
-                top: 24px;
-                right 24px;
+        }
+        .complaintContent {
+            c(#666);
+            ft(28);
+            mt(6);
+            text-overflow-1()
+        }
+        .replyContent {
+            c(#FF5638);
+            ft(28);
+            mt(16);
+            text-overflow-1()
+        }
+        .state {
+            position absolute;
+            c(#FF5638);
+            ft(26);
+            top: 24px;
+            right 24px;
 
-            }
-            .btn-warp {
-                position: relative
-                border-top 1px solid #F6F6F6;
-                mt(24);
-                display: flex;
-                justify-content flex-end
-            }
-            .go-detail {
-                c(#333);
-                ft(28);
-                padding 12px 24px;
-                border: 2px solid #DDDDDD;
-                outline: none;
-                border-radius: 8px;
-                bg(#fff);
-                margin: 16px 0
+        }
+        .btn-warp {
+            position: relative
+            border-top 1px solid #F6F6F6;
+            mt(24);
+            display: flex;
+            justify-content flex-end
+        }
+        .go-detail {
+            c(#333);
+            ft(28);
+            padding 12px 24px;
+            border: 2px solid #DDDDDD;
+            outline: none;
+            border-radius: 8px;
+            bg(#fff);
+            margin: 16px 0
 
-            }
-            .select-img {
-                position absolute
-                w(40)
-                h(40)
-                top: 40px;
-                left 24px;
+        }
+        .select-img {
+            position absolute
+            w(40)
+            h(40)
+            top: 40px;
+            left 24px;
 
-            }
-            .continue {
-                bg(#f6f6f6);
-                mt(24);
-                border-radius: 10px;
-                padding: 24px;
-                position: relative;
-            }
-            .report {
-                overflow: hidden;
-                margin-bottom: 16px;
-            }
-            .left {
-                float: left;
-                c(#FF5638)
-                font-size: 26px;
-                height: 34px;
-            }
+        }
+        .continue {
+            bg(#f6f6f6);
+            mt(24);
+            border-radius: 10px;
+            padding: 24px;
+            position: relative;
+        }
+        .report {
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .left {
+            float: left;
+            c(#FF5638)
+            font-size: 26px;
+            height: 34px;
+        }
 
-            .right {
-                float: right;
-                c(#999)
-                font-size: 26px;
-                height: 34px;
-                lh(34);
-            }
-            .tips {
-                c(#666);
-            }
-            .triangle {
-                width: 0;
-                height: 0;
-                border-bottom: 22px solid #f6f6f6;
-                border-left: 16px solid transparent;
-                border-right: 16px solid transparent;
-                position: absolute;
-                top: -22px;
-                left: 50px;
-            }
-
+        .right {
+            float: right;
+            c(#999)
+            font-size: 26px;
+            height: 34px;
+            lh(34);
+        }
+        .tips {
+            c(#666);
+        }
+        .triangle {
+            width: 0;
+            height: 0;
+            border-bottom: 22px solid #f6f6f6;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            position: absolute;
+            top: -22px;
+            left: 50px;
         }
         .footer {
             position: fixed;

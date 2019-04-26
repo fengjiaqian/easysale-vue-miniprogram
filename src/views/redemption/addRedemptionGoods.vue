@@ -70,22 +70,21 @@
             display flex
             flex-direction row;
             margin:24px;
-            .goods-img{
-                w(120);
-                h(120);
-                bg(#f6f6f6)
-                border-radius:6px;
-                margin 0 24px;
-
-            }
-            .goods-name{
-                c(#333);
-                ft(30);
-
-            }
-
+        }
+        .goods-img{
+            w(120);
+            h(120);
+            bg(#f6f6f6)
+            border-radius:6px;
+            margin 0 24px;
 
         }
+        .goods-name{
+            c(#333);
+            ft(30);
+
+        }
+
         .select-img {
             w(40)
             h(40)
