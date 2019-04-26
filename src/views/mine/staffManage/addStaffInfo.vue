@@ -30,7 +30,6 @@
                 class="date-pick-wrap"
                 v-model="staffInfo.hireDate"
                 type="date"
-                clearable="false"
                 placeholder="请选择雇佣日期">
         </el-date-picker>
         <i class="extension"></i>
