@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "cube-ui": "~1.12.15",
     "element-ui": "^2.7.2",
+    "fastclick": "^1.0.6",
     "style-resources-loader": "^1.2.1",
     "vconsole": "^3.3.0",
     "vue": "^2.6.6",

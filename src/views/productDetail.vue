@@ -86,9 +86,9 @@ export default {
       const storageGoods = getAllGoods();
       if (storageGoods && storageGoods.length) {
         const itemInStore = storageGoods.find(item => item.id === product.id);
-        product.buyCount = itemInStore ? itemInStore.buyCount : 1;
+        product.buyCount = itemInStore ? itemInStore.buyCount : 0;
       } else {
-        product.buyCount = 1;
+        product.buyCount = 0;
       }
       product.minBuyNum = 1;
       product.maxBuyNum = 9999;
