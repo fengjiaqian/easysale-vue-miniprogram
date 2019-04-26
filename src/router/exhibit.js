@@ -55,16 +55,28 @@ const PerformRecord = (resolve) => {
  * 终端客户
  **/
 
-//销售人员-陈列状态列表
+//终端客户-陈列状态列表
 const SaleExhibitList = (resolve) => {
     import('@/views/exhibit/saleExhibitList.vue').then((module) => {
         resolve(module)
     })
 }
 
-//销售人员-陈列任务详情
+//终端客户-陈列任务详情
 const SalePerformDetail = (resolve) => {
     import('@/views/exhibit/salePerformDetail.vue').then((module) => {
+        resolve(module)
+    })
+}
+
+
+/**
+ * 销售人员
+ **/
+
+//销售人员-陈列任务详情
+const SaleSignExhibitList = (resolve) => {
+    import('@/views/exhibit/saleSignExhibitList.vue').then((module) => {
         resolve(module)
     })
 }
@@ -141,6 +153,22 @@ const exhibit = [
             title: '陈列详情'
         },
         component: SalePerformDetail
+    },
+    {
+        path: '/salePerformDetail',
+        name: 'salePerformDetail',
+        meta: {
+            title: '陈列管理'
+        },
+        component: SalePerformDetail
+    },
+    {
+        path: '/saleSignExhibitList',
+        name: 'saleSignExhibitList',
+        meta: {
+            title: '陈列管理'
+        },
+        component: SaleSignExhibitList
     },
 ]
 
