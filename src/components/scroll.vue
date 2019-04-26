@@ -1,7 +1,7 @@
 <template>
   <div ref="wrapper">
-  	 <slot></slot>
-  	<div class='pull-down-tip' v-show='pulldown && data.length' v-text="pullDownTip" ref='downTip'></div>
+    <slot></slot>
+    <div class="pull-down-tip" v-show="pulldown && data.length" v-text="pullDownTip" ref="downTip"></div>
   </div>
 </template>
 
@@ -67,6 +67,15 @@ export default {
       this._initScroll();
     }, 40);
   },
+  activated() {
+    if (!this.scroll) {
+      return;
+    }
+    this.enable();
+  },
+  deactivated() {
+    this.disable();
+  },
   methods: {
     _initScroll() {
       if (!this.$refs.wrapper) {
@@ -76,7 +85,7 @@ export default {
         probeType: this.probeType,
         click: this.click,
         scrollX: this.scrollX,
-        preventDefaultException: {tagName: /^(INPUT|TEXTAREA)$/}
+        preventDefaultException: { tagName: /^(INPUT|TEXTAREA)$/ }
       });
       if (this.listenScroll || this.pulldown) {
         let me = this;

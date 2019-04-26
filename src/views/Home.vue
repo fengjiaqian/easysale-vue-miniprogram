@@ -1,72 +1,141 @@
 <template>
-  <div id="home" ref="scrollDom" :class="{'pt174': userType==3}">
+  <div id="home" ref="scrollDom">
     <float-cart></float-cart>
     <!--  -->
-    <div class="home-banner" v-if="banners.length">
-      <div class="slider-body">
-        <slider :loop="true" :data="banners" ref="slider_dom">
-          <div class="banner-item" v-for="item in banners" :key="item.id">
-            <img :src="item.cloudSrc" alt>
-          </div>
-        </slider>
-      </div>
-    </div>
-    <!--  -->
-    <div class="select-dealer" v-if="userType==3">
-      <div class="left" @click="_jumpDealerList">
-        <img v-lazy="currentDealer.logoIamgeUrl" alt>
-        <strong>{{currentDealer.shopName}}</strong>
+    <div class="home-search-area">
+      <div class="dealer-name" v-if="userType==3" @click="_jumpDealerList">
+        {{currentDealer.shopName}}
         <em></em>
       </div>
+      <search-bar :jump="true"></search-bar>
     </div>
-    <search-bar :jump="true" :class="{'top82': userType==3}"></search-bar>
-    <!--  -->
-    <ul class="home-icons clearfix">
-      <li v-for="item in appIcons">
-        <a @click="jumpSecondsort(item)">
-          <img v-lazy="item.imgUrl || ''">
-          <span>{{item.value}}</span>
-        </a>
-      </li>
-    </ul>
-    <!--  -->
-    <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-if="scrollMenu.length">
-      <div
-        class="s-m-btn"
-        v-if="menuCanScroll"
-        @click="showSqure=!showSqure"
-        :class="{'active':showSqure}"
-      ></div>
-      <div class="scroll-menu-area">
-        <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu">
-          <ul ref="scroll_menu_content" class="scroll-menu-ul">
-            <li v-for="menu in scrollMenu" :key="menu.brandId" :id="'menu'+menu.brandId">
-              <a
-                href="javascript:;"
-                class="c-3 fz30"
-                @click="bindClickMenu(menu.brandId)"
-                :class="{'active':currentColumnId == menu.brandId}"
-              >{{menu.brandName}}</a>
+    <div class="view-wrapper">
+      <!-- 定位导航 -->
+      <div class="fixed-nav">
+        <div class="scroll-menu-wrap clearfix" v-show="showFixed">
+          <div
+            class="s-m-btn"
+            v-if="menuCanScroll"
+            @click="showSqure=!showSqure"
+            :class="{'active':showSqure}"
+          ></div>
+          <div class="scroll-menu-area">
+            <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu2">
+              <ul ref="scroll_menu_content2" class="scroll-menu-ul">
+                <li
+                  v-for="(menu, index) in scrollMenu"
+                  :key="menu.brandId"
+                  :id="'menu'+menu.brandId"
+                >
+                  <a
+                    href="javascript:;"
+                    class="c-3 fz30"
+                    @click="bindClickMenu(index)"
+                    :class="{'active':currentIndex == index}"
+                  >{{menu.brandName}}</a>
+                </li>
+              </ul>
+            </scroll>
+          </div>
+
+          <transition name="squre">
+            <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
+              <div
+                class="squre-item-wrap flt"
+                v-for="(item, index) in scrollMenu"
+                :key="item.brandId"
+              >
+                <div
+                  class="squre-item"
+                  @click="bindClickMenu(index)"
+                  :class="{'squre-item-active':currentIndex == index}"
+                >{{item.brandName}}</div>
+              </div>
+            </div>
+          </transition>
+        </div>
+      </div>
+      <scroll
+        ref="scrollProduct"
+        :data="scrollProducts"
+        :probeType="2"
+        :click="true"
+        :listenScroll="true"
+        @scroll="listenScroll"
+        class="view-wrapper"
+      >
+        <main>
+          <!--  -->
+          <div class="home-banner" v-if="banners.length">
+            <div class="slider-body">
+              <slider :loop="loop" :data="banners" ref="slider_dom">
+                <div class="banner-item" v-for="item in banners" :key="item.id">
+                  <img :src="item.cloudSrc" alt>
+                </div>
+              </slider>
+            </div>
+          </div>
+          <!--  -->
+          <ul class="home-icons clearfix">
+            <li v-for="item in appIcons">
+              <a @click="jumpSecondsort(item)">
+                <img v-lazy="item.imgUrl || ''">
+                <span>{{item.value}}</span>
+              </a>
             </li>
           </ul>
-        </scroll>
-      </div>
+          <!--  -->
+          <div class="mune-wrapper">
+            <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-show="!showFixed">
+              <div
+                class="s-m-btn"
+                v-if="menuCanScroll"
+                @click="showSqure=!showSqure"
+                :class="{'active':showSqure}"
+              ></div>
+              <div class="scroll-menu-area">
+                <scroll :probeType="1" :scrollX="true" :data="scrollMenu" ref="ScrollMenu">
+                  <ul ref="scroll_menu_content" class="scroll-menu-ul">
+                    <li
+                      v-for="(menu, index) in scrollMenu"
+                      :key="menu.brandId"
+                      :id="'menu'+menu.brandId"
+                    >
+                      <a
+                        href="javascript:;"
+                        class="c-3 fz30"
+                        @click="bindClickMenu(index)"
+                        :class="{'active':currentIndex == index}"
+                      >{{menu.brandName}}</a>
+                    </li>
+                  </ul>
+                </scroll>
+              </div>
 
-      <transition name="squre">
-        <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
-          <div class="squre-item-wrap flt" v-for="item in scrollMenu" :key="item.brandId">
-            <div
-              class="squre-item"
-              @click="bindClickMenu(item.brandId,true)"
-              :class="{'squre-item-active':currentColumnId === item.brandId}"
-            >{{item.brandName}}</div>
+              <transition name="squre">
+                <div class="nav-squre-list bg-w clearfix" v-show="showSqure">
+                  <div
+                    class="squre-item-wrap flt"
+                    v-for="(item, index) in scrollMenu"
+                    :key="item.brandId"
+                  >
+                    <div
+                      class="squre-item"
+                      @click="bindClickMenu(index)"
+                      :class="{'squre-item-active':currentIndex == index}"
+                    >{{item.brandName}}</div>
+                  </div>
+                </div>
+              </transition>
+            </div>
           </div>
-        </div>
-      </transition>
-    </div>
-    <!--  -->
-    <div class="home-product-list">
-      <product v-for="item in productList" :product="item" :key="item.id"></product>
+          <!--  -->
+          <div class="scroll-item" v-for="item in scrollProducts" :key="item.brandId">
+            <div :id="'dom'+item.brandId"></div>
+            <product v-for="product in item.products " :product="product" :key="product.id"></product>
+          </div>
+        </main>
+      </scroll>
     </div>
   </div>
 </template>
@@ -100,14 +169,16 @@ export default {
   name: "home",
   data() {
     return {
+      showFixed: false,
       loop: true,
       appIcons: appIcons,
-      productList: [],
-      currentColumnId: "",
       showSqure: false,
       menuCanScroll: false,
       scrollMenu: [],
+      scrollProducts: [],
       banners: [],
+      posY: 0,
+      heightList: [],
       currentDealer: storage.get("currentDealer", {})
     };
   },
@@ -119,20 +190,36 @@ export default {
     slider
   },
   beforeCreate() {},
-  computed: {},
+  computed: {
+    currentIndex() {
+      var h = this.posY,
+        arr = this.heightList || [];
+      for (var j = 0, len = arr.length; j < len; j++) {
+        var h1 = arr[j],
+          h2 = arr[j + 1];
+        if ((h >= h1 && h < h2) || !h2) {
+          return j;
+        }
+      }
+      return 0;
+    }
+  },
   activated() {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
       this.currentDealer = storage.get("currentDealer", {});
+      this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
       this._listDealerLogs();
       this._queryHomeProducts();
-      storage.set("homeRefresh", false);
     } else {
-      this.productList = transformProductList(this.productList);
+      this.scrollProducts.forEach(item => {
+        item.products = transformProductList(item.products);
+      });
     }
+    storage.set("homeRefresh", false);
   },
   created() {
-    this._initAuth(); //该步骤有判断有没有带入shareDealerId，有则缓存currentDealerId
+    this._initAuth(); //该步骤有判断有没有带入shareDealerId,有则缓存currentDealerId
     this.currentDealerId = storage.get("currentDealerId", "");
     if (!this.currentDealerId) {
       //如果没有currentDealerId的话，跳转选择经销商。
@@ -163,8 +250,9 @@ export default {
         storage.set("userType", userType);
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         this.userType = userType;
+        return false;
       }
-      //只有nickName和avatarUrl,cache for mine page。以终端访客身份访问
+      //只有nickName和avatarUrl, cache for mine page。 以终端访客身份访问
       if (nickName && avatarUrl) {
         storage.remove("token");
         storage.remove("userType");
@@ -183,32 +271,25 @@ export default {
     _queryHomeProducts() {
       queryHomeProducts().then(res => {
         if (res.result === "success" && res.data) {
-          this.scrollMenu = res.data.brands || [];
+          const { menu, brands } = this.calculateHomeDisplayData(res.data);
+          this.scrollMenu = menu;
+          this.scrollProducts = brands;
           if (!this.scrollMenu.length) {
-            return this.$toast("当前经销商暂无商品，请重新选择经销商");
+            const msg =
+              this.userType == 3
+                ? "当前经销商暂无商品,请重新选择经销商"
+                : "您的店铺暂无上架商品,请尽快添加";
+            return this.$toast(msg);
           }
-          this.scrollMenu.length &&
-            (this.currentColumnId = this.scrollMenu[0].brandId);
-          this.productList = transformProductList(res.data.products);
-          //
-          this.scrollMenu[0].products = this.productList;
           this.$nextTick(() => {
             this.calculateScrollRect();
-            this.watchScroll();
+            setTimeout(() => {
+              this.calculateHeightList();
+            }, 1000);
           });
         }
       });
     },
-    //
-    _jumpDealerList() {
-      this.$router.push({
-        name: "dealerList",
-        query: {
-          id: this.currentDealer.id
-        }
-      });
-    },
-    jumpSecondsort(item) {},
     //计算 scroll-menu 的scroll_menu_content 的宽度
     calculateScrollRect() {
       const clientWidth =
@@ -219,110 +300,103 @@ export default {
         w += el.getBoundingClientRect().width;
       }
       this.$refs.scroll_menu_content.style.width = w + "px";
+      //todo
+      this.$refs.scroll_menu_content2 &&
+        (this.$refs.scroll_menu_content2.style.width = w + "px");
       //判断menu是否能滑动
       this.menuCanScroll = w > clientWidth - (clientWidth * 88) / 750;
     },
-    bindClickMenu(id) {
+    bindClickMenu(Index) {
       this.showSqure = false;
-      this.currentColumnId = id;
-      this.menuScrollToEl(id);
-      //匹配
-      let matchItem = this.scrollMenu.find(item => id == item.brandId);
-      if (matchItem.products) {
-        this.productList = matchItem.products;
-        return true;
-      }
-      // const Index = this.productColumns.findIndex(
-      //   item => this.currentColumnId == item.columnId
-      // );
-      // if (Index != -1 && this.productColumns[Index].products) {
-      //   this.currentColumnPorducts = transformList(
-      //     this.productColumns[Index].products,
-      //     getAllGoods()
-      //   );
-      //   this.$nextTick(() => {
-      //     this.scrollSmoothTo(this.$refs.scrollDom, this.distance);
-      //   });
-      //   return false;
-      // }
-      //如果没有产品则需查询
-      const params = {
-        brandId: id,
-        pageSize: 10
-      };
-      ListProduct(params).then(res => {
-        if (res.result === "success" && res.data) {
-          this.productList = transformProductList(res.data.dataList);
-          matchItem.products = this.productList;
-          // this.currentColumnPorducts = transformList(res.data, getAllGoods());
-          // this.productColumns[Index].products = this.currentColumnPorducts;
-          // this.$nextTick(() => {
-          //   this.scrollSmoothTo(this.$refs.scrollDom, this.distance);
-          // });
-        }
-      });
-    },
-    menuScrollToEl(id) {
-      let Index = this.scrollMenu.findIndex(item => item.brandId == id);
-      Index = Index > 2 ? Index - 2 : 0;
-      let domId = "menu" + this.scrollMenu[Index].brandId;
-      this.$refs.ScrollMenu.scrollToElement(
+      let domId = "dom" + this.scrollMenu[Index].brandId;
+      this.$refs.scrollProduct.scrollToElement(
         document.getElementById(domId),
         150
       );
-    },
-    watchScroll() {
-      if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
-          return setTimeout(callback, 17);
-        };
-      }
-      const clientWidth =
-        document.body.clientWidth || document.documentElement.clientWidth;
-      var last_known_scroll_position = 0,
-        ticking = false;
-      var d = this.userType == 3 ? 174 : 92;
-      this.distance =
-        this.$refs.scrollMenuWrap.offsetTop - (clientWidth * d) / 750;
+      Index = Index > 2 ? Index - 2 : 0;
+      let menuId = "menu" + this.scrollMenu[Index].brandId;
 
-      this.$refs.scrollDom.addEventListener("scroll", e => {
-        last_known_scroll_position = this.$refs.scrollDom.scrollTop;
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            var cls = this.userType == 3 ? "fixed-customer" : "fixed-dealer";
-            if (last_known_scroll_position > Math.abs(this.distance)) {
-              addClass(this.$refs.scrollMenuWrap, cls);
-            } else {
-              removeClass(this.$refs.scrollMenuWrap, cls);
-            }
-            ticking = false;
-          });
+      const thisScroll = this.showFixed
+        ? this.$refs.ScrollMenu2
+        : this.$refs.ScrollMenu;
+      //
+      thisScroll &&
+        thisScroll.scrollToElement(document.getElementById(menuId), 150);
+    },
+    /***
+     *处理首页展示数据
+     */
+    calculateHomeDisplayData(response) {
+      const { brands = [], products = [] } = response;
+      for (let brand of brands) {
+        brand.products = transformProductList(
+          products.filter(product => product.brandId == brand.brandId)
+        );
+      }
+      const menu = brands.map(item => ({
+        brandId: item.brandId,
+        brandName: item.brandName
+      }));
+      return { menu, brands };
+    },
+    // scroll-items
+    calculateHeightList() {
+      let h = this.$refs.scrollMenuWrap.offsetTop;
+      let heightList = [h];
+      const els = document.querySelectorAll(".scroll-item");
+      for (let el of Array.prototype.slice.call(els)) {
+        h += el.clientHeight;
+        heightList.push(h);
+      }
+      console.log(heightList);
+      this.heightList = heightList;
+    },
+    listenScroll(pos) {
+      console.log(pos);
+      this.posY = Math.abs(pos.y);
+      if (this.posY > this.heightList[0]) {
+        this.showFixed = true;
+      } else {
+        this.showFixed = false;
+      }
+    },
+    _jumpDealerList() {
+      this.$router.push({
+        name: "dealerList",
+        query: {
+          id: this.currentDealer.id
         }
-        ticking = true;
       });
     },
-    scrollSmoothTo(el, position) {
-      var distance = el.scrollTop;
-      if (distance <= position) {
-        return false;
-      }
-      var step = function() {
-        // 距离目标滚动距离
-        distance -= 200;
-        if (Math.abs(distance) < position) {
-          el.scrollTop = position;
-        } else {
-          el.scrollTop = distance;
-          window.requestAnimationFrame(step);
-        }
-      };
-      step();
-    }
+    jumpSecondsort(item) {}
   }
 };
 </script>
 
 <style lang="stylus">
+.view-wrapper {
+  width: 100%;
+  height: 100%;
+  pos(relative);
+  top: 0;
+  left: 0;
+}
+
+.fixed-nav {
+  width: 100%;
+  h(88);
+  pos(absolute);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.mune-wrapper {
+  h(88);
+  bg(#fff);
+}
+
+/* ** */
 .fixed-dealer {
   position: fixed !important;
   top: 92px;
@@ -534,12 +608,42 @@ export default {
   }
 }
 
-.home-product-list {
-  .H-product-item {
-    &:nth-last-of-type(1) {
-      .H-product-content {
-        border: 0;
-      }
+.home-search-area {
+  width: 100%;
+  bg(#fff);
+  pos(fixed);
+  top: 0;
+  left: 0;
+  z-index: 200;
+
+  .search-bar-wrap {
+    pos(static);
+    width: auto;
+  }
+
+  .dealer-name {
+    pos(relative);
+    w(200);
+    lh(92);
+    mr(-24);
+    pl(24);
+    pr(32);
+    flt();
+    ft(26);
+    c(#333);
+    text-c();
+    omit();
+
+    em {
+      block();
+      pos(absolute);
+      top: 30px;
+      right: 0;
+      squ(32);
+      background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
+      transform: rotateZ(-90deg);
+      background-size: contain;
+      vm();
     }
   }
 }

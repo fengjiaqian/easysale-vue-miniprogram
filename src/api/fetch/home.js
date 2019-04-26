@@ -46,7 +46,7 @@ export function ListAllDealer(params = {}) {
 
 	const paramsData = Object.assign({
 		pageNum: 1,
-		pageSize: 20
+		pageSize: 3
 	}, params);
 	const url = "/user/listAllDealer";
 	return axios({

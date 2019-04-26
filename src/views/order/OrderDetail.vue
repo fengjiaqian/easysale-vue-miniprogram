@@ -11,12 +11,12 @@
       <!--  -->
       <div class="order-detail-amount">
         <div class="order-price" v-if="order.reduceAmount">
-          <span>原价：&yen;{{order.orderAmount | priceToFixed}}</span>
+          <span>原价：&yen;{{order.payableAmount | priceToFixed}}</span>
           <span>优惠：&yen;{{order.reduceAmount | priceToFixed}}</span>
         </div>
         <div class="fz30">
           实付：
-          <span class="c-theme">&yen;{{order.payableAmount | priceToFixed}}</span>
+          <span class="c-theme">&yen;{{order.orderAmount | priceToFixed}}</span>
         </div>
       </div>
     </div>
@@ -37,8 +37,8 @@
     <div class="order-detail-area">
       <h5>订单信息</h5>
       <div class="info-display">
-        <p>下单人：{{order.createUser}}</p>
-        <p>下单店铺：{{order.dealerName}}</p>
+        <p v-if="userType!=3">下单人：{{order.name}}</p>
+        <p v-if="userType==3">下单店铺：{{order.dealerName}}</p>
         <p>下单时间：{{order.createTime}}</p>
       </div>
     </div>

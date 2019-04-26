@@ -41,12 +41,12 @@
     </div>
     <div class="O-item-amount">
       <div class="order-price" v-if="order.reduceAmount">
-        <span>原价：&yen;{{order.orderAmount | priceToFixed}}</span>
+        <span>原价：&yen;{{order.payableAmount | priceToFixed}}</span>
         <span>优惠：&yen;{{order.reduceAmount | priceToFixed}}</span>
       </div>
       <div class="fz30">
         实付：
-        <span class="c-theme">&yen;{{order.payableAmount | priceToFixed}}</span>
+        <span class="c-theme">&yen;{{order.orderAmount | priceToFixed}}</span>
       </div>
     </div>
     <div class="O-item-btns" v-if="userType!=3 && order.orderState==1">
