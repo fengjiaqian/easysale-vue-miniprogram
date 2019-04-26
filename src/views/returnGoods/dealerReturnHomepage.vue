@@ -8,7 +8,7 @@
                         <img v-lazy="selectImg[0]" class="select-img">
                         <p class="dealer">小丽</p>
                         <p class="replyTime">2019-03-23 20:43</p>
-                        <p class="redemptionHeadLine">兑奖申请</p>
+                        <p class="redemptionHeadLine">买错了，不想要了</p>
                         <ul >
                             <li v-for="(applyItem, index) in [1,2,3]">
                                 <div class="redemption-box" v-if="index<2">
@@ -32,7 +32,7 @@
                         </div>
                         <p class="state">{{stateList[0]}}</p>
                         <div class="btn-warp">
-                            <button class="go-detail" @click="toredemptionDetail()">查看详情</button>
+                            <button class="go-detail" @click="toReturnDetail()">查看详情</button>
                         </div>
                     </div>
                 </li>
@@ -57,7 +57,7 @@
 
     const selectImg = [ic1, ic2, ic3];
     export default {
-        name: 'dealerRedemptionHomepage',
+        name: 'dealerReturnHomepage',
         components: {TopTabs},
         data() {
             return {
@@ -99,9 +99,9 @@
              * 跳转投诉详情
              * @param id-投诉单id
              */
-            toredemptionDetail(id) {
+            toReturnDetail(id) {
                 this.$router.push({
-                    name: "redemptionDetail",
+                    name: "returnDetail",
                     params: {
                         id: id
                     }

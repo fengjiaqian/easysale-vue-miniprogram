@@ -1,3 +1,5 @@
+// 投诉+兑奖+退货管理模块
+
 // 终端投诉管理首页
 const clientComplaintsHomepage = (resolve) => {
     import('views/complaint/clientComplaintsHomepage.vue').then((module) => {
@@ -49,6 +51,30 @@ const addNewRedemption = (resolve) => {
 // 添加兑奖商品
 const addRedemptionGoods = (resolve) => {
     import('views/redemption/addRedemptionGoods.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 经销商退货管理
+const dealerReturnHomepage = (resolve) => {
+    import('views/returnGoods/dealerReturnHomepage.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 退货详情
+const returnDetail = (resolve) => {
+    import('views/returnGoods/returnDetail.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 终端退货管理
+const clientReturnHomepage = (resolve) => {
+    import('views/returnGoods/clientReturnHomepage.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 终端退货管理
+const addNewReturnOrder = (resolve) => {
+    import('views/returnGoods/addNewReturnOrder.vue').then((module) => {
         resolve(module)
     })
 };
@@ -124,6 +150,40 @@ const manageInit = [
             title: '可选兑奖商品',
         },
         component: addRedemptionGoods,
+    },
+    {
+        path: '/dealerReturnHomepage',
+        name: 'dealerReturnHomepage',
+        meta: {
+            title: '退货管理',
+        },
+        component: dealerReturnHomepage,
+    }
+    ,
+    {
+        path: '/returnDetail',
+        name: 'returnDetail',
+        meta: {
+            title: '退货详情',
+        },
+        component: returnDetail,
+    }
+    ,
+    {
+        path: '/clientReturnHomepage',
+        name: 'clientReturnHomepage',
+        meta: {
+            title: '退货列表',
+        },
+        component: clientReturnHomepage,
+    },
+    {
+        path: '/addNewReturnOrder',
+        name: 'addNewReturnOrder',
+        meta: {
+            title: '退货列表',
+        },
+        component: addNewReturnOrder,
     }
 ]
 

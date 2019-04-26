@@ -29,7 +29,6 @@
     import scroll from "components/scroll.vue";
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
-
     const selectImg = [ic1, ic2,];
     export default {
         name: '',
