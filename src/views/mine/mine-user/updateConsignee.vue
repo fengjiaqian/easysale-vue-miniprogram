@@ -1,6 +1,6 @@
 <template>
   <div class="common pt90">
-    <m-header :isFixed="true"></m-header>
+    <m-header :isFixed="true" :tit="myTitle"></m-header>
     <div class="name">
       <div class="left">姓名 :</div>
       <input class="right" type="text" v-model="consigneeInfo.name" placeholder="请输入姓名">
@@ -11,7 +11,12 @@
     </div>
     <div class="shopname">
       <div class="left">店铺名称 :</div>
-      <input class="right" type="text" v-model="consigneeInfo.customerShopName" placeholder="请输入店铺名称">
+      <input
+        class="right"
+        type="text"
+        v-model="consigneeInfo.customerShopName"
+        placeholder="请输入店铺名称"
+      >
     </div>
     <div class="address-column">
       <span>收货地址 :</span>
@@ -31,30 +36,31 @@ export default {
   data() {
     return {
       code: 1, //新增1  编辑2
+      myTitle: "",
       consigneeInfo: {
         name: "",
         phone: "",
         customerShopName: "",
         address: "",
         id: ""
-      },
+      }
     };
   },
   computed: {
     canOperate() {
-      const { name,phone,customerShopName,address } = this.consigneeInfo
-      return name && phone && customerShopName && address;
+      const { name, phone, address } = this.consigneeInfo;
+      return name.trim() && phone && address.trim();
     }
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm=>{
-      let passData = to.query.passData ? to.query.passData : null
-      if(passData){
-        passData = JSON.parse(passData)
-        Object.assign(vm.consigneeInfo,passData.pageData)
-        vm.consigneeInfo.address = passData.addressData.address
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      let passData = to.query.passData ? to.query.passData : null;
+      if (passData) {
+        passData = JSON.parse(passData);
+        Object.assign(vm.consigneeInfo, passData.pageData);
+        vm.consigneeInfo.address = passData.addressData.address;
       }
-    })
+    });
   },
   created() {
     this.init();
@@ -65,7 +71,7 @@ export default {
       let addressInfo = this.$route.query.addressInfo;
       addressInfo && (addressInfo = this.decodeUrl(addressInfo));
       console.log(addressInfo);
-      document.title = this.code == 1 ? "新增收货人" : "编辑收货人";
+      this.myTitle = this.code == 1 ? "新增收货人" : "编辑收货人";
       if (this.code == 2 && addressInfo) {
         for (let preperty in addressInfo) {
           this.consigneeInfo[preperty] = addressInfo[preperty];
@@ -93,13 +99,13 @@ export default {
         });
     },
     //去定位地址
-    obtainAddress(){
+    obtainAddress() {
       let recordData = {
         path: this.$route.path,
         pageData: this.consigneeInfo
-      }
-      evokeWxLocation(recordData)
-    },
+      };
+      evokeWxLocation(recordData);
+    }
   }
 };
 </script>
@@ -147,17 +153,18 @@ export default {
   height: 132px;
   background: rgba(255, 255, 255, 1);
   overflow: hidden;
-  .position{
-    float right
-    display inline-block
-    mt(24)
-    mr(24)
-    w(48)
-    h(48)
-    background-size contain
-    background-repeat no-repeat
-    background-position center
-    background-image url(../../../assets/images/address_position_icon.png)
+
+  .position {
+    float: right;
+    display: inline-block;
+    mt(24);
+    mr(24);
+    w(48);
+    h(48);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('../../../assets/images/address_position_icon.png');
   }
 }
 
@@ -198,43 +205,50 @@ export default {
 .can-operate {
   bg(rgba(255, 86, 56, 1));
 }
-.address-column{
-  padding 0 24px
-  bg(#fff)
-  flex()
-  align-items center
-  justify-content flex-start
-  lh(90)
-  ft(30)
-  c-3()
-  span{
-    c-6()
-    mr(12)
-    min-width 150px
+
+.address-column {
+  padding: 0 24px;
+  bg(#fff);
+  flex();
+  align-items: center;
+  justify-content: flex-start;
+  lh(90);
+  ft(30);
+  c-3();
+
+  span {
+    c-6();
+    mr(12);
+    min-width: 150px;
   }
-  input{
-    flex-1()
-    outline none
-    border none
+
+  input {
+    flex-1();
+    outline: none;
+    border: none;
   }
-  div{
-    flex-1()
-    lh(90)
-    h(90)
-    input{
-      width 100%
-      height 100%
+
+  div {
+    flex-1();
+    lh(90);
+    h(90);
+
+    input {
+      width: 100%;
+      height: 100%;
     }
   }
-  i{
-    background-size contain
-    background-repeat no-repeat
-    background-position center
+
+  i {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .position{
-    w(48)
-    h(48)
-    background-image url(../../../assets/images/address_position_icon.png)
+
+  .position {
+    w(48);
+    h(48);
+    background-image: url('../../../assets/images/address_position_icon.png');
   }
 }
 </style>

@@ -14,7 +14,7 @@
           @change="handleChange($event)"
         >
       </div>
-      <div class="title" v-else>{{title || ''}}</div>
+      <div class="title" v-else>{{tit || title || ''}}</div>
     </div>
     <!--  -->
     <div class="icon-shortcut" @click.stop="showShortcutList">
@@ -66,6 +66,11 @@ export default {
     isFixed: {
       type: Boolean,
       default: false
+    },
+    //传入的title
+    tit: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -87,7 +92,7 @@ export default {
   computed: {},
   created() {},
   mounted() {
-    this.watchScroll();
+    // this.watchScroll();
   },
   methods: {
     goBack() {
@@ -295,7 +300,7 @@ export default {
     font-size: 26px;
     color: #333;
     background: #f2f2f2;
-    outline none
+    outline: none;
   }
 }
 </style>

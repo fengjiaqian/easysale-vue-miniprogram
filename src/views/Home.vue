@@ -58,7 +58,7 @@
       <scroll
         ref="scrollProduct"
         :data="scrollProducts"
-        :probeType="3"
+        :probeType="2"
         :click="true"
         :listenScroll="true"
         @scroll="listenScroll"

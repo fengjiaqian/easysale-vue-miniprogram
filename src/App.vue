@@ -18,7 +18,7 @@ export default {
   },
   created() {},
   mounted() {
-    FastClick.attach(document.body);
+   // FastClick.attach(document.body);
     document.body.addEventListener("touchend", function(el) {
       if (el.target.tagName != "INPUT") {
         const els = document.querySelectorAll("input");

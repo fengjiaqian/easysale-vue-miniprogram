@@ -1,36 +1,41 @@
 
 <template>
-  <div class="common">
-    <!-- <div class="search">
-      <input
-        class="case"
-        type="text"
-        value
-        @change="_queryCustomerConsigneeList"
-        v-model="keyword"
-        placeholder="请输入姓名或者电话"
-      >
-    </div>-->
+  <div class="my-consignee">
     <m-header :isSearch="true" placeholder="请输入姓名或者电话" @emitEvt="_queryCustomerConsigneeList"></m-header>
     <empty v-if="empty" txt="暂无收货人数据" :iconUrl="avatarUrl"></empty>
-    <address-list
-      :addressList="addressList"
-      :showOperation="showOperation"
-      @deletItem="_deletItem"
-      @bindTap="_bindTap"
-    ></address-list>
+    <div class="consignee-list">
+      <div
+        class="consignee-address-item"
+        v-for="item in addressList"
+        :key="item.id"
+        @click="_bindTap(item)"
+      >
+        <div class="info">
+          <strong>{{item.name}}</strong>
+          <strong>{{item.phone}}</strong>
+        </div>
+        <div class="shop-name">{{item.customerShopName}}</div>
+        <div class="receive-address">{{item.address}}</div>
+        <div class="operate" v-if="showOperation">
+          <a href="javascript:;" @click.stop="_modify(item)">编辑</a>
+          <a href="javascript:;" @click.stop="_delet(item.id)">删除</a>
+        </div>
+      </div>
+    </div>
     <div class="edit" @click="_addAddress()">新增收货人</div>
-    <div class="support"></div>
   </div>
 </template>
 
 <script>
-import AddressList from "./address-list.vue";
 import empty from "components/empty.vue";
 import avatarUrl from "@/assets/images/icon-product-empty.png";
-import { queryCustomerConsigneeList } from "api/fetch/endCustomer";
+import {
+  queryCustomerConsigneeList,
+  deleteConsignee
+} from "api/fetch/endCustomer";
 import storage from "common/storage";
 export default {
+  name: "my-consignee",
   data() {
     return {
       addressList: [],
@@ -40,13 +45,12 @@ export default {
     };
   },
   components: {
-    AddressList,
     empty
   },
   mounted() {},
   computed: {},
   created() {
-    this.showOperation = storage.get("fromOrder", false);
+    this.showOperation = !storage.get("fromOrder", false);
     this._queryCustomerConsigneeList();
   },
   methods: {
@@ -58,11 +62,38 @@ export default {
         }
       });
     },
-    _deletItem(id) {
-      const Idx = this.addressList.findIndex(item => item.id == id);
-      if (Idx != -1) {
-        this.addressList.splice(Idx, 1);
-      }
+    _addAddress() {
+      this.$router.push({
+        name: "updateConsignee",
+        params: {
+          code: 1
+        }
+      });
+    },
+    _modify(item) {
+      const addressInfo = encodeURIComponent(JSON.stringify(item));
+      this.$router.push({
+        name: "updateConsignee",
+        params: {
+          code: 2
+        },
+        query: {
+          addressInfo
+        }
+      });
+    },
+    _delet(id) {
+      deleteConsignee(id)
+        .then(res => {
+          if (res.result === "success") {
+            this.$toast("删除成功");
+            const Idx = this.addressList.findIndex(item => item.id == id);
+            if (Idx != -1) {
+              this.addressList.splice(Idx, 1);
+            }
+          }
+        })
+        .catch(err => {});
     },
     _bindTap(item) {
       if (storage.get("fromOrder", false)) {
@@ -74,57 +105,76 @@ export default {
         });
       }
       return false;
-    },
-    _addAddress() {
-      this.$router.push({
-        name: "updateConsignee",
-        params: {
-          code: 1
-        }
-      });
     }
   }
 };
 </script>
 
-<style lang="stylus" scoped>
-.common {
-  background-color: #F6F6F6;
-  position: relative;
-  height: 100%;
-  overflow: hidden;
+<style lang="stylus">
+.my-consignee {
+  pt(90);
+  pb(98);
+
+  .m-header {
+    pos(fixed);
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
 }
 
-.common .search {
-  width: 100%;
-  height: 110px;
-  background-color: white;
-  display: border-box;
+.consignee-list {
+  bg(#fff);
+}
+
+.consignee-address-item {
+  pos(relative);
   padding: 24px;
-  padding: 24px 24px 10px 24px;
-  position: fixed;
-  top: 0;
-  z-index: 100;
+
+  .info {
+    ft(32);
+    c(#333);
+
+    strong {
+      fb();
+
+      &:nth-of-type(2) {
+        ml(48);
+      }
+    }
+  }
+
+  .shop-name, .receive-address {
+    mt(16);
+    lh(38);
+    ft(28);
+    c(#666);
+  }
+
+  .operate {
+    pos(absolute);
+    top: 68px;
+    right: 24px;
+
+    a {
+      inline();
+      w(88);
+      h(56);
+      lh(60);
+      ft(28);
+      c(#666);
+      text-c();
+      border-radius: 8px;
+      border: 1px solid rgba(221, 221, 221, 1);
+
+      &:nth-of-type(2) {
+        ml(24);
+      }
+    }
+  }
 }
 
-.common .search .case {
-  width: 100%;
-  height: 72px;
-  border-radius: 10px;
-  display: inline-block;
-  text-align: center;
-  margin: auto;
-  outline: none;
-  font-size: 28px;
-  font-weight: 400;
-  color: rgba(136, 136, 136, 1);
-  background: rgba(246, 246, 246, 1) url('../../../assets/images/ic_sousuo@2x.png') no-repeat center;
-  background-position: 30% center;
-  background-size: 32px 32px;
-}
-
-// list
-.common .edit {
+.my-consignee .edit {
   width: 100%;
   height: 98px;
   background: rgba(255, 255, 255, 1);
@@ -135,9 +185,5 @@ export default {
   line-height: 98px;
   text-align: center;
   border-top: 1PX solid #ededed;
-}
-
-.common .support {
-  h(98);
 }
 </style>
