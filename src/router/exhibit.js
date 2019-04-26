@@ -49,6 +49,26 @@ const PerformRecord = (resolve) => {
     })
 }
 
+
+
+/**
+ * 终端客户
+ **/
+
+//销售人员-陈列状态列表
+const SaleExhibitList = (resolve) => {
+    import('@/views/exhibit/saleExhibitList.vue').then((module) => {
+        resolve(module)
+    })
+}
+
+//销售人员-陈列任务详情
+const SalePerformDetail = (resolve) => {
+    import('@/views/exhibit/salePerformDetail.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 const exhibit = [
     {
         path: '/exhibitList',
@@ -105,6 +125,22 @@ const exhibit = [
             title: '执行详情'
         },
         component: PerformRecord
+    },
+    {
+        path: '/saleExhibitList',
+        name: 'saleExhibitList',
+        meta: {
+            title: '陈列列表'
+        },
+        component: SaleExhibitList
+    },
+    {
+        path: '/salePerformDetail',
+        name: 'salePerformDetail',
+        meta: {
+            title: '陈列详情'
+        },
+        component: SalePerformDetail
     },
 ]
 

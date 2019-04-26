@@ -33,8 +33,8 @@
       </li>
     </ul>
     <div class="et-footer">
-      <span @click="_deleteExhibit">删除</span>
-      <span class="edit" @click="editExhibit">编辑</span>
+      <span @click="_deleteExhibit" v-if="exhibitInfo.canDel">删除</span>
+      <span class="edit" @click="editExhibit" v-if="ableEdit">编辑</span>
     </div>
   </section>
 </template>
@@ -48,6 +48,7 @@
         id: '',//活动id
         exhibitInfo: {},
         domShow: false,
+        ableEdit: true,//是否可编辑
       };
     },
     components: {
@@ -55,6 +56,7 @@
     },
     created() {
       this.id = this.$route.query.id
+      this.ableEdit = !this.$route.query.applyNum
       this.queryDetail()
     },
     mounted() {},

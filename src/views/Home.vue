@@ -365,7 +365,11 @@ export default {
     jumpSecondsort(item) {
       switch (item.value) {
         case `陈列管理`:
-          this.$router.push({path: "/exhibitList"});
+          if(this.userType==1){
+            this.$router.push({path: "/exhibitList"});
+          }else if(this.userType==3){
+            this.$router.push({path: "/saleExhibitList"});
+          }
           break;
         default:
           break;
