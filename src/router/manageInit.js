@@ -99,7 +99,7 @@ const manageInit = [
         path: '/addNewComplaint',
         name: 'addNewComplaint',
         meta: {
-            title: '新增投诉',
+            title: '新建投诉',
         },
         component: addNewComplaint,
     },

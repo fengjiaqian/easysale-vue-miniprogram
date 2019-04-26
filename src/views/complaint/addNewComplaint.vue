@@ -1,13 +1,14 @@
 <template>
     <div id="addNewComplaint">
+        <m-header :isFixed="true"></m-header>
         <div class="reason">
             <p class="title">投诉原因</p>
-            <input type="text" placeholder="请输入投诉原因" v-model="reason">
+            <input type="text" placeholder="请输入投诉原因" v-model="complaintHeadLine">
         </div>
         <div class="description">
             <p class="title">内容描述</p>
             <textarea id="description" cols="30" rows="9" placeholder="请输入投诉内容"
-                      v-model="description"></textarea>
+                      v-model="complaintContent"></textarea>
             <p class="count"><span id="textCount">0</span>/100</p>
         </div>
         <div class="remark">
@@ -15,29 +16,25 @@
             <textarea id="remark" cols="30" rows="6" placeholder="请输入内容"
                       v-model="remark"></textarea>
         </div>
-        <button class="submit">提交</button>
+        <button class="submit" @click="addNewComplaint">提交</button>
     </div>
 </template>
 
 <script>
+    import {saveComplain} from "api/fetch/complaints";
+    import storage from "common/storage";
+    import mHeader from "components/header.vue";
     export default {
         name: 'addNewComplaint',
         data() {
             return {
-                reason: '',
-                description: '',
+                complaintHeadLine: '',
+                complaintContent: '',
                 remark: '',
 
             }
         },
-        computed: {},
-        components: {},
-        beforeCreate: function () {
-
-        },
-        created: function () {
-
-        },
+        components: {mHeader},
 
         mounted() {
             window.onload = function () {
@@ -47,7 +44,6 @@
                     let eLen = val.length;
                     return eLen;
                 }
-
                 let el = document.getElementById('description');
                 el.addEventListener('input', function () {
                     let len = txtCount(this);
@@ -58,11 +54,47 @@
                     document.getElementById('textCount').innerHTML = len;
                 });
 
-
             }
         },
-        methods: {},
-        watch: {}
+
+        methods: {
+
+            /**
+             * 校验表单
+             * @returns {boolean}
+             */
+            isValid(){
+                let errList = [];
+                if (!this.complaintHeadLine) {
+                    errList.push({errMsg: '请填写投诉原因'});
+                }
+                if (!this.complaintContent) {
+                    errList.push({errMsg: '请填写投诉内容'});
+                }
+                if (errList.length !== 0) {
+                    this.$toast(errList[0].errMsg)
+                }
+                return errList.length === 0
+            },
+
+            addNewComplaint(){
+                if (!this.isValid()) return;
+                const currentDealerId = storage.get("currentDealerId", "") || "";
+                let params={
+                    dealerId:currentDealerId,
+                    complaintContent:this.complaintContent,
+                    complaintHeadLine:this.complaintHeadLine,
+                    remark:this.remark,
+                };
+                saveComplain(params).then(res => {
+                    if (res.data) {
+                        this.$toast('新增成功');
+                        this.$router.go(-1);
+                    }
+                });
+            }
+
+        },
     }
 </script>
 
@@ -75,6 +107,7 @@
         overflow: scroll;
         -webkit-overflow-scrolling: touch;
         .reason {
+            mt(90)
             width: 100%;
             padding 0 24px;
             bg(#fff);
