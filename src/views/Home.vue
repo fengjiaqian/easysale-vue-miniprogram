@@ -61,7 +61,7 @@
           <!--  -->
           <div class="home-banner" v-if="banners.length">
             <div class="slider-body">
-              <slider :loop="true" :data="banners" ref="slider_dom">
+              <slider :loop="loop" :data="banners" ref="slider_dom">
                 <div class="banner-item" v-for="item in banners" :key="item.id">
                   <img :src="item.cloudSrc" alt>
                 </div>
@@ -201,6 +201,7 @@ export default {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
       this.currentDealer = storage.get("currentDealer", {});
+      this._listDealerLogs();
       this._queryHomeProducts();
     } else {
       this.scrollProducts.forEach(item => {
@@ -383,9 +384,10 @@ export default {
   left: 0;
   z-index: 1;
 }
-.mune-wrapper{
+
+.mune-wrapper {
   h(88);
-  bg(#fff)
+  bg(#fff);
 }
 
 /* ** */
