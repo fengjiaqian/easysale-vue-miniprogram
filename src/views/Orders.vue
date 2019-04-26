@@ -68,6 +68,11 @@ export default {
   computed: {},
   created() {
     this.params = params;
+    const state = this.$route.query.state || "";
+    if (state) {
+      this.currentState = state;
+      this.params.orderState = state;
+    }
     if (!this.isVisitor) {
       this._QueryOrders();
     }
