@@ -1,6 +1,6 @@
 <template>
   <div class="dealer-list">
-    <search-bar></search-bar>
+    <m-header :isSearch="true" placeholder="请输入店铺名称" @emitEvt="_searchKeyChange"></m-header>
     <div class="current-dealer" v-if="currentDealer.phone">
       <div class="title">当前商贸公司</div>
       <div class="dealer-item">
@@ -85,6 +85,10 @@ export default {
       this.$router.push({
         path: "/navi/home"
       });
+    },
+    _searchKeyChange(searchKey){
+
+
     }
   }
 };
