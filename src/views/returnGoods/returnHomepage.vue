@@ -122,8 +122,6 @@
             },
 
 
-
-
             // 客户退货的经销商列表
             _QueryDealReturn() {
                 selectDealReturn(this.tabState).then(res => {
@@ -332,6 +330,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)

@@ -13,7 +13,8 @@
                style="height: 100%;overflow: hidden"
                :txt="'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div   v-if="redemptionList.length"    :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"  style="height: 100%">
+        <div v-if="redemptionList.length"
+             :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}" style="height: 100%">
             <scroll
                     class="c-list"
                     :data="redemptionList"
@@ -111,7 +112,7 @@
                 this._QueryAwardList()
             },
 
-          //切换经销商店铺
+            //切换经销商店铺
             switchShop(item, idx) {
                 this.activeDealerIdx = idx;
                 this.redemptionList = [];
@@ -134,7 +135,6 @@
             },
 
 
-
             // 加载列表数据
             _QueryAwardList() {
                 let params = {
@@ -153,8 +153,6 @@
                 });
 
             },
-
-
 
 
             /**
@@ -330,6 +328,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)
