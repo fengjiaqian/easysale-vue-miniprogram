@@ -1,33 +1,33 @@
 <template>
-    <div id="complaintDetail">
+    <div id="returnDetail">
         <m-header :isFixed="true"></m-header>
         <div class="content">
             <div class="status">
-                <div class="state-title">兑奖状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerAward.state]}}</span>
+                <div class="state-title">退货状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerReturn.state]}}</span>
                 </div>
                 <div class="descrip" v-if="saleMan.dealingName&&isCustomer">
                     销售人员-{{saleMan.dealingName}}正在处理您的问题，请耐心等待！
                 </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerAward.state==0">
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerReturn.state==0">
                     已移交销售人员-{{saleMan.dealingName}}
                 </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerAward.state==1">
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerReturn.state==1">
                     销售人员-{{saleMan.dealingName}}已处理
                 </div>
-                <div class="continue" v-if="customerAward.state==1">
+                <div class="continue" v-if="customerReturn.state==1">
                     <div class="triangle"></div>
                     <div class="report">
                         <div class="left">{{dealer.dealerName}}回复：</div>
-                        <div class="right">{{customerAward.replyTime}}</div>
+                        <div class="right">{{customerReturn.replyTime}}</div>
                     </div>
-                    <div class="tips">{{customerAward.replyContent}}</div>
+                    <div class="tips">{{customerReturn.replyContent}}</div>
                 </div>
             </div>
             <div class="title-box">
-                <div class="title ">兑奖商品</div>
+                <div class="title ">商品信息</div>
                 <div class="font-30-666 company-name " style="padding-top: 0">
-                    <ul v-if="customerAward.items&&customerAward.items.length>0">
-                        <li v-for="(skuItem, index) in customerAward.items">
+                    <ul v-if="customerReturn.items&&customerReturn.items.length>0">
+                        <li v-for="(skuItem, index) in customerReturn.items">
                             <div class="goods-box" v-if="index<2">
                                 <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                         </li>
-                        <div class="expand" @click="isShowMoreInfo" v-if="customerAward.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerReturn.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
                     </ul>
                 </div>
             </div>
@@ -51,6 +51,11 @@
             <div class="title-box" v-if="!isDealer">
                 <div class="title ">{{isCustomer?'商贸公司':'经销商'}}</div>
                 <div class="font-30-666 company-name">{{dealer.dealerName}}</div>
+            </div>
+            <!--经销商可见-->
+            <div class="title-box" v-if="!isCustomer">
+                <div class="title ">退货原因</div>
+                <div class="font-30-666 company-name">{{customerReturn.returnContent}}</div>
             </div>
             <!--经销商可见-->
             <div class="title-box" v-if="!isCustomer">
@@ -65,22 +70,22 @@
             <!--终端可见-->
             <div class="title-box" v-if="isCustomer">
                 <span class="title">申请时间</span>
-                <span class="font-30-666 company-name">{{customerAward.createTime}}</span>
+                <span class="font-30-666 company-name">{{customerReturn.createTime}}</span>
             </div>
             <div class="title-box">
                 <span class="title ">备注</span>
-                <span class="font-30-666 company-name">{{customerAward.remark}}</span>
+                <span class="font-30-666 company-name">{{customerReturn.remark}}</span>
             </div>
             <!--经销商可见-->
-            <div class="title-box" v-if="!isCustomer&&customerAward.state==0">
+            <div class="title-box" v-if="!isCustomer&&customerReturn.state==0">
                 <p class="title">回复</p>
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer&&customerAward.state==0" @click="cancelRedemption">取消兑奖</button>
+        <button class="cancel-btn" v-if="isCustomer&&customerReturn.state==0" @click="cancelRedemption">取消兑奖</button>
         <!--经销商可见-->
-        <div v-if="isDealer&&customerAward.state==0">
+        <div v-if="isDealer&&customerReturn.state==0">
             <!--待处理-->
             <div class="footer">
                 <button class="left-btn" @click.stop="handoverProcessing">移交处理</button>
@@ -88,7 +93,7 @@
             </div>
         </div>
         <!--销售人员可见-->
-        <div v-if="isSaleMan&&customerAward.state==0">
+        <div v-if="isSaleMan&&customerReturn.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
         </div>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
@@ -98,19 +103,19 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {awardDetail, updateAwardById, batchUpdateAward,cancelAward} from "api/fetch/redemption";
+    import {returnDetail, updateReturnById, batchUpdateReturn,cancelCustomerReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
 
     export default {
-        name: 'complaintDetail',
+        name: 'returnDetail',
         data() {
             return {
                 state: ['待处理', '已处理', '已取消'],
                 judgeCode: 2,
                 replay: '',
                 customer: {},
-                customerAward: {},
+                customerReturn: {},
                 dealer: {},
                 saleMan: {},
                 rolePopShow: false,
@@ -134,7 +139,7 @@
         components: {mHeader, salemanPop},
         created: function () {
             this.id = this.$route.params.id;
-            this._QueryRedemptionDetail();
+            this._QueryReturnDetail();
         },
 
         methods: {
@@ -149,12 +154,12 @@
              * 加载投诉详情
              * @private
              */
-            _QueryRedemptionDetail() {
-                awardDetail(this.id).then(res => {
+            _QueryReturnDetail() {
+                returnDetail(this.id).then(res => {
                     if (res.data) {
-                        let {customer, customerAward, dealer, saleMan} = {...res.data};
+                        let {customer, customerReturn, dealer, saleMan} = {...res.data};
                         this.customer = {...customer};
-                        this.customerAward = {...customerAward};
+                        this.customerReturn = {...customerReturn};
                         this.dealer = {...dealer};
                         this.saleMan = {...saleMan}
                     }
@@ -191,9 +196,9 @@
                     idList: [this.id],
                     dealingId: dealingId,
                 };
-                batchUpdateAward(params).then(res => {
+                batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryRedemptionDetail()
+                    this._QueryReturnDetail()
                 });
             },
 
@@ -206,9 +211,9 @@
                     replyContent: this.replay,
                     state: 1
                 };
-                updateAwardById(params).then(res => {
+                updateReturnById(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryRedemptionDetail()
+                    this._QueryReturnDetail()
                 });
             },
 
@@ -216,9 +221,9 @@
              * 取消兑奖
              */
             cancelRedemption(){
-                cancelAward(this.id).then(res => {
+                cancelCustomerReturn(this.id).then(res => {
                     this.$toast('操作成功');
-                    this._QueryRedemptionDetail()
+                    this._QueryReturnDetail()
                 });
             }
         }
@@ -226,7 +231,7 @@
 </script>
 
 <style lang="stylus" scoped>
-    #complaintDetail {
+    #returnDetail {
         bg(#f6f6f6);
         .content {
             mt(90)

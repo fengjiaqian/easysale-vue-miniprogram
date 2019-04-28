@@ -1,54 +1,63 @@
 <template>
-    <div id="addNewRedemption">
+    <div id="addNewReturnOrder">
         <m-header :isFixed="true"></m-header>
-        <div class="goods-box">
-            <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}">兑奖商品</p>
-            <div class="good-warp">
-                <div v-if="redemptionGoods.length">
-                    <ul>
-                        <li v-for="(item,index) in redemptionGoods">
-                            <div class="goods-list-box">
-                                <div class="goods-info">
-                                    <div class="img-box">
-                                        <img v-lazy="item.productImageUrl">
+        <div class="content">
+            <div class="reason-box">
+                <p class="title">投诉原因</p>
+                <input type="text" placeholder="请输入退货原因" v-model="reason" >
+            </div>
+            <div class="goods-box">
+                <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}">退货商品</p>
+                <div class="good-warp">
+                    <div v-if="returnGoods.length">
+                        <ul>
+                            <li v-for="(item,index) in returnGoods">
+                                <div class="goods-list-box">
+                                    <div class="goods-info">
+                                        <div class="img-box">
+                                            <img v-lazy="item.productImageUrl">
+                                        </div>
+                                        <p class="goods-name">{{item.productName}}</p>
+                                        <div class="del-btn" @click="delGoods(index)">删除</div>
                                     </div>
-                                    <p class="goods-name">{{item.productName}}</p>
-                                    <div class="del-btn" @click="delGoods(index)">删除</div>
+                                    <div class="count-box">
+                                        <span class="font-30-333">退货数量：</span>
+                                        <number-picker :product="item"></number-picker>
+                                    </div>
+                                    <p class="dividing-line" v-show="index<(returnGoods.length-1)"></p>
                                 </div>
-                                <div class="count-box">
-                                    <span class="font-30-333">兑奖数量：</span>
-                                    <number-picker :product="item"></number-picker>
-                                </div>
-                                <p class="dividing-line" v-show="index<(redemptionGoods.length-1)"></p>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="add-tip"
+                       :style="{marginTop:returnGoods.length?'12px':'0',borderWidth:returnGoods.length?'0.5px':'0.01px'}"
+                       @click="toAddReturnGoods()">+添加退货商品</p>
                 </div>
-                <p class="add-tip"
-                   :style="{marginTop:redemptionGoods.length?'12px':'0',borderWidth:redemptionGoods.length?'0.5px':'0.01px'}"
-                   @click="toAddRedemptionGoods()">+添加兑奖商品</p>
+            </div>
+            <div class="remark-box">
+                <p class="title ">备注</p>
+                <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
+                          v-model="remark"></textarea>
             </div>
         </div>
-        <div class="remark-box">
-            <p class="title ">备注</p>
-            <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
-                      v-model="remark"></textarea>
-        </div>
-        <button class="submit-btn" @click="submitRedemption">提交</button>
+
+        <button class="submit-btn" @click="submitReturnOrder">提交</button>
     </div>
 </template>
 
 <script>
     import numberPicker from "components/number-picker.vue";
-    import storage from 'common/storage';
     import mHeader from "components/header.vue";
-    import {saveAward} from "api/fetch/redemption";
+    import storage from 'common/storage';
+    import {saveCustomerReturn} from "api/fetch/returnGoods";
     export default {
-        name: 'addNewRedemption',
+        name: 'addNewReturnOrder',
         data() {
             return {
-                redemptionGoods: [],
+              returnGoods: [
+                ],
                 remark: '',
+                reason: ''
             }
         },
         components: {
@@ -58,37 +67,34 @@
             next(vm => {
                 if (from.name == 'chooseProductList') {
                     let selectedProduct = storage.get("selectedProduct", "");
-                        selectedProduct.buyCount=1
-                    vm.redemptionGoods.push(selectedProduct)
+                    selectedProduct.buyCount=1
+                    vm.returnGoods.push(selectedProduct)
                 } else {
                     storage.remove("selectedProduct");
                 }
             })
         },
+
         methods: {
-
             //跳转到添加兑奖商品
-            toAddRedemptionGoods() {
-                this.$router.push({ path: "/chooseProductList" });
+            toAddReturnGoods() {
+                this.$router.push({ path: "/chooseReturnGoods" });
             },
-
             // 删除已添加的兑奖商品
             delGoods(selectIndex){
-                let data=this.redemptionGoods;
-                data.forEach((item,index)=>{
+                this.returnGoods.forEach((item,index)=>{
                     if(index==selectIndex){
-                      data.splice(index,1)
+                        this.returnGoods.splice(index,1)
                     }
                 });
-                this.redemptionGoods=[...data]
             },
 
             //新建兑奖单
-            submitRedemption(){
+            submitReturnOrder(){
                 if (!this.isValid()) return;
                 const currentDealerId = storage.get("currentDealerId", "") || "";
                 let items=[];
-                for(let item of this.redemptionGoods){
+                for(let item of this.returnGoods){
                     let obj={
                         productId:item.id,
                         awardCount:item.buyCount,
@@ -100,7 +106,7 @@
                     items:items,
                     remark:this.remark,
                 };
-                saveAward(params).then(res => {
+                saveCustomerReturn(params).then(res => {
                     this.$toast('新增成功');
                     this.$router.go(-1)
                 });
@@ -112,8 +118,11 @@
              */
             isValid(){
                 let errList = [];
-                if (!this.redemptionGoods.length) {
-                    errList.push({errMsg: '请添加兑奖商品'});
+                if(!this.reason){
+                    errList.push({errMsg: '请填写投诉原因'});
+                }
+                if (!this.returnGoods.length) {
+                    errList.push({errMsg: '请添加退货商品'});
                 }
                 if (errList.length !== 0) {
                     this.$toast(errList[0].errMsg)
@@ -126,16 +135,28 @@
 </script>
 
 <style lang="stylus" scoped>
-    #addNewRedemption {
+    #addNewReturnOrder {
         width 100%;
         height 100%;
         bg(#f6f6f6);
-        mt(114)
-        .goods-box, .remark-box {
+        overflow scroll;
+        mt(90)
+        .content {
+            overflow scroll
+            mb(100)
+        }
+        .reason-box, .goods-box, .remark-box {
             margin 24px;
             padding 24px 24px 32px;
             bg(#fff);
 
+        }
+        .reason-box{
+            input{
+                width 100%;
+                display flex;
+                flex 1;
+            }
         }
         .add-tip {
             pt(32);
@@ -191,22 +212,11 @@
             flex-direction column;
 
         }
-        .dividing-line {
-            h(2);
-            bg(#EDEDED);
-            ml(168)
-            mt(24)
-        }
-        .dividing-line-2 {
-            h(2);
-            bg(#EDEDED);
-        }
         .goods-info {
             position relative;
             display flex;
             flex-direction row;
             padding 24px 0
-
             img {
                 w(120)
                 h(120)
@@ -247,6 +257,30 @@
             ft(30);
             c(#333)
         }
+        .dividing-line {
+            h(2);
+            bg(#EDEDED);
+            ml(168)
+            mt(24)
+        }
+        .dividing-line-2 {
+            h(2);
+            bg(#EDEDED);
+        }
+        input:
+        :-webkit-input-placeholder {
+            color: #BDBDBD !important;
+            font-size: 30px;
+            text-align: left;
+        }
+        input {
+            display: inline-block;
+            outline: none;
+            margin 24px 0;
+            font-size: 30px;
+            c(#333)
+        }
+
     }
 
 </style>

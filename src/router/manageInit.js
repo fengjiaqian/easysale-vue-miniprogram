@@ -1,3 +1,5 @@
+// 投诉+兑奖+退货管理模块
+
 // 终端投诉管理首页
 const clientComplaintsHomepage = (resolve) => {
     import('views/complaint/clientComplaintsHomepage.vue').then((module) => {
@@ -46,9 +48,35 @@ const addNewRedemption = (resolve) => {
         resolve(module)
     })
 };
-// 添加兑奖商品
-const addRedemptionGoods = (resolve) => {
-    import('views/redemption/addRedemptionGoods.vue').then((module) => {
+
+// 经销商退货管理
+const dealerReturnHomepage = (resolve) => {
+    import('views/returnGoods/dealerReturnHomepage.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 退货详情
+const returnDetail = (resolve) => {
+    import('views/returnGoods/returnDetail.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 终端退货管理
+const clientReturnHomepage = (resolve) => {
+    import('views/returnGoods/clientReturnHomepage.vue').then((module) => {
+        resolve(module)
+    })
+};
+// 终端退货管理
+const addNewReturnOrder = (resolve) => {
+    import('views/returnGoods/addNewReturnOrder.vue').then((module) => {
+        resolve(module)
+    })
+};
+
+// 选择退货商品
+const chooseReturnGoods = (resolve) => {
+    import('views/returnGoods/chooseReturnGoods.vue').then((module) => {
         resolve(module)
     })
 };
@@ -73,7 +101,7 @@ const manageInit = [
         path: '/addNewComplaint',
         name: 'addNewComplaint',
         meta: {
-            title: '新增投诉',
+            title: '新建投诉单',
         },
         component: addNewComplaint,
     },
@@ -113,17 +141,52 @@ const manageInit = [
         path: '/addNewRedemption',
         name: 'addNewRedemption',
         meta: {
+            keepAlive: true ,
             title: '新建兑奖单',
         },
         component: addNewRedemption,
     },
     {
-        path: '/addRedemptionGoods',
-        name: 'addRedemptionGoods',
+        path: '/dealerReturnHomepage',
+        name: 'dealerReturnHomepage',
         meta: {
-            title: '可选兑奖商品',
+            title: '退货管理',
         },
-        component: addRedemptionGoods,
+        component: dealerReturnHomepage,
+    }
+    ,
+    {
+        path: '/returnDetail',
+        name: 'returnDetail',
+        meta: {
+            title: '退货详情',
+        },
+        component: returnDetail,
+    }
+    ,
+    {
+        path: '/clientReturnHomepage',
+        name: 'clientReturnHomepage',
+        meta: {
+            title: '退货列表',
+        },
+        component: clientReturnHomepage,
+    },
+    {
+        path: '/addNewReturnOrder',
+        name: 'addNewReturnOrder',
+        meta: {
+            title: '新建退货单',
+        },
+        component: addNewReturnOrder,
+    },
+    {
+        path: '/chooseReturnGoods',
+        name: 'chooseReturnGoods',
+        meta: {
+            title: '可选退货商品',
+        },
+        component: chooseReturnGoods,
     }
 ]
 

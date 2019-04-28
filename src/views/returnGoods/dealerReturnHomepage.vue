@@ -6,12 +6,12 @@
                :iconUrl="iconUrl"></empty>
         <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
             <scroll
-                    v-if="redemptionList.length"
+                    v-if="returnGoodsList.length"
                     class="c-list"
-                    :data="redemptionList"
+                    :data="returnGoodsList"
                     ref="scrollRedemption"
             >
-                <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
+                <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
                            :tabState="tabState" @selectSingle="selectSingle"></list-item>
             </scroll>
         </div>
@@ -23,13 +23,13 @@
             </div>
             <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
         </div>
-        <button class="footer-btn" @click="addRedemption()" v-if="isCustomer">新建兑奖单</button>
+        <button class="footer-btn" @click="addReturnGoods()" v-if="isCustomer">新建退货单</button>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
                      @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 <script>
-    import {awardList,batchUpdateAward} from "api/fetch/redemption";
+    import {returnList,batchUpdateReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
     import TopTabs from "../../components/topTabs";
     import scroll from "components/scroll.vue";
@@ -55,15 +55,15 @@
                 empty: false,
                 isAllSelected: false,
                 title: '兑奖管理',
-                redemptionList: [],
+                returnGoodsList: [],
                 roleList:[],
                 rolePopShow:false,
 
             }
         },
         created() {
-            this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
-            this._QueryAwardList()
+            this.title = this.userType == '3' ? '退货列表' : '退货管理';
+            this._QueryReturnList()
         },
         computed: {
             isDealer() {
@@ -86,22 +86,21 @@
              */
             switchTab(state) {
                 this.tabState = state;
-                this._QueryAwardList()
+                this._QueryReturnList()
             },
 
 
 
-
             // 加载列表数据
-            _QueryAwardList() {
-                awardList(this.tabState).then(res => {
+            _QueryReturnList() {
+                returnList(this.tabState).then(res => {
                     if (res.data) {
                         let resultData = res.data;
                         this.empty = !resultData.length;
                         resultData.forEach(item => {
                             item['selected'] = false;
                         });
-                        this.redemptionList = [...resultData];
+                        this.returnGoodsList = [...resultData];
                     }
                 });
 
@@ -114,28 +113,28 @@
              * @param id-投诉单id
              */
             selectSingle(id) {
-                let listData = this.redemptionList;
+                let listData = this.returnGoodsList;
                 listData.forEach(item => {
-                    if (item.customerAward) {
-                        let customerAward = item.customerAward;
-                        if (customerAward.id == id) {
+                    if (item.customerReturn) {
+                        let customerReturn = item.customerReturn;
+                        if (customerReturn.id == id) {
                             item.selected = !item.selected;
                         }
                     }
                 });
                 this.isAllSelected = !listData.some(item => !item.selected);
-                this.redemptionList = [...listData];
+                this.returnGoodsList = [...listData];
             },
 
 
             // 全选
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.redemptionList;
+                let listData = this.returnGoodsList;
                 listData.forEach(item => {
                     item.selected = this.isAllSelected
                 });
-                this.redemptionList = [...listData]
+                this.returnGoodsList = [...listData]
             },
 
 
@@ -144,9 +143,9 @@
              * 跳转新增兑奖单
              * @param id-投诉单id
              */
-            addRedemption() {
+            addReturnGoods() {
                 this.$router.push({
-                    name: "addNewRedemption",
+                    name: "addNewReturnOrder",
                 });
             },
 
@@ -155,7 +154,7 @@
              * 批量移交处理
              */
             handoverProcessing(){
-                const selectedComplaints = this.redemptionList.filter(item => item.selected);
+                const selectedComplaints = this.returnGoodsList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
                     return this.$toast("请选择投诉单");
                 }
@@ -180,19 +179,19 @@
             submitQuery(dealingId) {
                 this.closePop();
                 let idList=[];
-                const selectedRedemption = this.redemptionList.filter(item => item.selected);
+                const selectedRedemption = this.returnGoodsList.filter(item => item.selected);
                 selectedRedemption.forEach(item=>{
-                    if(item.customerAward){
-                        idList.push(item.customerAward.id)
+                    if(item.customerReturn){
+                        idList.push(item.customerReturn.id)
                     }
                 });
                 let params = {
                     idList:[...idList],
                     dealingId: dealingId,
                 };
-                batchUpdateAward(params).then(res => {
+                batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryAwardList()
+                    this._QueryReturnList()
                 });
             },
 
