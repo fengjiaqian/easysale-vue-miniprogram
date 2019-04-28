@@ -32,7 +32,7 @@
                                 </ul>
                                 <p class="state">{{stateList[redemption.state]}}</p>
                                 <div class="btn-warp">
-                                    <button class="go-detail" @click="toRedemptionDetail(redemption.id)">查看详情</button>
+                                    <button class="go-detail" @click="toReturnDetail(redemption.id)">查看详情</button>
                                 </div>
                             </div>
                         </li>
@@ -40,14 +40,14 @@
                 </cube-scroll-nav-panel>
             </cube-scroll-nav>
         </div>
-        <button class="footer" @click="addNewRedemption()">新建兑奖单</button>
+        <button class="footer" @click="addNewReturnOrder()">新建退货单</button>
     </div>
 </template>
 <script>
     import TopTabs from "../../components/topTabs";
 
     export default {
-        name: 'redemptionsHomepage',
+        name: 'clientReturnHomepage',
         components: {TopTabs},
         data() {
             return {
@@ -110,21 +110,21 @@
             },
 
             /**
-             * 跳转新增兑奖单
+             * 跳转新增退货单
              * @param
              */
-            addNewRedemption() {
+            addNewReturnOrder() {
                 this.$router.push({
-                    name: "addNewRedemption",
+                    name: "addNewReturnOrder",
                 });
             },
             /**
              * 跳转兑奖详情
              * @param id-投诉单id
              */
-            toRedemptionDetail(id) {
+            toReturnDetail(id) {
                 this.$router.push({
-                    name: "redemptionDetail",
+                    name: "returnDetail",
                     params: {
                         id: id
                     }
@@ -189,7 +189,6 @@
             bg(#fff);
             padding 0 24px;
             position relative;
-
 
         }
         .dealer {
@@ -277,4 +276,5 @@
     }
 
 </style>
+
 
