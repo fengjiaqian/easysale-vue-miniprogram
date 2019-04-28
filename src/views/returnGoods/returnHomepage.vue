@@ -64,7 +64,7 @@
                 iconUrl: iconUrl,
                 tabState: 0,
                 isShowMore: false,
-                empty: false,
+                empty: true,
                 isAllSelected: false,
                 title: '退货管理',
                 returnGoodsList: [],

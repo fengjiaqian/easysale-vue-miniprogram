@@ -64,7 +64,7 @@
                 iconUrl: iconUrl,
                 tabState: 0,
                 isShowMore: false,
-                empty: false,
+                empty: true,
                 isAllSelected: false,
                 title: '兑奖管理',
                 redemptionList: [],

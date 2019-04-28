@@ -63,7 +63,7 @@
                 tabState: 0,
                 complaintsList: [],
                 selectImg: selectImg,
-                empty: false,
+                empty: true,
                 isAllSelected: false,
                 roleList: [],
                 rolePopShow: false,
