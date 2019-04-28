@@ -1,5 +1,5 @@
 <template>
-  <div class="product-wrap">
+  <div class="product-wrap exhibit-wrap">
     <!--头部-->
     <section class="pi-header">
       <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange"></m-header>
@@ -24,16 +24,18 @@
     <section class="footer" :class="{'achieve':achieve}" @click="confirm">
       <span>确定</span>
     </section>
-
+    <empty v-if="isEmpty" txt="暂无商品数据~" :iconUrl="avatarUrl"></empty>
   </div>
 </template>
 
 <script>
+  import avatarUrl from "@/assets/images/empty_icon_1.png";
   import productNormal from "components/productManage/product-manage-normal.vue";
   import scroll from "components/scroll.vue";
   import { queryProductList } from "api/fetch/mine";
   import bus from "common/Bus";
   import storage from 'common/storage'
+  import empty from "components/empty.vue";
   export default {
     data() {
       return {
@@ -51,11 +53,13 @@
         }, //商品查询参数
         selectedProduct: null,//选中的商品
         achieve: false,
+        avatarUrl,
       };
     },
     components: {
       productNormal,
-      scroll
+      scroll,
+      empty
     },
     created() {
       storage.remove("selectedProduct");

@@ -105,6 +105,7 @@
         },
         //添加陈列活动(修改陈列活动)
         addExhibit(){
+          if(!this.achieve) return
           let timeType = typeof this.param.end_time
           if(timeType == 'object'){
             this.param.end_time = this.param.end_time.getTime()
