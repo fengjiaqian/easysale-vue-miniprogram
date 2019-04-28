@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import { queryPerformList,oprateExhibit,querySaleDealers } from "api/fetch/exhibit";
+  import { queryPerformList,oprateExhibit,querySaleDealers, } from "api/fetch/exhibit";
   import salePerformColumn from "components/exhibit/sale-perform-column.vue";
   import scroll from "components/scroll.vue";
   export default {
@@ -192,7 +192,7 @@
         querySaleDealers({}).then(res => {
           if (res.result === "success") {
             this.dealerList = res.data
-            this.filterParam.dealer_id = this.dealerList[0].id
+            this.filterParam.dealer_id = this.dealerList.length ? this.dealerList[0].id : ''
           }
         }).catch(err => {
           this.$toast(err.message)
