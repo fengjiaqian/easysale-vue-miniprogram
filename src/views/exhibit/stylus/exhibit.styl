@@ -1,10 +1,15 @@
 //陈列管理列表
-.exhibit-list-scroll{
+.exhibit-content{
   padding 110px 0 118px
   width 100%
   height 100%
 }
+.exhibit-list-scroll{
+  width 100%
+  height 100%
+}
 .exhibit-list{
+
   li{
     bg(#fff)
     mb(20)
@@ -817,4 +822,25 @@ input{
 }
 .top-t{
   padding-top 278px !important
+}
+
+.exhibit-wrap{
+  height 100%
+}
+
+.exhibit-wrap /deep/{
+  .empty-page{
+    position absolute
+    left 50%
+    top 50%
+    transform translate(-50%,-75%)
+    div{
+      width 340px !important
+      height 340px !important
+    }
+    p{
+      margin-top 0 !important
+      c(#999)
+    }
+  }
 }

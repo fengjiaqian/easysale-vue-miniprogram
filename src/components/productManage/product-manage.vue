@@ -49,6 +49,7 @@
     methods: {
       goToDetail(){
         const code = this.product.id;
+        if(!code) return
         this.$router.push({
           path: "/my/productDetail",
           query: {

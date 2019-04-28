@@ -58,12 +58,17 @@
         querySaleSignList(this.filterParam).then(res => {
           if (res.result === "success") {
             this.domShow = true
-            const { dataList = [], pager } = res.data;
-            const { currentPage, totalPage } = pager;
-            if(currentPage==1){
-              this.totalPage = totalPage
+            if(!res.data.dataList){
+              this.performList = []
+              this.totalPage = 1
+            }else{
+              const { dataList = [], pager } = res.data;
+              const { currentPage, totalPage } = pager;
+              if(currentPage==1){
+                this.totalPage = totalPage
+              }
+              this.performList = this.performList.concat(dataList)
             }
-            this.performList = this.performList.concat(dataList)
             this.loading = false
             this.requestDone = true
           }
