@@ -63,7 +63,7 @@
 				show: false,
 				content: '',
 				duration: 2000,
-				location: 'bottom',
+				location: 'center',
 				toastStyle: {},
 				imgStyle: {},
 				textStyle: {},

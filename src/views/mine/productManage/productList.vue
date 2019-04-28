@@ -335,8 +335,7 @@ export default {
     },
     //加载更多
     loadMoreProducts() {
-      if (this.loading || this.filterParam.pageNum >= this.totalPage)
-        return false;
+      if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
       this.filterParam.pageNum += 1;
     }
   },

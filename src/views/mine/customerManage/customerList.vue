@@ -5,7 +5,7 @@
       <!-- <div class="search-bar">
         <input v-model="searchKey" placeholder="请输入姓名或手机号" @change="handleChange($event)">
       </div>-->
-      <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange"></m-header>
+      <m-header :isSearch="true" placeholder="请输入姓名或手机号" @emitEvt="handleChange"></m-header>
     </section>
     <!--内容-->
     <section class="sl-content">

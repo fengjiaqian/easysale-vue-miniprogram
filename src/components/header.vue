@@ -14,7 +14,7 @@
           @change="handleChange($event)"
         >
       </div>
-      <div class="title" v-else>{{title || ''}}</div>
+      <div class="title" v-else>{{tit || title || ''}}</div>
     </div>
     <!--  -->
     <div class="icon-shortcut" @click.stop="showShortcutList">
@@ -66,6 +66,11 @@ export default {
     isFixed: {
       type: Boolean,
       default: false
+    },
+    //传入的title
+    tit: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -81,14 +86,13 @@ export default {
     return {
       show: false,
       searchKey: "",
-      title: document.title,
       fixedStyleObj: fixedStyleObj
     };
   },
   computed: {},
   created() {},
   mounted() {
-    this.watchScroll();
+    // this.watchScroll();
   },
   methods: {
     goBack() {
@@ -173,10 +177,10 @@ export default {
 
 .icon-back {
   position: absolute;
-  w(88);
-  h(88);
+  w(50);
+  h(50);
   top: 0;
-  left: 0;
+  left: 10px;
 
   span {
     block();
@@ -209,11 +213,12 @@ export default {
 .center-area {
   width: 100%;
   h(90);
-  padding: 0 88px;
+  padding: 15px 100px 0;
+  bg(#fff);
 
   .title {
-    lh(90);
-    ft(32);
+    ft(38);
+    fb();
     c(#333);
     text-c();
   }
@@ -272,12 +277,12 @@ export default {
 
 .search-bar {
   flex-1();
-  height: 100%;
   display: flex;
   align-items: center;
   border: 1PX solid #ededed;
-  border-radius: 8px;
+  radius(8);
   background: #f2f2f2;
+  overflow: hidden;
 
   .s-b-l {
     display: inline-block;
@@ -295,6 +300,7 @@ export default {
     font-size: 26px;
     color: #333;
     background: #f2f2f2;
+    outline: none;
   }
 }
 </style>

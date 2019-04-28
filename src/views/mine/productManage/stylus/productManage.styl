@@ -140,8 +140,8 @@
 .fixed-wrap{
   position fixed
   right 32px
-  bottom 300px
-  z-index 9
+  bottom 160px
+  z-index 99
   .fixed-add{
     w(130)
     h(130)
@@ -228,6 +228,7 @@
       flex()
       align-items center
       justify-content flex-start
+      pr(24)
       span{
         w(150)
       }
@@ -235,12 +236,14 @@
         ml(12)
         lh(70)
         outline none
+        flex-1()
         &::-webkit-input-placeholder{
           c(#bdbdbd)
         }
       }
       .price{
-        w(180)
+        w(240)
+        flex-grow inherit !important
       }
     }
   }
@@ -297,6 +300,7 @@
       ml(12)
       border 0px solid transparent
       outline none
+      ft(30)
       &::-webkit-textarea-placeholder{
         c(#bdbdbd)
       }

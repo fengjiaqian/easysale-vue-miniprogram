@@ -1,11 +1,11 @@
 <template>
   <div class="dealer-list">
-    <search-bar></search-bar>
-    <div class="current-dealer" v-if="currentDealer.phone">
+    <m-header :isSearch="true" placeholder="请输入店铺名称" @emitEvt="_searchKeyChange"></m-header>
+    <div class="current-dealer">
       <div class="title">当前商贸公司</div>
-      <div class="dealer-item">
+      <div class="dealer-item" v-if="currentDealer.phone">
         <div class="pic">
-          <img v-lazy="currentDealer.logoIamgeUrl" alt>
+          <img v-lazy="currentDealer.logoIamgeUrl || ''" alt>
         </div>
         <div class="content" style="border: 0;">
           <p>{{currentDealer.shopName}}</p>
@@ -17,8 +17,14 @@
     <!--  -->
     <empty class="scroll-list" :txt="'当前没有可选经销商店铺'" v-if="empty"></empty>
     <!--  -->
-    <div class="scroll-list" :class="{'pt0': !currentDealer.phone }" v-if="dealerList.length">
-      <scroll class="scroll-dom" :data="dealerList">
+    <div class="scroll-list" v-if="dealerList.length">
+      <scroll
+        class="scroll-dom"
+        :data="dealerList"
+        :probeType="3"
+        :pullup="true"
+        @scrollToEnd="loadMore"
+      >
         <section>
           <div
             class="dealer-item"
@@ -27,7 +33,7 @@
             @click="_chooseDealer(item)"
           >
             <div class="pic">
-              <img v-lazy="item.logoIamgeUrl" alt>
+              <img v-lazy="item.logoIamgeUrl || ''" alt>
             </div>
             <div class="content">
               <p>{{item.shopName}}</p>
@@ -44,7 +50,6 @@
 /**
  * 首次选择和切换2种状态
  */
-import searchBar from "components/searchBar.vue";
 import scroll from "components/scroll.vue";
 import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
@@ -59,25 +64,51 @@ export default {
     };
   },
   components: {
-    searchBar,
     scroll,
     empty
   },
   created() {
+    this.params = {
+      pageNum: 1,
+      pageSize: 20,
+      shopName: ""
+    };
     this.currentId = this.$route.query.id || "";
-    this._ListAllDealer();
+    this._ListCurrentDealer();
+    this._ListAllDealer(this.params);
   },
   methods: {
-    _ListAllDealer() {
-      ListAllDealer().then(res => {
-        if (res.data) {
-          const { dataList, pager } = res.data;
-          this.currentDealer =
-            dataList.find(item => item.id == this.currentId) || {};
-          this.dealerList = dataList.filter(item => item.id != this.currentId);
-          this.empty = !this.dealerList.length;
-        }
+    _ListCurrentDealer() {
+      ListAllDealer({ id: this.currentId }).then(res => {
+        const { dataList = [] } = res.data;
+        dataList.length && (this.currentDealer = dataList[0]);
       });
+    },
+    _ListAllDealer(params) {
+      this.loading = true;
+      ListAllDealer(params)
+        .then(res => {
+          if (res.data) {
+            const { dataList, pager } = res.data;
+            const { currentPage, totalPage } = pager;
+            if (currentPage === 1) {
+              this.dealerList = dataList.filter(
+                item => item.id != this.currentId
+              );
+              this.totalPage = totalPage;
+              this.empty = !this.dealerList.length;
+            } else {
+              this.dealerList = this.dealerList.concat(
+                dataList.filter(item => item.id != this.currentId)
+              );
+            }
+            this.params.pageNum++;
+            this.loading = false;
+          }
+        })
+        .catch(err => {
+          this.loading = false;
+        });
     },
     _chooseDealer(dealer) {
       storage.set("currentDealerId", dealer.id);
@@ -85,6 +116,14 @@ export default {
       this.$router.push({
         path: "/navi/home"
       });
+    },
+    _searchKeyChange(searchKey) {
+      this.params.pageNum = 1;
+      this._ListAllDealer(searchKey.trim());
+    },
+    loadMore() {
+      if (this.loading || this.params.pageNum > this.totalPage) return false;
+      this._ListAllDealer(this.params);
     }
   }
 };
@@ -92,31 +131,33 @@ export default {
 
 <style lang="stylus" scoped>
 .dealer-list {
+  pos(relative);
   width: 100%;
   height: 100%;
-  pt(92);
+
+  .m-header {
+    width: 100%;
+    pos(absolute);
+    top: 0;
+    left: 0;
+  }
 }
 
 .current-dealer {
-  width: 100%;
-  pos(fixed);
-  top: 92;
+  pos(absolute);
+  top: 90px;
   left: 0;
-  z-index: 100;
+  width: 100%;
 }
 
 .scroll-list {
-  pt(233 + 20);
+  pt(340);
   height: 100%;
-}
-
-.pt0 {
-  pt(0);
 }
 
 .scroll-dom {
-  overflow: hidden;
   height: 100%;
+  overflow: hidden;
 }
 
 .title {

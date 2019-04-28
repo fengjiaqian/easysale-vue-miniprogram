@@ -137,6 +137,8 @@ export default {
     line-height: 78px;
     background: #eee;
     pl(32);
+    ft(28)
+    c-9()
   }
 
   .button-list {
@@ -195,7 +197,7 @@ export default {
 .item-list {
   padding: 16px 24px;
   flex-center();
-
+  bg(#fff)
   .il-l {
     w(100);
     h(100);

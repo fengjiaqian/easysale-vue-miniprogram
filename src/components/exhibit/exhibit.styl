@@ -1,0 +1,198 @@
+.exhibit-column{
+  bg(#fff)
+  mb(20)
+}
+.el-t{
+  padding 24px 0 0 24px
+  flex()
+  align-content center
+  justify-content space-between
+  .title{
+    flex()
+    flex-direction column
+    h5{
+      text-overflow-1()
+      ft(32)
+      c-3()
+      font-weight 600
+    }
+    span{
+      mt(6)
+      ft(24)
+      c-9()
+    }
+  }
+  .tag{
+    h(60)
+    lh(60)
+    bg(#FFF2D7)
+    border-radius:100px 0px 0px 100px;
+    ft(26)
+    c(#D08C02)
+    padding 0 24px
+    word-break keep-all
+    min-width 250px
+    &.end{
+      bg(#F6F6F6)
+      c-9()
+    }
+  }
+}
+.el-m{
+  padding 24px
+  ft(28)
+  border-bottom 1PX solid #EDEDED
+  p{
+    ft(28)
+    c-6()
+    text-overflow-2()
+    line-height 1.5
+  }
+  .apply-info{
+    mt(10)
+    c(#FF5638)
+  }
+}
+.el-b{
+  padding 26px 0
+  flex-center()
+  span{
+    flex-center()
+    width 50%
+    text-c()
+    ft(28)
+    c-6()
+    position relative
+    &:nth-of-type(2):before{
+      content ""
+      position absolute
+      left 0
+      top 0
+      width 1PX
+      h(40)
+      bg(#EDEDED)
+    }
+    i{
+      ft(26)
+      c(#fff)
+      bg(#FF5638)
+      h(32)
+      w(32)
+      border-radius 50%
+      ml(10)
+    }
+  }
+}
+
+
+
+
+//陈列执行情况
+.state-audit{
+  bg(#fff)
+  mt(20)
+  position relative
+  .sa-t{
+    padding 24px
+    border-bottom 1PX solid #EDEDED
+    flex()
+    >i{
+      mr(24)
+      mt(10)
+    }
+    .st-content{
+      flex-1()
+      width 100%
+      .stc-t{
+        flex()
+        flex-direction column
+        ft(24)
+        c-9()
+        mb(24)
+        .shop-name{
+          ft(28)
+          c-3()
+          mb(6)
+        }
+      }
+      .stc-b{
+        flex()
+        flex-direction column
+        ft(28)
+        c-6()
+        .task{
+          ft(32)
+          c-3()
+          mb(8)
+          font-weight 600
+        }
+        .warn-tips{
+          c(#FF5638)
+          mt(14)
+        }
+        .nper{
+          mt(30)
+          flex()
+          flex-wrap nowrap
+          overflow-x scroll
+          i{
+            bg(#F6F6F6)
+            ft(24)
+            c(#6892BB)
+            min-width 116px
+            w(116)
+            lh(48)
+            text-c()
+            border-radius 24px
+            mr(24)
+            word-break keep-all
+            &.warn{
+              c(#FF5638)
+            }
+          }
+        }
+      }
+    }
+  }
+  .sa-b{
+    flex()
+    justify-content flex-end
+    padding 16px 0
+    span{
+      border-radius 8px
+      border 1PX solid #DDDDDD
+      ft(28)
+      c-6()
+      w(160)
+      h(64)
+      lh(64)
+      box-sizing border-box
+      mr(24)
+      text-c()
+      &.red{
+        c(#FF5638)
+        border 1PX solid #FF5638
+      }
+    }
+  }
+  .state-tag{
+    position absolute
+    right 24px
+    top 24px
+    c(#FF5638)
+    ft(26)
+  }
+}
+
+.select{
+  inline()
+  w(40)
+  h(40)
+  background-image url(../../assets/images/icon-check.png)
+  background-size contain
+  background-repeat no-repeat
+  background-position center
+  &.selected{
+    background-image url(../../assets/images/icon-checked.png)
+  }
+}

@@ -4,11 +4,7 @@
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
-    <div class="D-name">
-      <i>自有</i>
-      <i :class="[product.state==1 ? 's-success' : 's-fail']">{{product.state==1?'上架':'下架'}}</i>
-      {{product.productName}}
-    </div>
+    <div class="D-name">{{product.productName}}</div>
     <div class="D-grama">
       <span class="brand">品牌：{{product.brandName}}</span>
     </div>
@@ -163,16 +159,6 @@ export default {
   lh(80);
   c(#333);
   ft(34);
-
-  i {
-    bg(#FF5638);
-    ft(22);
-    c(#fff);
-    border-radius: 4px;
-    padding: 0 8px;
-    mr(12);
-    lh(34);
-  }
 }
 
 .D-grama {
