@@ -107,6 +107,7 @@
              */
             switchTab(state) {
                 this.tabState = state;
+                this.returnGoodsList = [];
                 this._QueryReturnList()
             },
 
