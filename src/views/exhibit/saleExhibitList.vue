@@ -20,14 +20,17 @@
               :pullup="true"
               @scrollToEnd="loadMoreData"
               ref="productScrollDom">
-        <sale-perform-column
-                v-for="exhibit in performList"
-                :key="exhibit.id"
-                :exhibit="exhibit"
-                class="perform-column"
-        >
-          <i></i>
-        </sale-perform-column>
+        <div>
+          <sale-perform-column
+                  v-for="exhibit in performList"
+                  :key="exhibit.id"
+                  :exhibit="exhibit"
+                  class="perform-column"
+          >
+            <i></i>
+          </sale-perform-column>
+        </div>
+
       </scroll>
     </section>
 
