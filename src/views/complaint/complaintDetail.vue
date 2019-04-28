@@ -5,9 +5,15 @@
             <div class="status">
                 <div class="state-title">投诉状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerComplaint.state]}}</span>
                 </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isCustomer">销售人员-{{saleMan.dealingName}}正在处理您的问题，请耐心等待！</div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==0">已移交销售人员-{{saleMan.dealingName}}</div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==1">销售人员-{{saleMan.dealingName}}已处理</div>
+                <div class="descrip" v-if="saleMan.dealingName&&isCustomer">
+                    销售人员-{{saleMan.dealingName}}正在处理您的问题，请耐心等待！
+                </div>
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==0">
+                    已移交销售人员-{{saleMan.dealingName}}
+                </div>
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==1">
+                    销售人员-{{saleMan.dealingName}}已处理
+                </div>
                 <div class="continue" v-if="customerComplaint.state==1">
                     <div class="triangle"></div>
                     <div class="report">
@@ -54,11 +60,11 @@
             <!--经销商可见-->
             <div class="title-box" v-if="!isCustomer&&customerComplaint.state==0">
                 <p class="title">回复</p>
-                <textarea  class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
+                <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer">撤销投诉</button>
+        <button class="cancel-btn" v-if="isCustomer&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉</button>
         <!--经销商可见-->
         <div v-if="isDealer&&customerComplaint.state==0">
             <!--待处理-->
@@ -78,9 +84,10 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {complainDetail, updateCustomerById,batchUpdateComplaint} from "api/fetch/complaints";
+    import {complainDetail, updateCustomerById, batchUpdateComplaint, cancelComplaint} from "api/fetch/complaints";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
+
     export default {
         name: 'complaintDetail',
         data() {
@@ -172,7 +179,7 @@
             /**
              * 处理
              */
-            directProcessing(){
+            directProcessing() {
                 let params = {
                     id: this.id,
                     replyContent: this.replay,
@@ -182,9 +189,18 @@
                     this.$toast('操作成功');
                     this._QueryComplaintDetail()
                 });
+            },
+
+            /**
+             * 撤销投诉
+             */
+            cancelComplaint(){
+                cancelComplaint(this.id).then(res => {
+                    this.$toast('操作成功');
+                    this._QueryComplaintDetail()
+                });
             }
-        },
-        watch: {}
+        }
     }
 </script>
 

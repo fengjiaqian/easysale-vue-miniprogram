@@ -1,148 +1,226 @@
 <template>
     <div id="complaintDetail">
+        <m-header :isFixed="true"></m-header>
         <div class="content">
             <div class="status">
-                <div class="state-title">兑奖状态：<span style="color:#FF5638;font-weight:bold;">待处理</span></div>
-                <div v-if="isCustomer">
-                    <div class="descrip" v-if="judgeCode==1">销售人员-小黑正在处理您的问题，请耐心等待！</div>
-                    <div class="continue" v-if="judgeCode==2">
-                        <div class="triangle"></div>
-                        <div class="report">
-                            <div class="left">茅台商贸公司回复：</div>
-                            <div class="right">2019-03-23 20:40</div>
-                        </div>
-                        <div class="tips">亲爱的客户，非常抱歉给您带来的不便，您的反馈问题我们会在下次服务中改进。期待您再次光临</div>
-                    </div>
+                <div class="state-title">兑奖状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerAward.state]}}</span>
                 </div>
-
+                <div class="descrip" v-if="saleMan.dealingName&&isCustomer">
+                    销售人员-{{saleMan.dealingName}}正在处理您的问题，请耐心等待！
+                </div>
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerAward.state==0">
+                    已移交销售人员-{{saleMan.dealingName}}
+                </div>
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerAward.state==1">
+                    销售人员-{{saleMan.dealingName}}已处理
+                </div>
+                <div class="continue" v-if="customerAward.state==1">
+                    <div class="triangle"></div>
+                    <div class="report">
+                        <div class="left">{{dealer.dealerName}}回复：</div>
+                        <div class="right">{{customerAward.replyTime}}</div>
+                    </div>
+                    <div class="tips">{{customerAward.replyContent}}</div>
+                </div>
             </div>
             <div class="title-box">
                 <div class="title ">兑奖商品</div>
                 <div class="font-30-666 company-name " style="padding-top: 0">
-                    <ul>
-                        <li v-for="(applyItem, index) in [1,2,3]">
+                    <ul v-if="customerAward.items&&customerAward.items.length>0">
+                        <li v-for="(skuItem, index) in customerAward.items">
                             <div class="goods-box" v-if="index<2">
-                                <img class="goods-img">
+                                <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
-                                    <p class="goods-name">洋河蓝色经典 梦之蓝M6 52度</p>
-                                    <p class="goods-num">兑奖数量：2</p>
+                                    <p class="goods-name">{{skuItem.productName}}</p>
+                                    <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
                                 </div>
                             </div>
                             <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
                                 <img class="goods-img">
                                 <div class="goods-info">
-                                    <p class="goods-name">洋河蓝色经典 梦之蓝M6 52度</p>
-                                    <p class="goods-num">兑奖数量：2</p>
+                                    <p class="goods-name">{{skuItem.productName}}</p>
+                                    <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
                                 </div>
                             </div>
                         </li>
-                        <div class="expand" @click="isShowMoreInfo">{{isShowMore?'收起':'展开更多'}}</div>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerAward.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
                     </ul>
                 </div>
             </div>
             <!--终端可见-->
-            <div class="title-box" v-if="isCustomer">
-                <div class="title ">商贸公司</div>
-                <div class="font-30-666 company-name">茅台商贸公司</div>
-            </div>
-            <!--销售人员可见-->
-            <div class="title-box" v-if="isSaler">
-                <div class="title ">经销商</div>
-                <div class="font-30-666 company-name">茅台商贸公司</div>
+            <div class="title-box" v-if="!isDealer">
+                <div class="title ">{{isCustomer?'商贸公司':'经销商'}}</div>
+                <div class="font-30-666 company-name">{{dealer.dealerName}}</div>
             </div>
             <!--经销商可见-->
             <div class="title-box" v-if="!isCustomer">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
-                    <span class="font-30-666 margin-bottom-8">客户姓名：老王</span>
-                    <span class="font-30-666 margin-bottom-8">手机号码：134 2348 2334</span>
-                    <span class="font-30-666 margin-bottom-8">投诉时间：2019-03-23 15:3</span>
-                    <span class="font-30-666">销售负责人：小李</span>
+                    <span class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</span>
+                    <span class="font-30-666 margin-bottom-8">手机号码：{{customer.customerPhone}}</span>
+                    <span class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</span>
+                    <span class="font-30-666">销售负责人：{{customer.saleName}}</span>
                 </div>
             </div>
             <!--终端可见-->
             <div class="title-box" v-if="isCustomer">
                 <span class="title">申请时间</span>
-                <span class="font-30-666 company-name">2019-03-23 15:32</span>
+                <span class="font-30-666 company-name">{{customerAward.createTime}}</span>
             </div>
             <div class="title-box">
                 <span class="title ">备注</span>
-                <span class="font-30-666 company-name">质量不好。货送来的时候好多都是破损的</span>
+                <span class="font-30-666 company-name">{{customerAward.remark}}</span>
             </div>
             <!--经销商可见-->
-            <div class="title-box" v-if="!isCustomer">
+            <div class="title-box" v-if="!isCustomer&&customerAward.state==0">
                 <p class="title">回复</p>
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <!--终端可见-->
-        <button class="cancel-btn" v-if="isCustomer">取消兑奖</button>
+        <button class="cancel-btn" v-if="isCustomer&&customerAward.state==0" @click="cancelRedemption">取消兑奖</button>
         <!--经销商可见-->
-        <div v-if="isDealer">
+        <div v-if="isDealer&&customerAward.state==0">
             <!--待处理-->
-            <div class="footer" >
-                <button class="left-btn" >移交处理</button>
-                <button class="right-btn" >处理</button>
-            </div>
-            <div class="footer" style="display: none">
-                <button class="left-btn" >拒绝</button>
-                <button class="right-btn" >同意</button>
+            <div class="footer">
+                <button class="left-btn" @click.stop="handoverProcessing">移交处理</button>
+                <button class="right-btn" @click.stop="directProcessing">处理</button>
             </div>
         </div>
         <!--销售人员可见-->
-        <div v-if="isSaler">
-            <button class="deal-btn" >处理</button>
-            <button class="deal-btn" style="display: none">重新处理</button>
+        <div v-if="isSaleMan&&customerAward.state==0">
+            <button class="deal-btn" @click="directProcessing">处理</button>
         </div>
+        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
+                     @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 
 <script>
+    import mHeader from "components/header.vue";
+    import {awardDetail, updateAwardById, batchUpdateAward,cancelAward} from "api/fetch/redemption";
+    import {queryStaffList} from "api/fetch/mine";
+    import salemanPop from "components/saleman-pop.vue"
+
     export default {
-        name: 'redemptionDetail',
+        name: 'complaintDetail',
         data() {
             return {
+                state: ['待处理', '已处理', '已取消'],
                 judgeCode: 2,
                 replay: '',
+                customer: {},
+                customerAward: {},
+                dealer: {},
+                saleMan: {},
+                rolePopShow: false,
+                roleList: [],
+                id: '',
                 isShowMore: false,
 
             }
         },
         computed: {
-            isCustomer() {
-                return this.userType == '3'
-            },
             isDealer() {
                 return this.userType == '1'
             },
-            isSaler() {
+            isSaleMan() {
                 return this.userType == '2'
-            }
+            },
+            isCustomer() {
+                return this.userType == '3'
+            },
         },
-        components: {},
-        beforeCreate: function () {
-
-        },
+        components: {mHeader, salemanPop},
         created: function () {
+            this.id = this.$route.params.id;
+            this._QueryRedemptionDetail();
+        },
 
-        },
-        beforeDestory() {
-        },
-        destoryed() {
-        },
-        mounted() {
-
-        },
         methods: {
+
             // 是否展示更多信息
-            isShowMoreInfo() {
-                this.isShowMore = !this.isShowMore
+            isShowMoreInfo(id) {
+                this.isShowMore = !this.isShowMore;
             },
 
-        },
-        watch: {
 
+            /**
+             * 加载投诉详情
+             * @private
+             */
+            _QueryRedemptionDetail() {
+                awardDetail(this.id).then(res => {
+                    if (res.data) {
+                        let {customer, customerAward, dealer, saleMan} = {...res.data};
+                        this.customer = {...customer};
+                        this.customerAward = {...customerAward};
+                        this.dealer = {...dealer};
+                        this.saleMan = {...saleMan}
+                    }
+                });
+            },
+
+            /**
+             * 移交处理
+             */
+
+            handoverProcessing() {
+                this.rolePopShow = true;
+                //查询所有角色
+                queryStaffList({}).then(res => {
+                    if (res.result === "success") {
+                        this.roleList = res.data;
+                    }
+                });
+
+            },
+
+            closePop() {
+                this.rolePopShow = false;
+            },
+
+
+            /**
+             * 移交处理
+             * @param idealingId
+             */
+            submitQuery(dealingId) {
+                this.closePop();
+                let params = {
+                    idList: [this.id],
+                    dealingId: dealingId,
+                };
+                batchUpdateAward(params).then(res => {
+                    this.$toast('操作成功');
+                    this._QueryRedemptionDetail()
+                });
+            },
+
+            /**
+             * 处理
+             */
+            directProcessing() {
+                let params = {
+                    id: this.id,
+                    replyContent: this.replay,
+                    state: 1
+                };
+                updateAwardById(params).then(res => {
+                    this.$toast('操作成功');
+                    this._QueryRedemptionDetail()
+                });
+            },
+
+            /**
+             * 取消兑奖
+             */
+            cancelRedemption(){
+                cancelAward(this.id).then(res => {
+                    this.$toast('操作成功');
+                    this._QueryRedemptionDetail()
+                });
+            }
         }
     }
 </script>
@@ -151,6 +229,7 @@
     #complaintDetail {
         bg(#f6f6f6);
         .content {
+            mt(90)
             mb(100);
             overflow: scroll
         }
@@ -247,7 +326,6 @@
             border: 0;
             outline: none;
         }
-
 
         .triangle {
             width: 0;
@@ -354,7 +432,7 @@
             ft(32)
         }
 
-        .deal-btn{
+        .deal-btn {
             h(98)
             position: fixed;
             width: 100%;

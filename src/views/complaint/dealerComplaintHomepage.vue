@@ -32,7 +32,7 @@
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import TopTabs from "../../components/topTabs";
-    import listItem from "components/complaint/list-item.vue";
+    import listItem from "./list-item.vue";
     import empty from "components/empty.vue";
     import mHeader from "components/header.vue";
     import salemanPop from "components/saleman-pop.vue"
@@ -54,13 +54,15 @@
                 roleList:[],
                 rolePopShow:false,
                 iconUrl:iconUrl,
-                title:'投诉管理'
+                title:'投诉管理',
+                dealerList:[],
             }
         },
         created() {
             console.log(this.userType)
             this.title = this.userType=='3'?'投诉列表':'投诉管理';
-            this._QueryComplaintList();
+            this.queryUrl();
+
         },
         computed: {
             isDealer() {
@@ -74,6 +76,10 @@
             }
         },
         methods: {
+            queryUrl(){
+                this._QueryComplaintList();
+                this._QueryDealComplaint();
+            },
 
             /**
              * 切换顶部tabs
@@ -81,7 +87,7 @@
              */
             switchTab(state) {
                 this.tabState = state;
-                this._QueryComplaintList()
+                this.queryUrl()
             },
 
             // 加载列表数据
@@ -98,6 +104,18 @@
                 });
 
             },
+
+            // 客户投诉过的经销商列表
+            _QueryDealComplaint() {
+                selectDealComplaint(this.tabState).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.dealerList = [...resultData];
+                    }
+                });
+
+            },
+
 
 
             /**

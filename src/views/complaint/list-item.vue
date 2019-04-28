@@ -3,7 +3,7 @@
          v-if="listData.customerComplaint">
         <img v-if="tabState==0&&isDealer" :src="listData.selected?selectImg[1]:selectImg[0]" class="select-img"
              @click.stop="selectSingle(listData.customerComplaint.id)">
-        <p class="dealer">{{ isCustomer?listData.dealer.dealerName: listData.customerComplaint.createUser}}</p>
+        <p class="dealer">{{ isCustomer?listData.dealer.dealerName: listData.customer.customerName}}</p>
         <p class="replyTime">{{listData.customerComplaint.createTime}}</p>
         <p class="complaintHeadLine">{{listData.customerComplaint.complaintHeadLine}}</p>
         <p class="complaintContent">{{listData.customerComplaint.complaintContent}}</p>
@@ -30,7 +30,6 @@
 <script>
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
-
     const selectImg = [ic1, ic2];
     export default {
         name: 'list-item',

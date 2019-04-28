@@ -9,7 +9,7 @@
             <p class="title">内容描述</p>
             <textarea id="description" cols="30" rows="9" placeholder="请输入投诉内容"
                       v-model="complaintContent"></textarea>
-            <p class="count"><span id="textCount">0</span>/100</p>
+            <p class="count">{{length}}/100</p>
         </div>
         <div class="remark">
             <p class="title">备注</p>
@@ -31,32 +31,17 @@
                 complaintHeadLine: '',
                 complaintContent: '',
                 remark: '',
+                length:0
 
             }
         },
         components: {mHeader},
 
-        mounted() {
-            window.onload = function () {
-                //获取文本内容和长度函数
-                function txtCount(el) {
-                    let val = el.value;
-                    let eLen = val.length;
-                    return eLen;
-                }
-                let el = document.getElementById('description');
-                el.addEventListener('input', function () {
-                    let len = txtCount(this);
-                    document.getElementById('textCount').innerHTML = len;
-                });
-                el.addEventListener('propertychange', function () {//兼容IE
-                    let len = txtCount(this);
-                    document.getElementById('textCount').innerHTML = len;
-                });
-
+        watch:{
+            complaintContent(val,oval){
+                this.length = val.length;
             }
         },
-
         methods: {
 
             /**
@@ -87,10 +72,8 @@
                     remark:this.remark,
                 };
                 saveComplain(params).then(res => {
-                    if (res.data) {
-                        this.$toast('新增成功');
-                        this.$router.go(-1);
-                    }
+                    this.$toast('新增成功');
+                    this.$router.go(-1)
                 });
             }
 

@@ -48,12 +48,7 @@ const addNewRedemption = (resolve) => {
         resolve(module)
     })
 };
-// 添加兑奖商品
-const addRedemptionGoods = (resolve) => {
-    import('views/redemption/addRedemptionGoods.vue').then((module) => {
-        resolve(module)
-    })
-};
+
 // 经销商退货管理
 const dealerReturnHomepage = (resolve) => {
     import('views/returnGoods/dealerReturnHomepage.vue').then((module) => {
@@ -78,6 +73,13 @@ const addNewReturnOrder = (resolve) => {
         resolve(module)
     })
 };
+
+// 选择退货商品
+const chooseReturnGoods = (resolve) => {
+    import('views/returnGoods/chooseReturnGoods.vue').then((module) => {
+        resolve(module)
+    })
+};
 const manageInit = [
     {
         path: '/clientComplaintsHomepage',
@@ -99,7 +101,7 @@ const manageInit = [
         path: '/addNewComplaint',
         name: 'addNewComplaint',
         meta: {
-            title: '新建投诉',
+            title: '新建投诉单',
         },
         component: addNewComplaint,
     },
@@ -139,17 +141,10 @@ const manageInit = [
         path: '/addNewRedemption',
         name: 'addNewRedemption',
         meta: {
+            keepAlive: true ,
             title: '新建兑奖单',
         },
         component: addNewRedemption,
-    },
-    {
-        path: '/addRedemptionGoods',
-        name: 'addRedemptionGoods',
-        meta: {
-            title: '可选兑奖商品',
-        },
-        component: addRedemptionGoods,
     },
     {
         path: '/dealerReturnHomepage',
@@ -181,9 +176,17 @@ const manageInit = [
         path: '/addNewReturnOrder',
         name: 'addNewReturnOrder',
         meta: {
-            title: '退货列表',
+            title: '新建退货单',
         },
         component: addNewReturnOrder,
+    },
+    {
+        path: '/chooseReturnGoods',
+        name: 'chooseReturnGoods',
+        meta: {
+            title: '可选退货商品',
+        },
+        component: chooseReturnGoods,
     }
 ]
 

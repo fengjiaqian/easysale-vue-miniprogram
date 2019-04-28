@@ -1,8 +1,8 @@
 <template>
     <div id="addNewRedemption">
+        <m-header :isFixed="true"></m-header>
         <div class="goods-box">
             <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}">兑奖商品</p>
-            <!--<div class="dividing-line-2" v-if="redemptionGoods.length"></div>-->
             <div class="good-warp">
                 <div v-if="redemptionGoods.length">
                     <ul>
@@ -10,10 +10,10 @@
                             <div class="goods-list-box">
                                 <div class="goods-info">
                                     <div class="img-box">
-                                        <img>
+                                        <img v-lazy="item.productImageUrl">
                                     </div>
-                                    <p class="goods-name">洋河蓝色经典 梦之蓝M6 52度梦之蓝M6 52度梦之蓝M6 52度</p>
-                                    <div class="del-btn">删除</div>
+                                    <p class="goods-name">{{item.productName}}</p>
+                                    <div class="del-btn" @click="delGoods(index)">删除</div>
                                 </div>
                                 <div class="count-box">
                                     <span class="font-30-333">兑奖数量：</span>
@@ -34,42 +34,93 @@
             <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
                       v-model="remark"></textarea>
         </div>
-        <button class="submit-btn">提交</button>
+        <button class="submit-btn" @click="submitRedemption">提交</button>
     </div>
 </template>
 
 <script>
     import numberPicker from "components/number-picker.vue";
-
+    import storage from 'common/storage';
+    import mHeader from "components/header.vue";
+    import {saveAward} from "api/fetch/redemption";
     export default {
         name: 'addNewRedemption',
         data() {
             return {
-                redemptionGoods: [
-                    {
-                        buyCount: 1,
-                    },
-                    {
-                        buyCount: 2,
-                    },
-                    {
-                        buyCount: 2,
-                    }
-                ],
-                remark: ''
+                redemptionGoods: [],
+                remark: '',
             }
         },
         components: {
-            numberPicker
+            numberPicker,mHeader
         },
-
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                if (from.name == 'chooseProductList') {
+                    let selectedProduct = storage.get("selectedProduct", "");
+                        selectedProduct.buyCount=1
+                    vm.redemptionGoods.push(selectedProduct)
+                } else {
+                    storage.remove("selectedProduct");
+                }
+            })
+        },
         methods: {
+
             //跳转到添加兑奖商品
             toAddRedemptionGoods() {
-                this.$router.push({
-                    name: "addRedemptionGoods",
+                this.$router.push({ path: "/chooseProductList" });
+            },
+
+            // 删除已添加的兑奖商品
+            delGoods(selectIndex){
+                let data=this.redemptionGoods;
+                data.forEach((item,index)=>{
+                    if(index==selectIndex){
+                      data.splice(index,1)
+                    }
                 });
-            }
+                this.redemptionGoods=[...data]
+            },
+
+            //新建兑奖单
+            submitRedemption(){
+                if (!this.isValid()) return;
+                const currentDealerId = storage.get("currentDealerId", "") || "";
+                let items=[];
+                for(let item of this.redemptionGoods){
+                    let obj={
+                        productId:item.id,
+                        awardCount:item.buyCount,
+                    }
+                    items.push(obj)
+                }
+                let params={
+                    dealerId:currentDealerId,
+                    items:items,
+                    remark:this.remark,
+                };
+                saveAward(params).then(res => {
+                    this.$toast('新增成功');
+                    this.$router.go(-1)
+                });
+            },
+
+            /**
+             * 校验表单
+             * @returns {boolean}
+             */
+            isValid(){
+                let errList = [];
+                if (!this.redemptionGoods.length) {
+                    errList.push({errMsg: '请添加兑奖商品'});
+                }
+                if (errList.length !== 0) {
+                    this.$toast(errList[0].errMsg)
+                }
+                return errList.length === 0
+            },
+
         }
     }
 </script>
@@ -79,6 +130,7 @@
         width 100%;
         height 100%;
         bg(#f6f6f6);
+        mt(114)
         .goods-box, .remark-box {
             margin 24px;
             padding 24px 24px 32px;
