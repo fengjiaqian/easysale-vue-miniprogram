@@ -49,7 +49,9 @@
                                 </div>
                             </div>
                         </li>
-                        <div class="expand" @click="isShowMoreInfo" v-if="customerReturn.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerReturn.items.length>2">
+                            {{isShowMore?'收起':'展开更多'}}
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -69,7 +71,7 @@
                 <div class="customer-info">
                     <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
-                    <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
+                        <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
                     <p class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</p>
                     <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
@@ -110,7 +112,7 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {returnDetail, updateReturnById, batchUpdateReturn,cancelCustomerReturn} from "api/fetch/returnGoods";
+    import {returnDetail, updateReturnById, batchUpdateReturn, cancelCustomerReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
 
@@ -227,11 +229,16 @@
             /**
              * 取消申请
              */
-            cancelReturn(){
-                cancelCustomerReturn(this.id).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryReturnDetail()
-                });
+            cancelReturn() {
+                this.$confirm('您确定取消申请吗？')
+                    .then(() => {
+                        cancelCustomerReturn(this.id).then(res => {
+                            this.$toast('操作成功');
+                            this._QueryReturnDetail()
+                        });
+                    })
+                    .catch(() => {
+                    });
             }
         }
     }
@@ -404,7 +411,7 @@
         }
         .goods-info {
             display flex;
-            flex:1;
+            flex: 1;
             width 100%
             flex-direction column;
             ml(24)
@@ -461,19 +468,19 @@
             border: 0;
             outline: none;
         }
-        .goods-price-warp{
+        .goods-price-warp {
             mt(43)
             display: flex;
             align-items center;
             position relative;
             width 100%
         }
-        .count{
+        .count {
             display flex;
             position absolute;
             right 0px
         }
-        .tel{
+        .tel {
             block();
             pos(absolute);
             bottom: 0;

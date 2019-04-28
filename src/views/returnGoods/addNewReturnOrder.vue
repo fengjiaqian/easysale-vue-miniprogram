@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <button class="submit-btn" @click="submitReturnOrder">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate}"   @click="submitReturnOrder">提交</button>
     </div>
 </template>
 
@@ -94,6 +94,12 @@
                     vm.returnContent=''
                 }
             })
+        },
+
+        computed:{
+            canOperate() {
+                return this.returnContent.trim() && this.returnGoods.length;
+            }
         },
 
         methods: {
@@ -201,13 +207,17 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(#FF5638);
+            bg(#BDBDBD);
             text-align: center;
             lh(98);
             c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;
+        }
+        .achieve{
+            bg(#FF5638)
+
         }
         textarea:
         :-webkit-input-placeholder {

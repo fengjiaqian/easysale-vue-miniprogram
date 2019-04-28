@@ -43,7 +43,9 @@
                                 </div>
                             </div>
                         </li>
-                        <div class="expand" @click="isShowMoreInfo" v-if="customerAward.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerAward.items.length>2">
+                            {{isShowMore?'收起':'展开更多'}}
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -99,7 +101,7 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {awardDetail, updateAwardById, batchUpdateAward,cancelAward} from "api/fetch/redemption";
+    import {awardDetail, updateAwardById, batchUpdateAward, cancelAward} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
 
@@ -216,11 +218,17 @@
             /**
              * 取消兑奖
              */
-            cancelRedemption(){
-                cancelAward(this.id).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryRedemptionDetail()
-                });
+            cancelRedemption() {
+                this.$confirm('您确定取消兑奖吗？')
+                    .then(() => {
+                        cancelAward(this.id).then(res => {
+                            this.$toast('操作成功');
+                            this._QueryRedemptionDetail()
+                        });
+                    })
+                    .catch(() => {
+                    });
+
             }
         }
     }
@@ -447,7 +455,7 @@
             border: 0;
             outline: none;
         }
-        .tel{
+        .tel {
             block();
             pos(absolute);
             bottom: 0;

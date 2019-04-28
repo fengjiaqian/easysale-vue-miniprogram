@@ -36,7 +36,7 @@
                       v-model="remark"></textarea>
         </div>
         </div>
-        <button class="submit-btn" @click="submitRedemption">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate}"  @click="submitRedemption">提交</button>
     </div>
 </template>
 
@@ -82,6 +82,12 @@
                     vm.remark=''
                 }
             })
+        },
+
+        computed:{
+            canOperate() {
+                return this.redemptionGoods.length
+            }
         },
         methods: {
 
@@ -178,13 +184,17 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(#FF5638);
+            bg(#bdbdbd);
             text-align: center;
             lh(98);
             c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;
+        }
+        .achieve{
+            bg(#FF5638)
+
         }
         textarea:
         :-webkit-input-placeholder {
