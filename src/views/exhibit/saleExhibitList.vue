@@ -4,9 +4,15 @@
     <section class="top-bar">
       <span v-for="(item,index) in stateList" :class="{'active': activeIdx == index}" @click="switchBar(index)">{{item.title}}</span>
     </section>
+    <!--经销商店铺列表-->
+    <section class="dealer-list-wrap" v-if="activeIdx!=0">
+      <span :class="{'active':activeDealerIdx==idx}"
+            v-for="(item,idx) in dealerList"
+            @click="switchShop(item,idx)"
+      >{{item.shopName||item.name}}</span>
+    </section>
 
-    <section class="exhibit-state-content">
-
+    <section class="exhibit-state-content" :class="{'top-t':activeIdx!=0}">
       <scroll
               class="exhibit-state-scroll"
               :data="performList"
@@ -14,38 +20,28 @@
               :pullup="true"
               @scrollToEnd="loadMoreData"
               ref="productScrollDom">
-        <perform-column
+        <sale-perform-column
                 v-for="exhibit in performList"
                 :key="exhibit.id"
                 :exhibit="exhibit"
                 class="perform-column"
         >
           <i></i>
-        </perform-column>
+        </sale-perform-column>
       </scroll>
-    </section>
-
-    <section class="footer" v-if="activeIdx==0">
-      <div class="oprate">
-        <div class="all-select">
-          <i class="select"></i>
-          <span>全选</span>
-        </div>
-        <div class="agree" @click="batchOprate">同意</div>
-      </div>
     </section>
 
     <!--空页面友好提示-->
     <section class="empty-exhibit" v-if="isEmpty">
       <i></i>
-      <span>暂无陈列执行数据~</span>
+      <span>暂无数据~</span>
     </section>
   </div>
 </template>
 
 <script>
-  import { queryPerformList,oprateExhibit } from "api/fetch/exhibit";
-  import performColumn from "components/exhibit/perform-column.vue";
+  import { queryPerformList,oprateExhibit,querySaleDealers } from "api/fetch/exhibit";
+  import salePerformColumn from "components/exhibit/sale-perform-column.vue";
   import scroll from "components/scroll.vue";
   export default {
     data() {
@@ -73,27 +69,35 @@
           pageSize: 10,
           display_Id: '',//活动id
           lists_tates: [0],//可选查询状态
+          dealer_id: '',//当前选中的经销商id
+          customer: 1,//代表客户调用
         },
         performList: [],//执行情况列表
         isEmpty: false,
+        dealerList: [],//经销商列表
+        activeDealerIdx: 0,//默认选中的经销商
       };
     },
     components: {
       scroll,
-      performColumn
+      salePerformColumn
     },
     created() {
       this.filterParam.display_Id = this.$route.query.id
-      //this.queryPerforms()
+      if(this.activeIdx==0){
+        //获取可申请的列表
+        this.queryPerforms(`apply`)
+      }
+      this.queryDealers()
     },
     mounted() {},
     methods: {
+      //切换状态栏
       switchBar(idx){
         if(idx == this.activeIdx) return false
         this.activeIdx = idx
         switch (idx) {
           case 0:
-          this.filterParam.lists_tates = [0]
           break;
           case 1:
             this.filterParam.lists_tates = [2]
@@ -109,25 +113,39 @@
         }
         this.filterParam.pageNum = 1
         this.performList = []
+        if(idx==0) this.queryPerforms(`apply`)
       },
-      queryPerforms(){
+      //获取任务列表
+      queryPerforms(type){
         this.loading = true
         this.requestDone = false
-        queryPerformList(this.filterParam).then(res => {
+        let param = this.filterParam
+        //可申请列表
+        if(type==`apply`){
+          param = {}
+        }
+        queryPerformList(param,type).then(res => {
           if (res.result === "success") {
             this.domShow = true
-            const { dataList = [], pager } = res.data;
-            const { currentPage, totalPage } = pager;
-            if(currentPage==1){
-              this.totalPage = totalPage
-            }
-            //待审核的列表项可以勾选
             if(this.activeIdx==0){
+              this.performList = res.data
+              this.totalPage = 1
+            }else{
+              const { dataList = [], pager } = res.data;
+              const { currentPage, totalPage } = pager;
+              if(currentPage==1){
+                this.totalPage = totalPage
+              }
               dataList.forEach((item)=>{
-                item.select = false
+                item.dealer = {}
+                this.dealerList.forEach((dealer)=>{
+                  if(dealer.id == item.dealer_id){
+                    Object.assign(item.dealer,dealer)
+                  }
+                })
               })
+              this.performList = this.performList.concat(dataList)
             }
-            this.performList = this.performList.concat(dataList)
             this.loading = false
             this.requestDone = true
           }
@@ -169,11 +187,31 @@
         if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
         this.filterParam.pageNum += 1
       },
+      //查询客户签约的店铺列表
+      queryDealers(){
+        querySaleDealers({}).then(res => {
+          if (res.result === "success") {
+            this.dealerList = res.data
+            this.filterParam.dealer_id = this.dealerList[0].id
+          }
+        }).catch(err => {
+          this.$toast(err.message)
+        })
+      },
+      //切换经销商店铺
+      switchShop(item,idx){
+        this.activeDealerIdx = idx
+        this.filterParam.pageNum = 1
+        this.performList = []
+        this.filterParam.dealer_id = item.id
+      },
     },
     watch: {
       filterParam: {
         handler(newVal, oldVal) {
-          this.queryPerforms()
+          if(this.activeIdx!=0){
+            this.queryPerforms(``)
+          }
         },
         deep: true
       },

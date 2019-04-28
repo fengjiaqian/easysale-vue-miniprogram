@@ -47,7 +47,7 @@
       goDetail(){
         this.$router.push({
           path: "/exhibitTaskInfo",
-          query: {id: this.exhibit.id}
+          query: {id: this.exhibit.id,applyNum:this.exhibit.applySignNum}
         });
       },
       //删除陈列

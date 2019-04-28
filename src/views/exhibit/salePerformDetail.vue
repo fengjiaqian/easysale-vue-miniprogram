@@ -28,6 +28,28 @@
         <div class="pc-content">
           <p>执行周期：{{performInfo.shopDisplayItemDto.display_days}}天，共{{performInfo.shopDisplayItemDto.total_periods}}期，当前第{{performInfo.periods}}期</p>
           <p>已上传{{nperNum.uploadedNum}}期，共有<i>{{nperNum.unloadedNum}}</i>期未按时上传</p>
+          <!--上传陈列图片-->
+          <div class="upload-column" v-if="showUpload">
+            <ul class="upload-column-list">
+              <li v-for="(item,index) in fileList">
+                <img :src="item.url">
+                <i @click="deleteUploadImg(index)"></i>
+              </li>
+              <el-upload class="upload-wrap-large"
+                         :action="uploadImgUrl"
+                         list-type="picture-card"
+                         :headers="headers"
+                         :before-upload="onBeforeUpload"
+                         :on-change="changeLoad"
+                         :on-progress="progressUpload"
+                         :on-success="fileSuccess"
+                         :on-error="fileFaild"
+                         accept="image/*"
+              >
+              </el-upload>
+            </ul>
+            <div class="upload-btn" @click="uploadNper" :class="{'achieve':achieve}">上传</div>
+          </div>
           <div class="nper-column">
             <span v-for="(item,idx) in performInfo.displayitemphotoDtos">
               {{idx+1}}
@@ -65,7 +87,9 @@
 </template>
 
 <script>
-  import { queryPerformDetail,oprateExhibit } from "api/fetch/exhibit";
+  import { querySaleExhibitDetail,oprateExhibit,uploadExhibitNper } from "api/fetch/exhibit";
+  import { compress } from "common/util";
+  import storage from "common/storage";
   export default {
     data() {
       return {
@@ -78,6 +102,11 @@
           comments: ''//拒绝原因
         },
         nperNum: {},
+        limitUploadNum: 1,//上传图片的限制张数
+        fileList: [],
+        productImageUrl: '',//
+        achieve: false,//能否上传
+        showUpload: false,//是否有上传按钮
       };
     },
     components: {
@@ -86,10 +115,12 @@
     computed: {
       stateContent() {
         const { state } = this.performInfo
-        let content = state == 0 ? `待审核` :
-                state == 2 ? `执行中` :
+        let content = state == 0 ? `可申请` :
+                state == 1 ? `已拒绝` :
+                state == 2 ? `进行中` :
                 state == 3 ? `已到期` :
-                state == 4 || state == 5 ? `已完成` : ``
+                state == 4 ? `已完成，收到陈列奖品` :
+                state == 5 ? `已拒绝，拒绝兑奖` : ``
         return content
       },
       performContent() {
@@ -113,6 +144,12 @@
         }
         return content
       },
+      headers() {
+        const token = storage.get("token", "");
+        return {
+          'token': token,
+        }
+      }
     },
     created() {
       this.id = this.$route.query.id
@@ -121,13 +158,16 @@
     mounted() {},
     methods: {
       queryDetail(){
-        queryPerformDetail(this.id).then(res => {
+        querySaleExhibitDetail(this.id).then(res => {
           if (res.result === "success") {
             this.performInfo = res.data
             Object.assign(this.product,res.data.shopDisplayItemDto.dealerProductDTO)
             if(this.performInfo.state == 2 || this.performInfo.state == 3){
               let nperNum = this.calculateNper(this.performInfo.displayitemphotoDtos)
               Object.assign(this.nperNum,nperNum)
+            }
+            if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
+              this.showUpload = true
             }
             this.domShow = true
           }
@@ -196,6 +236,82 @@
           unloadedNum
         }
       },
+      //图片上传前验证
+      onBeforeUpload(file){
+        const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
+        const isLt1M = file.size / 1024 / 1024 < 10;
+        if (!isIMAGE) {
+          this.$alert('上传文件只能是图片格式!');
+        }
+        if (!isLt1M) {
+          this.$alert('上传文件大小不能超过 10MB!');
+        }
+        if(isIMAGE && isLt1M){
+          //console.log('压缩前',file)
+          return new Promise((resolve, reject)=>{
+            compress(file, function(val) {
+              //console.log('压缩后',val)
+              resolve(val)
+            })
+          })
+        }else{
+          return false
+        }
+      },
+      changeLoad(file, fileList){
+
+      },
+      //图片上传时
+      progressUpload(event, file, fileList){
+
+      },
+      //图片上传成功时
+      fileSuccess(res, file) {
+        this.fileList.unshift(file)
+        if(this.fileList.length == this.limitUploadNum){
+          document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
+        }
+        this.productImageUrl = res.data
+      },
+      fileFaild(){
+        this.$alert('图片上传失败！')
+      },
+      deleteUploadImg(idx){
+        this.fileList = this.fileList.filter((item,index)=>{
+          return idx!=index
+        })
+        if(this.fileList.length < this.limitUploadNum){
+          document.querySelector('.el-upload--picture-card').removeAttribute('style')
+        }
+        this.productImageUrl = ''
+      },
+      //上传期数
+      uploadNper(){
+        if(!this.achieve) return
+        const { id,sign_id } = this.performInfo.displayitemphotoDto
+        let param = {
+          id,
+          sign_id,
+          path: this.productImageUrl
+        }
+        uploadExhibitNper(param).then(res => {
+          if (res.result === "success") {
+            this.$toast(`操作成功！`)
+            this.queryDetail()
+          }
+        }).catch(err => {
+          this.$toast(err.message)
+        })
+      },
+    },
+    watch: {
+      productImageUrl: function(val) {
+        if(val){
+          this.achieve = true
+        }else{
+          this.achieve = false
+        }
+      }
     }
   };
 </script>

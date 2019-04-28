@@ -375,7 +375,21 @@ export default {
         }
       });
     },
-    jumpSecondsort(item) {}
+    jumpSecondsort(item) {
+      switch (item.value) {
+        case `陈列管理`:
+          if(this.userType==1){
+            this.$router.push({path: "/exhibitList"});
+          }else if(this.userType==2){
+            this.$router.push({path: "/saleSignExhibitList"});
+          }else if(this.userType==3){
+            this.$router.push({path: "/saleExhibitList"});
+          }
+          break;
+        default:
+          break;
+      }
+    }
   }
 };
 </script>
