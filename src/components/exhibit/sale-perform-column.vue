@@ -146,7 +146,10 @@
       goDetail(){
         this.$router.push({
           path: "/salePerformDetail",
-          query: {id: this.exhibit.id}
+          query: {
+            id: this.exhibit.id,
+            type: this.exhibit.state
+          }
         });
       },
       select(){
