@@ -77,8 +77,8 @@
           </div>
           <!--  -->
           <ul class="home-icons clearfix">
-            <li v-for="item in appIcons">
-              <a @click="jumpSecondsort(item)">
+            <li v-for="(item,index) in appIcons">
+              <a @click="jumpSecondsort(index)">
                 <img v-lazy="item.imgUrl || ''">
                 <span>{{item.value}}</span>
               </a>
@@ -271,10 +271,9 @@ export default {
         "mineRefresh",
         "orderRefresh",
         "currentDealer",
-        "currentDealerId",
         "fromOrder",
         "orderPrequeryParams",
-        "orderPrequeryParams"
+        "orderExtraParams"
       ];
       for (let key of keys) {
         storage.remove(key);
@@ -387,29 +386,32 @@ export default {
         }
       });
     },
-    jumpSecondsort(item) {
-      switch (item.value) {
-        case `陈列管理`:
+    jumpSecondsort(Index) {
+      var jumpPath = "";
+      switch (Index) {
+        case 3:
           if (this.userType == 1) {
-            this.$router.push({ path: "/exhibitList" });
+            jumpPath = "/exhibitList";
           } else if (this.userType == 2) {
-            this.$router.push({ path: "/saleSignExhibitList" });
-          } else if (this.userType == 3) {
-            this.$router.push({ path: "/saleExhibitList" });
+            jumpPath = "/saleSignExhibitList";
+          } else {
+            jumpPath = "/saleExhibitList";
           }
           break;
-        case `投诉管理`:
-          this.$router.push({ path: "/complaintHomepage" });
+        case 0:
+          jumpPath = "/complaintHomepage";
           break;
-        case `兑奖管理`:
-          this.$router.push({ path: "/redemptionHomepage" });
+        case 1:
+          jumpPath = "/redemptionHomepage";
           break;
-        case `退货管理`:
-          this.$router.push({ path: "/returnHomepage" });
+        case 2:
+          jumpPath = "/returnHomepage";
           break;
         default:
           break;
       }
+      if (this.navigateToLogin()) return false;
+      this.$router.push({ path: jumpPath });
     }
   }
 };
