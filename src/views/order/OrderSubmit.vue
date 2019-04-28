@@ -214,6 +214,7 @@ export default {
   ft(28);
   c(#999);
   line-height: 1.2;
+  b1(#ededed);
 }
 
 .info-display {

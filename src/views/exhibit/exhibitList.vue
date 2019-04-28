@@ -1,30 +1,35 @@
 <template>
-  <section>
+  <section class="exhibit-wrap">
     <m-header :isFixed="true"></m-header>
-    <scroll
-            class="exhibit-list-scroll"
-            :data="exhibitList"
-            :probeType="3"
-            :pullup="true"
-            @scrollToEnd="loadMoreData"
-            ref="productScrollDom">
-      <ul class="exhibit-list">
-        <exhibit-column
-                v-for="exhibit in exhibitList"
-                :key="exhibit.id"
-                :exhibit="exhibit"
-        ></exhibit-column>
-      </ul>
-    </scroll>
+    <div class="exhibit-content">
+      <scroll
+              class="exhibit-list-scroll"
+              :data="exhibitList"
+              :probeType="3"
+              :pullup="true"
+              @scrollToEnd="loadMoreData"
+              ref="productScrollDom">
+        <div class="exhibit-list">
+          <exhibit-column
+                  v-for="exhibit in exhibitList"
+                  :key="exhibit.id"
+                  :exhibit="exhibit"
+          ></exhibit-column>
+        </div>
+      </scroll>
+    </div>
     <div class="exhibit-footer" @click="addExhibit">新建陈列</div>
+    <empty v-if="isEmpty" txt="暂无陈列数据~" :iconUrl="avatarUrl"></empty>
   </section>
 </template>
 
 <script>
+  import avatarUrl from "@/assets/images/empty_icon_1.png";
   import exhibitColumn from "components/exhibit/exhibit-column.vue";
   import { queryDisplayList } from "api/fetch/exhibit";
   import scroll from "components/scroll.vue";
   import bus from "common/Bus";
+  import empty from "components/empty.vue";
   export default {
     data() {
       return {
@@ -38,11 +43,13 @@
           pageSize: 10
         },
         totalPage: 0,//总页数
+        avatarUrl,
       };
     },
     components: {
       scroll,
-      exhibitColumn
+      exhibitColumn,
+      empty
     },
     created() {
       this.queryExhibitList()

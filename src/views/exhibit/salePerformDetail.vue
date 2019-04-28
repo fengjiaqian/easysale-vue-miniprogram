@@ -20,7 +20,37 @@
           <p class="reward">{{performInfo.shopDisplayItemDto.display_reward}}</p>
         </div>
       </li>
-      <li class="perform-case" v-if="performInfo.state!=0">
+      <li>
+        <h5>陈列周期</h5>
+        <div class="require">
+          <p>{{performInfo.display_days}}天</p>
+        </div>
+      </li>
+      <li>
+        <h5>上传周期</h5>
+        <div class="require">
+          <p>{{performInfo.photo_space_day}}天</p>
+        </div>
+      </li>
+      <li>
+        <h5>奖励</h5>
+        <div class="require">
+          <p>{{performInfo.display_rule}}</p>
+        </div>
+      </li>
+      <li>
+        <h5>商贸公司</h5>
+        <div class="require">
+          <p>{{performInfo.dealerDto.shopName}}</p>
+        </div>
+      </li>
+      <li>
+        <h5>申请截止日期</h5>
+        <div class="require">
+          <p>{{performInfo.end_time}}</p>
+        </div>
+      </li>
+      <li class="perform-case" v-if="performInfo.state!=0&&type!=1">
         <div class="pc-title">
           <span>执行情况</span>
           <span class="detail" @click="goRecord">查看详情</span>
@@ -59,35 +89,33 @@
           <div class="scale-btn" v-if="performInfo.periods>10">展开更多</div>
         </div>
       </li>
-      <li>
-        <h5>客户信息</h5>
-        <div class="customer-info">
-          <p>客户姓名：{{performInfo.customerInfoDTO.name}}</p>
-          <p>手机号码：{{performInfo.customerInfoDTO.phone}}
-            <a class="tel" :href="'tel:'+performInfo.customerInfoDTO.phone"></a>
-          </p>
-          <p>申请时间：{{performInfo.create_time}}</p>
-          <p>销售负责人：{{performInfo.customerInfoDTO.salesmen}}</p>
-        </div>
-      </li>
       <li class="remark" v-if="performInfo.state == 0 || performInfo.state == 3">
         <h5>备注<span>(若拒绝，则必须填写拒绝原因)</span></h5>
         <textarea v-model="oprateParam.comments" cols="30" rows="6" placeholder="请输入内容"></textarea>
       </li>
     </ul>
-    <div class="et-footer" v-if="performInfo.state==0">
-      <span class="refuse" @click="oprateApply(`refuse`)">拒绝</span>
-      <span class="agree" @click="oprateApply(`agree`)">同意</span>
-    </div>
-    <div class="et-footer" v-if="performInfo.state==3">
-      <span class="refuse" @click="oprateApply(`refuseReward`)">拒绝发放</span>
-      <span class="agree" @click="oprateApply(`agreeReward`)">发放奖励</span>
-    </div>
+    <section v-if="type!=1">
+      <div class="et-footer" v-if="performInfo.state==0">
+        <span class="refuse" @click="oprateApply(`refuse`)">拒绝</span>
+        <span class="agree" @click="oprateApply(`agree`)">同意</span>
+      </div>
+      <div class="et-footer" v-if="performInfo.state==3">
+        <span class="refuse" @click="oprateApply(`refuseReward`)">拒绝发放</span>
+        <span class="agree" @click="oprateApply(`agreeReward`)">发放奖励</span>
+      </div>
+    </section>
+    <!--申请按钮-->
+    <section v-else>
+      <div class="et-footer">
+        <span class="ex-apply" @click="applyEx">申请</span>
+      </div>
+    </section>
+
   </section>
 </template>
 
 <script>
-  import { querySaleExhibitDetail,oprateExhibit,uploadExhibitNper } from "api/fetch/exhibit";
+  import { querySaleExhibitDetail,oprateExhibit,uploadExhibitNper,queryExhibitDetail,applyExhibit } from "api/fetch/exhibit";
   import { compress } from "common/util";
   import storage from "common/storage";
   export default {
@@ -107,6 +135,7 @@
         productImageUrl: '',//
         achieve: false,//能否上传
         showUpload: false,//是否有上传按钮
+        type: null,//type==1 是可申请详情
       };
     },
     components: {
@@ -121,6 +150,9 @@
                 state == 3 ? `已到期` :
                 state == 4 ? `已完成，收到陈列奖品` :
                 state == 5 ? `已拒绝，拒绝兑奖` : ``
+        if(this.$route.query.type==1){
+          content = `可申请`
+        }
         return content
       },
       performContent() {
@@ -153,21 +185,30 @@
     },
     created() {
       this.id = this.$route.query.id
-      this.queryDetail()
+      this.type = this.$route.query.type
+      this.queryDetail(this.type)
     },
     mounted() {},
     methods: {
-      queryDetail(){
-        querySaleExhibitDetail(this.id).then(res => {
+      queryDetail(type){
+        let queryApi = querySaleExhibitDetail
+        if(type == 1) queryApi = queryExhibitDetail
+          queryApi(this.id).then(res => {
           if (res.result === "success") {
             this.performInfo = res.data
-            Object.assign(this.product,res.data.shopDisplayItemDto.dealerProductDTO)
-            if(this.performInfo.state == 2 || this.performInfo.state == 3){
-              let nperNum = this.calculateNper(this.performInfo.displayitemphotoDtos)
-              Object.assign(this.nperNum,nperNum)
-            }
-            if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
-              this.showUpload = true
+            if(type == 1){
+              this.performInfo.shopDisplayItemDto = {}
+              Object.assign(this.product,res.data.dealerProductDTO)
+              Object.assign(this.performInfo.shopDisplayItemDto,res.data)
+            }else{
+              Object.assign(this.product,res.data.shopDisplayItemDto.dealerProductDTO)
+              if(this.performInfo.state == 2 || this.performInfo.state == 3){
+                let nperNum = this.calculateNper(this.performInfo.displayitemphotoDtos)
+                Object.assign(this.nperNum,nperNum)
+              }
+              if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
+                this.showUpload = true
+              }
             }
             this.domShow = true
           }
@@ -298,6 +339,24 @@
           if (res.result === "success") {
             this.$toast(`操作成功！`)
             this.queryDetail()
+          }
+        }).catch(err => {
+          this.$toast(err.message)
+        })
+      },
+      //点击申请签约
+      applyEx(){
+        if(this.isVisitor){
+          this.navigateToLogin()
+          return
+        }
+        let param = {
+          display_Id: this.id
+        }
+        applyExhibit(param).then(res => {
+          if (res.result === "success") {
+            this.$toast(`申请成功！`)
+
           }
         }).catch(err => {
           this.$toast(err.message)

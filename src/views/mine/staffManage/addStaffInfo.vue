@@ -163,8 +163,8 @@
         queryRole({}).then(res => {
           if (res.result === "success") {
             this.roleList = res.data
-            this.staffInfo.roleId = res.data[0].id
-            this.activeRoleName = res.data[0].roleName
+            this.staffInfo.roleId = res.data.length ? res.data[0].id : ''
+            this.activeRoleName = res.data.length ? res.data[0].roleName : ''
           }
         });
       },
