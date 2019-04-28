@@ -108,6 +108,16 @@
             },
 
 
+            //切换经销商店铺
+            switchShop(item, idx) {
+                this.activeDealerIdx = idx;
+                this.returnGoodsList = [];
+                this.dealerId = item.dealerId;
+                this._QueryReturnList()
+
+            },
+
+
             // 加载列表数据
             _QueryReturnList() {
                 let params={
