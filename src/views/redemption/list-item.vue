@@ -94,8 +94,8 @@
 
 
             /**
-             * 跳转投诉详情
-             * @param id-投诉单id
+             * 跳转兑奖详情
+             * @param id-兑奖单id
              */
             toRedemptionDetail(id) {
                 this.$router.push({

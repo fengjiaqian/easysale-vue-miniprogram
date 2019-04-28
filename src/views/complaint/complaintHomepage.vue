@@ -1,8 +1,16 @@
 <template>
     <div id="complaint">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <top-tabs  v-if="!isSaleMan"  :topTabsList="topTabsList" @switchTab="switchTab" class="top"></top-tabs>
-        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关投诉单'" v-if="empty" :iconUrl="iconUrl"></empty>
+        <section class="top-bar "  v-if="!isSaleMan">
+            <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
+        </section>
+        <!--经销商店铺列表-->
+        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
+            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
+                  @click="switchShop(item,idx)">{{item.dealerName}}</span>
+        </section>
+        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关投诉单'" v-if="empty"
+               :iconUrl="iconUrl"></empty>
         <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
             <scroll
                     v-if="complaintsList.length"
@@ -28,10 +36,9 @@
     </div>
 </template>
 <script>
-    import {complaintList,batchUpdateComplaint,selectDealComplaint} from "api/fetch/complaints";
+    import {complaintList, batchUpdateComplaint, selectDealComplaint} from "api/fetch/complaints";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
-    import TopTabs from "../../components/topTabs";
     import listItem from "./list-item.vue";
     import empty from "components/empty.vue";
     import mHeader from "components/header.vue";
@@ -39,29 +46,40 @@
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
     import iconUrl from "../../assets/images/empty_icon_1.png"
+
     const selectImg = [ic1, ic2];
     export default {
-        name: 'dealerComplaintHomepage',
-        components: {TopTabs, listItem, empty,mHeader,scroll,salemanPop},
+        name: 'complaintHomepage',
+        components: {listItem, empty, mHeader, scroll, salemanPop},
         data() {
             return {
-                topTabsList: ['待处理', '已处理'],
+                stateList: [{
+                    title: `待处理`,
+                    idx: 0
+                },{
+                    title: `已处理`,
+                    idx: 1
+                }],
                 tabState: 0,
                 complaintsList: [],
                 selectImg: selectImg,
                 empty: false,
                 isAllSelected: false,
-                roleList:[],
-                rolePopShow:false,
-                iconUrl:iconUrl,
-                title:'投诉管理',
-                dealerList:[],
+                roleList: [],
+                rolePopShow: false,
+                iconUrl: iconUrl,
+                title: '投诉管理',
+                dealerList: [],
+                activeDealerIdx: 0,//默认选中的经销商
             }
         },
         created() {
             console.log(this.userType)
-            this.title = this.userType=='3'?'投诉列表':'投诉管理';
-            this.queryUrl();
+            this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
+            this._QueryComplaintList();
+            if (this.userType == '3') {
+                this._QueryDealComplaint();
+            }
 
         },
         computed: {
@@ -76,28 +94,36 @@
             }
         },
         methods: {
-            queryUrl(){
-                this._QueryComplaintList();
-                this._QueryDealComplaint();
-            },
-
             /**
              * 切换顶部tabs
              * @param state:0-待处理，1-已处理
              */
             switchTab(state) {
                 this.tabState = state;
-                this.queryUrl()
+                this._QueryComplaintList()
+            },
+
+            //切换经销商店铺
+            switchShop(item, idx) {
+                this.activeDealerIdx = idx;
+                this.complaintsList = [];
+                this.dealerId = item.dealerId;
+                this._QueryComplaintList()
+
             },
 
             // 加载列表数据
             _QueryComplaintList() {
-                complaintList(this.tabState).then(res => {
+                let params={
+                    state:this.tabState,
+                    dealerId:this.dealerId
+                }
+                complaintList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
                         this.empty = !resultData.length;
                         resultData.forEach(item => {
-                            item['selected']=false;
+                            item['selected'] = false;
                         });
                         this.complaintsList = [...resultData];
                     }
@@ -111,11 +137,11 @@
                     if (res.data) {
                         let resultData = res.data;
                         this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId
                     }
                 });
 
             },
-
 
 
             /**
@@ -143,7 +169,7 @@
                 this.isAllSelected = !this.isAllSelected;
                 let listData = this.complaintsList;
                 listData.forEach(item => {
-                   item.selected=this.isAllSelected
+                    item.selected = this.isAllSelected
                 });
                 this.complaintsList = [...listData]
             },
@@ -161,7 +187,7 @@
             /**
              * 批量移交处理
              */
-            handoverProcessing(){
+            handoverProcessing() {
                 const selectedComplaints = this.complaintsList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
                     return this.$toast("请选择投诉单");
@@ -186,15 +212,15 @@
              */
             submitQuery(dealingId) {
                 this.closePop();
-                let idList=[];
+                let idList = [];
                 const selectedComplaints = this.complaintsList.filter(item => item.selected);
-                selectedComplaints.forEach(item=>{
-                    if(item.customerComplaint){
+                selectedComplaints.forEach(item => {
+                    if (item.customerComplaint) {
                         idList.push(item.customerComplaint.id)
                     }
                 });
                 let params = {
-                    idList:[...idList],
+                    idList: [...idList],
                     dealingId: dealingId,
                 };
                 batchUpdateComplaint(params).then(res => {
@@ -219,22 +245,58 @@
 <style lang="stylus" scoped>
     #complaint {
         width: 100vw;
-        height :100vh;
+        height: 100vh;
         bg(#f6f6f6);
         .top {
             width 100vw;
             position fixed;
-            top:90px;
+            top: 90px;
             left 0;
             z-index 34;
         }
-        .content {
-            margin-top 185px;
+
+        .top-bar{
+            bg(#fff)
+            border-bottom 1PX solid #EDEDED
+            flex-center()
+            width 100%
+            h(98)
+            box-sizing border-box
+            position fixed
+            left 0
+            top 90px
+            z-index 2
+            span{
+                width 50%
+                text-c()
+                lh(98)
+                c-6()
+                ft(28)
+            }
+            .active{
+                font-weight 600
+                ft(34)
+                c-3()
+                position relative
+                &:before{
+                    content ""
+                    position absolute
+                    left 50%
+                    bottom 0
+                    transform translateX(-50%)
+                    w(40)
+                    h(6)
+                    bg(#FF5638)
+                }
+            }
         }
-        .mb{
+        .content {
+            margin-top 275px;
+        }
+        .mb {
             margin-bottom 110px;
         }
-        .mt{
+        .mt {
             margin-top 110px
         }
         .c-list {
@@ -289,6 +351,9 @@
             left 24px;
 
         }
+
+
+
         .footer-btn {
             position: fixed;
             bottom: 0;
@@ -303,6 +368,39 @@
             c(#FF5638);
             text-align: center;
             z-index 44
+        }
+        .dealer-list-wrap {
+            position fixed
+            top 185px
+            left 0
+            width 100%
+            flex()
+            align-content center
+            flex-wrap nowrap
+            padding 16px 24px
+            z-index 10
+            bg(#fff)
+            border-top 1px solid #EDEDED
+            border-bottom 1PX solid #EDEDED
+            overflow-x scroll
+            span {
+                bg(#F6F6F6)
+                lh(60)
+                padding 0 20px
+                ft(26)
+                c-6()
+                border-radius 8px
+                mr(20)
+                max-width 220px
+                text-overflow-1()
+                &:last-child {
+                    margin-right 0
+                }
+                &.active {
+                    bg(#FFEEEB)
+                    c(#FF5638)
+                }
+            }
         }
     }
 

@@ -58,7 +58,7 @@
                 <div class="customer-info">
                     <span class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</span>
                     <span class="font-30-666 margin-bottom-8">手机号码：{{customer.customerPhone}}</span>
-                    <span class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</span>
+                    <span class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</span>
                     <span class="font-30-666">销售负责人：{{customer.saleName}}</span>
                 </div>
             </div>
@@ -146,7 +146,7 @@
 
 
             /**
-             * 加载投诉详情
+             * 加载兑奖详情
              * @private
              */
             _QueryRedemptionDetail() {

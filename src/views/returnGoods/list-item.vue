@@ -94,7 +94,7 @@
 
 
             /**
-             * 跳转投诉详情
+             * 跳转退货详情
              * @param id-投诉单id
              */
             toReturnDetail(id) {

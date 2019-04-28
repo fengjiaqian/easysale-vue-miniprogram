@@ -1,17 +1,24 @@
 <template>
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <top-tabs v-if="!isSaleMan" :topTabsList="topTabsList" @switchTab="switchTab" class="top"></top-tabs>
+        <section class="top-bar "  v-if="!isSaleMan">
+            <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
+        </section>
+        <!--经销商店铺列表-->
+        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
+            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
+                  @click="switchShop(item,idx)">{{item.dealerName}}</span>
+        </section>
         <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
             <scroll
-                    v-if="returnGoodsList.length"
+                    v-if="redemptionList.length"
                     class="c-list"
-                    :data="returnGoodsList"
+                    :data="redemptionList"
                     ref="scrollRedemption"
             >
-                <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
+                <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
                            :tabState="tabState" @selectSingle="selectSingle"></list-item>
             </scroll>
         </div>
@@ -23,15 +30,14 @@
             </div>
             <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
         </div>
-        <button class="footer-btn" @click="addReturnGoods()" v-if="isCustomer">新建退货单</button>
+        <button class="footer-btn" @click="addRedemption()" v-if="isCustomer">新建兑奖单</button>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
                      @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 <script>
-    import {returnList,batchUpdateReturn} from "api/fetch/returnGoods";
+    import {awardList,batchUpdateAward,selectDealAward} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
-    import TopTabs from "../../components/topTabs";
     import scroll from "components/scroll.vue";
     import empty from "components/empty.vue";
     import mHeader from "components/header.vue";
@@ -43,11 +49,17 @@
 
     const selectImg = [ic1, ic2];
     export default {
-        name: 'dealerRedemptionHomepage',
-        components: {TopTabs, scroll, empty, mHeader, listItem,salemanPop},
+        name: 'redemptionHomepage',
+        components: {scroll, empty, mHeader, listItem,salemanPop},
         data() {
             return {
-                topTabsList: ['待处理', '已处理'],
+                stateList: [{
+                    title: `待处理`,
+                    idx: 0
+                },{
+                    title: `已处理`,
+                    idx: 1
+                }],
                 selectImg: selectImg,
                 iconUrl: iconUrl,
                 tabState: 0,
@@ -55,15 +67,21 @@
                 empty: false,
                 isAllSelected: false,
                 title: '兑奖管理',
-                returnGoodsList: [],
+                redemptionList: [],
                 roleList:[],
                 rolePopShow:false,
+                activeDealerIdx:0,
+                dealerList:[],
+                dealerId:''
 
             }
         },
         created() {
-            this.title = this.userType == '3' ? '退货列表' : '退货管理';
-            this._QueryReturnList()
+            this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
+            this._QueryAwardList();
+            if (this.userType == '3') {
+                this._QueryDealAward();
+            }
         },
         computed: {
             isDealer() {
@@ -86,21 +104,38 @@
              */
             switchTab(state) {
                 this.tabState = state;
-                this._QueryReturnList()
+                this._QueryAwardList()
             },
 
 
 
+
             // 加载列表数据
-            _QueryReturnList() {
-                returnList(this.tabState).then(res => {
+            _QueryAwardList() {
+                let params={
+                    state:this.tabState,
+                    dealerId:this.dealerId
+                }
+                awardList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
                         this.empty = !resultData.length;
                         resultData.forEach(item => {
                             item['selected'] = false;
                         });
-                        this.returnGoodsList = [...resultData];
+                        this.redemptionList = [...resultData];
+                    }
+                });
+
+            },
+
+            // 客户兑奖过的经销商列表
+            _QueryDealAward() {
+                selectDealAward(this.tabState).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId
                     }
                 });
 
@@ -110,42 +145,42 @@
 
             /**
              *单选
-             * @param id-投诉单id
+             * @param id-兑奖单id
              */
             selectSingle(id) {
-                let listData = this.returnGoodsList;
+                let listData = this.redemptionList;
                 listData.forEach(item => {
-                    if (item.customerReturn) {
-                        let customerReturn = item.customerReturn;
-                        if (customerReturn.id == id) {
+                    if (item.customerAward) {
+                        let customerAward = item.customerAward;
+                        if (customerAward.id == id) {
                             item.selected = !item.selected;
                         }
                     }
                 });
                 this.isAllSelected = !listData.some(item => !item.selected);
-                this.returnGoodsList = [...listData];
+                this.redemptionList = [...listData];
             },
 
 
             // 全选
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.returnGoodsList;
+                let listData = this.redemptionList;
                 listData.forEach(item => {
                     item.selected = this.isAllSelected
                 });
-                this.returnGoodsList = [...listData]
+                this.redemptionList = [...listData]
             },
 
 
 
             /**
              * 跳转新增兑奖单
-             * @param id-投诉单id
+             * @param id-兑奖单id
              */
-            addReturnGoods() {
+            addRedemption() {
                 this.$router.push({
-                    name: "addNewReturnOrder",
+                    name: "addNewRedemption",
                 });
             },
 
@@ -154,9 +189,9 @@
              * 批量移交处理
              */
             handoverProcessing(){
-                const selectedComplaints = this.returnGoodsList.filter(item => item.selected);
+                const selectedComplaints = this.redemptionList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
-                    return this.$toast("请选择投诉单");
+                    return this.$toast("请选择兑奖单");
                 }
                 this.rolePopShow = true;
                 //查询所有角色
@@ -179,19 +214,19 @@
             submitQuery(dealingId) {
                 this.closePop();
                 let idList=[];
-                const selectedRedemption = this.returnGoodsList.filter(item => item.selected);
+                const selectedRedemption = this.redemptionList.filter(item => item.selected);
                 selectedRedemption.forEach(item=>{
-                    if(item.customerReturn){
-                        idList.push(item.customerReturn.id)
+                    if(item.customerAward){
+                        idList.push(item.customerAward.id)
                     }
                 });
                 let params = {
                     idList:[...idList],
                     dealingId: dealingId,
                 };
-                batchUpdateReturn(params).then(res => {
+                batchUpdateAward(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryReturnList()
+                    this._QueryAwardList()
                 });
             },
 
@@ -214,7 +249,42 @@
             z-index 34;
         }
         .content {
-            margin-top 185px;
+            margin-top 275px;
+        }
+        .top-bar{
+            bg(#fff)
+            border-bottom 1PX solid #EDEDED
+            flex-center()
+            width 100%
+            h(98)
+            box-sizing border-box
+            position fixed
+            left 0
+            top 90px
+            z-index 2
+            span{
+                width 50%
+                text-c()
+                lh(98)
+                c-6()
+                ft(28)
+            }
+            .active{
+                font-weight 600
+                ft(34)
+                c-3()
+                position relative
+                &:before{
+                    content ""
+                    position absolute
+                    left 50%
+                    bottom 0
+                    transform translateX(-50%)
+                    w(40)
+                    h(6)
+                    bg(#FF5638)
+                }
+            }
         }
         .mb {
             margin-bottom 110px;
@@ -288,6 +358,40 @@
             c(#FF5638);
             text-align: center;
             z-index 44
+        }
+
+        .dealer-list-wrap {
+            position fixed
+            top 185px
+            left 0
+            width 100%
+            flex()
+            align-content center
+            flex-wrap nowrap
+            padding 16px 24px
+            z-index 10
+            bg(#fff)
+            border-top 1px solid #EDEDED
+            border-bottom 1PX solid #EDEDED
+            overflow-x scroll
+            span {
+                bg(#F6F6F6)
+                lh(60)
+                padding 0 20px
+                ft(26)
+                c-6()
+                border-radius 8px
+                mr(20)
+                max-width 220px
+                text-overflow-1()
+                &:last-child {
+                    margin-right 0
+                }
+                &.active {
+                    bg(#FFEEEB)
+                    c(#FF5638)
+                }
+            }
         }
     }
 

@@ -3,8 +3,8 @@
         <m-header :isFixed="true"></m-header>
         <div class="content">
             <div class="reason-box">
-                <p class="title">投诉原因</p>
-                <input type="text" placeholder="请输入退货原因" v-model="reason" >
+                <p class="title">退货原因</p>
+                <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
             <div class="goods-box">
                 <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}">退货商品</p>
@@ -17,8 +17,12 @@
                                         <div class="img-box">
                                             <img v-lazy="item.productImageUrl">
                                         </div>
-                                        <p class="goods-name">{{item.productName}}</p>
+                                        <div class="column">
+                                            <p class="goods-name">{{item.productName}}</p>
+                                            <p class="goods-price">{{item.price}}元/{{item.priceUnit}}</p>
+                                        </div>
                                         <div class="del-btn" @click="delGoods(index)">删除</div>
+
                                     </div>
                                     <div class="count-box">
                                         <span class="font-30-333">退货数量：</span>
@@ -50,25 +54,39 @@
     import mHeader from "components/header.vue";
     import storage from 'common/storage';
     import {saveCustomerReturn} from "api/fetch/returnGoods";
+
     export default {
         name: 'addNewReturnOrder',
         data() {
             return {
-              returnGoods: [
-                ],
+                returnGoods: [],
                 remark: '',
-                reason: ''
+                returnContent: ''
             }
         },
         components: {
-            numberPicker,mHeader
+            numberPicker, mHeader
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
-                if (from.name == 'chooseProductList') {
+                if (from.name == 'chooseReturnGoods') {
                     let selectedProduct = storage.get("selectedProduct", "");
-                    selectedProduct.buyCount=1
-                    vm.returnGoods.push(selectedProduct)
+                    selectedProduct.buyCount = 1;
+                    selectedProduct.minBuyNum = 1;
+                    selectedProduct.maxBuyNum = selectedProduct.count;
+                    if (vm.returnGoods.length > 0) {
+                        const index = vm.returnGoods.findIndex(
+                            item => item.id === selectedProduct.id
+                        );
+                        if (index != -1) {
+                            vm.returnGoods[index].buyCount += 1
+                        } else {
+                            vm.returnGoods.push(selectedProduct)
+                        }
+
+                    } else {
+                        vm.returnGoods.push(selectedProduct)
+                    }
                 } else {
                     storage.remove("selectedProduct");
                 }
@@ -76,35 +94,33 @@
         },
 
         methods: {
-            //跳转到添加兑奖商品
+            //跳转到添加退货商品
             toAddReturnGoods() {
-                this.$router.push({ path: "/chooseReturnGoods" });
+                this.$router.push({path: "/chooseReturnGoods"});
             },
-            // 删除已添加的兑奖商品
-            delGoods(selectIndex){
-                this.returnGoods.forEach((item,index)=>{
-                    if(index==selectIndex){
-                        this.returnGoods.splice(index,1)
-                    }
-                });
+            // 删除已添加的退货商品
+            delGoods(selectIndex) {
+                this.returnGoods.splice(selectIndex, 1);
             },
 
-            //新建兑奖单
-            submitReturnOrder(){
+            //新建退货单
+            submitReturnOrder() {
                 if (!this.isValid()) return;
                 const currentDealerId = storage.get("currentDealerId", "") || "";
-                let items=[];
-                for(let item of this.returnGoods){
-                    let obj={
-                        productId:item.id,
-                        awardCount:item.buyCount,
+                let items = [];
+                for (let item of this.returnGoods) {
+                    let obj = {
+                        productId: item.id,
+                        returnCount: item.buyCount,
+                        price: item.price
                     }
                     items.push(obj)
                 }
-                let params={
-                    dealerId:currentDealerId,
-                    items:items,
-                    remark:this.remark,
+                let params = {
+                    dealerId: currentDealerId,
+                    items: items,
+                    remark: this.remark,
+                    returnContent: this.returnContent
                 };
                 saveCustomerReturn(params).then(res => {
                     this.$toast('新增成功');
@@ -116,10 +132,10 @@
              * 校验表单
              * @returns {boolean}
              */
-            isValid(){
+            isValid() {
                 let errList = [];
-                if(!this.reason){
-                    errList.push({errMsg: '请填写投诉原因'});
+                if (!this.returnContent) {
+                    errList.push({errMsg: '请填写退货原因'});
                 }
                 if (!this.returnGoods.length) {
                     errList.push({errMsg: '请添加退货商品'});
@@ -151,8 +167,8 @@
             bg(#fff);
 
         }
-        .reason-box{
-            input{
+        .reason-box {
+            input {
                 width 100%;
                 display flex;
                 flex 1;
@@ -228,6 +244,11 @@
             text-overflow-2();
             mr(149)
         }
+        .goods-price {
+            c(#666);
+            ft(26);
+            mt(43)
+        }
         .del-btn {
             position absolute;
             right 0;
@@ -279,6 +300,10 @@
             margin 24px 0;
             font-size: 30px;
             c(#333)
+        }
+        .column {
+            display flex;
+            flex-direction column
         }
 
     }
