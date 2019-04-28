@@ -5,7 +5,6 @@
     <!--待审核-->
     <div class="state-audit" v-if="exhibit.state==0">
       <div class="sa-t">
-        <i class="select" :class="{'selected':exhibit.select}" @click="select"></i>
         <div class="st-content" @click="goDetail">
           <div class="stc-t">
             <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
@@ -17,17 +16,30 @@
           </div>
         </div>
       </div>
-<!--      <div class="sa-b">
-        <span @click="goDetail">查看详情</span>
-      </div>-->
       <div class="state-tag">待审核</div>
+    </div>
+    <!--申请中-->
+    <div class="state-audit" v-if="exhibit.state==1">
+      <div class="sa-t">
+        <div class="st-content" @click="goDetail">
+          <div class="stc-t">
+            <span class="shop-name">{{exhibit.dealerDto.shopName || exhibit.dealerDto.name}}</span>
+            <span>{{exhibit.create_time}}</span>
+          </div>
+          <div class="stc-b">
+            <span class="task">{{exhibit.display_rule}}</span>
+            <span>{{exhibit.display_reward}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="state-tag">可申请</div>
     </div>
     <!--执行中-->
     <div class="state-audit" v-if="exhibit.state==2" @click="goDetail">
       <div class="sa-t">
         <div class="st-content">
           <div class="stc-t">
-            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
+            <span class="shop-name">{{exhibit.dealer.shopName || exhibit.dealer.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b">
@@ -42,9 +54,6 @@
           </div>
         </div>
       </div>
-<!--      <div class="sa-b">
-        <span @click="goDetail">查看详情</span>
-      </div>-->
       <div class="state-tag">执行中</div>
     </div>
     <!--已到期-->
@@ -61,11 +70,6 @@
           </div>
         </div>
       </div>
-<!--      <div class="sa-b">
-        <span class="red" @click="goDetail">查看详情</span>
-        <span class="red" v-if="exhibit.unloadedNum">处理</span>
-        <span class="red" v-else>发放奖励</span>
-      </div>-->
       <div class="state-tag">已到期</div>
     </div>
     <!--已完成-->
@@ -86,9 +90,6 @@
           </div>
         </div>
       </div>
-<!--      <div class="sa-b">
-        <span @click="goDetail">查看详情</span>
-      </div>-->
       <div class="state-tag">已完成</div>
     </div>
   </div>
@@ -144,7 +145,7 @@
       //产看详情
       goDetail(){
         this.$router.push({
-          path: "/performDetail",
+          path: "/salePerformDetail",
           query: {id: this.exhibit.id}
         });
       },

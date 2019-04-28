@@ -511,6 +511,16 @@
         c-6()
         p{
           mb(8)
+          position relative
+          .tel{
+            block();
+            pos(absolute);
+            bottom: 0;
+            right: 0;
+            squ(40);
+            background: url('../../assets/images/icon-tel.png') no-repeat center;
+            background-size: contain;
+          }
         }
       }
     }
@@ -523,6 +533,7 @@
       }
       textarea{
         padding 24px
+        width 100%
       }
     }
     .perform-case{
@@ -551,6 +562,50 @@
           c-3()
           i{
             c(#FF5638)
+          }
+        }
+        .upload-column{
+          .upload-column-list{
+            margin 24px 0
+            flex()
+            flex-wrap wrap
+            justify-content flex-start
+            >li{
+              position relative
+              width 100%
+              flex-center()
+              img{
+                margin 0 auto
+                height 100%
+                max-height 300px
+                border-radius 10px
+                border 1PX dashed #DDDDDD
+                box-sizing border-box
+              }
+              i{
+                position absolute
+                right 8px
+                top -20px
+                w(40)
+                h(40)
+                background-image url(../../../assets/images/close_icon1.png)
+                background-size contain
+                background-repeat no-repeat
+                background-position center
+              }
+            }
+          }
+          .upload-btn{
+            bg(#BDBDBD)
+            lh(88)
+            border-radius 10px
+            ft(32)
+            c(#fff)
+            text-c()
+            letter-spacing 1.2
+            &.achieve{
+              bg(#FF5638)
+            }
           }
         }
         .nper-column{
@@ -582,6 +637,9 @@
               background-size contain
               background-repeat no-repeat
               background-position center
+              &.faild{
+                background-image url(../../assets/images/faild_exhibit_icon.png)
+              }
             }
           }
         }
@@ -706,4 +764,57 @@ input{
     ft(30)
     c-9()
   }
+}
+.perform-column{
+  position relative
+  i{
+    position absolute
+    right 24px
+    top 50%
+    transform translateY(-50%)
+    w(30)
+    h(30)
+    background-image url(../../assets/images/icon-enter.png)
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+    z-index 2
+  }
+}
+
+
+.dealer-list-wrap{
+  position fixed
+  top 188px
+  left 0
+  width 100%
+  flex()
+  align-content center
+  flex-wrap nowrap
+  padding 16px 24px
+  z-index 5
+  bg(#fff)
+  border-bottom 1PX solid #EDEDED
+  overflow-x scroll
+  span{
+    bg(#F6F6F6)
+    lh(60)
+    padding 0 20px
+    ft(26)
+    c-6()
+    border-radius 8px
+    mr(20)
+    max-width 220px
+    text-overflow-1()
+    &:last-child{
+      margin-right 0
+    }
+    &.active{
+      bg(#FFEEEB)
+      c(#FF5638)
+    }
+  }
+}
+.top-t{
+  padding-top 278px !important
 }
