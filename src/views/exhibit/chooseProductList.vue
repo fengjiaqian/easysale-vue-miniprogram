@@ -80,17 +80,23 @@
                 .then(res => {
                   if (res.result === "success" && res.data) {
                     this.domShow = true;
-                    const { dataList = [], pager } = res.data;
-                    const { currentPage, totalPage } = pager;
-                    if (currentPage == 1) {
-                      this.totalPage = totalPage;
+                    if(res.data.dataList){
+                        const { dataList = [], pager } = res.data;
+                        const { currentPage, totalPage } = pager;
+                        if (currentPage == 1) {
+                            this.totalPage = totalPage;
+                        }
+                        dataList.forEach(item => {
+                            item.select = false;
+                        });
+                        this.productList = this.productList.concat(dataList);
+                        this.loading = false;
+                        this.requestDone = true;
+                    }else{
+                        this.totalPage=1;
+                        this.productList=[]
                     }
-                    dataList.forEach(item => {
-                      item.select = false;
-                    });
-                    this.productList = this.productList.concat(dataList);
-                    this.loading = false;
-                    this.requestDone = true;
+
                   }
                 })
                 .catch(err => {
@@ -114,7 +120,7 @@
       },
       //搜索关键字查询
       handleChange($event){
-        this.filterParam.searchKey = searchKey;
+        this.filterParam.searchKey = $event;
         this.filterParam.pageNum = 1;
         this.productList = [];
       },
@@ -126,9 +132,7 @@
     watch: {
       filterParam: {
         handler(newVal, oldVal) {
-          if (!this.resetFilter) {
             this.queryProducts();
-          }
         },
         deep: true
       },

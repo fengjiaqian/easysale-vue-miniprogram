@@ -27,7 +27,7 @@
             <div class="tips">{{listData.customerReturn.replyContent}}</div>
         </div>
         <p class="state">{{stateList[0]}}</p>
-        <div class="btn-warp" :style="{justifyContent:isNull? 'flex-end':'space-between'}">
+        <div class="btn-warp" :style="{justifyContent:isNull||isCustomer? 'flex-end':'space-between'}">
             <p v-if="listData.saleMan.dealingName&&tabState==1&&!isCustomer" class="saleMan">
                 销售人员-{{listData.saleMan.dealingName}}已处理</p>
             <p v-if="listData.saleMan.dealingName&&tabState==0&&!isCustomer" class="saleMan">
@@ -76,7 +76,7 @@
                 return this.userType == '3'
             },
             isNull() {
-                return JSON.stringify(this.listData.saleMan) == "{}"
+                return JSON.stringify( ) == "{}"
             }
         },
         component: {
