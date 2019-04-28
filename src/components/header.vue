@@ -17,26 +17,26 @@
       <div class="title" v-else>{{tit || title || ''}}</div>
     </div>
     <!--  -->
-    <div class="icon-shortcut" @click.stop="showShortcutList">
+    <div class="icon-shortcut" @click.stop="show=!show" ref="shortcut">
       <span></span>
     </div>
     <!--  -->
     <ul class="shortcut-list" v-show="show">
       <li class="shortcut-item">
         <router-link to="/navi/home">
-          <span></span>
+          <span class="shortcut-item-ic-home"></span>
           <strong>首页</strong>
         </router-link>
       </li>
       <li class="shortcut-item">
         <router-link to="/navi/orders">
-          <span></span>
+          <span class="shortcut-item-ic-orders"></span>
           <strong>订单</strong>
         </router-link>
       </li>
       <li class="shortcut-item">
         <router-link to="/navi/mine">
-          <span></span>
+          <span class="shortcut-item-ic-mine"></span>
           <strong>我的</strong>
         </router-link>
       </li>
@@ -45,11 +45,6 @@
 </template>
 
 <script>
-/***
- *
- *
- */
-import { addClass, removeClass } from "common/dom";
 export default {
   name: "m-header",
   props: {
@@ -92,8 +87,14 @@ export default {
   computed: {},
   created() {},
   mounted() {
-    // this.watchScroll();
+    document.body.addEventListener("click", e => {
+      const el = this.$refs.shortcut;
+      if (e.target !== el) {
+        this.show = false;
+      }
+    });
   },
+  destroyed() {},
   methods: {
     goBack() {
       const { name } = this.$route;
@@ -120,42 +121,6 @@ export default {
           this.$router.go(-1);
       }
     },
-    showShortcutList() {
-      this.show = !this.show;
-    },
-    watchScroll() {
-      if (this.isFixed) {
-        return false;
-      }
-      if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
-          return setTimeout(callback, 17);
-        };
-      }
-      const clientWidth =
-        document.body.clientWidth || document.documentElement.clientWidth;
-      var last_known_scroll_position = 0,
-        ticking = false;
-      var distance = (clientWidth * 90) / 750;
-
-      const scrollDom = document.querySelector("#app"); //
-      scrollDom.addEventListener("scroll", e => {
-        this.show = false;
-        last_known_scroll_position = scrollDom.scrollTop;
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const el = this.$refs.mHeaderDom;
-            if (last_known_scroll_position > Math.abs(distance)) {
-              el && addClass(el, "header-fixed");
-            } else {
-              el && removeClass(el, "header-fixed");
-            }
-            ticking = false;
-          });
-        }
-        ticking = true;
-      });
-    },
     handleChange($event) {
       this.searchKey = $event.target.value;
       this.$emit("emitEvt", this.searchKey);
@@ -173,16 +138,12 @@ export default {
   border-bottom: 1PX solid #e5e5e5;
 }
 
-.header-fixed {
-  pos(fixed);
-}
-
 .icon-back {
   position: absolute;
-  w(88);
-  h(88);
+  w(50);
+  h(50);
   top: 0;
-  left: 0;
+  left: 10px;
 
   span {
     block();
@@ -219,8 +180,8 @@ export default {
   bg(#fff);
 
   .title {
-    lh(90);
-    ft(32);
+    ft(38);
+    fb();
     c(#333);
     text-c();
   }
@@ -228,19 +189,19 @@ export default {
 
 .shortcut-list {
   position: fixed;
-  top: 110px;
+  top: 90px;
   right: 24px;
   z-index: 1000;
   border-radius: 8px;
-  width: 200px;
-  background: rgba(0, 0, 0, 0.9);
+  width: 152px;
+  background: rgba(0, 0, 0, 0.6);
 
   &:after {
     position: absolute;
-    top: -10px;
-    right: 10px;
-    width: 21PX;
-    height: 10px;
+    top: -20px;
+    right: 20px;
+    width: 42px;
+    height: 20px;
     background: url('../assets/images/icon-sanjiao.png') no-repeat;
     background-size: 100% 100%;
     content: '';
@@ -251,7 +212,6 @@ export default {
   display: block;
   position: relative;
   margin-left: 80px;
-  border-bottom: 1PX solid hsla(0, 0%, 100%, 0.2);
   height: 80px;
   line-height: 80px;
   z-index: 1000;
@@ -272,8 +232,21 @@ export default {
     left: -80px;
     width: 80px;
     height: 80px;
-    background: url('../assets/images/ic-shoucurt-home.png') no-repeat center;
-    background-size: 40% 40%;
+
+    &.shortcut-item-ic-home {
+      background: url('../assets/images/ic-shoucurt-home.png') no-repeat center;
+      background-size: 50% 50%;
+    }
+
+    &.shortcut-item-ic-orders {
+      background: url('../assets/images/ic-shoucurt-orders.png') no-repeat center;
+      background-size: 50% 50%;
+    }
+
+    &.shortcut-item-ic-mine {
+      background: url('../assets/images/ic-shoucurt-mine.png') no-repeat center;
+      background-size: 50% 50%;
+    }
   }
 }
 

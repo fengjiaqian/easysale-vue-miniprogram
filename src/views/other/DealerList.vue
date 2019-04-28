@@ -58,7 +58,7 @@ export default {
   name: "dealer-list",
   data() {
     return {
-      currentDealer: {},
+      currentDealer: storage.get("currentDealer", {}),
       dealerList: [],
       empty: false
     };
@@ -79,6 +79,10 @@ export default {
   },
   methods: {
     _ListCurrentDealer() {
+      const storeDealer = storage.get("currentDealer", {});
+      if (storeDealer.id == this.currentId) {
+        return (this.currentDealer = storeDealer);
+      }
       ListAllDealer({ id: this.currentId }).then(res => {
         const { dataList = [] } = res.data;
         dataList.length && (this.currentDealer = dataList[0]);
@@ -131,29 +135,33 @@ export default {
 
 <style lang="stylus" scoped>
 .dealer-list {
+  pos(relative);
   width: 100%;
   height: 100%;
+
+  .m-header {
+    width: 100%;
+    pos(absolute);
+    top: 0;
+    left: 0;
+  }
 }
 
 .current-dealer {
-  width: 100%;
-  pos(fixed);
-  top: 92;
+  pos(absolute);
+  top: 90px;
   left: 0;
-  z-index: 100;
+  width: 100%;
 }
 
 .scroll-list {
-  pt(233 + 20);
+  pt(340);
   height: 100%;
-}
-
-.pt0 {
-  pt(0);
 }
 
 .scroll-dom {
   height: 100%;
+  overflow: hidden;
 }
 
 .title {

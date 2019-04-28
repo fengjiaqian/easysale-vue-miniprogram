@@ -58,7 +58,7 @@
       <scroll
         ref="scrollProduct"
         :data="scrollProducts"
-        :probeType="2"
+        :probeType="3"
         :click="true"
         :listenScroll="true"
         @scroll="listenScroll"
@@ -77,8 +77,8 @@
           </div>
           <!--  -->
           <ul class="home-icons clearfix">
-            <li v-for="item in appIcons">
-              <a @click="jumpSecondsort(item)">
+            <li v-for="(item,index) in appIcons">
+              <a @click="jumpSecondsort(index)">
                 <img v-lazy="item.imgUrl || ''">
                 <span>{{item.value}}</span>
               </a>
@@ -131,7 +131,9 @@
           </div>
           <!--  -->
           <div class="scroll-item" v-for="item in scrollProducts" :key="item.brandId">
-            <div :id="'dom'+item.brandId"></div>
+            <div :id="'dom'+item.brandId" class="menu-title">
+              <span>{{item.brandName}}</span>
+            </div>
             <product v-for="product in item.products " :product="product" :key="product.id"></product>
           </div>
         </main>
@@ -178,7 +180,6 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      heightList: [],
       currentDealer: storage.get("currentDealer", {})
     };
   },
@@ -245,6 +246,7 @@ export default {
       } = this.$route.query;
       // 以登录身份访问
       if (mobileNo && token && userType) {
+        this.clearStorage(); //清楚部分缓存
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("userType", userType);
@@ -254,12 +256,27 @@ export default {
       }
       //只有nickName和avatarUrl, cache for mine page。 以终端访客身份访问
       if (nickName && avatarUrl) {
+        this.clearStorage(); //清楚部分缓存
         storage.remove("token");
         storage.remove("userType");
         storage.remove("currentDealerId");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+      }
+    },
+    clearStorage() {
+      var keys = [
+        "homeRefresh",
+        "mineRefresh",
+        "orderRefresh",
+        "currentDealer",
+        "fromOrder",
+        "orderPrequeryParams",
+        "orderExtraParams"
+      ];
+      for (let key of keys) {
+        storage.remove(key);
       }
     },
     _listDealerLogs() {
@@ -313,6 +330,7 @@ export default {
         document.getElementById(domId),
         150
       );
+      //
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
 
@@ -341,18 +359,18 @@ export default {
     },
     // scroll-items
     calculateHeightList() {
-      let h = this.$refs.scrollMenuWrap.offsetTop;
+      var target = this.$refs.scrollMenuWrap;
+      this.menuHeight = target.getBoundingClientRect().height;
+      let h = target.offsetTop;
       let heightList = [h];
       const els = document.querySelectorAll(".scroll-item");
       for (let el of Array.prototype.slice.call(els)) {
         h += el.clientHeight;
         heightList.push(h);
       }
-      console.log(heightList);
       this.heightList = heightList;
     },
     listenScroll(pos) {
-      console.log(pos);
       this.posY = Math.abs(pos.y);
       if (this.posY > this.heightList[0]) {
         this.showFixed = true;
@@ -368,20 +386,32 @@ export default {
         }
       });
     },
-    jumpSecondsort(item) {
-      switch (item.value) {
-        case `陈列管理`:
-          if(this.userType==1){
-            this.$router.push({path: "/exhibitList"});
-          }else if(this.userType==2){
-            this.$router.push({path: "/saleSignExhibitList"});
-          }else if(this.userType==3){
-            this.$router.push({path: "/saleExhibitList"});
+    jumpSecondsort(Index) {
+      var jumpPath = "";
+      switch (Index) {
+        case 3:
+          if (this.userType == 1) {
+            jumpPath = "/exhibitList";
+          } else if (this.userType == 2) {
+            jumpPath = "/saleSignExhibitList";
+          } else {
+            jumpPath = "/saleExhibitList";
           }
+          break;
+        case 0:
+          jumpPath = "/complaintHomepage";
+          break;
+        case 1:
+          jumpPath = "/redemptionHomepage";
+          break;
+        case 2:
+          jumpPath = "/returnHomepage";
           break;
         default:
           break;
       }
+      if (this.navigateToLogin()) return false;
+      this.$router.push({ path: jumpPath });
     }
   }
 };
@@ -408,6 +438,35 @@ export default {
 .mune-wrapper {
   h(88);
   bg(#fff);
+}
+
+.menu-title {
+  height: 78px;
+  line-height: 78px;
+  background: #f6f6f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-title span {
+  margin: 0 24px;
+  color: #333;
+  font-size: 30px;
+}
+
+.menu-title::after {
+  content: '';
+  width: 80px;
+  height: 2px;
+  background: rgba(229, 229, 229, 1);
+}
+
+.menu-title::before {
+  content: '';
+  width: 80px;
+  height: 2px;
+  background: rgba(229, 229, 229, 1);
 }
 
 /* ** */
@@ -512,11 +571,11 @@ export default {
     width: 25%;
     float: left;
 
-    >a {
+    > a {
       display: block;
       margin-top: 32px;
 
-      >img {
+      > img {
         margin: 0 auto;
         display: block;
         margin-bottom: 16px;
@@ -524,7 +583,7 @@ export default {
         height: 88px;
       }
 
-      >span {
+      > span {
         text-align: center;
         display: block;
         font-size: 28px;

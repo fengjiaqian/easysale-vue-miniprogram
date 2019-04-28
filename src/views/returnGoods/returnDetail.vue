@@ -1,36 +1,56 @@
 <template>
-    <div id="complaintDetail">
+    <div id="returnDetail">
         <m-header :isFixed="true"></m-header>
         <div class="content">
             <div class="status">
-                <div class="state-title">投诉状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerComplaint.state]}}</span>
+                <div class="state-title">退货状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerReturn.state]}}</span>
                 </div>
                 <div class="descrip" v-if="saleMan.dealingName&&isCustomer">
                     销售人员-{{saleMan.dealingName}}正在处理您的问题，请耐心等待！
                 </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==0">
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerReturn.state==0">
                     已移交销售人员-{{saleMan.dealingName}}
                 </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==1">
+                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerReturn.state==1">
                     销售人员-{{saleMan.dealingName}}已处理
                 </div>
-                <div class="continue" v-if="customerComplaint.state==1">
+                <div class="continue" v-if="customerReturn.state==1">
                     <div class="triangle"></div>
                     <div class="report">
-                        <div class="left">{{dealer.dealerName}}回复：</div>
-                        <div class="right">{{customerComplaint.replyTime}}</div>
+                        <p class="left">{{dealer.dealerName}}回复：</p>
+                        <div class="right">{{customerReturn.replyTime}}</div>
                     </div>
-                    <div class="tips">{{customerComplaint.replyContent}}</div>
+                    <div class="tips">{{customerReturn.replyContent}}</div>
                 </div>
             </div>
             <div class="title-box">
-                <div class="reason-warp">
-                    <span class="title ">投诉原因</span>
-                    <span class="font-30-666  reason-detail ">{{customerComplaint.complaintHeadLine}}</span>
-                </div>
-                <div class="content-warp">
-                    <span class="title">内容描述</span>
-                    <span class="font-30-666 margin-top-24">{{customerComplaint.complaintContent}}</span>
+                <div class="title ">商品信息</div>
+                <div class="font-30-666 company-name " style="padding-top: 0">
+                    <ul v-if="customerReturn.items&&customerReturn.items.length>0">
+                        <li v-for="(skuItem, index) in customerReturn.items">
+                            <div class="goods-box" v-if="index<2">
+                                <img class="goods-img" v-lazy="skuItem.productImageUrl">
+                                <div class="goods-info">
+                                    <p class="goods-name">{{skuItem.productName}}</p>
+                                    <div class="goods-price-warp">
+                                        <span>{{skuItem.price}}元/{{skuItem.priceUnit}}</span>
+                                        <span class="count">X{{skuItem.returnCount}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
+                                <img class="goods-img">
+                                <div class="goods-info">
+                                    <p class="goods-name">{{skuItem.productName}}</p>
+                                    <div clas="goods-price-warp">
+                                        <span>{{skuItem.price}}元/{{skuItem.priceUnit}}</span>
+                                        <span class="count">X{{skuItem.returnCount}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerReturn.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+                    </ul>
                 </div>
             </div>
             <!--终端可见-->
@@ -40,34 +60,39 @@
             </div>
             <!--经销商可见-->
             <div class="title-box" v-if="!isCustomer">
+                <div class="title ">退货原因</div>
+                <div class="font-30-666 company-name">{{customerReturn.returnContent}}</div>
+            </div>
+            <!--经销商可见-->
+            <div class="title-box" v-if="!isCustomer">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
                     <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
-                     <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
-                    <p class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</p>
+                    <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
+                    <p class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</p>
                     <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <!--终端可见-->
             <div class="title-box" v-if="isCustomer">
-                <span class="title">投诉时间</span>
-                <span class="font-30-666 company-name">{{customerComplaint.createTime}}</span>
+                <span class="title">申请时间</span>
+                <span class="font-30-666 company-name">{{customerReturn.createTime}}</span>
             </div>
             <div class="title-box">
                 <span class="title ">备注</span>
-                <span class="font-30-666 company-name">{{customerComplaint.remark}}</span>
+                <span class="font-30-666 company-name">{{customerReturn.remark}}</span>
             </div>
             <!--经销商可见-->
-            <div class="title-box" v-if="!isCustomer&&customerComplaint.state==0">
+            <div class="title-box" v-if="!isCustomer&&customerReturn.state==0">
                 <p class="title">回复</p>
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉</button>
+        <button class="cancel-btn" v-if="isCustomer&&customerReturn.state==0" @click="cancelReturn">取消申请</button>
         <!--经销商可见-->
-        <div v-if="isDealer&&customerComplaint.state==0">
+        <div v-if="isDealer&&customerReturn.state==0">
             <!--待处理-->
             <div class="footer">
                 <button class="left-btn" @click.stop="handoverProcessing">移交处理</button>
@@ -75,7 +100,7 @@
             </div>
         </div>
         <!--销售人员可见-->
-        <div v-if="isSaleMan&&customerComplaint.state==0">
+        <div v-if="isSaleMan&&customerReturn.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
         </div>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
@@ -85,24 +110,25 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {complainDetail, updateCustomerById, batchUpdateComplaint, cancelComplaint} from "api/fetch/complaints";
+    import {returnDetail, updateReturnById, batchUpdateReturn,cancelCustomerReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
 
     export default {
-        name: 'complaintDetail',
+        name: 'returnDetail',
         data() {
             return {
                 state: ['待处理', '已处理', '已取消'],
                 judgeCode: 2,
                 replay: '',
                 customer: {},
-                customerComplaint: {},
+                customerReturn: {},
                 dealer: {},
                 saleMan: {},
                 rolePopShow: false,
                 roleList: [],
-                id: ''
+                id: '',
+                isShowMore: false,
 
             }
         },
@@ -120,21 +146,27 @@
         components: {mHeader, salemanPop},
         created: function () {
             this.id = this.$route.params.id;
-            this._QueryComplaintDetail();
+            this._QueryReturnDetail();
         },
 
         methods: {
 
+            // 是否展示更多信息
+            isShowMoreInfo(id) {
+                this.isShowMore = !this.isShowMore;
+            },
+
+
             /**
-             * 加载投诉详情
+             * 加载退货详情
              * @private
              */
-            _QueryComplaintDetail() {
-                complainDetail(this.id).then(res => {
+            _QueryReturnDetail() {
+                returnDetail(this.id).then(res => {
                     if (res.data) {
-                        let {customer, customerComplaint, dealer, saleMan} = {...res.data};
+                        let {customer, customerReturn, dealer, saleMan} = {...res.data};
                         this.customer = {...customer};
-                        this.customerComplaint = {...customerComplaint};
+                        this.customerReturn = {...customerReturn};
                         this.dealer = {...dealer};
                         this.saleMan = {...saleMan}
                     }
@@ -171,9 +203,9 @@
                     idList: [this.id],
                     dealingId: dealingId,
                 };
-                batchUpdateComplaint(params).then(res => {
+                batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryComplaintDetail()
+                    this._QueryReturnDetail()
                 });
             },
 
@@ -186,19 +218,19 @@
                     replyContent: this.replay,
                     state: 1
                 };
-                updateCustomerById(params).then(res => {
+                updateReturnById(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryComplaintDetail()
+                    this._QueryReturnDetail()
                 });
             },
 
             /**
-             * 撤销投诉
+             * 取消申请
              */
-            cancelComplaint(){
-                cancelComplaint(this.id).then(res => {
+            cancelReturn(){
+                cancelCustomerReturn(this.id).then(res => {
                     this.$toast('操作成功');
-                    this._QueryComplaintDetail()
+                    this._QueryReturnDetail()
                 });
             }
         }
@@ -206,7 +238,7 @@
 </script>
 
 <style lang="stylus" scoped>
-    #complaintDetail {
+    #returnDetail {
         bg(#f6f6f6);
         .content {
             mt(90)
@@ -217,6 +249,7 @@
             width: 100%;
             padding: 24px 24px 24px 24px;
             bg(white);
+
         }
         .state-title {
             c(#333);
@@ -351,6 +384,39 @@
             font-size: 30px;
             c(#333);
         }
+        .expand {
+            ft(28);
+            c(#0096FF);
+            mt(16)
+        }
+        .goods-box {
+            display: flex
+            flex-direction row;
+            mt(24)
+        }
+        .goods-img {
+            w(120)
+            h(120)
+            border-radius: 6px
+            border none
+            outline: none;
+        }
+        .goods-info {
+            display flex;
+            flex:1;
+            width 100%
+            flex-direction column;
+            ml(24)
+        }
+        .goods-name {
+            ft(30);
+            c(#333);
+        }
+        .goods-num {
+            ft(26);
+            c(#666);
+            mt(43)
+        }
         .footer {
             position: fixed;
             h(98)
@@ -394,6 +460,18 @@
             border: 0;
             outline: none;
         }
+        .goods-price-warp{
+            mt(43)
+            display: flex;
+            align-items center;
+            position relative;
+            width 100%
+        }
+        .count{
+            display flex;
+            position absolute;
+            right 0px
+        }
         .tel{
             block();
             pos(absolute);
@@ -403,7 +481,6 @@
             background: url('../../assets/images/icon-tel.png') no-repeat center;
             background-size: contain;
         }
-
     }
 
 

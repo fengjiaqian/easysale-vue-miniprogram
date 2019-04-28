@@ -7,14 +7,13 @@
         <div class="way">申请状态：:</div>
         <div class="fettle">审核中</div>
       </div>
-      <!-- <div class="describe">经销商正在处理您的问题，请耐心等待！</div> -->
     </div>
     <div class="license" v-if="applyDealerInfo.logoIamgeUrls.length">
       <div class="trade">营业执照</div>
       <div class="slider-wrapper bg-w">
         <div class="slider-body">
           <slider ref="slider_dom" :loop="applyDealerInfo.logoIamgeUrls.length>1?true:false">
-            <div class="banner-item" v-for="item in applyDealerInfo.logoIamgeUrls">
+            <div class="pic-item" v-for="item in applyDealerInfo.logoIamgeUrls">
               <a href="javascript:;">
                 <img :src="item">
               </a>
@@ -68,6 +67,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.pic-item {
+  h(250);
+
+  a>img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .slider-body {
   pos(relative);
   overflow: hidden;
@@ -76,7 +84,6 @@ export default {
 .common {
   background-color: #F6F6F6;
   position: relative;
-  height: 100%;
   overflow: hidden;
 }
 
