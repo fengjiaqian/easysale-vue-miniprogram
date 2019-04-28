@@ -9,18 +9,20 @@
             <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}"
+        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
+               style="height: 100%;overflow: hidden"
                :txt="'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}">
+        <div   v-if="redemptionList.length"    :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"  style="height: 100%">
             <scroll
-                    v-if="redemptionList.length"
                     class="c-list"
                     :data="redemptionList"
                     ref="scrollRedemption"
             >
-                <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
-                           :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                <div>
+                    <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
+                               :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                </div>
             </scroll>
         </div>
         <!--经销商可见-->
@@ -79,7 +81,6 @@
         },
         created() {
             this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
-            this._QueryAwardList();
             if (this.userType == '3') {
                 this._QueryDealAward();
             }
@@ -117,13 +118,27 @@
 
             },
 
+            // 客户兑奖过的经销商列表
+            _QueryDealAward() {
+                selectDealAward(this.tabState).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId;
+                        this._QueryAwardList();
+                    }
+                });
+
+            },
+
+
 
             // 加载列表数据
             _QueryAwardList() {
                 let params = {
                     state: this.tabState,
                     dealerId: this.dealerId
-                }
+                };
                 awardList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
@@ -137,17 +152,7 @@
 
             },
 
-            // 客户兑奖过的经销商列表
-            _QueryDealAward() {
-                selectDealAward(this.tabState).then(res => {
-                    if (res.data) {
-                        let resultData = res.data;
-                        this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId
-                    }
-                });
 
-            },
 
 
             /**
@@ -246,16 +251,6 @@
         width: 100vw;
         height: 100vh;
         bg(#f6f6f6);
-        .top {
-            width 100vw;
-            position fixed;
-            top: 90px;
-            left 0;
-            z-index 34;
-        }
-        .content {
-            margin-top 275px;
-        }
         .top-bar {
             bg(#fff)
             border-bottom 1PX solid #EDEDED
@@ -292,20 +287,19 @@
             }
         }
         .mb {
-            margin-bottom 110px;
+            pb(110)
         }
         .mt-275 {
-            margin-top 275px;
+            pt(275)
         }
         .mt-185 {
-            margin-top 185px;
+            pt(185)
         }
         .mt-110 {
-            margin-top 110px
+            mt(110)
         }
         .c-list {
             height: 100%;
-            overflow: hidden;
         }
 
         .footer {

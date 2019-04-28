@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
-                                <img class="goods-img">
+                                <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
                                     <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>

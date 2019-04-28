@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
-                                <img class="goods-img">
+                                <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
                                     <div clas="goods-price-warp">

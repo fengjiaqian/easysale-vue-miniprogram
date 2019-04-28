@@ -6,9 +6,8 @@
         </section>
         <empty v-if="isEmpty" txt="暂无商品数据~" :iconUrl="avatarUrl" class="empty"></empty>
         <!--内容-->
-        <section class="pi-content" >
+        <section class="pi-content"  v-if="productList.length">
             <scroll
-                    v-if="productList.length"
                     class="product-list-scroll"
                     :data="productList"
                     :probeType="3"

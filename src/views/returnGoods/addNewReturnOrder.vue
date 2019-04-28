@@ -89,6 +89,9 @@
                     }
                 } else {
                     storage.remove("selectedProduct");
+                    vm.returnGoods=[];
+                    vm.remark='';
+                    vm.returnContent=''
                 }
             })
         },
@@ -155,11 +158,10 @@
         width 100%;
         height 100%;
         bg(#f6f6f6);
-        overflow scroll;
-        mt(90)
         .content {
             overflow scroll
-            mb(100)
+            mb(110)
+            mt(90)
         }
         .reason-box, .goods-box, .remark-box {
             margin 24px;
