@@ -1,7 +1,7 @@
 <template>
     <div id="complaint">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar "  v-if="!isSaleMan">
+        <section class="top-bar " v-if="!isSaleMan">
             <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
@@ -9,9 +9,9 @@
             <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关投诉单'" v-if="empty"
+        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}" :txt="'暂无相关投诉单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
+        <div :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}">
             <scroll
                     v-if="complaintsList.length"
                     class="c-list"
@@ -30,7 +30,7 @@
             </div>
             <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
         </div>
-        <button class="footer-btn" @click="addComplaints()" v-if="isCustomer">新建投诉</button>
+        <button class="footer-btn" @click="addComplaints()" v-if="isCustomer">新建投诉单</button>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
                      @submitQuery="submitQuery"></saleman-pop>
     </div>
@@ -56,7 +56,7 @@
                 stateList: [{
                     title: `待处理`,
                     idx: 0
-                },{
+                }, {
                     title: `已处理`,
                     idx: 1
                 }],
@@ -74,7 +74,6 @@
             }
         },
         created() {
-            console.log(this.userType)
             this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
             this._QueryComplaintList();
             if (this.userType == '3') {
@@ -91,9 +90,12 @@
             },
             isCustomer() {
                 return this.userType == '3'
-            }
+            },
+
+
         },
         methods: {
+
             /**
              * 切换顶部tabs
              * @param state:0-待处理，1-已处理
@@ -114,9 +116,9 @@
 
             // 加载列表数据
             _QueryComplaintList() {
-                let params={
-                    state:this.tabState,
-                    dealerId:this.dealerId
+                let params = {
+                    state: this.tabState,
+                    dealerId: this.dealerId
                 }
                 complaintList(params).then(res => {
                     if (res.data) {
@@ -255,7 +257,7 @@
             z-index 34;
         }
 
-        .top-bar{
+        .top-bar {
             bg(#fff)
             border-bottom 1PX solid #EDEDED
             flex-center()
@@ -266,19 +268,19 @@
             left 0
             top 90px
             z-index 2
-            span{
+            span {
                 width 50%
                 text-c()
                 lh(98)
                 c-6()
                 ft(28)
             }
-            .active{
+            .active {
                 font-weight 600
                 ft(34)
                 c-3()
                 position relative
-                &:before{
+                &:before {
                     content ""
                     position absolute
                     left 50%
@@ -293,10 +295,13 @@
         .content {
             margin-top 275px;
         }
-        .mb {
-            margin-bottom 110px;
+        .mt-275 {
+            margin-top 275px;
         }
-        .mt {
+        .mt-185 {
+            margin-top 185px;
+        }
+        .mt-110 {
             margin-top 110px
         }
         .c-list {
@@ -351,8 +356,6 @@
             left 24px;
 
         }
-
-
 
         .footer-btn {
             position: fixed;

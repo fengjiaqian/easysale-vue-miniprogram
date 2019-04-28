@@ -192,8 +192,8 @@ export default {
   },
   beforeCreate() {},
   computed: {
-    currentIndex() {   
-      var h = this.posY,  
+    currentIndex() {
+      var h = this.posY,
         arr = this.heightList || [];
       for (var j = 0, len = arr.length; j < len; j++) {
         var h1 = arr[j],
@@ -369,11 +369,9 @@ export default {
         h += el.clientHeight;
         heightList.push(h);
       }
-      console.log(heightList);
       this.heightList = heightList;
     },
     listenScroll(pos) {
-      console.log(pos);
       this.posY = Math.abs(pos.y);
       if (this.posY > this.heightList[0]) {
         this.showFixed = true;
@@ -399,6 +397,15 @@ export default {
           } else if (this.userType == 3) {
             this.$router.push({ path: "/saleExhibitList" });
           }
+          break;
+        case `投诉管理`:
+          this.$router.push({ path: "/complaintHomepage" });
+          break;
+        case `兑奖管理`:
+          this.$router.push({ path: "/redemptionHomepage" });
+          break;
+        case `退货管理`:
+          this.$router.push({ path: "/returnHomepage" });
           break;
         default:
           break;
@@ -562,11 +569,11 @@ export default {
     width: 25%;
     float: left;
 
-    >a {
+    > a {
       display: block;
       margin-top: 32px;
 
-      >img {
+      > img {
         margin: 0 auto;
         display: block;
         margin-bottom: 16px;
@@ -574,7 +581,7 @@ export default {
         height: 88px;
       }
 
-      >span {
+      > span {
         text-align: center;
         display: block;
         font-size: 28px;

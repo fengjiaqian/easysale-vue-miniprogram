@@ -56,10 +56,11 @@
             <div class="title-box" v-if="!isCustomer">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
-                    <span class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</span>
-                    <span class="font-30-666 margin-bottom-8">手机号码：{{customer.customerPhone}}</span>
-                    <span class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</span>
-                    <span class="font-30-666">销售负责人：{{customer.saleName}}</span>
+                    <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
+                    <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
+                        <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
+                    <p class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</p>
+                    <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <!--终端可见-->
@@ -445,6 +446,15 @@
             font-size: 32px;
             border: 0;
             outline: none;
+        }
+        .tel{
+            block();
+            pos(absolute);
+            bottom: 0;
+            right: 1px;
+            squ(40);
+            background: url('../../assets/images/icon-tel.png') no-repeat center;
+            background-size: contain;
         }
 
     }
