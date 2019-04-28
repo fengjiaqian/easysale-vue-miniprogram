@@ -48,7 +48,7 @@
       return {
         activeIdx: 0,//选中的状态
         stateList: [{
-          title: `待审核`,
+          title: `可申请`,
           idx: 0
         },{
           title: `执行中`,
@@ -88,13 +88,19 @@
         //获取可申请的列表
         this.queryPerforms(`apply`)
       }
-      this.queryDealers()
+      if(!this.isVisitor){
+        this.queryDealers()
+      }
     },
     mounted() {},
     methods: {
       //切换状态栏
       switchBar(idx){
         if(idx == this.activeIdx) return false
+        //如果是游客，只能查看可申请的陈列
+        if(this.isVisitor&&idx!=0){
+          this.navigateToLogin()
+        }
         this.activeIdx = idx
         switch (idx) {
           case 0:
