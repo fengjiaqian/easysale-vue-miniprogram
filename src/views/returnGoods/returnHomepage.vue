@@ -9,9 +9,9 @@
             <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关退货单'" v-if="empty"
+        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}" :txt="'暂无相关退货单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
+        <div :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}">
             <scroll
                     v-if="returnGoodsList.length"
                     class="c-list"
@@ -285,7 +285,13 @@
         .mb {
             margin-bottom 110px;
         }
-        .mt {
+        .mt-275 {
+            margin-top 275px;
+        }
+        .mt-185 {
+            margin-top 185px;
+        }
+        .mt-110 {
             margin-top 110px
         }
         .c-list {
