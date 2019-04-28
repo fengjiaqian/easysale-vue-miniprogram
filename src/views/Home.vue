@@ -180,7 +180,6 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      heightList: [],
       currentDealer: storage.get("currentDealer", {})
     };
   },
@@ -193,8 +192,8 @@ export default {
   },
   beforeCreate() {},
   computed: {
-    currentIndex() {
-      var h = this.posY,
+    currentIndex() {   
+      var h = this.posY,  
         arr = this.heightList || [];
       for (var j = 0, len = arr.length; j < len; j++) {
         var h1 = arr[j],
@@ -247,6 +246,7 @@ export default {
       } = this.$route.query;
       // 以登录身份访问
       if (mobileNo && token && userType) {
+        this.clearStorage(); //清楚部分缓存
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("userType", userType);
@@ -256,12 +256,28 @@ export default {
       }
       //只有nickName和avatarUrl, cache for mine page。 以终端访客身份访问
       if (nickName && avatarUrl) {
+        this.clearStorage(); //清楚部分缓存
         storage.remove("token");
         storage.remove("userType");
         storage.remove("currentDealerId");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+      }
+    },
+    clearStorage() {
+      var keys = [
+        "homeRefresh",
+        "mineRefresh",
+        "orderRefresh",
+        "currentDealer",
+        "currentDealerId",
+        "fromOrder",
+        "orderPrequeryParams",
+        "orderPrequeryParams"
+      ];
+      for (let key of keys) {
+        storage.remove(key);
       }
     },
     _listDealerLogs() {
@@ -315,8 +331,6 @@ export default {
         document.getElementById(domId),
         150
       );
-      // var distance = this.heightList[Index];
-      // this.$refs.scrollProduct.scrollTo(0, -distance);
       //
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
@@ -378,12 +392,12 @@ export default {
     jumpSecondsort(item) {
       switch (item.value) {
         case `陈列管理`:
-          if(this.userType==1){
-            this.$router.push({path: "/exhibitList"});
-          }else if(this.userType==2){
-            this.$router.push({path: "/saleSignExhibitList"});
-          }else if(this.userType==3){
-            this.$router.push({path: "/saleExhibitList"});
+          if (this.userType == 1) {
+            this.$router.push({ path: "/exhibitList" });
+          } else if (this.userType == 2) {
+            this.$router.push({ path: "/saleSignExhibitList" });
+          } else if (this.userType == 3) {
+            this.$router.push({ path: "/saleExhibitList" });
           }
           break;
         default:

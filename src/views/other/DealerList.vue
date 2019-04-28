@@ -58,7 +58,7 @@ export default {
   name: "dealer-list",
   data() {
     return {
-      currentDealer: {},
+      currentDealer: storage.get("currentDealer", {}),
       dealerList: [],
       empty: false
     };
@@ -79,6 +79,10 @@ export default {
   },
   methods: {
     _ListCurrentDealer() {
+      const storeDealer = storage.get("currentDealer", {});
+      if (storeDealer.id == this.currentId) {
+        return (this.currentDealer = storeDealer);
+      }
       ListAllDealer({ id: this.currentId }).then(res => {
         const { dataList = [] } = res.data;
         dataList.length && (this.currentDealer = dataList[0]);
