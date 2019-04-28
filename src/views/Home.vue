@@ -58,7 +58,7 @@
       <scroll
         ref="scrollProduct"
         :data="scrollProducts"
-        :probeType="2"
+        :probeType="3"
         :click="true"
         :listenScroll="true"
         @scroll="listenScroll"
@@ -131,7 +131,9 @@
           </div>
           <!--  -->
           <div class="scroll-item" v-for="item in scrollProducts" :key="item.brandId">
-            <div :id="'dom'+item.brandId"></div>
+            <div :id="'dom'+item.brandId" class="menu-title">
+              <span>{{item.brandName}}</span>
+            </div>
             <product v-for="product in item.products " :product="product" :key="product.id"></product>
           </div>
         </main>
@@ -313,6 +315,9 @@ export default {
         document.getElementById(domId),
         150
       );
+      // var distance = this.heightList[Index];
+      // this.$refs.scrollProduct.scrollTo(0, -distance);
+      //
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
 
@@ -341,7 +346,9 @@ export default {
     },
     // scroll-items
     calculateHeightList() {
-      let h = this.$refs.scrollMenuWrap.offsetTop;
+      var target = this.$refs.scrollMenuWrap;
+      this.menuHeight = target.getBoundingClientRect().height;
+      let h = target.offsetTop;
       let heightList = [h];
       const els = document.querySelectorAll(".scroll-item");
       for (let el of Array.prototype.slice.call(els)) {
@@ -394,6 +401,35 @@ export default {
 .mune-wrapper {
   h(88);
   bg(#fff);
+}
+
+.menu-title {
+  height: 78px;
+  line-height: 78px;
+  background: #f6f6f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-title span {
+  margin: 0 24px;
+  color: #333;
+  font-size: 30px;
+}
+
+.menu-title::after {
+  content: '';
+  width: 80px;
+  height: 2px;
+  background: rgba(229, 229, 229, 1);
+}
+
+.menu-title::before {
+  content: '';
+  width: 80px;
+  height: 2px;
+  background: rgba(229, 229, 229, 1);
 }
 
 /* ** */
