@@ -2,7 +2,8 @@
  * 处理缓存商品 
  */
 import storage from 'common/storage'
-const _userId = '001'
+//TODO 如果用户没有登录 没有手机 登录后带入之前选择的商品 
+const _userId = storage.get('mobileNo', '');
 const _storageKey = 'yjxGoods'
 
 function getAllGoods() {

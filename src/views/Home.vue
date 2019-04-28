@@ -1,7 +1,14 @@
 <template>
   <div id="home" ref="scrollDom">
     <float-cart></float-cart>
-    <search-bar :jump="true"></search-bar>
+    <!--  -->
+    <div class="home-search-area">
+      <div class="dealer-name" v-if="userType==3" @click="_jumpDealerList">
+        {{currentDealer.shopName}}
+        <em></em>
+      </div>
+      <search-bar :jump="true"></search-bar>
+    </div>
     <div class="view-wrapper">
       <!-- 定位导航 -->
       <div class="fixed-nav">
@@ -51,7 +58,7 @@
       <scroll
         ref="scrollProduct"
         :data="scrollProducts"
-        :probeType="3"
+        :probeType="2"
         :click="true"
         :listenScroll="true"
         @scroll="listenScroll"
@@ -201,6 +208,7 @@ export default {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
       this.currentDealer = storage.get("currentDealer", {});
+      this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
       this._listDealerLogs();
       this._queryHomeProducts();
     } else {
@@ -208,6 +216,7 @@ export default {
         item.products = transformProductList(item.products);
       });
     }
+    storage.set("homeRefresh", false);
   },
   created() {
     this._initAuth(); //该步骤有判断有没有带入shareDealerId,有则缓存currentDealerId
@@ -273,13 +282,10 @@ export default {
             return this.$toast(msg);
           }
           this.$nextTick(() => {
-            if (!storage.get("homeRefresh", false)) {
-              this.calculateScrollRect();
-              setTimeout(() => {
-                this.calculateHeightList();
-              }, 1000);
-            }
-            storage.set("homeRefresh", false);
+            this.calculateScrollRect();
+            setTimeout(() => {
+              this.calculateHeightList();
+            }, 1000);
           });
         }
       });
@@ -616,19 +622,44 @@ export default {
   }
 }
 
-.home-product-list {
-  // .H-product-item {
-  // &:nth-last-of-type(1) {
-  // .H-product-content {
-  // border: 0;
-  // }
-  // }
-  // }
-}
+.home-search-area {
+  width: 100%;
+  bg(#fff);
+  pos(fixed);
+  top: 0;
+  left: 0;
+  z-index: 200;
 
-.scroll-products {
-  height: 100%;
-  overflow: hidden;
+  .search-bar-wrap {
+    pos(static);
+    width: auto;
+  }
+
+  .dealer-name {
+    pos(relative);
+    w(200);
+    lh(92);
+    mr(-24);
+    pl(24);
+    pr(32);
+    flt();
+    ft(26);
+    c(#333);
+    text-c();
+    omit();
+
+    em {
+      block();
+      pos(absolute);
+      top: 30px;
+      right: 0;
+      squ(32);
+      background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
+      transform: rotateZ(-90deg);
+      background-size: contain;
+      vm();
+    }
+  }
 }
 </style>
 

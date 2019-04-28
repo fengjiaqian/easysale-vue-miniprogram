@@ -46,32 +46,32 @@ function queryStatisticalData(params) {
 
 //我的模块-数据统计-商品维度报表
 function queryProductPerformance(params) {
-    const url = "/performance/getProductPerformance"
-    return axios({
-        method: 'post',
-        url: url,
-        data: params,
+	const url = "/performance/getProductPerformance"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
 		loading: true
-    }).then((res) => {
-        return Promise.resolve(res.data)
-    }).catch(res => {
-        return Promise.reject(res.data)
-    });
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
 }
 
 //我的模块-数据统计-客户维度报表
 function queryCustomerPerformance(params) {
-    const url = "/performance/getCustomerPerformance"
-    return axios({
-        method: 'post',
-        url: url,
-        data: params,
+	const url = "/performance/getCustomerPerformance"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
 		loading: true
-    }).then((res) => {
-        return Promise.resolve(res.data)
-    }).catch(res => {
-        return Promise.reject(res.data)
-    });
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
 }
 
 
@@ -285,7 +285,8 @@ function queryCustomerDetail(params) {
 	return axios({
 		method: 'post',
 		url: url,
-		data: params
+		data: params,
+		loading: true
 	}).then((res) => {
 		return Promise.resolve(res.data)
 	}).catch(res => {
@@ -337,8 +338,8 @@ function uploadImg(params) {
 
 export {
 	queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
-    queryProductList, queryProductBrand, oprateManageProduct,
-    addProduct, productDetail, editProduct, queryJyProduct,
+	queryProductList, queryProductBrand, oprateManageProduct,
+	addProduct, productDetail, editProduct, queryJyProduct,
 	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole,
 	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer,
 	uploadImg

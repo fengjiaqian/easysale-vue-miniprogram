@@ -102,33 +102,6 @@ export default {
   width: 100%;
   height: 100%;
 }
-
-.search-area {
-  width: 100%;
-  bg(#fff);
-  pos(fixed);
-  top: 0;
-  left: 0;
-  z-index: 200;
-
-  .search-bar-wrap {
-    pos(static);
-    mr(129);
-    width: auto;
-    pr(0);
-  }
-
-  .btn {
-    w(129);
-    lh(92);
-    block();
-    frt();
-    ft(30);
-    c(#333);
-    text-c();
-  }
-}
-
 .product-list-wrap {
   height: 100%;
 }

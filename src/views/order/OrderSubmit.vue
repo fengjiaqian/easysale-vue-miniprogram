@@ -124,6 +124,7 @@ export default {
       storage.set("orderExtraParams", {});
     },
     _OrderSubmit() {
+      // payableAmount是应付金额，orderAmount是实付金额
       const customerId = this.currentCustomer.id;
       if (!customerId) {
         const msg = this.userType == 3 ? "请选择收货人" : "请选择客户";
@@ -133,9 +134,9 @@ export default {
       const params = {
         customerId,
         orderItem,
-        orderAmount: this.orderAmount,
+        orderAmount: this.payableAmount, //
         reduceAmount: this.reduce || 0,
-        payableAmount: this.payableAmount, //应付
+        payableAmount: this.orderAmount,
         order_remark: this.remark
       };
       OrderSubmit(params)
