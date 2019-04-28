@@ -1,14 +1,8 @@
 // 投诉+兑奖+退货管理模块
 
-// 终端投诉管理首页
-const clientComplaintsHomepage = (resolve) => {
-    import('views/complaint/clientComplaintsHomepage.vue').then((module) => {
-        resolve(module)
-    })
-};
-// 经销商投诉管理首页
-const dealerComplaintHomepage = (resolve) => {
-    import('views/complaint/dealerComplaintHomepage.vue').then((module) => {
+// 投诉管理首页
+const complaintHomepage = (resolve) => {
+    import('views/complaint/complaintHomepage.vue').then((module) => {
         resolve(module)
     })
 };
@@ -24,15 +18,9 @@ const complaintDetail = (resolve) => {
         resolve(module)
     })
 };
-// 经销商兑奖管理首页
-const dealerRedemptionHomepage = (resolve) => {
-    import('views/redemption/dealerRedemptionHomepage.vue').then((module) => {
-        resolve(module)
-    })
-};
-// 终端兑奖管理首页
-const clientRedemptionHomepage = (resolve) => {
-    import('views/redemption/clientRedemptionHomepage.vue').then((module) => {
+// 兑奖管理首页
+const redemptionHomepage = (resolve) => {
+    import('views/redemption/redemptionHomepage.vue').then((module) => {
         resolve(module)
     })
 };
@@ -49,9 +37,9 @@ const addNewRedemption = (resolve) => {
     })
 };
 
-// 经销商退货管理
-const dealerReturnHomepage = (resolve) => {
-    import('views/returnGoods/dealerReturnHomepage.vue').then((module) => {
+// 退货管理
+const returnHomepage = (resolve) => {
+    import('views/returnGoods/returnHomepage.vue').then((module) => {
         resolve(module)
     })
 };
@@ -61,12 +49,7 @@ const returnDetail = (resolve) => {
         resolve(module)
     })
 };
-// 终端退货管理
-const clientReturnHomepage = (resolve) => {
-    import('views/returnGoods/clientReturnHomepage.vue').then((module) => {
-        resolve(module)
-    })
-};
+
 // 终端退货管理
 const addNewReturnOrder = (resolve) => {
     import('views/returnGoods/addNewReturnOrder.vue').then((module) => {
@@ -81,21 +64,14 @@ const chooseReturnGoods = (resolve) => {
     })
 };
 const manageInit = [
+
     {
-        path: '/clientComplaintsHomepage',
-        name: 'clientComplaintsHomepage',
-        meta: {
-            title: '投诉列表',
-        },
-        component: clientComplaintsHomepage,
-    },
-    {
-        path: '/dealerComplaintHomepage',
-        name: 'dealerComplaintHomepage',
+        path: '/complaintHomepage',
+        name: 'complaintHomepage',
         meta: {
             title: '投诉管理',
         },
-        component: dealerComplaintHomepage,
+        component: complaintHomepage,
     },
     {
         path: '/addNewComplaint',
@@ -114,20 +90,12 @@ const manageInit = [
         component: complaintDetail,
     },
     {
-        path: '/dealerRedemptionHomepage',
-        name: 'dealerRedemptionHomepage',
+        path: '/redemptionHomepage',
+        name: 'redemptionHomepage',
         meta: {
             title: '兑奖管理',
         },
-        component: dealerRedemptionHomepage,
-    },
-    {
-        path: '/clientRedemptionHomepage',
-        name: 'clientRedemptionHomepage',
-        meta: {
-            title: '兑奖列表',
-        },
-        component: clientRedemptionHomepage,
+        component: redemptionHomepage,
     },
     {
         path: '/redemptionDetail',
@@ -147,12 +115,12 @@ const manageInit = [
         component: addNewRedemption,
     },
     {
-        path: '/dealerReturnHomepage',
-        name: 'dealerReturnHomepage',
+        path: '/returnHomepage',
+        name: 'returnHomepage',
         meta: {
             title: '退货管理',
         },
-        component: dealerReturnHomepage,
+        component: returnHomepage,
     }
     ,
     {
@@ -164,14 +132,7 @@ const manageInit = [
         component: returnDetail,
     }
     ,
-    {
-        path: '/clientReturnHomepage',
-        name: 'clientReturnHomepage',
-        meta: {
-            title: '退货列表',
-        },
-        component: clientReturnHomepage,
-    },
+
     {
         path: '/addNewReturnOrder',
         name: 'addNewReturnOrder',

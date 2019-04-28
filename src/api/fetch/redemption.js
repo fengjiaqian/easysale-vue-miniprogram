@@ -3,14 +3,12 @@ import axios from 'axios'
 /**
  * 兑奖列表查询接口
  */
-export function awardList(state) {
+export function awardList(params) {
     let url = "/award/awardList";
     return axios({
         method: 'post',
         url,
-        data: {
-            state
-        },
+        data: params,
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)
@@ -98,6 +96,22 @@ export function cancelAward(id) {
         method: 'post',
         url,
         data:{id},
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+/**
+ * 客户兑奖的经销商列表
+ */
+export function selectDealAward(state) {
+    let url = "/award/selectDealAward";
+    return axios({
+        method: 'post',
+        url,
+        data:{state},
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)

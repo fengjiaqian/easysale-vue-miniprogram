@@ -3,14 +3,12 @@ import axios from 'axios'
 /**
  * 投诉列表查询接口
  */
-export function complaintList(state) {
+export function complaintList(params) {
     let url = "/complaint/complaintList";
     return axios({
         method: 'post',
         url,
-        data: {
-            state
-        },
+        data: params,
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)

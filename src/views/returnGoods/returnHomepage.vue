@@ -1,16 +1,24 @@
 <template>
-    <div id="complaint">
+    <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <top-tabs  v-if="!isSaleMan"  :topTabsList="topTabsList" @switchTab="switchTab" class="top"></top-tabs>
-        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关投诉单'" v-if="empty" :iconUrl="iconUrl"></empty>
+        <section class="top-bar "  v-if="!isSaleMan">
+            <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
+        </section>
+        <!--经销商店铺列表-->
+        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
+            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
+                  @click="switchShop(item,idx)">{{item.dealerName}}</span>
+        </section>
+        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关退货单'" v-if="empty"
+               :iconUrl="iconUrl"></empty>
         <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
             <scroll
-                    v-if="complaintsList.length"
+                    v-if="returnGoodsList.length"
                     class="c-list"
-                    :data="complaintsList"
-                    ref="scrollComplaints"
+                    :data="returnGoodsList"
+                    ref="scrollRedemption"
             >
-                <list-item v-for="(item,index) in complaintsList" :listData="item" :key="index"
+                <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
                            :tabState="tabState" @selectSingle="selectSingle"></list-item>
             </scroll>
         </div>
@@ -22,47 +30,58 @@
             </div>
             <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
         </div>
-        <button class="footer-btn" @click="addComplaints()" v-if="isCustomer">新建投诉</button>
+        <button class="footer-btn" @click="addReturnGoods()" v-if="isCustomer">新建退货单</button>
         <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
                      @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 <script>
-    import {complaintList,batchUpdateComplaint,selectDealComplaint} from "api/fetch/complaints";
+    import {returnList, batchUpdateReturn,selectDealReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
-    import TopTabs from "../../components/topTabs";
-    import listItem from "./list-item.vue";
     import empty from "components/empty.vue";
     import mHeader from "components/header.vue";
-    import salemanPop from "components/saleman-pop.vue"
+    import listItem from "./list-item.vue";
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
-    import iconUrl from "../../assets/images/empty_icon_1.png"
+    import iconUrl from "../../assets/images/empty_icon_1.png";
+    import salemanPop from "components/saleman-pop.vue"
+
     const selectImg = [ic1, ic2];
     export default {
-        name: 'dealerComplaintHomepage',
-        components: {TopTabs, listItem, empty,mHeader,scroll,salemanPop},
+        name: 'returnHomepage',
+        components: { scroll, empty, mHeader, listItem, salemanPop},
         data() {
             return {
-                topTabsList: ['待处理', '已处理'],
-                tabState: 0,
-                complaintsList: [],
+                stateList: [{
+                    title: `待处理`,
+                    idx: 0
+                },{
+                    title: `已处理`,
+                    idx: 1
+                }],
                 selectImg: selectImg,
+                iconUrl: iconUrl,
+                tabState: 0,
+                isShowMore: false,
                 empty: false,
                 isAllSelected: false,
-                roleList:[],
-                rolePopShow:false,
-                iconUrl:iconUrl,
-                title:'投诉管理',
+                title: '退货管理',
+                returnGoodsList: [],
+                roleList: [],
+                rolePopShow: false,
+                activeDealerIdx:0,
                 dealerList:[],
+                dealerId:''
+
             }
         },
         created() {
-            console.log(this.userType)
-            this.title = this.userType=='3'?'投诉列表':'投诉管理';
-            this.queryUrl();
-
+            this.title = this.userType == '3' ? '退货列表' : '退货管理';
+            this._QueryReturnList()
+            if (this.userType == '3') {
+                this._QueryDealReturn();
+            }
         },
         computed: {
             isDealer() {
@@ -73,16 +92,11 @@
             },
             isCustomer() {
                 return this.userType == '3'
-            }
-        },
-        methods: {
-            queryUrl(){
-                this._QueryComplaintList();
-                if(this.userType == '3'){
-                    this._QueryDealComplaint();
-                }
-
             },
+        },
+
+        methods: {
+
 
             /**
              * 切换顶部tabs
@@ -90,84 +104,91 @@
              */
             switchTab(state) {
                 this.tabState = state;
-                this.queryUrl()
+                this._QueryReturnList()
             },
 
+
             // 加载列表数据
-            _QueryComplaintList() {
-                complaintList(this.tabState).then(res => {
+            _QueryReturnList() {
+                let params={
+                    state:this.tabState,
+                    dealerId:this.dealerId
+                }
+                returnList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
                         this.empty = !resultData.length;
                         resultData.forEach(item => {
-                            item['selected']=false;
+                            item['selected'] = false;
                         });
-                        this.complaintsList = [...resultData];
+                        this.returnGoodsList = [...resultData];
                     }
                 });
 
             },
 
-            // 客户投诉过的经销商列表
-            _QueryDealComplaint() {
-                selectDealComplaint(this.tabState).then(res => {
+
+            // 客户退货的经销商列表
+            _QueryDealReturn() {
+                selectDealReturn(this.tabState).then(res => {
                     if (res.data) {
                         let resultData = res.data;
                         this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId
                     }
                 });
 
             },
-
 
 
             /**
              *单选
-             * @param id-投诉单id
+             * @param id-退货单id
              */
             selectSingle(id) {
-                let listData = this.complaintsList;
+                let listData = this.returnGoodsList;
                 listData.forEach(item => {
-                    if (item.customerComplaint) {
-                        let customerComplaint = item.customerComplaint;
-                        if (customerComplaint.id == id) {
+                    if (item.customerReturn) {
+                        let customerReturn = item.customerReturn;
+                        if (customerReturn.id == id) {
                             item.selected = !item.selected;
                         }
                     }
                 });
                 this.isAllSelected = !listData.some(item => !item.selected);
-                this.complaintsList = [...listData];
-
+                this.returnGoodsList = [...listData];
             },
 
 
             // 全选
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.complaintsList;
+                let listData = this.returnGoodsList;
                 listData.forEach(item => {
-                   item.selected=this.isAllSelected
+                    item.selected = this.isAllSelected
                 });
-                this.complaintsList = [...listData]
+                this.returnGoodsList = [...listData]
             },
 
 
             /**
-             * 跳转新增投诉与建议
+             * 跳转新增退货单
+             * @param id-退货单id
              */
-            addComplaints() {
+            addReturnGoods() {
                 this.$router.push({
-                    name: "addNewComplaint",
+                    name: "addNewReturnOrder",
                 });
             },
+
 
             /**
              * 批量移交处理
              */
-            handoverProcessing(){
-                const selectedComplaints = this.complaintsList.filter(item => item.selected);
+            handoverProcessing() {
+                const selectedComplaints = this.returnGoodsList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
-                    return this.$toast("请选择投诉单");
+                    return this.$toast("请选择退货单");
                 }
                 this.rolePopShow = true;
                 //查询所有角色
@@ -189,55 +210,82 @@
              */
             submitQuery(dealingId) {
                 this.closePop();
-                let idList=[];
-                const selectedComplaints = this.complaintsList.filter(item => item.selected);
-                selectedComplaints.forEach(item=>{
-                    if(item.customerComplaint){
-                        idList.push(item.customerComplaint.id)
+                let idList = [];
+                const selectedRedemption = this.returnGoodsList.filter(item => item.selected);
+                selectedRedemption.forEach(item => {
+                    if (item.customerReturn) {
+                        idList.push(item.customerReturn.id)
                     }
                 });
                 let params = {
-                    idList:[...idList],
+                    idList: [...idList],
                     dealingId: dealingId,
                 };
-                batchUpdateComplaint(params).then(res => {
+                batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryComplaintList()
+                    this._QueryReturnList()
                 });
             },
 
-            /**
-             * 跳转新增投诉与建议
-             * @param id-投诉单id
-             */
-            addComplaints() {
-                this.$router.push({
-                    name: "addNewComplaint",
-                });
-            },
+
         }
     }
 </script>
 
 <style lang="stylus" scoped>
-    #complaint {
+    #redemption {
         width: 100vw;
-        height :100vh;
+        height: 100vh;
         bg(#f6f6f6);
         .top {
             width 100vw;
             position fixed;
-            top:90px;
+            top: 90px;
             left 0;
             z-index 34;
         }
         .content {
-            margin-top 185px;
+            margin-top 275px;
         }
-        .mb{
+        .top-bar{
+            bg(#fff)
+            border-bottom 1PX solid #EDEDED
+            flex-center()
+            width 100%
+            h(98)
+            box-sizing border-box
+            position fixed
+            left 0
+            top 90px
+            z-index 2
+            span{
+                width 50%
+                text-c()
+                lh(98)
+                c-6()
+                ft(28)
+            }
+            .active{
+                font-weight 600
+                ft(34)
+                c-3()
+                position relative
+                &:before{
+                    content ""
+                    position absolute
+                    left 50%
+                    bottom 0
+                    transform translateX(-50%)
+                    w(40)
+                    h(6)
+                    bg(#FF5638)
+                }
+            }
+        }
+        .mb {
             margin-bottom 110px;
         }
-        .mt{
+        .mt {
             margin-top 110px
         }
         .c-list {
@@ -306,6 +354,39 @@
             c(#FF5638);
             text-align: center;
             z-index 44
+        }
+        .dealer-list-wrap {
+            position fixed
+            top 185px
+            left 0
+            width 100%
+            flex()
+            align-content center
+            flex-wrap nowrap
+            padding 16px 24px
+            z-index 10
+            bg(#fff)
+            border-top 1px solid #EDEDED
+            border-bottom 1PX solid #EDEDED
+            overflow-x scroll
+            span {
+                bg(#F6F6F6)
+                lh(60)
+                padding 0 20px
+                ft(26)
+                c-6()
+                border-radius 8px
+                mr(20)
+                max-width 220px
+                text-overflow-1()
+                &:last-child {
+                    margin-right 0
+                }
+                &.active {
+                    bg(#FFEEEB)
+                    c(#FF5638)
+                }
+            }
         }
     }
 
