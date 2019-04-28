@@ -410,7 +410,6 @@ export default {
         default:
           break;
       }
-      if (this.navigateToLogin()) return false;
       this.$router.push({ path: jumpPath });
     }
   }
