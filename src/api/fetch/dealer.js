@@ -38,3 +38,21 @@ export function ListDealerLogs() {
         return Promise.reject(res.data)
     });
 }
+
+/**
+ * 客户选择店铺
+ */
+export function addShopHistory(dealerId) {
+    let url = "/shop/addShopHistory";
+    return axios({
+        method: 'post',
+        url,
+        data: {
+            dealerId: dealerId,
+        }
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
