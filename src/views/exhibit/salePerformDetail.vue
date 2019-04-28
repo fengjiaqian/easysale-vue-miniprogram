@@ -38,12 +38,12 @@
           <p>{{performInfo.display_rule}}</p>
         </div>
       </li>
-      <li>
+<!--      <li>
         <h5>商贸公司</h5>
         <div class="require">
           <p>{{performInfo.dealerDto.shopName}}</p>
         </div>
-      </li>
+      </li>-->
       <li>
         <h5>申请截止日期</h5>
         <div class="require">
@@ -209,6 +209,8 @@
               if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
                 this.showUpload = true
               }
+              const {display_days,display_reward,display_rule,end_time,photo_space_day} = res.data.shopDisplayItemDto
+              Object.assign(this.performInfo,{display_days,display_reward,display_rule,end_time,photo_space_day})
             }
             this.domShow = true
           }
