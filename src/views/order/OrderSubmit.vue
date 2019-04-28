@@ -132,7 +132,7 @@ export default {
       }
       const orderItem = transformOrderItems(this.products);
       const params = {
-        customerId,
+        receiverId: customerId,
         orderItem,
         orderAmount: this.payableAmount, //
         reduceAmount: this.reduce || 0,
