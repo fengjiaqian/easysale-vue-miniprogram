@@ -38,12 +38,12 @@
           <p>{{performInfo.display_rule}}</p>
         </div>
       </li>
-<!--      <li>
+      <li>
         <h5>商贸公司</h5>
         <div class="require">
-          <p>{{performInfo.dealerDto.shopName}}</p>
+          <p>{{performInfo.dealerDto ? performInfo.dealerDto.shopName : '经销商店铺'}}</p>
         </div>
-      </li>-->
+      </li>
       <li>
         <h5>申请截止日期</h5>
         <div class="require">
@@ -340,7 +340,7 @@
         uploadExhibitNper(param).then(res => {
           if (res.result === "success") {
             this.$toast(`操作成功！`)
-            this.queryDetail()
+            this.queryDetail('')
           }
         }).catch(err => {
           this.$toast(err.message)
