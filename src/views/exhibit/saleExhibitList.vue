@@ -5,7 +5,7 @@
       <span v-for="(item,index) in stateList" :class="{'active': activeIdx == index}" @click="switchBar(index)">{{item.title}}</span>
     </section>
     <!--经销商店铺列表-->
-    <section class="dealer-list-wrap" v-if="activeIdx!=0">
+    <section class="dealer-list-wrap" v-if="activeIdx!=0&&dealerList.length">
       <span :class="{'active':activeDealerIdx==idx}"
             v-for="(item,idx) in dealerList"
             @click="switchShop(item,idx)"
@@ -100,6 +100,7 @@
       //切换状态栏
       switchBar(idx){
         if(idx == this.activeIdx) return false
+        this.dealerList = []
         //如果是游客，只能查看可申请的陈列
         if(this.isVisitor&&idx!=0){
           this.navigateToLogin()
@@ -122,7 +123,10 @@
         }
         this.filterParam.pageNum = 1
         this.performList = []
-        if(idx==0) this.queryPerforms(`apply`)
+        if(idx==0) {
+          this.queryPerforms(`apply`)
+        }
+        this.queryDealers()
       },
       //获取任务列表
       queryPerforms(type){
@@ -198,10 +202,14 @@
       },
       //查询客户签约的店铺列表
       queryDealers(){
-        querySaleDealers({}).then(res => {
+        let param = {
+          lists_tates: this.filterParam.lists_tates
+        }
+        querySaleDealers(param).then(res => {
           if (res.result === "success") {
             this.dealerList = res.data
             this.filterParam.dealer_id = this.dealerList.length ? this.dealerList[0].id : ''
+            if(this.activeIdx != 0 && this.dealerList.length) this.queryPerforms()
           }
         }).catch(err => {
           this.$toast(err.message)
@@ -219,7 +227,7 @@
       filterParam: {
         handler(newVal, oldVal) {
           if(this.activeIdx!=0){
-            this.queryPerforms(``)
+            //this.queryPerforms(``)
           }
         },
         deep: true

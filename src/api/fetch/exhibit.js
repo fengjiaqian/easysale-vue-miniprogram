@@ -161,12 +161,12 @@ function querySaleMayApplyExhibit(id) {
 }
 
 //陈列管理-查询客户签约的经销商列表
-function querySaleDealers(id) {
+function querySaleDealers(params) {
 	const url = `/customer/querydealers`
 	return axios({
 		method: 'post',
 		url: url,
-		data: {},
+		data: params,
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)
