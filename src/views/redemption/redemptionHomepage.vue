@@ -81,6 +81,7 @@
         },
         created() {
             this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
+            this._QueryAwardList();
             if (this.userType == '3') {
                 this._QueryDealAward();
             }
@@ -125,7 +126,7 @@
                         let resultData = res.data;
                         this.dealerList = [...resultData];
                         this.dealerId = this.dealerList[0].dealerId;
-                        this._QueryAwardList();
+
                     }
                 });
 

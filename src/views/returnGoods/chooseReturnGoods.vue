@@ -121,7 +121,7 @@
             },
             //搜索关键字查询
             handleChange($event){
-                this.filterParam.searchKey = searchKey;
+                this.filterParam.searchKey = $event;
                 this.filterParam.pageNum = 1;
                 this.productList = [];
             },
@@ -133,9 +133,7 @@
         watch: {
             filterParam: {
                 handler(newVal, oldVal) {
-                    if (!this.resetFilter) {
-                        this.queryProducts();
-                    }
+                    this.queryProducts();
                 },
                 deep: true
             },
