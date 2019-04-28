@@ -92,7 +92,7 @@
         this.queryPerforms(`apply`)
       }
       if(!this.isVisitor){
-        this.queryDealers()
+        //this.queryDealers()
       }
     },
     mounted() {},
