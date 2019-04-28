@@ -176,6 +176,7 @@ const manageInit = [
         path: '/addNewReturnOrder',
         name: 'addNewReturnOrder',
         meta: {
+            keepAlive: true ,
             title: '新建退货单',
         },
         component: addNewReturnOrder,

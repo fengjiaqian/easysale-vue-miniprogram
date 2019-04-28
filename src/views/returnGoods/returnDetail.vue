@@ -17,7 +17,7 @@
                 <div class="continue" v-if="customerReturn.state==1">
                     <div class="triangle"></div>
                     <div class="report">
-                        <div class="left">{{dealer.dealerName}}回复：</div>
+                        <p class="left">{{dealer.dealerName}}回复：</p>
                         <div class="right">{{customerReturn.replyTime}}</div>
                     </div>
                     <div class="tips">{{customerReturn.replyContent}}</div>
@@ -32,14 +32,20 @@
                                 <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
-                                    <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
+                                    <div class="goods-price-warp">
+                                        <span>{{skuItem.price}}元/{{skuItem.priceUnit}}</span>
+                                        <span class="count">X{{skuItem.returnCount}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
                                 <img class="goods-img">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
-                                    <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
+                                    <div clas="goods-price-warp">
+                                        <span>{{skuItem.price}}元/{{skuItem.priceUnit}}</span>
+                                        <span class="count">X{{skuItem.returnCount}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -63,7 +69,7 @@
                 <div class="customer-info">
                     <span class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</span>
                     <span class="font-30-666 margin-bottom-8">手机号码：{{customer.customerPhone}}</span>
-                    <span class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</span>
+                    <span class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</span>
                     <span class="font-30-666">销售负责人：{{customer.saleName}}</span>
                 </div>
             </div>
@@ -83,7 +89,7 @@
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer&&customerReturn.state==0" @click="cancelRedemption">取消兑奖</button>
+        <button class="cancel-btn" v-if="isCustomer&&customerReturn.state==0" @click="cancelReturn">取消申请</button>
         <!--经销商可见-->
         <div v-if="isDealer&&customerReturn.state==0">
             <!--待处理-->
@@ -151,7 +157,7 @@
 
 
             /**
-             * 加载投诉详情
+             * 加载退货详情
              * @private
              */
             _QueryReturnDetail() {
@@ -218,9 +224,9 @@
             },
 
             /**
-             * 取消兑奖
+             * 取消申请
              */
-            cancelRedemption(){
+            cancelReturn(){
                 cancelCustomerReturn(this.id).then(res => {
                     this.$toast('操作成功');
                     this._QueryReturnDetail()
@@ -396,6 +402,7 @@
         }
         .goods-info {
             display flex;
+            flex:1;
             flex-direction column;
             ml(24)
         }
@@ -451,7 +458,15 @@
             border: 0;
             outline: none;
         }
-
+        .goods-price-warp{
+            display: flex;
+            align-items center;
+        }
+        .count{
+            display flex;
+            position absolute;
+            right 48px
+        }
     }
 
 

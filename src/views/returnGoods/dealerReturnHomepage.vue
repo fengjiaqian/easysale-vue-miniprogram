@@ -2,7 +2,7 @@
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
         <top-tabs v-if="!isSaleMan" :topTabsList="topTabsList" @switchTab="switchTab" class="top"></top-tabs>
-        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关兑奖单'" v-if="empty"
+        <empty :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'']" :txt="'暂无相关退货单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <div :class="[!isSaleMan?'content':'',tabState==0&&!isSaleMan?'mb':'',isSaleMan?'mt':'']">
             <scroll
@@ -54,7 +54,7 @@
                 isShowMore: false,
                 empty: false,
                 isAllSelected: false,
-                title: '兑奖管理',
+                title: '退货管理',
                 returnGoodsList: [],
                 roleList:[],
                 rolePopShow:false,
@@ -110,7 +110,7 @@
 
             /**
              *单选
-             * @param id-投诉单id
+             * @param id-退货单id
              */
             selectSingle(id) {
                 let listData = this.returnGoodsList;
@@ -140,8 +140,8 @@
 
 
             /**
-             * 跳转新增兑奖单
-             * @param id-投诉单id
+             * 跳转新增退货单
+             * @param id-退货单id
              */
             addReturnGoods() {
                 this.$router.push({
@@ -156,7 +156,7 @@
             handoverProcessing(){
                 const selectedComplaints = this.returnGoodsList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
-                    return this.$toast("请选择投诉单");
+                    return this.$toast("请选择退货单");
                 }
                 this.rolePopShow = true;
                 //查询所有角色

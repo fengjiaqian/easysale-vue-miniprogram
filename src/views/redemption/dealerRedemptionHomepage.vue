@@ -62,7 +62,7 @@
             }
         },
         created() {
-            this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
+            this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
             this._QueryAwardList()
         },
         computed: {
@@ -111,7 +111,7 @@
 
             /**
              *单选
-             * @param id-投诉单id
+             * @param id-兑奖单id
              */
             selectSingle(id) {
                 let listData = this.redemptionList;
@@ -142,7 +142,7 @@
 
             /**
              * 跳转新增兑奖单
-             * @param id-投诉单id
+             * @param id-兑奖单id
              */
             addRedemption() {
                 this.$router.push({
@@ -157,7 +157,7 @@
             handoverProcessing(){
                 const selectedComplaints = this.redemptionList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
-                    return this.$toast("请选择投诉单");
+                    return this.$toast("请选择兑奖单");
                 }
                 this.rolePopShow = true;
                 //查询所有角色

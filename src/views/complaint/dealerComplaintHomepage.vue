@@ -78,7 +78,10 @@
         methods: {
             queryUrl(){
                 this._QueryComplaintList();
-                this._QueryDealComplaint();
+                if(this.userType == '3'){
+                    this._QueryDealComplaint();
+                }
+
             },
 
             /**
