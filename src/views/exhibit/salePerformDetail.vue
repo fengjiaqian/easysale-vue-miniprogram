@@ -41,7 +41,7 @@
       <li>
         <h5>商贸公司</h5>
         <div class="require">
-          <p>{{performInfo.dealerDto.shopName}}</p>
+          <p>{{performInfo.dealerDto ? performInfo.dealerDto.shopName : '经销商店铺'}}</p>
         </div>
       </li>
       <li>
@@ -209,6 +209,8 @@
               if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
                 this.showUpload = true
               }
+              const {display_days,display_reward,display_rule,end_time,photo_space_day} = res.data.shopDisplayItemDto
+              Object.assign(this.performInfo,{display_days,display_reward,display_rule,end_time,photo_space_day})
             }
             this.domShow = true
           }
@@ -338,7 +340,7 @@
         uploadExhibitNper(param).then(res => {
           if (res.result === "success") {
             this.$toast(`操作成功！`)
-            this.queryDetail()
+            this.queryDetail('')
           }
         }).catch(err => {
           this.$toast(err.message)

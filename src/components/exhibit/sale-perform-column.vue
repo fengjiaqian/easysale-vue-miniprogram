@@ -43,7 +43,7 @@
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b">
-            <span class="task" v-if="!exhibit.begin_time">执行时间：该用户还未开始陈列</span>
+            <span class="task" v-if="!exhibit.begin_time">执行时间：还未开始陈列</span>
             <span class="task" v-else>执行时间：{{exhibit.begin_time}}至{{exhibit.end_time}}</span>
             <span>陈列周期为{{exhibit.shopDisplayItemDto.display_days}}天，共{{exhibit.total_periods}}期，已上传{{exhibit.uploadedNum}}期。</span>
             <span class="warn-tips" v-if="exhibit.unloadedNum">该客户目前有{{exhibit.unloadedNum}}期未上传。</span>
