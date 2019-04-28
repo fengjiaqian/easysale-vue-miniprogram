@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <button class="submit" @click="addNewComplaint">提交</button>
+        <button class="submit" :class="{'achieve':canOperate}"   @click="addNewComplaint">提交</button>
     </div>
 </template>
 
@@ -34,7 +34,7 @@
                 complaintHeadLine: '',
                 complaintContent: '',
                 remark: '',
-                length:0
+                length:0,
 
             }
         },
@@ -43,6 +43,11 @@
         watch:{
             complaintContent(val,oval){
                 this.length = val.length;
+            }
+        },
+        computed:{
+            canOperate() {
+                return this.complaintHeadLine.trim() && this.complaintContent.trim();
             }
         },
         methods: {
@@ -187,10 +192,14 @@
             width: 100%;
             h(98);
             lh(98);
-            bg(#FF5638)
+            bg(#BDBDBD)
             font-size: 32px;
             c(#fff);
             text-align: center;
+
+        }
+        .achieve{
+            bg(#FF5638)
 
         }
 

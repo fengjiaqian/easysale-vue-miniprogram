@@ -79,10 +79,10 @@
         },
         created() {
             this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
-            this._QueryComplaintList();
             if (this.userType == '3') {
                 this._QueryDealComplaint();
             }
+            this._QueryComplaintList();
 
         },
         computed: {
@@ -106,6 +106,7 @@
              */
             switchTab(state) {
                 this.tabState = state;
+                this.complaintsList = [];
                 this._QueryComplaintList()
             },
 
@@ -342,6 +343,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)

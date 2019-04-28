@@ -106,12 +106,12 @@ export function cancelCustomerReturn(id) {
 /**
  * 客户可退货产品选择接口
  */
-export function returnProduct(id) {
+export function returnProduct(params) {
     let url = "/return/returnProduct";
     return axios({
         method: 'post',
         url,
-        data:{id},
+        data:params,
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)

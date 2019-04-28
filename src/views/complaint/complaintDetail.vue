@@ -44,7 +44,7 @@
                 <div class="customer-info">
                     <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
-                     <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
+                        <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
                     <p class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</p>
                     <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
@@ -195,11 +195,16 @@
             /**
              * 撤销投诉
              */
-            cancelComplaint(){
-                cancelComplaint(this.id).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryComplaintDetail()
-                });
+            cancelComplaint() {
+                this.$confirm('您确定撤销投诉吗？')
+                    .then(() => {
+                        cancelComplaint(this.id).then(res => {
+                            this.$toast('操作成功');
+                            this._QueryComplaintDetail()
+                        });
+                    })
+                    .catch(() => {
+                    });
             }
         }
     }
@@ -255,6 +260,7 @@
             lh(34);
         }
         .tips {
+            ft(26);
             c(#666);
         }
 
@@ -394,7 +400,7 @@
             border: 0;
             outline: none;
         }
-        .tel{
+        .tel {
             block();
             pos(absolute);
             bottom: 0;

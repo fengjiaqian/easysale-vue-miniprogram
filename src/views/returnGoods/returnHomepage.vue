@@ -107,6 +107,7 @@
              */
             switchTab(state) {
                 this.tabState = state;
+                this.returnGoodsList = [];
                 this._QueryReturnList()
             },
 
@@ -119,8 +120,6 @@
                 this._QueryReturnList()
 
             },
-
-
 
 
             // 客户退货的经销商列表
@@ -331,6 +330,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)
