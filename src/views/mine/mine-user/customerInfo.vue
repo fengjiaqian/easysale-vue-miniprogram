@@ -1,15 +1,15 @@
 <template>
-  <div class="common pt">
+  <div class="common pt90">
     <m-header :isFixed="true"></m-header>
-    <div class="name">
+    <div class="mc-item">
       <div class="left">您的姓名 :</div>
       <input class="right" value type="text" v-model="name" placeholder="请输入姓名" ref="nameInput">
     </div>
-    <div class="tele">
+    <div class="mc-item">
       <div class="left">联系电话 :</div>
       <input class="right" value type="text" v-model="phone" placeholder="请输入联系电话">
     </div>
-    <div class="address">
+    <div class="mc-item">
       <div class="left">收货地址 :</div>
       <textarea rows="2" cols="20" class="right" v-model="address" placeholder="请填写收货地址"></textarea>
     </div>
@@ -54,15 +54,6 @@ export default {
           this.$toast(err.message);
         });
     },
-    checkData() {
-      // wx 检验数据是否都存在
-      // /都是空的
-      if (this.name && this.phone && this.address) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     _operate() {
       if (!this.isEdit) {
         document.title = "编辑个人信息";
@@ -70,8 +61,10 @@ export default {
         this.$refs.nameInput.focus();
         return false;
       }
+      const checkState =
+        this.name.trim() && this.phone.trim() && this.address.trim();
       //todo 判断空
-      if (!this.checkData) {
+      if (!this.checkState) {
         return this.$toast("信息不能为空");
       }
       //保存 如果没有更改项直接返回
@@ -105,73 +98,32 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.common {
-  background-color: #F6F6F6;
-  position: relative;
-  height: 100%;
+.mc-item {
+  padding: 0 24px;
+  bg(#fff);
+  flex();
+  align-items: center;
+  justify-content: flex-start;
+  lh(90);
+  ft(30);
+  c-3();
+
+  .left {
+    c-6();
+    mr(12);
+    min-width: 150px;
+  }
+
+  .right {
+    lh(90);
+    h(90);
+    flex-1();
+    outline: none;
+    border: none;
+  }
 }
 
-.common .name, .common .tele {
-  height: 90px;
-  background: rgba(255, 255, 255, 1);
-  overflow: hidden;
-  border-bottom: 1PX solid #f6f6f6;
-}
-
-.common .tele {
-  margin-bottom: 20px;
-}
-
-.common .name .left, .common .tele .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 24px 24px;
-}
-
-.common .name .right, .common .tele .right {
-  float: left;
-  width: 600px;
-  height: 42px;
-  font-size: 30px;
-  color: rgba(51, 51, 51, 1);
-  line-height: 42px;
-  margin-top: 24px;
-  outline: none;
-}
-
-.common .address {
-  height: 132px;
-  background: rgba(255, 255, 255, 1);
-  overflow: hidden;
-}
-
-.common .address .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 66px 24px;
-}
-
-.common .address .right {
-  width: 540px;
-  height: 84px;
-  font-size: 30px;
-  color: rgba(51, 51, 51, 1);
-  line-height: 42px;
-  margin-top: 24px;
-  outline: none;
-  resize: none;
-  border: 0;
-}
-
-.common .edit {
+.edit {
   width: 100%;
   height: 98px;
   background: rgba(255, 255, 255, 1);

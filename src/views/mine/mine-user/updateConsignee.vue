@@ -1,15 +1,15 @@
 <template>
-  <div class="common pt90">
+  <div class="modify-consignee pt90">
     <m-header :isFixed="true" :tit="myTitle"></m-header>
-    <div class="name">
+    <div class="mc-item">
       <div class="left">姓名 :</div>
       <input class="right" type="text" v-model="consigneeInfo.name" placeholder="请输入姓名">
     </div>
-    <div class="tele">
+    <div class="mc-item">
       <div class="left">联系电话 :</div>
       <input class="right" type="number" v-model="consigneeInfo.phone" placeholder="请输入手机号码">
     </div>
-    <div class="shopname">
+    <div class="mc-item mc-item-shopname">
       <div class="left">店铺名称 :</div>
       <input
         class="right"
@@ -110,84 +110,38 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-.common {
-  background-color: #F6F6F6;
-  position: relative;
+<style lang="stylus">
+.modify-consignee {
   height: 100%;
 }
 
-.common .name, .common .tele, .common .name, .common .shopname {
-  height: 90px;
-  background: rgba(255, 255, 255, 1);
-  overflow: hidden;
-  border-bottom: 1PX solid #f6f6f6;
-}
+.mc-item {
+  padding: 0 24px;
+  bg(#fff);
+  flex();
+  align-items: center;
+  justify-content: flex-start;
+  lh(90);
+  ft(30);
+  c-3();
 
-.common .tele {
-  margin-bottom: 20px;
-}
+  .left {
+    c-6();
+    mr(12);
+    min-width: 150px;
+  }
 
-.common .name .left, .common .tele .left, .common .name .left, .common .shopname .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 24px 24px;
-}
-
-.common .name .right, .common .tele .right, .common .name .right, .common .shopname .right {
-  float: left;
-  width: 600px;
-  height: 42px;
-  font-size: 30px;
-  color: rgba(51, 51, 51, 1);
-  line-height: 42px;
-  margin-top: 24px;
-  outline: none;
-}
-
-.common .address {
-  height: 132px;
-  background: rgba(255, 255, 255, 1);
-  overflow: hidden;
-
-  .position {
-    float: right;
-    display: inline-block;
-    mt(24);
-    mr(24);
-    w(48);
-    h(48);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url('../../../assets/images/address_position_icon.png');
+  .right {
+    lh(90);
+    h(90);
+    flex-1();
+    outline: none;
+    border: none;
   }
 }
 
-.common .address .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 66px 24px;
-}
-
-.common .address .right {
-  width: 540px;
-  height: 84px;
-  font-size: 30px;
-  color: rgba(51, 51, 51, 1);
-  line-height: 42px;
-  margin-top: 24px;
-  outline: none;
-  resize: none;
-  border: 0;
+.mc-item-shopname {
+  mt(20);
 }
 
 .edit {

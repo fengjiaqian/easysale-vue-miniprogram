@@ -254,7 +254,7 @@ export default {
         this.userType = userType;
         return false;
       }
-      //只有nickName和avatarUrl, cache for mine page。 以终端访客身份访问
+      //只有nickName和avatarUrl, cache for mine page。  以终端访客身份访问
       if (nickName && avatarUrl) {
         this.clearStorage(); //清楚部分缓存
         storage.remove("token");
@@ -263,6 +263,7 @@ export default {
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+        this.userType = 3;
       }
     },
     clearStorage() {
@@ -372,6 +373,7 @@ export default {
     },
     listenScroll(pos) {
       this.posY = Math.abs(pos.y);
+      !this.heightList && (this.heightList = [220]);
       if (this.posY > this.heightList[0]) {
         this.showFixed = true;
       } else {
