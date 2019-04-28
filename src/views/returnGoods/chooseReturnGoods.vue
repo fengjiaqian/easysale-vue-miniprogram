@@ -4,10 +4,11 @@
         <section class="pi-header">
             <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange"></m-header>
         </section>
-
+        <empty v-if="isEmpty" txt="暂无商品数据~" :iconUrl="avatarUrl" class="empty"></empty>
         <!--内容-->
-        <section class="pi-content">
+        <section class="pi-content" >
             <scroll
+                    v-if="productList.length"
                     class="product-list-scroll"
                     :data="productList"
                     :probeType="3"
@@ -33,7 +34,9 @@
     import scroll from "components/scroll.vue";
     import { returnProduct } from "api/fetch/returnGoods";
     import bus from "common/Bus";
-    import storage from 'common/storage'
+    import storage from 'common/storage';
+    import avatarUrl from "@/assets/images/empty_icon_1.png";
+    import empty from "components/empty.vue";
     export default {
         data() {
             return {
@@ -49,11 +52,13 @@
                 }, //商品查询参数
                 selectedProduct: null,//选中的商品
                 achieve: false,
+                avatarUrl:avatarUrl
             };
         },
         components: {
             productNormal,
-            scroll
+            scroll,
+            empty
         },
         created() {
             storage.remove("selectedProduct");
@@ -73,23 +78,32 @@
                 returnProduct(this.filterParam)
                     .then(res => {
                         if (res.result === "success" && res.data) {
-                            this.domShow = true;
-                            const { dataList = [], pager } = res.data;
-                            const { currentPage, totalPage } = pager;
-                            if (currentPage == 1) {
-                                this.totalPage = totalPage;
+                            if(res.data.dataList){
+                                this.domShow = true;
+                                const { dataList = [], pager } = res.data;
+                                const { currentPage, totalPage } = pager;
+                                if (currentPage == 1) {
+                                    this.totalPage = totalPage;
+                                }
+                                dataList.forEach(item => {
+                                    item.select = false;
+                                });
+                                this.productList = this.productList.concat(dataList);
+                                this.loading = false;
+                                this.requestDone = true;
+                            }else{
+                                this.requestDone = true;
+                                this.totalPage=1;
+                                this.productList=[]
+
                             }
-                            dataList.forEach(item => {
-                                item.select = false;
-                            });
-                            this.productList = this.productList.concat(dataList);
-                            this.loading = false;
-                            this.requestDone = true;
+
                         }
                     })
                     .catch(err => {
                         this.loading = false;
                         this.requestDone = true;
+                        this.productList=[]
                     });
             },
             choose(data){

@@ -80,17 +80,23 @@
                 .then(res => {
                   if (res.result === "success" && res.data) {
                     this.domShow = true;
-                    const { dataList = [], pager } = res.data;
-                    const { currentPage, totalPage } = pager;
-                    if (currentPage == 1) {
-                      this.totalPage = totalPage;
+                    if(res.data.dataList){
+                        const { dataList = [], pager } = res.data;
+                        const { currentPage, totalPage } = pager;
+                        if (currentPage == 1) {
+                            this.totalPage = totalPage;
+                        }
+                        dataList.forEach(item => {
+                            item.select = false;
+                        });
+                        this.productList = this.productList.concat(dataList);
+                        this.loading = false;
+                        this.requestDone = true;
+                    }else{
+                        this.totalPage=1;
+                        this.productList=[]
                     }
-                    dataList.forEach(item => {
-                      item.select = false;
-                    });
-                    this.productList = this.productList.concat(dataList);
-                    this.loading = false;
-                    this.requestDone = true;
+
                   }
                 })
                 .catch(err => {
