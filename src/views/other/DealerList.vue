@@ -53,6 +53,7 @@
 import scroll from "components/scroll.vue";
 import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
+import { addShopHistory } from "api/fetch/dealer";
 import storage from "common/storage";
 export default {
   name: "dealer-list",
@@ -115,6 +116,7 @@ export default {
         });
     },
     _chooseDealer(dealer) {
+      addShopHistory(dealer.id).then(res => {});
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
       this.$router.push({

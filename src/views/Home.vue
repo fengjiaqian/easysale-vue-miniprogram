@@ -70,7 +70,7 @@
             <div class="slider-body">
               <slider :loop="loop" :data="banners" ref="slider_dom">
                 <div class="banner-item" v-for="item in banners" :key="item.id">
-                  <img :src="item.cloudSrc" alt>
+                  <img :src="item.cloudSrc">
                 </div>
               </slider>
             </div>
