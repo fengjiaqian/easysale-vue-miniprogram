@@ -43,6 +43,7 @@
     import storage from 'common/storage';
     import mHeader from "components/header.vue";
     import {saveAward} from "api/fetch/redemption";
+
     export default {
         name: 'addNewRedemption',
         data() {
@@ -52,13 +53,13 @@
             }
         },
         components: {
-            numberPicker,mHeader
+            numberPicker, mHeader
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
                 if (from.name == 'chooseProductList') {
                     let selectedProduct = storage.get("selectedProduct", "");
-                        selectedProduct.buyCount=1
+                    selectedProduct.buyCount = 1
                     vm.redemptionGoods.push(selectedProduct)
                 } else {
                     storage.remove("selectedProduct");
@@ -69,36 +70,30 @@
 
             //跳转到添加兑奖商品
             toAddRedemptionGoods() {
-                this.$router.push({ path: "/chooseProductList" });
+                this.$router.push({path: "/chooseProductList"});
             },
 
             // 删除已添加的兑奖商品
-            delGoods(selectIndex){
-                let data=this.redemptionGoods;
-                data.forEach((item,index)=>{
-                    if(index==selectIndex){
-                      data.splice(index,1)
-                    }
-                });
-                this.redemptionGoods=[...data]
+            delGoods(selectIndex) {
+                this.redemptionGoods.splice(selectIndex, 1);
             },
 
             //新建兑奖单
-            submitRedemption(){
+            submitRedemption() {
                 if (!this.isValid()) return;
                 const currentDealerId = storage.get("currentDealerId", "") || "";
-                let items=[];
-                for(let item of this.redemptionGoods){
-                    let obj={
-                        productId:item.id,
-                        awardCount:item.buyCount,
+                let items = [];
+                for (let item of this.redemptionGoods) {
+                    let obj = {
+                        productId: item.id,
+                        awardCount: item.buyCount,
                     }
                     items.push(obj)
                 }
-                let params={
-                    dealerId:currentDealerId,
-                    items:items,
-                    remark:this.remark,
+                let params = {
+                    dealerId: currentDealerId,
+                    items: items,
+                    remark: this.remark,
                 };
                 saveAward(params).then(res => {
                     this.$toast('新增成功');
@@ -110,7 +105,7 @@
              * 校验表单
              * @returns {boolean}
              */
-            isValid(){
+            isValid() {
                 let errList = [];
                 if (!this.redemptionGoods.length) {
                     errList.push({errMsg: '请添加兑奖商品'});

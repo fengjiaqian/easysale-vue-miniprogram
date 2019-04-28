@@ -82,11 +82,7 @@
             },
             // 删除已添加的兑奖商品
             delGoods(selectIndex){
-                this.returnGoods.forEach((item,index)=>{
-                    if(index==selectIndex){
-                        this.returnGoods.splice(index,1)
-                    }
-                });
+                this.returnGoods.splice(selectIndex, 1);
             },
 
             //新建兑奖单
