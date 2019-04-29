@@ -149,8 +149,9 @@
         height 100%;
         bg(#f6f6f6);
         .body{
-            mt(114)
-            mb(110)
+            height 100%;
+            pt(114)
+            pb(110)
             overflow scroll
         }
         .goods-box, .remark-box {
