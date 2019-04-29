@@ -130,7 +130,7 @@
                         this.dealerId = this.dealerList[0].dealerId;
 
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -150,7 +150,7 @@
                         });
                         this.redemptionList = [...resultData];
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -210,7 +210,7 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                });
+                }).catch(() => {});
             },
 
             closePop() {
@@ -238,6 +238,8 @@
                 batchUpdateAward(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryAwardList()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 

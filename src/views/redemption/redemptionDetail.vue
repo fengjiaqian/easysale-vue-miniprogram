@@ -161,7 +161,7 @@
                         this.dealer = {...dealer};
                         this.saleMan = {...saleMan}
                     }
-                });
+                }).catch(() => {});;
             },
 
             /**
@@ -175,7 +175,7 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                });
+                }).catch(()=>{});
 
             },
 
@@ -197,6 +197,8 @@
                 batchUpdateAward(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryRedemptionDetail()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -212,6 +214,8 @@
                 updateAwardById(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryRedemptionDetail()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 

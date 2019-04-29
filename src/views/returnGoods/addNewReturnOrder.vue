@@ -134,6 +134,8 @@
                 saveCustomerReturn(params).then(res => {
                     this.$toast('新增成功');
                     this.$router.go(-1)
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 

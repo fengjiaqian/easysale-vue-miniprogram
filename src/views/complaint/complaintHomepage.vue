@@ -127,7 +127,7 @@
                         this.dealerList = [...resultData];
                         this.dealerId = this.dealerList[0].dealerId
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -136,7 +136,7 @@
                 let params = {
                     state: this.tabState,
                     dealerId: this.dealerId
-                }
+                };
                 complaintList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
@@ -146,7 +146,7 @@
                         });
                         this.complaintsList = [...resultData];
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -206,7 +206,7 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                });
+                }).catch(() => {});
             },
 
             closePop() {
@@ -234,6 +234,8 @@
                 batchUpdateComplaint(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryComplaintList()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
