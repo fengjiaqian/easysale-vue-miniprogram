@@ -14,7 +14,7 @@ function creatBookMenuData(data) {
         //添加中文字符转拼音首字母的属性
         //如果是英文字母，直接赋值
         if(checkEnglish(firstN)){
-            item.initials = firstN
+            item.initials = firstN.toUpperCase();
         }else{
             item.initials = pinyin.getCamelChars(firstN)
         }
