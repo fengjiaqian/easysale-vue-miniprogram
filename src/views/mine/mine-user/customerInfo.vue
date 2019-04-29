@@ -64,7 +64,7 @@ export default {
       const checkState =
         this.name.trim() && this.phone.trim() && this.address.trim();
       //todo 判断空
-      if (!this.checkState) {
+      if (!checkState) {
         return this.$toast("信息不能为空");
       }
       //保存 如果没有更改项直接返回
