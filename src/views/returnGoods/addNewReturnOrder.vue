@@ -79,7 +79,9 @@
                             item => item.id === selectedProduct.id
                         );
                         if (index != -1) {
-                            vm.returnGoods[index].buyCount += 1
+                            let addBuyCount = vm.returnGoods[index].buyCount;
+                            if (addBuyCount >= selectedProduct.count) return;
+                            vm.returnGoods[index].buyCount += 1;
                         } else {
                             vm.returnGoods.push(selectedProduct)
                         }
@@ -134,7 +136,7 @@
                 saveCustomerReturn(params).then(res => {
                     this.$toast('新增成功');
                     this.$router.go(-1)
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
