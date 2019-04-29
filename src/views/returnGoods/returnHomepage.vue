@@ -85,6 +85,7 @@
             if (this.userType == '3') {
                 this._QueryDealReturn();
             }
+            this._QueryDealReturn()
         },
         computed: {
             isDealer() {
