@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <button class="submit" :class="{'achieve':canOperate}"   @click="addNewComplaint">提交</button>
+        <button class="submit" :class="{'achieve':canOperate}" @click="addNewComplaint">提交</button>
     </div>
 </template>
 
@@ -27,6 +27,7 @@
     import {saveComplain} from "api/fetch/complaints";
     import storage from "common/storage";
     import mHeader from "components/header.vue";
+
     export default {
         name: 'addNewComplaint',
         data() {
@@ -34,18 +35,18 @@
                 complaintHeadLine: '',
                 complaintContent: '',
                 remark: '',
-                length:0,
+                length: 0,
 
             }
         },
         components: {mHeader},
 
-        watch:{
-            complaintContent(val,oval){
+        watch: {
+            complaintContent(val, oval) {
                 this.length = val.length;
             }
         },
-        computed:{
+        computed: {
             canOperate() {
                 return this.complaintHeadLine.trim() && this.complaintContent.trim();
             }
@@ -56,7 +57,7 @@
              * 校验表单
              * @returns {boolean}
              */
-            isValid(){
+            isValid() {
                 let errList = [];
                 if (!this.complaintHeadLine) {
                     errList.push({errMsg: '请填写投诉原因'});
@@ -70,18 +71,20 @@
                 return errList.length === 0
             },
 
-            addNewComplaint(){
+            addNewComplaint() {
                 if (!this.isValid()) return;
                 const currentDealerId = storage.get("currentDealerId", "") || "";
-                let params={
-                    dealerId:currentDealerId,
-                    complaintContent:this.complaintContent,
-                    complaintHeadLine:this.complaintHeadLine,
-                    remark:this.remark,
+                let params = {
+                    dealerId: currentDealerId,
+                    complaintContent: this.complaintContent,
+                    complaintHeadLine: this.complaintHeadLine,
+                    remark: this.remark,
                 };
                 saveComplain(params).then(res => {
                     this.$toast('新增成功');
                     this.$router.go(-1)
+                }).catch(res => {
+                    this.$toast(res.message)
                 });
             }
 
@@ -92,9 +95,9 @@
 <style lang="stylus" scoped>
     #addNewComplaint {
         width: 100%;
-        height :100%;
+        height: 100%;
         bg(#f6f6f6);
-        .body{
+        .body {
             height 100%;
             pb(118);
             pt(90);
@@ -199,7 +202,7 @@
             text-align: center;
 
         }
-        .achieve{
+        .achieve {
             bg(#FF5638)
 
         }
