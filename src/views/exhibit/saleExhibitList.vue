@@ -222,6 +222,7 @@
       },
       //切换经销商店铺
       switchShop(item,idx){
+        if(this.activeDealerIdx == idx) return
         this.activeDealerIdx = idx
         this.filterParam.pageNum = 1
         this.performList = []

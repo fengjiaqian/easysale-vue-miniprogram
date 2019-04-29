@@ -27,8 +27,8 @@
 
     <section class="footer" v-if="activeIdx==0">
       <div class="oprate">
-        <div class="all-select">
-          <i class="select"></i>
+        <div class="all-select" @click="selectAll">
+          <i class="select" :class="{'selected':allSelected}"></i>
           <span>全选</span>
         </div>
         <div class="agree" @click="batchOprate">同意</div>
@@ -47,6 +47,7 @@
   import { queryPerformList,oprateExhibit } from "api/fetch/exhibit";
   import performColumn from "components/exhibit/perform-column.vue";
   import scroll from "components/scroll.vue";
+  import bus from "common/Bus";
   export default {
     data() {
       return {
@@ -76,6 +77,7 @@
         },
         performList: [],//执行情况列表
         isEmpty: false,
+        allSelected: false,//是否全选
       };
     },
     components: {
@@ -86,7 +88,15 @@
       this.filterParam.display_Id = this.$route.query.id
       //this.queryPerforms()
     },
-    mounted() {},
+    mounted() {
+      bus.$off("columnSelect")
+      bus.$on("columnSelect", () => {
+        let allSelected = this.performList.every((item) => {
+          return item.select
+        })
+        this.allSelected = allSelected
+      });
+    },
     methods: {
       switchBar(idx){
         if(idx == this.activeIdx) return false
@@ -168,6 +178,14 @@
       loadMoreData() {
         if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
         this.filterParam.pageNum += 1
+      },
+      //全选
+      selectAll(){
+        let allSelect = this.allSelected
+        this.performList.forEach((item)=>{
+          item.select = !allSelect
+        })
+        this.allSelected = !allSelect
       },
     },
     watch: {
