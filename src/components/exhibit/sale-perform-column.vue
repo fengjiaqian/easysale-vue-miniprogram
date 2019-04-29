@@ -61,7 +61,7 @@
       <div class="sa-t">
         <div class="st-content">
           <div class="stc-t">
-            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
+            <span class="shop-name">{{exhibit.dealerDto.shopName || exhibit.dealerDto.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b">
@@ -77,7 +77,7 @@
       <div class="sa-t">
         <div class="st-content">
           <div class="stc-t">
-            <span class="shop-name">{{exhibit.customerInfoDTO.customerShopName || exhibit.customerInfoDTO.name}}</span>
+            <span class="shop-name">{{exhibit.dealerDto.shopName || exhibit.dealerDto.name}}</span>
             <span>{{exhibit.create_time}}</span>
           </div>
           <div class="stc-b" v-if="exhibit.state==4">
@@ -85,12 +85,19 @@
             <span>奖品：{{exhibit.shopDisplayItemDto.display_reward}}</span>
           </div>
           <div class="stc-b" v-if="exhibit.state==5">
-            <span class="task">陈列奖品未发放</span>
-            <span>未发放原因：{{exhibit.comments}}</span>
+            <span class="task">陈列任务已到期</span>
+            <span>未在规定时间完成陈列任务，共有{{exhibit.unloadedNum}}期陈列照片未上传。</span>
+            <div class="remark-wrap" v-if="exhibit.comments">
+              <h5>
+                <span class="red">{{exhibit.dealerDto.shopName}}回复：</span>
+                <span class="time">{{exhibit.update_time}}</span>
+              </h5>
+              <p>{{exhibit.comments}}</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="state-tag">已完成</div>
+      <div class="state-tag">{{exhibit.state==4?`已完成`:`已拒绝`}}</div>
     </div>
   </div>
 </template>
@@ -113,7 +120,7 @@
 
     },
     created() {
-      if(this.exhibit.state == 2 || this.exhibit.state == 3){
+      if(this.exhibit.state == 2 || this.exhibit.state == 3 || this.exhibit.state == 5){
         let nperNum = this.calculateNper(this.exhibit.displayitemphotoDtos)
         Object.assign(this.exhibit,nperNum)
         if(this.exhibit.state == 3){
@@ -144,6 +151,10 @@
       },
       //产看详情
       goDetail(){
+        if(this.isVisitor){
+          this.navigateToLogin()
+          return
+        }
         this.$router.push({
           path: "/salePerformDetail",
           query: {

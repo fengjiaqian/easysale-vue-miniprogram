@@ -7,7 +7,7 @@
       <div class="remark-wrap" v-if="performInfo.state&&performInfo.comments">
         <h5>
           <span>{{performInfo.dealerDto.shopName}}回复：</span>
-          <span>{{performInfo.update_time}}</span>
+          <span class="time">{{performInfo.update_time}}</span>
         </h5>
         <p>{{performInfo.comments}}</p>
       </div>
