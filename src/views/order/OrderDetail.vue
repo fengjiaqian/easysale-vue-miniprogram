@@ -37,9 +37,10 @@
     <div class="order-detail-area">
       <h5>订单信息</h5>
       <div class="info-display">
-        <p v-if="userType!=3">下单人：{{order.name}}</p>
+        <p v-if="userType!=3">下单人：{{order.createUserName}}</p>
         <p v-if="userType==3">下单店铺：{{order.dealerName}}</p>
         <p>下单时间：{{order.createTime}}</p>
+        <p v-if="order.orderRemark">备注：{{order.orderRemark}}</p>
       </div>
     </div>
     <!-- 备注 -->

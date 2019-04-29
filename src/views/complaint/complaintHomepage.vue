@@ -9,17 +9,21 @@
             <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}" :txt="'暂无相关投诉单'" v-if="empty"
+        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
+               :txt="'暂无相关投诉单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}">
+        <div   :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
+             style="height: 100%"   v-if="complaintsList.length">
             <scroll
-                    v-if="complaintsList.length"
                     class="c-list"
                     :data="complaintsList"
                     ref="scrollComplaints"
             >
-                <list-item v-for="(item,index) in complaintsList" :listData="item" :key="index"
-                           :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                <div>
+                    <list-item v-for="(item,index) in complaintsList" :listData="item" :key="index"
+                               :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                </div>
+
             </scroll>
         </div>
         <!--经销商可见-->
@@ -63,7 +67,7 @@
                 tabState: 0,
                 complaintsList: [],
                 selectImg: selectImg,
-                empty: false,
+                empty: true,
                 isAllSelected: false,
                 roleList: [],
                 rolePopShow: false,
@@ -75,10 +79,10 @@
         },
         created() {
             this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
-            this._QueryComplaintList();
             if (this.userType == '3') {
                 this._QueryDealComplaint();
             }
+            this._QueryComplaintList();
 
         },
         computed: {
@@ -102,6 +106,7 @@
              */
             switchTab(state) {
                 this.tabState = state;
+                this.complaintsList = [];
                 this._QueryComplaintList()
             },
 
@@ -296,17 +301,20 @@
             margin-top 275px;
         }
         .mt-275 {
-            margin-top 275px;
+            pt(275)
+
         }
         .mt-185 {
-            margin-top 185px;
+            pt(185)
         }
         .mt-110 {
-            margin-top 110px
+            pt(110)
+        }
+        .mb {
+            padding-bottom 110px
         }
         .c-list {
             height: 100%;
-            overflow: hidden;
         }
 
         .footer {
@@ -335,6 +343,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)

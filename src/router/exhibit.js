@@ -155,14 +155,6 @@ const exhibit = [
         component: SalePerformDetail
     },
     {
-        path: '/salePerformDetail',
-        name: 'salePerformDetail',
-        meta: {
-            title: '陈列管理'
-        },
-        component: SalePerformDetail
-    },
-    {
         path: '/saleSignExhibitList',
         name: 'saleSignExhibitList',
         meta: {

@@ -1,7 +1,7 @@
 <template>
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar "  v-if="!isSaleMan">
+        <section class="top-bar " v-if="!isSaleMan">
             <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
@@ -9,17 +9,21 @@
             <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}" :txt="'暂无相关兑奖单'" v-if="empty"
+        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
+               style="height: 100%;overflow: hidden"
+               :txt="'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':tabState==0&&!isSaleMan}">
+        <div v-if="redemptionList.length"
+             :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}" style="height: 100%">
             <scroll
-                    v-if="redemptionList.length"
                     class="c-list"
                     :data="redemptionList"
                     ref="scrollRedemption"
             >
-                <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
-                           :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                <div>
+                    <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
+                               :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                </div>
             </scroll>
         </div>
         <!--经销商可见-->
@@ -36,7 +40,7 @@
     </div>
 </template>
 <script>
-    import {awardList,batchUpdateAward,selectDealAward} from "api/fetch/redemption";
+    import {awardList, batchUpdateAward, selectDealAward} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import empty from "components/empty.vue";
@@ -50,13 +54,13 @@
     const selectImg = [ic1, ic2];
     export default {
         name: 'redemptionHomepage',
-        components: {scroll, empty, mHeader, listItem,salemanPop},
+        components: {scroll, empty, mHeader, listItem, salemanPop},
         data() {
             return {
                 stateList: [{
                     title: `待处理`,
                     idx: 0
-                },{
+                }, {
                     title: `已处理`,
                     idx: 1
                 }],
@@ -64,15 +68,15 @@
                 iconUrl: iconUrl,
                 tabState: 0,
                 isShowMore: false,
-                empty: false,
+                empty: true,
                 isAllSelected: false,
                 title: '兑奖管理',
                 redemptionList: [],
-                roleList:[],
-                rolePopShow:false,
-                activeDealerIdx:0,
-                dealerList:[],
-                dealerId:''
+                roleList: [],
+                rolePopShow: false,
+                activeDealerIdx: 0,
+                dealerList: [],
+                dealerId: ''
 
             }
         },
@@ -104,18 +108,39 @@
              */
             switchTab(state) {
                 this.tabState = state;
+                this.redemptionList = [];
                 this._QueryAwardList()
             },
 
+            //切换经销商店铺
+            switchShop(item, idx) {
+                this.activeDealerIdx = idx;
+                this.redemptionList = [];
+                this.dealerId = item.dealerId;
+                this._QueryAwardList()
 
+            },
+
+            // 客户兑奖过的经销商列表
+            _QueryDealAward() {
+                selectDealAward(this.tabState).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId;
+
+                    }
+                });
+
+            },
 
 
             // 加载列表数据
             _QueryAwardList() {
-                let params={
-                    state:this.tabState,
-                    dealerId:this.dealerId
-                }
+                let params = {
+                    state: this.tabState,
+                    dealerId: this.dealerId
+                };
                 awardList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
@@ -128,19 +153,6 @@
                 });
 
             },
-
-            // 客户兑奖过的经销商列表
-            _QueryDealAward() {
-                selectDealAward(this.tabState).then(res => {
-                    if (res.data) {
-                        let resultData = res.data;
-                        this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId
-                    }
-                });
-
-            },
-
 
 
             /**
@@ -173,7 +185,6 @@
             },
 
 
-
             /**
              * 跳转新增兑奖单
              * @param id-兑奖单id
@@ -188,7 +199,7 @@
             /**
              * 批量移交处理
              */
-            handoverProcessing(){
+            handoverProcessing() {
                 const selectedComplaints = this.redemptionList.filter(item => item.selected);
                 if (!selectedComplaints.length) {
                     return this.$toast("请选择兑奖单");
@@ -213,15 +224,15 @@
              */
             submitQuery(dealingId) {
                 this.closePop();
-                let idList=[];
+                let idList = [];
                 const selectedRedemption = this.redemptionList.filter(item => item.selected);
-                selectedRedemption.forEach(item=>{
-                    if(item.customerAward){
+                selectedRedemption.forEach(item => {
+                    if (item.customerAward) {
                         idList.push(item.customerAward.id)
                     }
                 });
                 let params = {
-                    idList:[...idList],
+                    idList: [...idList],
                     dealingId: dealingId,
                 };
                 batchUpdateAward(params).then(res => {
@@ -229,7 +240,6 @@
                     this._QueryAwardList()
                 });
             },
-
 
 
         }
@@ -241,17 +251,7 @@
         width: 100vw;
         height: 100vh;
         bg(#f6f6f6);
-        .top {
-            width 100vw;
-            position fixed;
-            top: 90px;
-            left 0;
-            z-index 34;
-        }
-        .content {
-            margin-top 275px;
-        }
-        .top-bar{
+        .top-bar {
             bg(#fff)
             border-bottom 1PX solid #EDEDED
             flex-center()
@@ -262,19 +262,19 @@
             left 0
             top 90px
             z-index 2
-            span{
+            span {
                 width 50%
                 text-c()
                 lh(98)
                 c-6()
                 ft(28)
             }
-            .active{
+            .active {
                 font-weight 600
                 ft(34)
                 c-3()
                 position relative
-                &:before{
+                &:before {
                     content ""
                     position absolute
                     left 50%
@@ -287,20 +287,19 @@
             }
         }
         .mb {
-            margin-bottom 110px;
+            pb(110)
         }
         .mt-275 {
-            margin-top 275px;
+            pt(275)
         }
         .mt-185 {
-            margin-top 185px;
+            pt(185)
         }
         .mt-110 {
-            margin-top 110px
+            mt(110)
         }
         .c-list {
             height: 100%;
-            overflow: hidden;
         }
 
         .footer {
@@ -329,6 +328,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)
