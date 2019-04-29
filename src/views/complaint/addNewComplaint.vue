@@ -95,12 +95,13 @@
         height :100%;
         bg(#f6f6f6);
         .body{
-            margin-bottom 118px;
-            padding: 20px 16px;
+            height 100%;
+            pb(118);
+            pt(90);
             overflow scroll
         }
         .reason {
-            mt(90)
+            mt(20)
             width: 100%;
             padding 0 24px;
             bg(#fff);

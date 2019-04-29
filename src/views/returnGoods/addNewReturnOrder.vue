@@ -1,7 +1,7 @@
 <template>
     <div id="addNewReturnOrder">
         <m-header :isFixed="true"></m-header>
-        <div class="content">
+        <div class="body">
             <div class="reason-box">
                 <p class="title">退货原因</p>
                 <input type="text" placeholder="请输入退货原因" v-model="returnContent">
@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <button class="submit-btn" :class="{'achieve':canOperate}"   @click="submitReturnOrder">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate}" @click="submitReturnOrder">提交</button>
     </div>
 </template>
 
@@ -89,14 +89,14 @@
                     }
                 } else {
                     storage.remove("selectedProduct");
-                    vm.returnGoods=[];
-                    vm.remark='';
-                    vm.returnContent=''
+                    vm.returnGoods = [];
+                    vm.remark = '';
+                    vm.returnContent = ''
                 }
             })
         },
 
-        computed:{
+        computed: {
             canOperate() {
                 return this.returnContent.trim() && this.returnGoods.length;
             }
@@ -164,10 +164,11 @@
         width 100%;
         height 100%;
         bg(#f6f6f6);
-        .content {
+        .body {
+            height 100%
+            pb(110)
+            pt(90)
             overflow scroll
-            mb(110)
-            mt(90)
         }
         .reason-box, .goods-box, .remark-box {
             margin 24px;
@@ -215,7 +216,7 @@
             border: 0;
             outline: none;
         }
-        .achieve{
+        .achieve {
             bg(#FF5638)
 
         }
