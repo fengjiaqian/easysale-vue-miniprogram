@@ -28,13 +28,17 @@
         <div class="pc-content">
           <p>执行周期：{{performInfo.shopDisplayItemDto.display_days}}天，共{{performInfo.shopDisplayItemDto.total_periods}}期，当前第{{performInfo.periods}}期</p>
           <p>已上传{{nperNum.uploadedNum}}期，共有<i>{{nperNum.unloadedNum}}</i>期未按时上传</p>
-          <div class="nper-column">
+          <div class="nper-column" :class="{'nper-more':showMoreNper}">
             <span v-for="(item,idx) in performInfo.displayitemphotoDtos">
               {{idx+1}}
               <i :class="{'faild':item.state==0}"></i>
             </span>
           </div>
-          <div class="scale-btn" v-if="performInfo.periods>10">展开更多</div>
+            <div class="scale-btn"
+                 @click="showMoreNper=!showMoreNper"
+                 v-if="performInfo.periods>10">
+                {{showMoreNper?`收起`:`展开更多`}}
+            </div>
         </div>
       </li>
       <li>
@@ -78,6 +82,7 @@
           comments: ''//拒绝原因
         },
         nperNum: {},
+        showMoreNper: false,//展示更多的执行期数
       };
     },
     components: {

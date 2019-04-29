@@ -12,7 +12,8 @@ axios.interceptors.request.use(function (config) {
 	if (token) {
 		config.headers.token = token;
 	}
-	config.data.dealerId = currentDealerId;
+	config.data.dealerId = config.data.dealerId || currentDealerId;
+	config.data.dealer_id = config.data.dealer_id|| currentDealerId;
 	//TODO:加载中的转圈
 	if (config.loading) {
 		$Loading.getInstance();

@@ -37,9 +37,10 @@
     <div class="order-detail-area">
       <h5>订单信息</h5>
       <div class="info-display">
-        <p v-if="userType!=3">下单人：{{order.name}}</p>
+        <p v-if="userType!=3">下单人：{{order.createUserName}}</p>
         <p v-if="userType==3">下单店铺：{{order.dealerName}}</p>
         <p>下单时间：{{order.createTime}}</p>
+        <p v-if="order.orderRemark">备注：{{order.orderRemark}}</p>
       </div>
     </div>
     <!-- 备注 -->
@@ -77,7 +78,11 @@
  * 2.操作项不同
  */
 import { UpdateOrder, QueryOrders } from "api/fetch/order";
-import { orderOperate, pullProductsFromOrder } from "./orderOperate";
+import {
+  orderOperate,
+  pullProductsFromOrder,
+  transformOrderList
+} from "./orderOperate";
 import orderProducts from "components/order-products.vue";
 export default {
   name: "order-detail",
@@ -102,7 +107,7 @@ export default {
         id: orderId
       })
         .then(res => {
-          const orders = res.data.dataList;
+          const orders = transformOrderList(res.data.dataList);
           orders.length && (this.order = orders[0]);
           this.products = pullProductsFromOrder(this.order);
         })
@@ -128,13 +133,16 @@ export default {
 
 #orderDetail {
   pt(90);
+  pb(98);
 }
 
 .remark-txt {
+  width: 100%;
   padding: 12px;
   ft(28);
   c(#999);
   line-height: 1.2;
+  b1(#ededed);
 }
 
 .bottom-wrap {
@@ -142,6 +150,8 @@ export default {
   width: 100%;
   bottom: 0;
   border-top: 1PX solid #EDEDED;
+  bg(#fff);
+  z-index: 100;
 }
 
 .btn {

@@ -36,14 +36,16 @@
                                 </div>
                             </div>
                             <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
-                                <img class="goods-img">
+                                <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
                                     <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
                                 </div>
                             </div>
                         </li>
-                        <div class="expand" @click="isShowMoreInfo" v-if="customerAward.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerAward.items.length>2">
+                            {{isShowMore?'收起':'展开更多'}}
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -56,10 +58,11 @@
             <div class="title-box" v-if="!isCustomer">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
-                    <span class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</span>
-                    <span class="font-30-666 margin-bottom-8">手机号码：{{customer.customerPhone}}</span>
-                    <span class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</span>
-                    <span class="font-30-666">销售负责人：{{customer.saleName}}</span>
+                    <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
+                    <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
+                        <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
+                    <p class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</p>
+                    <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <!--终端可见-->
@@ -98,7 +101,7 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {awardDetail, updateAwardById, batchUpdateAward,cancelAward} from "api/fetch/redemption";
+    import {awardDetail, updateAwardById, batchUpdateAward, cancelAward} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
 
@@ -146,7 +149,7 @@
 
 
             /**
-             * 加载投诉详情
+             * 加载兑奖详情
              * @private
              */
             _QueryRedemptionDetail() {
@@ -215,11 +218,17 @@
             /**
              * 取消兑奖
              */
-            cancelRedemption(){
-                cancelAward(this.id).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryRedemptionDetail()
-                });
+            cancelRedemption() {
+                this.$confirm('您确定取消兑奖吗？')
+                    .then(() => {
+                        cancelAward(this.id).then(res => {
+                            this.$toast('操作成功');
+                            this._QueryRedemptionDetail()
+                        });
+                    })
+                    .catch(() => {
+                    });
+
             }
         }
     }
@@ -445,6 +454,15 @@
             font-size: 32px;
             border: 0;
             outline: none;
+        }
+        .tel {
+            block();
+            pos(absolute);
+            bottom: 0;
+            right: 1px;
+            squ(40);
+            background: url('../../assets/images/icon-tel.png') no-repeat center;
+            background-size: contain;
         }
 
     }

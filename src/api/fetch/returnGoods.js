@@ -3,14 +3,12 @@ import axios from 'axios'
 /**
  * 退货列表查询接口
  */
-export function returnList(state) {
+export function returnList(params) {
     let url = "/return/returnList";
     return axios({
         method: 'post',
         url,
-        data: {
-            state
-        },
+        data:params,
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)
@@ -108,12 +106,28 @@ export function cancelCustomerReturn(id) {
 /**
  * 客户可退货产品选择接口
  */
-export function returnProduct(id) {
+export function returnProduct(params) {
     let url = "/return/returnProduct";
     return axios({
         method: 'post',
         url,
-        data:{id},
+        data:params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+/**
+ * 客户退货的经销商列表
+ */
+export function selectDealReturn(state) {
+    let url = "/return/selectDealReturn";
+    return axios({
+        method: 'post',
+        url,
+        data:{state},
         loading: true,
     }).then((res) => {
         return Promise.resolve(res.data)

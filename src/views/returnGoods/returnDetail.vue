@@ -17,7 +17,7 @@
                 <div class="continue" v-if="customerReturn.state==1">
                     <div class="triangle"></div>
                     <div class="report">
-                        <div class="left">{{dealer.dealerName}}回复：</div>
+                        <p class="left">{{dealer.dealerName}}回复：</p>
                         <div class="right">{{customerReturn.replyTime}}</div>
                     </div>
                     <div class="tips">{{customerReturn.replyContent}}</div>
@@ -32,18 +32,26 @@
                                 <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
-                                    <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
+                                    <div class="goods-price-warp">
+                                        <span>{{skuItem.price}}元/{{skuItem.priceUnit}}</span>
+                                        <span class="count">X{{skuItem.returnCount}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="goods-box" v-else :style="{display:isShowMore?'flex':'none'}">
-                                <img class="goods-img">
+                                <img class="goods-img" v-lazy="skuItem.productImageUrl">
                                 <div class="goods-info">
                                     <p class="goods-name">{{skuItem.productName}}</p>
-                                    <p class="goods-num">兑奖数量：{{skuItem.awardCount}}</p>
+                                    <div clas="goods-price-warp">
+                                        <span>{{skuItem.price}}元/{{skuItem.priceUnit}}</span>
+                                        <span class="count">X{{skuItem.returnCount}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </li>
-                        <div class="expand" @click="isShowMoreInfo" v-if="customerReturn.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+                        <div class="expand" @click="isShowMoreInfo" v-if="customerReturn.items.length>2">
+                            {{isShowMore?'收起':'展开更多'}}
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -61,10 +69,11 @@
             <div class="title-box" v-if="!isCustomer">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
-                    <span class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</span>
-                    <span class="font-30-666 margin-bottom-8">手机号码：{{customer.customerPhone}}</span>
-                    <span class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</span>
-                    <span class="font-30-666">销售负责人：{{customer.saleName}}</span>
+                    <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
+                    <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
+                        <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
+                    <p class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</p>
+                    <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <!--终端可见-->
@@ -83,7 +92,7 @@
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer&&customerReturn.state==0" @click="cancelRedemption">取消兑奖</button>
+        <button class="cancel-btn" v-if="isCustomer&&customerReturn.state==0" @click="cancelReturn">取消申请</button>
         <!--经销商可见-->
         <div v-if="isDealer&&customerReturn.state==0">
             <!--待处理-->
@@ -103,7 +112,7 @@
 
 <script>
     import mHeader from "components/header.vue";
-    import {returnDetail, updateReturnById, batchUpdateReturn,cancelCustomerReturn} from "api/fetch/returnGoods";
+    import {returnDetail, updateReturnById, batchUpdateReturn, cancelCustomerReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
     import salemanPop from "components/saleman-pop.vue"
 
@@ -151,7 +160,7 @@
 
 
             /**
-             * 加载投诉详情
+             * 加载退货详情
              * @private
              */
             _QueryReturnDetail() {
@@ -218,13 +227,18 @@
             },
 
             /**
-             * 取消兑奖
+             * 取消申请
              */
-            cancelRedemption(){
-                cancelCustomerReturn(this.id).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryReturnDetail()
-                });
+            cancelReturn() {
+                this.$confirm('您确定取消申请吗？')
+                    .then(() => {
+                        cancelCustomerReturn(this.id).then(res => {
+                            this.$toast('操作成功');
+                            this._QueryReturnDetail()
+                        });
+                    })
+                    .catch(() => {
+                    });
             }
         }
     }
@@ -282,6 +296,7 @@
         }
         .tips {
             c(#666);
+            ft(26)
         }
 
         .title-box {
@@ -396,6 +411,8 @@
         }
         .goods-info {
             display flex;
+            flex: 1;
+            width 100%
             flex-direction column;
             ml(24)
         }
@@ -451,7 +468,27 @@
             border: 0;
             outline: none;
         }
-
+        .goods-price-warp {
+            mt(43)
+            display: flex;
+            align-items center;
+            position relative;
+            width 100%
+        }
+        .count {
+            display flex;
+            position absolute;
+            right 0px
+        }
+        .tel {
+            block();
+            pos(absolute);
+            bottom: 0;
+            right: 1px;
+            squ(40);
+            background: url('../../assets/images/icon-tel.png') no-repeat center;
+            background-size: contain;
+        }
     }
 
 

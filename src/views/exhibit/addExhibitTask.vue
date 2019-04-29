@@ -31,7 +31,7 @@
                 class="date-pick-wrap"
                 v-model="param.end_time"
                 type="date"
-                placeholder="请选择雇佣日期">
+                placeholder="请选择申请截止日期">
         </el-date-picker>
         <i class="extension"></i>
       </li>
@@ -105,6 +105,7 @@
         },
         //添加陈列活动(修改陈列活动)
         addExhibit(){
+          if(!this.achieve) return
           let timeType = typeof this.param.end_time
           if(timeType == 'object'){
             this.param.end_time = this.param.end_time.getTime()

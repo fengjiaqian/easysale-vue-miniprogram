@@ -122,7 +122,6 @@ export default {
           })
           .catch(() => {});
       }
-      console.log("确定删除已选中的商品？");
       this.$confirm("确定删除已选中的商品？")
         .then(() => {
           for (let item of selectedProducts) {

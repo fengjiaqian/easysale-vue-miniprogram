@@ -45,19 +45,13 @@ Vue.filter('normalPrice', function (val, unit = "") {
 	return `<span class="fz32">${nums[0]}<span><span class="fz24">.${nums[1]}<span class="fz26 ml8">元/${unit}</span></span>`
 })
 
-Vue.directive('auth-interceptors', {
-	bind(el, binding) {
-		console.log(el)
-		console.log(binding)
-		el.addEventListener('click', function () {
-			console.log('directive evt')
-		})
-	},
-	inserted() {
-		console.log('inserted')
-	},
-	unbind() {
-
+Vue.directive('img-aspect-fit', {
+	bind: function (el) {
+		el.addEventListener('load', function () {
+			var clientW = document.documentElement.clientWidth || document.body.clientWidth;
+			this.style.height = Math.round(clientW * this.height / this.width) + 'px'
+			this.parentNode.style = this.style.height
+		}, false)
 	}
 })
 

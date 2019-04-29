@@ -20,14 +20,17 @@
               :pullup="true"
               @scrollToEnd="loadMoreData"
               ref="productScrollDom">
-        <sale-perform-column
-                v-for="exhibit in performList"
-                :key="exhibit.id"
-                :exhibit="exhibit"
-                class="perform-column"
-        >
-          <i></i>
-        </sale-perform-column>
+        <div>
+          <sale-perform-column
+                  v-for="exhibit in performList"
+                  :key="exhibit.id"
+                  :exhibit="exhibit"
+                  class="perform-column"
+          >
+            <i></i>
+          </sale-perform-column>
+        </div>
+
       </scroll>
     </section>
 
@@ -40,7 +43,7 @@
 </template>
 
 <script>
-  import { queryPerformList,oprateExhibit,querySaleDealers } from "api/fetch/exhibit";
+  import { queryPerformList,oprateExhibit,querySaleDealers, } from "api/fetch/exhibit";
   import salePerformColumn from "components/exhibit/sale-perform-column.vue";
   import scroll from "components/scroll.vue";
   export default {
@@ -48,7 +51,7 @@
       return {
         activeIdx: 0,//选中的状态
         stateList: [{
-          title: `待审核`,
+          title: `可申请`,
           idx: 0
         },{
           title: `执行中`,
@@ -88,13 +91,19 @@
         //获取可申请的列表
         this.queryPerforms(`apply`)
       }
-      this.queryDealers()
+      if(!this.isVisitor){
+        this.queryDealers()
+      }
     },
     mounted() {},
     methods: {
       //切换状态栏
       switchBar(idx){
         if(idx == this.activeIdx) return false
+        //如果是游客，只能查看可申请的陈列
+        if(this.isVisitor&&idx!=0){
+          this.navigateToLogin()
+        }
         this.activeIdx = idx
         switch (idx) {
           case 0:
@@ -192,7 +201,7 @@
         querySaleDealers({}).then(res => {
           if (res.result === "success") {
             this.dealerList = res.data
-            this.filterParam.dealer_id = this.dealerList[0].id
+            this.filterParam.dealer_id = this.dealerList.length ? this.dealerList[0].id : ''
           }
         }).catch(err => {
           this.$toast(err.message)

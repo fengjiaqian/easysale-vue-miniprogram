@@ -70,15 +70,15 @@
             <div class="slider-body">
               <slider :loop="loop" :data="banners" ref="slider_dom">
                 <div class="banner-item" v-for="item in banners" :key="item.id">
-                  <img :src="item.cloudSrc" alt>
+                  <img :src="item.cloudSrc">
                 </div>
               </slider>
             </div>
           </div>
           <!--  -->
           <ul class="home-icons clearfix">
-            <li v-for="item in appIcons">
-              <a @click="jumpSecondsort(item)">
+            <li v-for="(item,index) in appIcons">
+              <a @click="jumpSecondsort(index)">
                 <img v-lazy="item.imgUrl || ''">
                 <span>{{item.value}}</span>
               </a>
@@ -180,7 +180,6 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      heightList: [],
       currentDealer: storage.get("currentDealer", {})
     };
   },
@@ -247,6 +246,7 @@ export default {
       } = this.$route.query;
       // 以登录身份访问
       if (mobileNo && token && userType) {
+        this.clearStorage(); //清楚部分缓存
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("userType", userType);
@@ -254,14 +254,30 @@ export default {
         this.userType = userType;
         return false;
       }
-      //只有nickName和avatarUrl, cache for mine page。 以终端访客身份访问
+      //只有nickName和avatarUrl, cache for mine page。  以终端访客身份访问
       if (nickName && avatarUrl) {
+        this.clearStorage(); //清楚部分缓存
         storage.remove("token");
         storage.remove("userType");
         storage.remove("currentDealerId");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+        this.userType = 3;
+      }
+    },
+    clearStorage() {
+      var keys = [
+        "homeRefresh",
+        "mineRefresh",
+        "orderRefresh",
+        "currentDealer",
+        "fromOrder",
+        "orderPrequeryParams",
+        "orderExtraParams"
+      ];
+      for (let key of keys) {
+        storage.remove(key);
       }
     },
     _listDealerLogs() {
@@ -315,8 +331,6 @@ export default {
         document.getElementById(domId),
         150
       );
-      // var distance = this.heightList[Index];
-      // this.$refs.scrollProduct.scrollTo(0, -distance);
       //
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
@@ -355,12 +369,11 @@ export default {
         h += el.clientHeight;
         heightList.push(h);
       }
-      console.log(heightList);
       this.heightList = heightList;
     },
     listenScroll(pos) {
-      console.log(pos);
       this.posY = Math.abs(pos.y);
+      !this.heightList && (this.heightList = [220]);
       if (this.posY > this.heightList[0]) {
         this.showFixed = true;
       } else {
@@ -375,20 +388,31 @@ export default {
         }
       });
     },
-    jumpSecondsort(item) {
-      switch (item.value) {
-        case `陈列管理`:
-          if(this.userType==1){
-            this.$router.push({path: "/exhibitList"});
-          }else if(this.userType==2){
-            this.$router.push({path: "/saleSignExhibitList"});
-          }else if(this.userType==3){
-            this.$router.push({path: "/saleExhibitList"});
+    jumpSecondsort(Index) {
+      var jumpPath = "";
+      switch (Index) {
+        case 3:
+          if (this.userType == 1) {
+            jumpPath = "/exhibitList";
+          } else if (this.userType == 2) {
+            jumpPath = "/saleSignExhibitList";
+          } else {
+            jumpPath = "/saleExhibitList";
           }
+          break;
+        case 0:
+          jumpPath = "/complaintHomepage";
+          break;
+        case 1:
+          jumpPath = "/redemptionHomepage";
+          break;
+        case 2:
+          jumpPath = "/returnHomepage";
           break;
         default:
           break;
       }
+      this.$router.push({ path: jumpPath });
     }
   }
 };
@@ -548,11 +572,11 @@ export default {
     width: 25%;
     float: left;
 
-    >a {
+    > a {
       display: block;
       margin-top: 32px;
 
-      >img {
+      > img {
         margin: 0 auto;
         display: block;
         margin-bottom: 16px;
@@ -560,7 +584,7 @@ export default {
         height: 88px;
       }
 
-      >span {
+      > span {
         text-align: center;
         display: block;
         font-size: 28px;
