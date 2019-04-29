@@ -117,7 +117,8 @@
                 this.activeDealerIdx = idx;
                 this.redemptionList = [];
                 this.dealerId = item.dealerId;
-                this._QueryAwardList()
+                this._QueryAwardList();
+                this._QueryDealAward();
 
             },
 

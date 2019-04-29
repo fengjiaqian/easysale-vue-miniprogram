@@ -115,7 +115,8 @@
                 this.activeDealerIdx = idx;
                 this.complaintsList = [];
                 this.dealerId = item.dealerId;
-                this._QueryComplaintList()
+                this._QueryComplaintList();
+                this._QueryDealComplaint()
 
             },
 

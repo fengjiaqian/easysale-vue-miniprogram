@@ -118,7 +118,8 @@
                 this.activeDealerIdx = idx;
                 this.returnGoodsList = [];
                 this.dealerId = item.dealerId;
-                this._QueryReturnList()
+                this._QueryReturnList();
+                this._QueryDealReturn()
 
             },
 
