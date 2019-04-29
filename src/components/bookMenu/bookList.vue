@@ -40,6 +40,7 @@
           <div class="ct-l-s">
             <span>{{list.name}}</span>
             <span>{{list.phone}}</span>
+            <div class="lable" v-if="list.state==0">停用</div>
           </div>
           <div>{{list.customerShopName}}</div>
           <div>{{list.address}}</div>
@@ -236,6 +237,7 @@ export default {
   .ct-l-s {
     ft(32);
     c-3();
+    position relative
 
     span {
       mr(40);
@@ -249,6 +251,16 @@ export default {
 
   &:last-child {
     border-bottom: none;
+  }
+  .lable{
+    c(#F6E5E2)
+    font-size 11px !important
+    position absolute;
+    right 0;
+    top 0
+    bg(#FF5638)
+    padding 2px 10px
+    border-radius 25px
   }
 }
 </style>
