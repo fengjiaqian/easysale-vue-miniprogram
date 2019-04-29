@@ -160,13 +160,12 @@ import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import slider from "components/slider.vue";
-import { queryHomeProducts, ListProduct } from "api/fetch/home";
+import { queryHomeProducts, ListProduct , ListAllDealer} from "api/fetch/home";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
 import { mapGetters, mapActions } from "vuex";
-
 export default {
   name: "home",
   data() {
@@ -180,7 +179,7 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      currentDealer: storage.get("currentDealer", {})
+      currentDealer: {}
     };
   },
   components: {
@@ -228,6 +227,8 @@ export default {
         path: "/dealerList"
       });
     }
+    //页头显示经销商名称
+    this._ListCurrentDealer();
     this._listDealerLogs();
     this._queryHomeProducts();
   },
@@ -284,6 +285,17 @@ export default {
       ListDealerLogs().then(res => {
         this.banners = res.data;
         this.loop = this.banners.length > 1;
+      });
+    },
+    //
+    _ListCurrentDealer() {
+      const storeDealer = storage.get("currentDealer", {});
+      if (storeDealer.id == this.currentDealerId) {
+        return (this.currentDealer = storeDealer);
+      }
+      ListAllDealer({ id: this.currentDealerId }).then(res => {
+        const { dataList = [] } = res.data;
+        dataList.length && (this.currentDealer = dataList[0]);
       });
     },
     _queryHomeProducts() {

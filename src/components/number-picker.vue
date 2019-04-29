@@ -82,11 +82,32 @@ export default {
   .decrease {
     background: url('../assets/images/icon-decrease.png') no-repeat center;
     background-size: contain;
+
+    &:after {
+      content: '';
+      block();
+      width: 66px;
+      height: 76px;
+      position: absolute;
+      right: 0;
+      top: -15px;
+    }
   }
 
   .increase {
+    position: relative;
     background: url('../assets/images/icon-increase.png') no-repeat center;
     background-size: contain;
+
+    &:after {
+      content: '';
+      block();
+      width: 66px;
+      height: 76px;
+      position: absolute;
+      left: 0;
+      top: -15px;
+    }
   }
 
   input {
