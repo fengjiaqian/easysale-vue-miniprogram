@@ -14,9 +14,7 @@
         <div class="slider-body">
           <slider ref="slider_dom" :loop="applyDealerInfo.logoIamgeUrls.length>1?true:false">
             <div class="pic-item" v-for="item in applyDealerInfo.logoIamgeUrls">
-              <a href="javascript:;">
-                <img :src="item">
-              </a>
+              <img :src="item" v-img-aspect-fit style="width:100%;">
             </div>
           </slider>
         </div>
@@ -68,12 +66,7 @@ export default {
 
 <style lang="stylus" scoped>
 .pic-item {
-  h(250);
-
-  a>img {
-    width: 100%;
-    height: 100%;
-  }
+ // h(250);
 }
 
 .slider-body {

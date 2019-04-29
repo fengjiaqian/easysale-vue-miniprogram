@@ -1,6 +1,7 @@
 <template>
     <div id="addNewRedemption">
         <m-header :isFixed="true"></m-header>
+        <div class="body">
         <div class="goods-box">
             <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}">兑奖商品</p>
             <div class="good-warp">
@@ -34,7 +35,8 @@
             <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
                       v-model="remark"></textarea>
         </div>
-        <button class="submit-btn"  @click="submitRedemption">提交</button>
+        </div>
+        <button class="submit-btn" :class="{'achieve':canOperate}"  @click="submitRedemption">提交</button>
     </div>
 </template>
 
@@ -60,7 +62,7 @@
                 if (from.name == 'chooseProductList') {
                     let selectedProduct = storage.get("selectedProduct", "");
                     selectedProduct.buyCount = 1;
-                    selectedProduct.minBuyNum=1;
+                    selectedProduct.minBuyNum = 1;
                     if (vm.redemptionGoods.length > 0) {
                         const index = vm.redemptionGoods.findIndex(
                             item => item.id === selectedProduct.id
@@ -76,8 +78,16 @@
                     }
                 } else {
                     storage.remove("selectedProduct");
+                    vm.redemptionGoods=[];
+                    vm.remark=''
                 }
             })
+        },
+
+        computed:{
+            canOperate() {
+                return this.redemptionGoods.length
+            }
         },
         methods: {
 
@@ -138,7 +148,12 @@
         width 100%;
         height 100%;
         bg(#f6f6f6);
-        mt(114)
+        .body{
+            height 100%;
+            pt(114)
+            pb(110)
+            overflow scroll
+        }
         .goods-box, .remark-box {
             margin 24px;
             padding 24px 24px 32px;
@@ -170,13 +185,17 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(#FF5638);
+            bg(#bdbdbd);
             text-align: center;
             lh(98);
             c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;
+        }
+        .achieve{
+            bg(#FF5638)
+
         }
         textarea:
         :-webkit-input-placeholder {

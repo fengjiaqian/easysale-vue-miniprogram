@@ -1,22 +1,25 @@
 <template>
     <div id="addNewComplaint">
         <m-header :isFixed="true"></m-header>
-        <div class="reason">
-            <p class="title">投诉原因</p>
-            <input type="text" placeholder="请输入投诉原因" v-model="complaintHeadLine">
+        <div class="body">
+            <div class="reason">
+                <p class="title">投诉原因</p>
+                <input type="text" placeholder="请输入投诉原因" v-model="complaintHeadLine">
+            </div>
+            <div class="description">
+                <p class="title">内容描述</p>
+                <textarea id="description" cols="30" rows="9" placeholder="请输入投诉内容"
+                          v-model="complaintContent"></textarea>
+                <p class="count">{{length}}/100</p>
+            </div>
+            <div class="remark">
+                <p class="title">备注</p>
+                <textarea id="remark" cols="30" rows="6" placeholder="请输入内容"
+                          v-model="remark"></textarea>
+            </div>
         </div>
-        <div class="description">
-            <p class="title">内容描述</p>
-            <textarea id="description" cols="30" rows="9" placeholder="请输入投诉内容"
-                      v-model="complaintContent"></textarea>
-            <p class="count">{{length}}/100</p>
-        </div>
-        <div class="remark">
-            <p class="title">备注</p>
-            <textarea id="remark" cols="30" rows="6" placeholder="请输入内容"
-                      v-model="remark"></textarea>
-        </div>
-        <button class="submit" @click="addNewComplaint">提交</button>
+
+        <button class="submit" :class="{'achieve':canOperate}"   @click="addNewComplaint">提交</button>
     </div>
 </template>
 
@@ -31,7 +34,7 @@
                 complaintHeadLine: '',
                 complaintContent: '',
                 remark: '',
-                length:0
+                length:0,
 
             }
         },
@@ -40,6 +43,11 @@
         watch:{
             complaintContent(val,oval){
                 this.length = val.length;
+            }
+        },
+        computed:{
+            canOperate() {
+                return this.complaintHeadLine.trim() && this.complaintContent.trim();
             }
         },
         methods: {
@@ -84,13 +92,16 @@
 <style lang="stylus" scoped>
     #addNewComplaint {
         width: 100%;
+        height :100%;
         bg(#f6f6f6);
-        margin-bottom 118px;
-        padding: 20px 16px;
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
+        .body{
+            height 100%;
+            pb(118);
+            pt(90);
+            overflow scroll
+        }
         .reason {
-            mt(90)
+            mt(20)
             width: 100%;
             padding 0 24px;
             bg(#fff);
@@ -182,10 +193,14 @@
             width: 100%;
             h(98);
             lh(98);
-            bg(#FF5638)
+            bg(#BDBDBD)
             font-size: 32px;
             c(#fff);
             text-align: center;
+
+        }
+        .achieve{
+            bg(#FF5638)
 
         }
 

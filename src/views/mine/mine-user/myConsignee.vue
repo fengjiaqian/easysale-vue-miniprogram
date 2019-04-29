@@ -2,7 +2,7 @@
 <template>
   <div class="my-consignee">
     <m-header :isSearch="true" placeholder="请输入姓名或者电话" @emitEvt="_queryCustomerConsigneeList"></m-header>
-    <empty v-if="empty" txt="暂无收货人数据" :iconUrl="avatarUrl"></empty>
+    <empty v-if="empty" txt="暂无收货人，快去添加吧" :iconUrl="avatarUrl"></empty>
     <div class="consignee-list">
       <div
         class="consignee-address-item"
@@ -28,7 +28,7 @@
 
 <script>
 import empty from "components/empty.vue";
-import avatarUrl from "@/assets/images/icon-product-empty.png";
+import avatarUrl from "@/assets/images/empty_icon_1.png";
 import {
   queryCustomerConsigneeList,
   deleteConsignee
