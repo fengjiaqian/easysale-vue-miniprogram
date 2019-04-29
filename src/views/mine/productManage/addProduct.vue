@@ -184,8 +184,8 @@
     watch: {
       productModal: {
         handler(newVal, oldVal) {
-          const { productName,brandName,price,priceUnit,specification,description } = newVal
-          if(productName && brandName && price && priceUnit && specification && description){
+          const { productName,brandName,price,priceUnit,specification,description,productImageUrl } = newVal
+          if(productName && brandName && price && priceUnit && specification && description && productImageUrl){
             this.achieve = true
           }else{
             this.achieve = false
