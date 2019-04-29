@@ -143,7 +143,6 @@
 </template>
 
 <script>
-import icBanner from "../assets/images/ic-banner.png";
 import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
@@ -160,7 +159,7 @@ import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import slider from "components/slider.vue";
-import { queryHomeProducts, ListProduct , ListAllDealer} from "api/fetch/home";
+import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -289,6 +288,9 @@ export default {
     },
     //
     _ListCurrentDealer() {
+      if (this.userType != 3) {
+        return false;
+      }
       const storeDealer = storage.get("currentDealer", {});
       if (storeDealer.id == this.currentDealerId) {
         return (this.currentDealer = storeDealer);
