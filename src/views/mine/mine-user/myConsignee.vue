@@ -18,7 +18,7 @@
         <div class="receive-address">{{item.address}}</div>
         <div class="operate" v-if="showOperation">
           <a href="javascript:;" @click.stop="_modify(item)">编辑</a>
-          <a href="javascript:;" @click.stop="_delet(item.id)">删除</a>
+          <a href="javascript:;" @click.stop="_delet(item.id)" v-if="userPhone!=item.phone">删除</a>
         </div>
       </div>
     </div>
