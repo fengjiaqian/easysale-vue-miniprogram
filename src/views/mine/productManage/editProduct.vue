@@ -176,7 +176,7 @@
     watch: {
       productModal: {
         handler(newVal, oldVal) {
-          const { productName,brandName,price,priceUnit,specification,description } = newVal
+          const { productName,brandName,price,priceUnit,specification,description,productImageUrl } = newVal
           //酒批productType=0 只能修改价格
           if(this.productType == 0){
             if(price){
@@ -185,7 +185,7 @@
               this.achieve = false
             }
           }else{
-            if(productName && brandName && price && priceUnit && specification && description){
+            if(productName && brandName && price && priceUnit && specification && description && productImageUrl){
               this.achieve = true
             }else{
               this.achieve = false
