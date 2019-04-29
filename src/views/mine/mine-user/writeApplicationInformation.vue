@@ -1,20 +1,27 @@
 
 <template>
   <div class="common pt90">
-     <m-header :isFixed="true"></m-header>
-    <div class="name">
+    <m-header :isFixed="true"></m-header>
+    <div class="mc-item">
       <div class="left">客户姓名 :</div>
       <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入姓名">
     </div>
-    <div class="tele">
+    <div class="mc-item">
       <div class="left">联系电话 :</div>
-      <input class="right" value v-model="applyInfo.phone" type="number" placeholder="请输入手机号码" readonly>
+      <input
+        class="right"
+        value
+        v-model="applyInfo.phone"
+        type="number"
+        placeholder="请输入手机号码"
+        readonly
+      >
     </div>
-    <div class="shopname">
+    <div class="mc-item">
       <div class="left">店铺名称 :</div>
       <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入店铺名称">
     </div>
-    <div class="address">
+    <div class="mc-item pre">
       <div class="left">店铺地址 :</div>
       <input class="right" value v-model="applyInfo.address" type="text" placeholder="请输入店铺地址">
       <img
@@ -31,16 +38,17 @@
           <img :src="item">
           <i @click="deleteUploadImg(index)"></i>
         </li>
-        <el-upload class="upload-wrap"
-                   :action="uploadImgUrl"
-                   list-type="picture-card"
-                   :headers="headers"
-                   :before-upload="onBeforeUpload"
-                   :on-change="changeLoad"
-                   :on-success="fileSuccess"
-                   :on-error="fileFaild"
-                   accept="image/*">
-        </el-upload>
+        <el-upload
+          class="upload-wrap"
+          :action="uploadImgUrl"
+          list-type="picture-card"
+          :headers="headers"
+          :before-upload="onBeforeUpload"
+          :on-change="changeLoad"
+          :on-success="fileSuccess"
+          :on-error="fileFaild"
+          accept="image/*"
+        ></el-upload>
       </ul>
     </div>
     <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
@@ -57,10 +65,10 @@ export default {
   data() {
     return {
       applyInfo: {
-          name: "",
-          phone: "",
-          shopName: "",
-          address: "",
+        name: "",
+        phone: "",
+        shopName: "",
+        address: ""
       },
       stagImgList: [], //暂存的图片数组
       limitUploadNum: 3 //上传图片的限制张数
@@ -68,7 +76,12 @@ export default {
   },
   computed: {
     canOperate() {
-      return this.applyInfo.name && this.applyInfo.phone && this.applyInfo.shopName && this.applyInfo.address;
+      return (
+        this.applyInfo.name &&
+        this.applyInfo.phone &&
+        this.applyInfo.shopName &&
+        this.applyInfo.address
+      );
     },
     headers() {
       const token = storage.get("token", "");
@@ -82,7 +95,7 @@ export default {
       let passData = to.query.passData ? to.query.passData : null;
       if (passData) {
         passData = JSON.parse(passData);
-        Object.assign(vm.applyInfo,passData.pageData)
+        Object.assign(vm.applyInfo, passData.pageData);
         vm.applyInfo.address = passData.addressData.address;
       }
     });
@@ -100,7 +113,7 @@ export default {
       if (!regExp.test(this.applyInfo.phone)) {
         return this.$toast("手机号码格式不正确");
       }
-      const {name,phone,shopName,address} = this.applyInfo
+      const { name, phone, shopName, address } = this.applyInfo;
       const params = {
         name,
         phone,
@@ -118,23 +131,23 @@ export default {
         });
     },
     //图片上传前验证
-    onBeforeUpload(file){
-      const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
+    onBeforeUpload(file) {
+      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
       const isLt1M = file.size / 1024 / 1024 < 10;
       if (!isIMAGE) {
         this.$alert("上传文件只能是图片格式!");
       }
       if (!isLt1M) {
-        this.$alert('上传文件大小不能超过 10MB!');
+        this.$alert("上传文件大小不能超过 10MB!");
       }
-      if(isIMAGE && isLt1M){
-        return new Promise((resolve, reject)=>{
+      if (isIMAGE && isLt1M) {
+        return new Promise((resolve, reject) => {
           compress(file, function(val) {
-            resolve(val)
-          })
-        })
-      }else{
-        return false
+            resolve(val);
+          });
+        });
+      } else {
+        return false;
       }
     },
     //图片上传成功时
@@ -181,74 +194,34 @@ export default {
   height: 100%;
 }
 
-.common .name, .common .tele, .common .name, .common .shopname {
-  height: 90px;
-  background: rgba(255, 255, 255, 1);
-  overflow: hidden;
-  border-bottom: 1PX solid #f6f6f6;
+.mc-item {
+  padding: 0 24px;
+  bg(#fff);
+  flex();
+  align-items: center;
+  justify-content: flex-start;
+  lh(90);
+  ft(30);
+  c-3();
+
+  .left {
+    c-6();
+    mr(12);
+    min-width: 150px;
+  }
+
+  .right {
+    lh(90);
+    h(90);
+    flex-1();
+    outline: none;
+    border: none;
+  }
 }
 
-.common .tele {
-  margin-bottom: 20px;
-}
-
-.common .name .left, .common .tele .left, .common .name .left, .common .shopname .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 24px 24px;
-}
-
-.common .name .right, .common .tele .right, .common .name .right, .common .shopname .right {
-  float: left;
-  width: 600px;
-  height: 42px;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  line-height: 42px;
-  margin-top: 24px;
-  outline: none;
-}
-
-.common .address {
-  height: 90px;
-  background: rgba(255, 255, 255, 1);
-  overflow: hidden;
-  position: relative;
-}
-
-.common .address .left {
-  float: left;
-  width: 150px;
-  height: 42px;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(102, 102, 102, 1);
-  line-height: 42px;
-  margin: 24px 12px 66px 24px;
-}
-
-.common .address .right {
-  float: left;
-  width: 600px;
-  height: 42px;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  line-height: 42px;
-  margin-top: 24px;
-  outline: none;
-}
-
-.common .address .location {
-  width: 48px;
-  height: 48px;
-  display: inline-block;
+.location {
+  block();
+  squ(55);
   position: absolute;
   right: 24px;
   top: 24px;

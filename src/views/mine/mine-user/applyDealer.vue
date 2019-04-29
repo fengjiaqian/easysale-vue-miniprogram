@@ -20,14 +20,14 @@
         </div>
       </div>
     </div>
-    <div class="infor" v-if="applyDealerInfo.name">
+    <div class="infor" v-if="applyDealerInfo.phone">
       <div class="trade">个人信息</div>
       <div class="news">
-        <div class="name">姓名 : {{applyDealerInfo.name}}</div>
-        <div>联系电话 : {{applyDealerInfo.phone}}</div>
+        <div class="name">姓名：{{applyDealerInfo.name}}</div>
+        <div>联系电话：{{applyDealerInfo.phone}}</div>
       </div>
       <div class="detail">
-        <div class="name">{{applyDealerInfo.shopName}}</div>
+        <div class="name" v-if="applyDealerInfo.shopName">{{applyDealerInfo.shopName}}</div>
         <div>{{applyDealerInfo.address}}</div>
       </div>
     </div>
@@ -35,14 +35,12 @@
 </template>
 
 <script>
-import icBanner from "@/assets/images/ic-banner.png";
 import { findApplyDealerInfo } from "api/fetch/endCustomer";
 import slider from "components/slider.vue";
 export default {
   data() {
     return {
-      applyDealerInfo: { logoIamgeUrls: [] },
-      icBanner: icBanner
+      applyDealerInfo: { logoIamgeUrls: [] }
     };
   },
   components: {
@@ -66,7 +64,7 @@ export default {
 
 <style lang="stylus" scoped>
 .pic-item {
- // h(250);
+  // h(250);
 }
 
 .slider-body {
