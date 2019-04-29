@@ -119,6 +119,18 @@
 
             },
 
+            // 客户投诉过的经销商列表
+            _QueryDealComplaint() {
+                selectDealComplaint(this.tabState).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId
+                    }
+                });
+
+            },
+
             // 加载列表数据
             _QueryComplaintList() {
                 let params = {
@@ -138,17 +150,6 @@
 
             },
 
-            // 客户投诉过的经销商列表
-            _QueryDealComplaint() {
-                selectDealComplaint(this.tabState).then(res => {
-                    if (res.data) {
-                        let resultData = res.data;
-                        this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId
-                    }
-                });
-
-            },
 
 
             /**
