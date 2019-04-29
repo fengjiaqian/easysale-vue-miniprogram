@@ -76,7 +76,7 @@
                 return this.userType == '3'
             },
             isNull() {
-                return JSON.stringify( ) == "{}"
+                return JSON.stringify(this.listData.saleMan) == "{}"
             }
         },
         component: {
@@ -220,6 +220,7 @@
 
     .tips {
         c(#666);
+        ft(26)
     }
 
     .triangle {
@@ -248,7 +249,10 @@
         c(#0096FF);
         mt(16)
     }
-
+    .saleMan {
+        c(#999);
+        ft(28)
+    }
 </style>
 
 

@@ -36,7 +36,7 @@
                       v-model="remark"></textarea>
         </div>
         </div>
-        <button class="submit-btn" @click="submitRedemption">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate}"  @click="submitRedemption">提交</button>
     </div>
 </template>
 
@@ -82,6 +82,12 @@
                     vm.remark=''
                 }
             })
+        },
+
+        computed:{
+            canOperate() {
+                return this.redemptionGoods.length
+            }
         },
         methods: {
 
@@ -143,8 +149,9 @@
         height 100%;
         bg(#f6f6f6);
         .body{
-            mt(114)
-            mb(110)
+            height 100%;
+            pt(114)
+            pb(110)
             overflow scroll
         }
         .goods-box, .remark-box {
@@ -178,13 +185,17 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(#FF5638);
+            bg(#bdbdbd);
             text-align: center;
             lh(98);
             c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;
+        }
+        .achieve{
+            bg(#FF5638)
+
         }
         textarea:
         :-webkit-input-placeholder {

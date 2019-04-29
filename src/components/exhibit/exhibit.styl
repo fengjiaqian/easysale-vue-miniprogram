@@ -198,3 +198,33 @@
     background-image url(../../assets/images/icon-checked.png)
   }
 }
+
+.remark-wrap{
+  mt(24)
+  bg(#F6F6F6)
+  ft(26)
+  c-6()
+  padding 16px 24px
+  border-radius 10px
+  position relative
+  h5{
+    flex()
+    align-content center
+    justify-content space-between
+    .time{
+      ft(24)
+      c-9()
+    }
+  }
+  &:before{
+    content ""
+    position absolute
+    left 50px
+    top -18px
+    width:0;
+    height:0;
+    border-width:0 18px 18px;
+    border-style:solid;
+    border-color:transparent transparent #F6F6F6;
+  }
+}

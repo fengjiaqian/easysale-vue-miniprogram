@@ -114,6 +114,7 @@ export default {
         case "customerList":
         case "userInfo":
           this.$router.push({ path: "/navi/mine" });
+          break;
         case "exhibitList":
           this.$router.push({ path: "/navi/home" });
           break;

@@ -79,10 +79,10 @@
         },
         created() {
             this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
-            this._QueryComplaintList();
             if (this.userType == '3') {
                 this._QueryDealComplaint();
             }
+            this._QueryComplaintList();
 
         },
         computed: {
@@ -106,6 +106,7 @@
              */
             switchTab(state) {
                 this.tabState = state;
+                this.complaintsList = [];
                 this._QueryComplaintList()
             },
 
@@ -115,6 +116,18 @@
                 this.complaintsList = [];
                 this.dealerId = item.dealerId;
                 this._QueryComplaintList()
+
+            },
+
+            // 客户投诉过的经销商列表
+            _QueryDealComplaint() {
+                selectDealComplaint(this.tabState).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.dealerList = [...resultData];
+                        this.dealerId = this.dealerList[0].dealerId
+                    }
+                });
 
             },
 
@@ -137,17 +150,6 @@
 
             },
 
-            // 客户投诉过的经销商列表
-            _QueryDealComplaint() {
-                selectDealComplaint(this.tabState).then(res => {
-                    if (res.data) {
-                        let resultData = res.data;
-                        this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId
-                    }
-                });
-
-            },
 
 
             /**
@@ -342,6 +344,8 @@
             display flex;
             align-items center
             justify-content center
+            c(#333)
+            ft(30)
         }
         .handle-btn {
             w(160)

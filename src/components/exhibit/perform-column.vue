@@ -150,6 +150,7 @@
       },
       select(){
         this.exhibit.select = !this.exhibit.select
+        bus.$emit("columnSelect", this.exhibit)
       },
     },
   };
