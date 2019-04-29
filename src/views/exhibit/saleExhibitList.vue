@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import { queryPerformList,oprateExhibit,querySaleDealers, } from "api/fetch/exhibit";
+  import { queryPerformList,oprateExhibit,querySaleDealers,queryVisitorPerformList } from "api/fetch/exhibit";
   import salePerformColumn from "components/exhibit/sale-perform-column.vue";
   import scroll from "components/scroll.vue";
   export default {
@@ -137,7 +137,12 @@
         if(type==`apply`){
           param = {}
         }
-        queryPerformList(param,type).then(res => {
+        let queryListApi = queryPerformList
+        //如果是游客，走另外一个查询接口
+        if(this.isVisitor){
+          queryListApi = queryVisitorPerformList
+        }
+        queryListApi(param,type).then(res => {
           if (res.result === "success") {
             this.domShow = true
             if(this.activeIdx==0){

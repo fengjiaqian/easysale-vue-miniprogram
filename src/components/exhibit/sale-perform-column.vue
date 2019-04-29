@@ -151,6 +151,10 @@
       },
       //产看详情
       goDetail(){
+        if(this.isVisitor){
+          this.navigateToLogin()
+          return
+        }
         this.$router.push({
           path: "/salePerformDetail",
           query: {
