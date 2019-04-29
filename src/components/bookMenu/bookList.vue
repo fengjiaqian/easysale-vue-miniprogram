@@ -40,7 +40,7 @@
           <div class="ct-l-s">
             <span>{{list.name}}</span>
             <span>{{list.phone}}</span>
-            <div class="lable" v-if="list.state==0">停用</div>
+            <p class="lable" v-if="list.state==0">停用</p>
           </div>
           <div>{{list.customerShopName}}</div>
           <div>{{list.address}}</div>
@@ -254,9 +254,9 @@ export default {
   }
   .lable{
     c(#F6E5E2)
-    font-size 11px !important
+    font-size 24px ;
     position absolute;
-    right 0;
+    right 24px;
     top 0
     bg(#FF5638)
     padding 2px 10px
