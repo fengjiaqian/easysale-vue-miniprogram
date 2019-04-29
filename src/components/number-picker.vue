@@ -16,6 +16,7 @@
 import { updateItem } from "common/goodsStorage";
 import Bus from "common/Bus";
 import { mapGetters, mapActions } from "vuex";
+import { debounce } from "common/lodash";
 export default {
   name: "number-picker",
   props: {
@@ -27,7 +28,15 @@ export default {
   data() {
     return {};
   },
-  created() {},
+  created() {
+    this.debounceEmit = debounce(
+      function(id) {
+        Bus.$emit("deleteOneInCart", id);
+      },
+      300,
+      false
+    );
+  },
   mounted() {},
   methods: {
     ...mapActions(["saveCartCount"]),
@@ -36,8 +45,8 @@ export default {
       if (product.buyCount <= minBuyNum) return false;
       //购物车是否删除此商品提示
       if (product.buyCount === 1 && this.isInCart()) {
-        console.log("$emit deleteOneInCart");
-        return Bus.$emit("deleteOneInCart", product.id);
+        this.debounceEmit(product.id);
+        return false;
       }
       product.buyCount--;
       updateItem(product, product.buyCount);

@@ -104,6 +104,7 @@ export default {
     },
     //删除单个或者多个商品
     _delete(id) {
+      console.log(id)
       let selectedProducts = [];
       if (typeof id === "object") {
         //此时id为$event
