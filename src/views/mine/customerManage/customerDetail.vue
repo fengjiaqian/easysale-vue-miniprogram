@@ -35,7 +35,7 @@
     </ul>
     <ul class="sd-oprate">
       <li class="sd-c-b" @click="skipTo">编辑</li>
-      <li class="sd-c-o" @click="freeze">停用</li>
+      <li class="sd-c-o" @click="freeze">{{customerInfo.state==1?`停用`:`启用`}}</li>
     </ul>
   </div>
 </template>
@@ -78,22 +78,31 @@
           path: "/my/editCustomerInfo"
         });
       },
+      //启用或者停用
       freeze(){
-        this.$confirm('停用的客户不能再通过小程序下单，且 员工也无法代替下单。')
-        .then(() => {
-          let param = {
-            id: this.customerInfo.id,
-            state: 0
+        //停用
+        if(this.customerInfo.state == 1){
+          this.$confirm('停用的客户不能再通过小程序下单，且 员工也无法代替下单。')
+                  .then(() => {
+                    this.editCustomerState('0')
+                  })
+                  .catch(() => {});
+        }else{
+          this.editCustomerState('1')
+        }
+      },
+      editCustomerState(type){
+        let param = {
+          id: this.customerInfo.id,
+          state: type
+        }
+        editCustomer(param).then(res => {
+          if (res.result === "success") {
+            //商品添加成功后回到商品管理列表页
+            this.$toast("修改成功！");
+            this.$router.go(-1)
           }
-          editCustomer(param).then(res => {
-            if (res.result === "success") {
-              //商品添加成功后回到商品管理列表页
-              this.$toast("修改成功！");
-              this.$router.go(-1)
-            }
-          });
-        })
-        .catch(() => {});
+        });
       },
     }
   };

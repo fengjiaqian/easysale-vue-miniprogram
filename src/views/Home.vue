@@ -70,15 +70,15 @@
             <div class="slider-body">
               <slider :loop="loop" :data="banners" ref="slider_dom">
                 <div class="banner-item" v-for="item in banners" :key="item.id">
-                  <img :src="item.cloudSrc" alt>
+                  <img :src="item.cloudSrc">
                 </div>
               </slider>
             </div>
           </div>
           <!--  -->
           <ul class="home-icons clearfix">
-            <li v-for="item in appIcons">
-              <a @click="jumpSecondsort(item)">
+            <li v-for="(item,index) in appIcons">
+              <a @click="jumpSecondsort(index)">
                 <img v-lazy="item.imgUrl || ''">
                 <span>{{item.value}}</span>
               </a>
@@ -143,7 +143,6 @@
 </template>
 
 <script>
-import icBanner from "../assets/images/ic-banner.png";
 import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
@@ -160,13 +159,12 @@ import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import slider from "components/slider.vue";
-import { queryHomeProducts, ListProduct } from "api/fetch/home";
+import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
 import { mapGetters, mapActions } from "vuex";
-
 export default {
   name: "home",
   data() {
@@ -180,7 +178,7 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      currentDealer: storage.get("currentDealer", {})
+      currentDealer: {}
     };
   },
   components: {
@@ -228,6 +226,8 @@ export default {
         path: "/dealerList"
       });
     }
+    //页头显示经销商名称
+    this._ListCurrentDealer();
     this._listDealerLogs();
     this._queryHomeProducts();
   },
@@ -254,7 +254,7 @@ export default {
         this.userType = userType;
         return false;
       }
-      //只有nickName和avatarUrl, cache for mine page。 以终端访客身份访问
+      //只有nickName和avatarUrl, cache for mine page。  以终端访客身份访问
       if (nickName && avatarUrl) {
         this.clearStorage(); //清楚部分缓存
         storage.remove("token");
@@ -263,6 +263,7 @@ export default {
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+        this.userType = 3;
       }
     },
     clearStorage() {
@@ -271,10 +272,9 @@ export default {
         "mineRefresh",
         "orderRefresh",
         "currentDealer",
-        "currentDealerId",
         "fromOrder",
         "orderPrequeryParams",
-        "orderPrequeryParams"
+        "orderExtraParams"
       ];
       for (let key of keys) {
         storage.remove(key);
@@ -284,6 +284,20 @@ export default {
       ListDealerLogs().then(res => {
         this.banners = res.data;
         this.loop = this.banners.length > 1;
+      });
+    },
+    //
+    _ListCurrentDealer() {
+      if (this.userType != 3) {
+        return false;
+      }
+      const storeDealer = storage.get("currentDealer", {});
+      if (storeDealer.id == this.currentDealerId) {
+        return (this.currentDealer = storeDealer);
+      }
+      ListAllDealer({ id: this.currentDealerId }).then(res => {
+        const { dataList = [] } = res.data;
+        dataList.length && (this.currentDealer = dataList[0]);
       });
     },
     _queryHomeProducts() {
@@ -373,6 +387,7 @@ export default {
     },
     listenScroll(pos) {
       this.posY = Math.abs(pos.y);
+      !this.heightList && (this.heightList = [220]);
       if (this.posY > this.heightList[0]) {
         this.showFixed = true;
       } else {
@@ -387,29 +402,31 @@ export default {
         }
       });
     },
-    jumpSecondsort(item) {
-      switch (item.value) {
-        case `陈列管理`:
+    jumpSecondsort(Index) {
+      var jumpPath = "";
+      switch (Index) {
+        case 3:
           if (this.userType == 1) {
-            this.$router.push({ path: "/exhibitList" });
+            jumpPath = "/exhibitList";
           } else if (this.userType == 2) {
-            this.$router.push({ path: "/saleSignExhibitList" });
-          } else if (this.userType == 3) {
-            this.$router.push({ path: "/saleExhibitList" });
+            jumpPath = "/saleSignExhibitList";
+          } else {
+            jumpPath = "/saleExhibitList";
           }
           break;
-        case `投诉管理`:
-          this.$router.push({ path: "/complaintHomepage" });
+        case 0:
+          jumpPath = "/complaintHomepage";
           break;
-        case `兑奖管理`:
-          this.$router.push({ path: "/redemptionHomepage" });
+        case 1:
+          jumpPath = "/redemptionHomepage";
           break;
-        case `退货管理`:
-          this.$router.push({ path: "/returnHomepage" });
+        case 2:
+          jumpPath = "/returnHomepage";
           break;
         default:
           break;
       }
+      this.$router.push({ path: jumpPath });
     }
   }
 };

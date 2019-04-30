@@ -264,7 +264,7 @@ export default {
     border-radius: 4px;
 
     &.active {
-      width: 21PX;
+      width: 21px;
       background: rgba(229, 57, 53, 0.8);
     }
   }

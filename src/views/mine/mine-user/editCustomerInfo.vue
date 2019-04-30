@@ -3,25 +3,17 @@
     <m-header :isFixed="true"></m-header>
     <div class="mc-item">
       <div class="left">您的姓名 :</div>
-      <input
-        class="right"
-        value
-        type="text"
-        v-model="name"
-        placeholder="请输入姓名"
-        ref="nameInput"
-        readonly
-      >
+      <input class="right" value type="text" v-model="name" placeholder="请输入姓名" ref="nameInput">
     </div>
     <div class="mc-item">
       <div class="left">联系电话 :</div>
-      <input class="right" value type="text" v-model="phone" placeholder="请输入联系电话" readonly>
+      <input class="right" value type="text" v-model="phone" placeholder="请输入联系电话">
     </div>
     <div class="mc-item">
       <div class="left">收货地址 :</div>
-      <textarea rows="2" cols="20" class="right" v-model="address" placeholder="请填写收货地址" readonly></textarea>
+      <textarea rows="2" cols="20" class="right" v-model="address" placeholder="请填写收货地址"></textarea>
     </div>
-    <div class="edit" @click="_jump">编辑</div>
+    <div class="edit" @click="_operate">保存</div>
   </div>
 </template>
 
@@ -30,6 +22,7 @@ import {
   findCustomerOwerInfo,
   updateOwerCustomer
 } from "api/fetch/endCustomer";
+
 export default {
   data() {
     return {
@@ -42,37 +35,29 @@ export default {
   mounted() {},
   computed: {},
   created() {
-    this._findCustomerOwerInfo();
+    let { info } = this.$route.query;
+    info = this.decodeUrl(info);
+    this.name = info.name;
+    this.phone = info.phone;
+    this.address = info.address;
   },
   methods: {
-    _findCustomerOwerInfo() {
-      findCustomerOwerInfo()
+    _operate() {
+      const { name, phone, address } = this;
+      const checkState = name.trim() && phone.trim() && address.trim();
+      if (!checkState) {
+        return this.$toast("信息不能为空");
+      }
+      updateOwerCustomer({ name, phone, address })
         .then(res => {
-          if (res.result === "success" && res.data) {
-            this.originInfo = res.data;
-            const { name, phone, address } = this.originInfo;
-            this.name = name;
-            this.phone = phone;
-            this.address = address;
+          if (res.result === "success") {
+            this.$toast("个人信息修改成功");
+            this.$router.push({ path: "/navi/mine" });
           }
         })
         .catch(err => {
           this.$toast(err.message);
         });
-    },
-
-    _jump() {
-      const params = {
-        name: this.name,
-        phone: this.phone,
-        address: this.address
-      };
-      this.$router.push({
-        path: "/editCustomerInfo",
-        query: {
-          info: this.encodeUrl(params)
-        }
-      });
     }
   }
 };

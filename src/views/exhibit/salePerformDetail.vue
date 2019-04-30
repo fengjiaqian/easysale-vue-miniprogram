@@ -4,6 +4,13 @@
     <div class="perform-title">
       <div>陈列状态：<span>{{stateContent}}</span></div>
       <p v-if="performContent">{{performContent}}</p>
+      <div class="remark-wrap" v-if="performInfo.state&&performInfo.comments">
+        <h5>
+          <span>{{performInfo.dealerDto.shopName}}回复：</span>
+          <span class="time">{{performInfo.update_time}}</span>
+        </h5>
+        <p>{{performInfo.comments}}</p>
+      </div>
     </div>
     <ul class="et-content">
       <li>
@@ -18,36 +25,6 @@
         <div class="require">
           <p>{{performInfo.shopDisplayItemDto.display_rule}}</p>
           <p class="reward">{{performInfo.shopDisplayItemDto.display_reward}}</p>
-        </div>
-      </li>
-      <li>
-        <h5>陈列周期</h5>
-        <div class="require">
-          <p>{{performInfo.display_days}}天</p>
-        </div>
-      </li>
-      <li>
-        <h5>上传周期</h5>
-        <div class="require">
-          <p>{{performInfo.photo_space_day}}天</p>
-        </div>
-      </li>
-      <li>
-        <h5>奖励</h5>
-        <div class="require">
-          <p>{{performInfo.display_rule}}</p>
-        </div>
-      </li>
-      <li>
-        <h5>商贸公司</h5>
-        <div class="require">
-          <p>{{performInfo.dealerDto.shopName}}</p>
-        </div>
-      </li>
-      <li>
-        <h5>申请截止日期</h5>
-        <div class="require">
-          <p>{{performInfo.end_time}}</p>
         </div>
       </li>
       <li class="perform-case" v-if="performInfo.state!=0&&type!=1">
@@ -80,32 +57,53 @@
             </ul>
             <div class="upload-btn" @click="uploadNper" :class="{'achieve':achieve}">上传</div>
           </div>
-          <div class="nper-column">
+          <div class="nper-column" :class="{'nper-more':showMoreNper}" >
             <span v-for="(item,idx) in performInfo.displayitemphotoDtos">
               {{idx+1}}
               <i :class="{'faild':item.state==0}"></i>
             </span>
           </div>
-          <div class="scale-btn" v-if="performInfo.periods>10">展开更多</div>
+          <div class="scale-btn"
+               @click="showMoreNper=!showMoreNper"
+               v-if="performInfo.periods>10">
+            {{showMoreNper?`收起`:`展开更多`}}
+          </div>
         </div>
       </li>
-      <li class="remark" v-if="performInfo.state == 0 || performInfo.state == 3">
-        <h5>备注<span>(若拒绝，则必须填写拒绝原因)</span></h5>
-        <textarea v-model="oprateParam.comments" cols="30" rows="6" placeholder="请输入内容"></textarea>
+      <li>
+        <h5>陈列周期</h5>
+        <div class="require">
+          <p>{{performInfo.display_days}}天</p>
+        </div>
+      </li>
+      <li>
+        <h5>上传周期</h5>
+        <div class="require">
+          <p>{{performInfo.photo_space_day}}天</p>
+        </div>
+      </li>
+      <li>
+        <h5>奖励</h5>
+        <div class="require">
+          <p>{{performInfo.display_rule}}</p>
+        </div>
+      </li>
+      <li>
+        <h5>商贸公司</h5>
+        <div class="require">
+          <p>{{performInfo.dealerDto ? performInfo.dealerDto.shopName : '经销商店铺'}}</p>
+        </div>
+      </li>
+      <li>
+        <h5>申请截止日期</h5>
+        <div class="require">
+          <p>{{performInfo.end_time}}</p>
+        </div>
       </li>
     </ul>
-    <section v-if="type!=1">
-      <div class="et-footer" v-if="performInfo.state==0">
-        <span class="refuse" @click="oprateApply(`refuse`)">拒绝</span>
-        <span class="agree" @click="oprateApply(`agree`)">同意</span>
-      </div>
-      <div class="et-footer" v-if="performInfo.state==3">
-        <span class="refuse" @click="oprateApply(`refuseReward`)">拒绝发放</span>
-        <span class="agree" @click="oprateApply(`agreeReward`)">发放奖励</span>
-      </div>
-    </section>
+
     <!--申请按钮-->
-    <section v-else>
+    <section v-if="type==1">
       <div class="et-footer">
         <span class="ex-apply" @click="applyEx">申请</span>
       </div>
@@ -125,10 +123,6 @@
         product:{},
         domShow: false,
         id: '',
-        oprateParam: {
-          state: 0,//状态  1=拒绝审核  2=审核通过      已完成(4=发放奖励  5拒绝发放奖励)
-          comments: ''//拒绝原因
-        },
         nperNum: {},
         limitUploadNum: 1,//上传图片的限制张数
         fileList: [],
@@ -136,6 +130,7 @@
         achieve: false,//能否上传
         showUpload: false,//是否有上传按钮
         type: null,//type==1 是可申请详情
+        showMoreNper: false,//展示更多的执行期数
       };
     },
     components: {
@@ -170,7 +165,7 @@
         }else if(state == 4){
           content = `已成功发放奖励。`
         }else if(state == 5){
-          content = `已拒绝发放奖励。`
+          content = ``
         }else if(state == 1){
           content = ``
         }
@@ -208,47 +203,13 @@
               }
               if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
                 this.showUpload = true
+              }else{
+                  this.showUpload = false
               }
+              const {display_days,display_reward,display_rule,end_time,photo_space_day} = res.data.shopDisplayItemDto
+              Object.assign(this.performInfo,{display_days,display_reward,display_rule,end_time,photo_space_day})
             }
             this.domShow = true
-          }
-        }).catch(err => {
-          this.$toast(err.message)
-        })
-      },
-      //处理陈列申请
-      oprateApply(type){
-        switch (type) {
-          case 'refuse':
-            this.oprateParam.state = 1
-            this.oprateParam.cids = [this.id]
-            break;
-          case 'agree':
-            this.oprateParam.state = 2
-            this.oprateParam.cids = [this.id]
-            break;
-          case 'refuseReward':
-            this.oprateParam.state = 5
-            this.oprateParam.id = this.id
-            break;
-          case 'agreeReward':
-            this.oprateParam.state = 4
-            this.oprateParam.id = this.id
-            break;
-          default:
-            break;
-        }
-        if((type==`refuse`||type==`refuseReward`)&&!this.oprateParam.comments){
-          this.$toast(`请填写拒绝原因！`)
-          return
-        }
-        oprateExhibit(this.oprateParam,type).then(res => {
-          if (res.result === "success") {
-            this.$toast(`操作成功！`)
-            this.$router.push({
-              path: "/exhibitStateList",
-              query: {id: this.performInfo.display_Id}
-            });
           }
         }).catch(err => {
           this.$toast(err.message)
@@ -338,7 +299,8 @@
         uploadExhibitNper(param).then(res => {
           if (res.result === "success") {
             this.$toast(`操作成功！`)
-            this.queryDetail()
+            this.showUpload = false
+            this.queryDetail('')
           }
         }).catch(err => {
           this.$toast(err.message)
@@ -356,7 +318,7 @@
         applyExhibit(param).then(res => {
           if (res.result === "success") {
             this.$toast(`申请成功！`)
-
+            this.$router.push({ path: "/saleExhibitList" });
           }
         }).catch(err => {
           this.$toast(err.message)

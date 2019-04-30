@@ -111,6 +111,13 @@ const customerInfo = (resolve) => { //wx 个人信息
         resolve(module)
     })
 }
+//编辑 用户
+const editCustomerInfo = (resolve) => {
+    import('views/mine/mine-user/editCustomerInfo.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 const myConsignee = (resolve) => { //wx 我的收货人的页面
     import('views/mine/mine-user/myConsignee.vue').then((module) => {
         resolve(module)
@@ -302,6 +309,14 @@ const mine = [
                     title: '个人信息',
                 },
                 component: customerInfo
+            },
+            {
+                path: '/editCustomerInfo',
+                name: 'editCustomerInfo',
+                meta: {
+                    title: '编辑个人信息',
+                },
+                component: editCustomerInfo
             },
             { //wx 我的收货人的页面
                 path: '/myConsignee',

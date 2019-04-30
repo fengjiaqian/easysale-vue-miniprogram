@@ -1,12 +1,12 @@
 <template>
   <div class="dealer-list">
     <m-header :isSearch="true" placeholder="请输入店铺名称" @emitEvt="_searchKeyChange"></m-header>
-    <div class="current-dealer">
+    <div class="current-dealer" v-if="currentDealer.phone">
       <div class="title">当前商贸公司</div>
-      <div class="dealer-item" v-if="currentDealer.phone">
-        <div class="pic">
+      <div class="dealer-item">
+        <!-- <div class="pic">
           <img v-lazy="currentDealer.logoIamgeUrl || ''" alt>
-        </div>
+        </div>-->
         <div class="content" style="border: 0;">
           <p>{{currentDealer.shopName}}</p>
           <p>电话：{{currentDealer.phone}}</p>
@@ -32,9 +32,9 @@
             :key="item.id"
             @click="_chooseDealer(item)"
           >
-            <div class="pic">
+            <!-- <div class="pic">
               <img v-lazy="item.logoIamgeUrl || ''" alt>
-            </div>
+            </div>-->
             <div class="content">
               <p>{{item.shopName}}</p>
               <p>电话：{{item.phone}}</p>
@@ -53,6 +53,7 @@
 import scroll from "components/scroll.vue";
 import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
+import { addShopHistory } from "api/fetch/dealer";
 import storage from "common/storage";
 export default {
   name: "dealer-list",
@@ -115,6 +116,7 @@ export default {
         });
     },
     _chooseDealer(dealer) {
+      addShopHistory(dealer.id).then(res => {});
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
       this.$router.push({
@@ -209,7 +211,7 @@ export default {
   }
 
   .content {
-    ml(124);
+    ml(48);
     h(148);
     border-bottom: 1PX solid #F2F2F2;
 

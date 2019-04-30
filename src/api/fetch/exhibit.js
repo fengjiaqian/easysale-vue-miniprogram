@@ -161,12 +161,12 @@ function querySaleMayApplyExhibit(id) {
 }
 
 //陈列管理-查询客户签约的经销商列表
-function querySaleDealers(id) {
+function querySaleDealers(params) {
 	const url = `/customer/querydealers`
 	return axios({
 		method: 'post',
 		url: url,
-		data: {},
+		data: params,
 		loading: true,
 	}).then((res) => {
 		return Promise.resolve(res.data)
@@ -221,9 +221,26 @@ function applyExhibit(params) {
 	});
 }
 
+
+//陈列管理-游客点击可申请陈列列表
+function queryVisitorPerformList(params) {
+	let url = `/customer/touristshopdiaplayList`
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 export {
 	queryDisplayList, addExhibitActivity, queryExhibitDetail, deleteExhibit,
 	queryPerformList, queryPerformDetail, oprateExhibit, queryPerformRecordList,
 	querySaleExhibitDetail, querySaleMayApplyExhibit, querySaleDealers,
-	uploadExhibitNper, querySaleSignList, applyExhibit
+	uploadExhibitNper, querySaleSignList, applyExhibit,
+	queryVisitorPerformList
 }

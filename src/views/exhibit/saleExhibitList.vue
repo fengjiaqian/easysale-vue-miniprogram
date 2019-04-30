@@ -5,7 +5,7 @@
       <span v-for="(item,index) in stateList" :class="{'active': activeIdx == index}" @click="switchBar(index)">{{item.title}}</span>
     </section>
     <!--经销商店铺列表-->
-    <section class="dealer-list-wrap" v-if="activeIdx!=0">
+    <section class="dealer-list-wrap" v-if="activeIdx!=0&&dealerList.length">
       <span :class="{'active':activeDealerIdx==idx}"
             v-for="(item,idx) in dealerList"
             @click="switchShop(item,idx)"
@@ -20,14 +20,17 @@
               :pullup="true"
               @scrollToEnd="loadMoreData"
               ref="productScrollDom">
-        <sale-perform-column
-                v-for="exhibit in performList"
-                :key="exhibit.id"
-                :exhibit="exhibit"
-                class="perform-column"
-        >
-          <i></i>
-        </sale-perform-column>
+        <div>
+          <sale-perform-column
+                  v-for="exhibit in performList"
+                  :key="exhibit.id"
+                  :exhibit="exhibit"
+                  class="perform-column"
+          >
+            <i></i>
+          </sale-perform-column>
+        </div>
+
       </scroll>
     </section>
 
@@ -40,15 +43,16 @@
 </template>
 
 <script>
-  import { queryPerformList,oprateExhibit,querySaleDealers, } from "api/fetch/exhibit";
+  import { queryPerformList,oprateExhibit,querySaleDealers,queryVisitorPerformList } from "api/fetch/exhibit";
   import salePerformColumn from "components/exhibit/sale-perform-column.vue";
   import scroll from "components/scroll.vue";
+  import storage from "common/storage";
   export default {
     data() {
       return {
         activeIdx: 0,//选中的状态
         stateList: [{
-          title: `待审核`,
+          title: `可申请`,
           idx: 0
         },{
           title: `执行中`,
@@ -88,13 +92,20 @@
         //获取可申请的列表
         this.queryPerforms(`apply`)
       }
-      this.queryDealers()
+      if(!this.isVisitor){
+        //this.queryDealers()
+      }
     },
     mounted() {},
     methods: {
       //切换状态栏
       switchBar(idx){
         if(idx == this.activeIdx) return false
+        this.dealerList = []
+        //如果是游客，只能查看可申请的陈列
+        if(this.isVisitor&&idx!=0){
+          this.navigateToLogin()
+        }
         this.activeIdx = idx
         switch (idx) {
           case 0:
@@ -113,7 +124,10 @@
         }
         this.filterParam.pageNum = 1
         this.performList = []
-        if(idx==0) this.queryPerforms(`apply`)
+        if(idx==0) {
+          this.queryPerforms(`apply`)
+        }
+        this.queryDealers()
       },
       //获取任务列表
       queryPerforms(type){
@@ -124,7 +138,12 @@
         if(type==`apply`){
           param = {}
         }
-        queryPerformList(param,type).then(res => {
+        let queryListApi = queryPerformList
+        //如果是游客，走另外一个查询接口
+        if(this.isVisitor){
+          queryListApi = queryVisitorPerformList
+        }
+        queryListApi(param,type).then(res => {
           if (res.result === "success") {
             this.domShow = true
             if(this.activeIdx==0){
@@ -189,10 +208,24 @@
       },
       //查询客户签约的店铺列表
       queryDealers(){
-        querySaleDealers({}).then(res => {
+        let param = {
+          lists_tates: this.filterParam.lists_tates
+        }
+        querySaleDealers(param).then(res => {
           if (res.result === "success") {
-            this.dealerList = res.data
+            if(res.data.length){
+              let currentDealerId = storage.get("currentDealerId", "")
+              let currentIdx = res.data.findIndex((item)=>{
+                return item.id == currentDealerId
+              })
+              if(currentIdx){
+                let first = res.data.splice(currentIdx,1)[0]
+                res.data.unshift(first)
+              }
+            }
+            this.dealerList = res.data || []
             this.filterParam.dealer_id = this.dealerList.length ? this.dealerList[0].id : ''
+            if(this.activeIdx != 0 && this.dealerList.length) this.queryPerforms()
           }
         }).catch(err => {
           this.$toast(err.message)
@@ -200,17 +233,19 @@
       },
       //切换经销商店铺
       switchShop(item,idx){
+        if(this.activeDealerIdx == idx) return
         this.activeDealerIdx = idx
         this.filterParam.pageNum = 1
         this.performList = []
         this.filterParam.dealer_id = item.id
+        this.queryPerforms(``)
       },
     },
     watch: {
       filterParam: {
         handler(newVal, oldVal) {
           if(this.activeIdx!=0){
-            this.queryPerforms(``)
+            //this.queryPerforms(``)
           }
         },
         deep: true
