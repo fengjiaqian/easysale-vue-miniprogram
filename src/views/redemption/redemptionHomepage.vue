@@ -363,9 +363,9 @@
             width: 100%;
             h(98);
             lh(98);
-            bg(#fff)
+            bg(#FF5638);
             font-size: 32px;
-            c(#FF5638);
+            c(#fff);
             text-align: center;
             z-index 44
         }

@@ -1,5 +1,6 @@
 <template>
   <div id="home" ref="scrollDom">
+    <div class="back-top" v-show="posY>600" @click="backTop"></div>
     <float-cart></float-cart>
     <!--  -->
     <div class="home-search-area">
@@ -414,6 +415,9 @@ export default {
     onPullingDown() {
       this._queryHomeProducts();
     },
+    backTop() {
+      this.$refs.scrollProduct.scrollTo(0, 0, 150);
+    },
     _jumpDealerList() {
       this.$router.push({
         name: "dealerList",
@@ -453,6 +457,18 @@ export default {
 </script>
 
 <style lang="stylus">
+.back-top {
+  position: fixed;
+  left: 80%;
+  top: 72%;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: url('../assets/images/ic_back_top.png') center center no-repeat, rgba(0, 0, 0, 0.4);
+  background-size: 120% 120%;
+  z-index: 50;
+}
+
 .view-wrapper {
   width: 100%;
   height: 100%;
