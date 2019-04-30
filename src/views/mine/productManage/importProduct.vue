@@ -101,6 +101,10 @@ export default {
             this.productList = this.productList.concat(res.data);
             this.loading = false;
             this.requestDone = true;
+          }else if(res.result === "success" && !res.data){
+            this.requestDone = true;
+            this.productList = []
+            this.totalPage = 1
           }
         })
         .catch(err => {
