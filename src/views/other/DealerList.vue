@@ -15,9 +15,18 @@
       </div>
     </div>
     <!--  -->
-    <empty class="scroll-list" :txt="'当前没有可选经销商店铺'" v-if="empty"></empty>
+    <empty
+      class="dealer-scroll-list"
+      :class="{'pt90-i':!currentDealer.phone}"
+      :txt="'当前没有可选经销商店铺'"
+      v-if="empty"
+    ></empty>
     <!--  -->
-    <div class="scroll-list" v-if="dealerList.length">
+    <div
+      class="dealer-scroll-list"
+      v-if="dealerList.length"
+      :class="{'pt90-i':!currentDealer.phone}"
+    >
       <scroll
         class="scroll-dom"
         :data="dealerList"
@@ -80,6 +89,7 @@ export default {
   },
   methods: {
     _ListCurrentDealer() {
+      if (!this.currentId) return false;
       const storeDealer = storage.get("currentDealer", {});
       if (storeDealer.id == this.currentId) {
         return (this.currentDealer = storeDealer);
@@ -116,7 +126,9 @@ export default {
         });
     },
     _chooseDealer(dealer) {
-      addShopHistory(dealer.id).then(res => {});
+      if (storage.get("token", "")) {
+        addShopHistory(dealer.id).then(res => {});
+      }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
       this.$router.push({
@@ -135,7 +147,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .dealer-list {
   pos(relative);
   width: 100%;
@@ -154,25 +166,29 @@ export default {
   top: 90px;
   left: 0;
   width: 100%;
+
+  .title {
+    lh(84);
+    bg(#fff);
+    pl(24);
+    ft(26);
+    c(#333);
+    border-bottom: 1PX solid #F2F2F2;
+  }
 }
 
-.scroll-list {
+.dealer-scroll-list {
   pt(340);
   height: 100%;
+
+  .scroll-dom {
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
-.scroll-dom {
-  height: 100%;
-  overflow: hidden;
-}
-
-.title {
-  lh(84);
-  bg(#fff);
-  pl(24);
-  ft(26);
-  c(#333);
-  border-bottom: 1PX solid #F2F2F2;
+.pt90-i {
+  padding-top: 90px;
 }
 
 .dealer-item {

@@ -55,14 +55,13 @@
           </transition>
         </div>
       </div>
-      <scroll
+      <cube-scroll
         ref="scrollProduct"
         :data="scrollProducts"
-        :probeType="3"
-        :click="true"
-        :listenScroll="true"
-        @scroll="listenScroll"
-        class="view-wrapper"
+        :options="options"
+        @scroll="onScrollHandle"
+        :scrollEvents="options.scrollEvents"
+        @pulling-down="onPullingDown"
       >
         <main>
           <!--  -->
@@ -137,7 +136,7 @@
             <product v-for="product in item.products " :product="product" :key="product.id"></product>
           </div>
         </main>
-      </scroll>
+      </cube-scroll>
     </div>
   </div>
 </template>
@@ -160,7 +159,7 @@ import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import slider from "components/slider.vue";
-import { queryHomeProducts, ListProduct , ListAllDealer} from "api/fetch/home";
+import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -179,7 +178,17 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      currentDealer: {}
+      currentDealer: {},
+      options: {
+        click: true,
+        probeType: 1,
+        scrollbar: false,
+        pullDownRefresh: {
+          threshold: 70,
+          txt: "刷新成功"
+        },
+        scrollEvents: ["scroll", "scroll-end"]
+      }
     };
   },
   components: {
@@ -337,13 +346,17 @@ export default {
       this.menuCanScroll = w > clientWidth - (clientWidth * 88) / 750;
     },
     bindClickMenu(Index) {
+      if (this.posY == 0) {
+        this.firstClick = true;
+      }
       this.showSqure = false;
-      let domId = "dom" + this.scrollMenu[Index].brandId;
-      this.$refs.scrollProduct.scrollToElement(
-        document.getElementById(domId),
-        150
-      );
+      // let domId = "dom" + this.scrollMenu[Index].brandId;
+      // this.$refs.scrollProduct.scrollToElement(
+      //   document.getElementById(domId),
+      //   150
+      // );
       //
+      this.$refs.scrollProduct.scrollTo(0, -this.heightList[Index] - 1, 150);
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
 
@@ -383,14 +396,21 @@ export default {
       }
       this.heightList = heightList;
     },
-    listenScroll(pos) {
+    onScrollHandle(pos) {
       this.posY = Math.abs(pos.y);
       !this.heightList && (this.heightList = [220]);
-      if (this.posY > this.heightList[0]) {
+      if (pos.y < 0 && this.posY > this.heightList[0]) {
         this.showFixed = true;
       } else {
         this.showFixed = false;
       }
+      if (this.firstClick) {
+        this.showFixed = true;
+        this.firstClick = false;
+      }
+    },
+    onPullingDown() {
+      this._queryHomeProducts();
     },
     _jumpDealerList() {
       this.$router.push({
@@ -445,7 +465,7 @@ export default {
   pos(absolute);
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
 }
 
 .mune-wrapper {
@@ -468,14 +488,14 @@ export default {
   font-size: 30px;
 }
 
-.menu-title::after {
+.menu-title:after {
   content: '';
   width: 80px;
   height: 2px;
   background: rgba(229, 229, 229, 1);
 }
 
-.menu-title::before {
+.menu-title:before {
   content: '';
   width: 80px;
   height: 2px;
@@ -732,6 +752,10 @@ export default {
       vm();
     }
   }
+}
+
+.cube-pulldown-loaded span {
+  ft(12);
 }
 </style>
 

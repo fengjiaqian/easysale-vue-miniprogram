@@ -155,8 +155,7 @@ const main = [{
 	path: '/search',
 	name: 'search',
 	meta: {
-		title: '搜索',
-		keepAlive: true
+		title: '搜索'
 	},
 	component: Search,
 }, {
