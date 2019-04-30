@@ -1,3 +1,4 @@
+import { checkChinese,checkEnglish } from "./validate";
 //截取字符串的第一个中文字符或英文字符
 function interceptStr(str) {
     var reg = new RegExp('[\u4e00-\u9fa5]+$','g');
@@ -11,6 +12,20 @@ function interceptStr(str) {
     }
     return str
 }
+
+//截取第一个中文或者英文字符
+function interceptChar(str) {
+    var strArr = str.split('')
+    var firstStr = ''
+    for(var i=0; i<strArr.length; i++){
+        if( checkChinese(strArr[i]) || checkEnglish(strArr[i]) ){
+            firstStr = strArr[i]
+            break;
+        }
+    }
+    return firstStr
+}
+
 var pinyin = (function (){
     var Pinyin = function (ops){
             this.initialize(ops);
@@ -139,4 +154,4 @@ var pinyin = (function (){
 })();
 
 
-export { pinyin, interceptStr }
+export { pinyin, interceptStr, interceptChar }
