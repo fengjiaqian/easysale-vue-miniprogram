@@ -46,6 +46,7 @@
   import { queryPerformList,oprateExhibit,querySaleDealers,queryVisitorPerformList } from "api/fetch/exhibit";
   import salePerformColumn from "components/exhibit/sale-perform-column.vue";
   import scroll from "components/scroll.vue";
+  import storage from "common/storage";
   export default {
     data() {
       return {
@@ -212,7 +213,17 @@
         }
         querySaleDealers(param).then(res => {
           if (res.result === "success") {
-            this.dealerList = res.data
+            if(res.data.length){
+              let currentDealerId = storage.get("currentDealerId", "")
+              let currentIdx = res.data.findIndex((item)=>{
+                return item.id == currentDealerId
+              })
+              if(currentIdx){
+                let first = res.data.splice(currentIdx,1)[0]
+                res.data.unshift(first)
+              }
+            }
+            this.dealerList = res.data || []
             this.filterParam.dealer_id = this.dealerList.length ? this.dealerList[0].id : ''
             if(this.activeIdx != 0 && this.dealerList.length) this.queryPerforms()
           }
@@ -222,10 +233,12 @@
       },
       //切换经销商店铺
       switchShop(item,idx){
+        if(this.activeDealerIdx == idx) return
         this.activeDealerIdx = idx
         this.filterParam.pageNum = 1
         this.performList = []
         this.filterParam.dealer_id = item.id
+        this.queryPerforms(``)
       },
     },
     watch: {

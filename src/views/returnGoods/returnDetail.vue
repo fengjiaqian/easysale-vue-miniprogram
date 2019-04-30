@@ -208,6 +208,8 @@
                 batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryReturnDetail()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -223,6 +225,8 @@
                 updateReturnById(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryReturnDetail()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 

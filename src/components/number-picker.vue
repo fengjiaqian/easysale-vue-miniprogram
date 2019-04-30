@@ -14,8 +14,7 @@
 
 <script>
 import { updateItem } from "common/goodsStorage";
-import Bus from "common/Bus";
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "number-picker",
   props: {
@@ -34,11 +33,6 @@ export default {
     decrease(product) {
       const { minBuyNum, maxBuyNum } = product;
       if (product.buyCount <= minBuyNum) return false;
-      //购物车是否删除此商品提示
-      if (product.buyCount === 1 && this.isInCart()) {
-        console.log("$emit deleteOneInCart");
-        return Bus.$emit("deleteOneInCart", product.id);
-      }
       product.buyCount--;
       updateItem(product, product.buyCount);
       this.saveCartCount();
@@ -55,9 +49,6 @@ export default {
       product.buyCount = currentVal ? currentVal : 1;
       updateItem(product, product.buyCount);
       this.saveCartCount();
-    },
-    isInCart() {
-      return this.$route.path === "/cart";
     }
   }
 };
@@ -73,11 +64,32 @@ export default {
   .decrease {
     background: url('../assets/images/icon-decrease.png') no-repeat center;
     background-size: contain;
+
+    &:after {
+      content: '';
+      block();
+      width: 66px;
+      height: 76px;
+      position: absolute;
+      right: 0;
+      top: -15px;
+    }
   }
 
   .increase {
+    position: relative;
     background: url('../assets/images/icon-increase.png') no-repeat center;
     background-size: contain;
+
+    &:after {
+      content: '';
+      block();
+      width: 66px;
+      height: 76px;
+      position: absolute;
+      left: 0;
+      top: -15px;
+    }
   }
 
   input {

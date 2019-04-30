@@ -110,7 +110,7 @@ export default {
         this.mineSkip("/my/userInfo");
       }
     },
-    //申请经销商后  刷新申请中的状态  
+    //申请经销商后  刷新申请中的状态
     //TODO 区别角色
     _findCustomerOwerInfo() {
       if (this.isVisitor) return false;
@@ -119,6 +119,7 @@ export default {
           this.applyDealerState = res.data.applyDealerState; //0:正在申请成为经销商 1：没有申请
           this.mobileNo = res.data.phone;
           this.nickName = res.data.wxNickName;
+          this.avatarUrl = res.data.iamgeUrl;
         })
         .catch(err => {});
     }

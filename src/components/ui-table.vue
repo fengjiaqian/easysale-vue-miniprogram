@@ -41,10 +41,11 @@ export default {
   pos(absolute);
   top: 0;
   left: 0;
+  text-c();
 
   li {
+    inline();
     width: 25%;
-    flt();
     text-c();
 
     a {

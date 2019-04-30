@@ -41,7 +41,8 @@ export default {
       addressList: [],
       showOperation: true,
       empty: false,
-      avatarUrl
+      avatarUrl,
+      userPhone: '',//用户手机号
     };
   },
   components: {
@@ -52,6 +53,7 @@ export default {
   created() {
     this.showOperation = !storage.get("fromOrder", false);
     this._queryCustomerConsigneeList();
+    this.userPhone = storage.get('mobileNo', '')
   },
   methods: {
     _queryCustomerConsigneeList(keyword = "") {
@@ -128,6 +130,7 @@ export default {
 }
 
 .consignee-address-item {
+  min-height 192px
   pos(relative);
   padding: 24px;
 

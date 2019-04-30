@@ -138,7 +138,7 @@
                         this.dealer = {...dealer};
                         this.saleMan = {...saleMan}
                     }
-                });
+                }).catch(() => {});
             },
 
             /**
@@ -152,7 +152,7 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -174,6 +174,8 @@
                 batchUpdateComplaint(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryComplaintDetail()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -189,6 +191,8 @@
                 updateCustomerById(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryComplaintDetail()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -201,7 +205,7 @@
                         cancelComplaint(this.id).then(res => {
                             this.$toast('操作成功');
                             this._QueryComplaintDetail()
-                        });
+                        }).catch(() => {});
                     })
                     .catch(() => {
                     });

@@ -118,7 +118,8 @@
                 this.activeDealerIdx = idx;
                 this.returnGoodsList = [];
                 this.dealerId = item.dealerId;
-                this._QueryReturnList()
+                this._QueryReturnList();
+                this._QueryDealReturn()
 
             },
 
@@ -132,7 +133,7 @@
                         this.dealerId = this.dealerList[0].dealerId
                         this._QueryReturnList()
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -152,7 +153,7 @@
                         });
                         this.returnGoodsList = [...resultData];
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -212,6 +213,9 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
+                }).catch(res=>{
+                    this.$toast(res.message)
+
                 });
             },
 
@@ -240,6 +244,8 @@
                 batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryReturnList()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
