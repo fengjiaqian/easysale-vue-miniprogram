@@ -7,7 +7,13 @@
       <a href="javascript:;" class="c-3" @click="_delete">删除</a>
     </div>
     <!--  -->
-    <product-cart v-for="item in products" :product="item" :key="item.id" @itemSelect="_itemSelect"></product-cart>
+    <product-cart
+      v-for="item in products"
+      :product="item"
+      :key="item.id"
+      @itemSelect="_itemSelect"
+      @deleteOne="_delete"
+    ></product-cart>
     <!--  -->
     <div class="C-bottom" v-if="products.length">
       <span class="C-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
@@ -69,6 +75,7 @@ export default {
   },
   mounted() {
     Bus.$on("deleteOneInCart", id => {
+      console.log("on" + id);
       this._delete(id);
     });
   },
@@ -104,7 +111,7 @@ export default {
     },
     //删除单个或者多个商品
     _delete(id) {
-      console.log(id)
+      console.log(id);
       let selectedProducts = [];
       if (typeof id === "object") {
         //此时id为$event

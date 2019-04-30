@@ -263,7 +263,16 @@ export default {
         default:
           break;
       }
-      this.updateOprate();
+      //如果是删除商品，需要再次确认
+      if(type=="delete"){
+        this.$confirm("确定要删除该商品吗？")
+                .then(() => {
+                  this.updateOprate();
+                })
+                .catch(() => {});
+      }else{
+        this.updateOprate();
+      }
     },
     //商品上下架及删除接口
     updateOprate() {

@@ -16,7 +16,7 @@
         </div>
         <div class="shop-name">{{item.customerShopName}}</div>
         <div class="receive-address">{{item.address}}</div>
-        <div class="operate" v-if="showOperation&&userPhone!=item.phone">
+        <div class="operate" v-if="showOperation">
           <a href="javascript:;" @click.stop="_modify(item)">编辑</a>
           <a href="javascript:;" @click.stop="_delet(item.id)">删除</a>
         </div>
@@ -130,6 +130,7 @@ export default {
 }
 
 .consignee-address-item {
+  min-height 192px
   pos(relative);
   padding: 24px;
 

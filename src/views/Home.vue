@@ -142,7 +142,6 @@
 </template>
 
 <script>
-import icBanner from "../assets/images/ic-banner.png";
 import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
@@ -298,6 +297,9 @@ export default {
     },
     //
     _ListCurrentDealer() {
+      if (this.userType != 3) {
+        return false;
+      }
       const storeDealer = storage.get("currentDealer", {});
       if (storeDealer.id == this.currentDealerId) {
         return (this.currentDealer = storeDealer);

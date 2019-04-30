@@ -65,13 +65,17 @@ export default {
       });
     },
     deleteProduct() {
-      oprateManageProduct(this.oprateParam).then(res => {
-        if (res.result === "success") {
-          this.$toast("操作成功");
-          //操作成功后返回商品管理列表
-          this.$router.push({ path: "/my/productList" });
-        }
-      });
+      this.$confirm("确定要删除该商品吗？")
+              .then(() => {
+                oprateManageProduct(this.oprateParam).then(res => {
+                  if (res.result === "success") {
+                    this.$toast("操作成功");
+                    //操作成功后返回商品管理列表
+                    this.$router.push({ path: "/my/productList" });
+                  }
+                });
+              })
+              .catch(() => {});
     },
     editProduct() {
       localStorage.setItem("productInfo", JSON.stringify(this.product));

@@ -11,7 +11,17 @@
         <div>
           <span class="c-yellow" v-html="$options.filters.price( product.price, product.priceUnit)"></span>
         </div>
-        <number-picker :product="product"></number-picker>
+        <div class="number-picker">
+          <span class="decrease" @click.stop="decrease(product)" v-show="product.buyCount"></span>
+          <input
+            v-show="product.buyCount"
+            type="number"
+            :value="product.buyCount"
+            @click.stop
+            @change="handleChange(product, $event)"
+          >
+          <span class="increase" @click.stop="increase(product)"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -19,6 +29,8 @@
 
 <script>
 import numberPicker from "./number-picker.vue";
+import { updateItem } from "common/goodsStorage";
+import { mapActions } from "vuex";
 export default {
   name: "product",
   props: {
@@ -31,6 +43,7 @@ export default {
     numberPicker
   },
   methods: {
+    ...mapActions(["saveCartCount"]),
     _select(product) {
       this.$emit("itemSelect", product);
     },
@@ -42,6 +55,31 @@ export default {
           code
         }
       });
+    },
+    decrease(product) {
+      const { minBuyNum, maxBuyNum } = product;
+      if (product.buyCount <= minBuyNum) return false;
+      if (product.buyCount === 1) {
+        //购物车是否删除此商品提示
+        this.$emit("deleteOne", product.id);
+        return false;
+      }
+      product.buyCount--;
+      updateItem(product, product.buyCount);
+      this.saveCartCount();
+    },
+    increase(product) {
+      const { minBuyNum, maxBuyNum } = product;
+      if (product.buyCount >= maxBuyNum) return false;
+      product.buyCount++;
+      updateItem(product, product.buyCount);
+      this.saveCartCount();
+    },
+    handleChange(product, $event) {
+      let currentVal = parseInt($event.target.value) || 0;
+      product.buyCount = currentVal ? currentVal : 1;
+      updateItem(product, product.buyCount);
+      this.saveCartCount();
     }
   },
   watch: {

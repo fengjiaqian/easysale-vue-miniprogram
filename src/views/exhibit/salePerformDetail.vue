@@ -203,6 +203,8 @@
               }
               if(this.performInfo.state==2&&this.performInfo.displayitemphotoDto.state==0){
                 this.showUpload = true
+              }else{
+                  this.showUpload = false
               }
               const {display_days,display_reward,display_rule,end_time,photo_space_day} = res.data.shopDisplayItemDto
               Object.assign(this.performInfo,{display_days,display_reward,display_rule,end_time,photo_space_day})
@@ -297,6 +299,7 @@
         uploadExhibitNper(param).then(res => {
           if (res.result === "success") {
             this.$toast(`操作成功！`)
+            this.showUpload = false
             this.queryDetail('')
           }
         }).catch(err => {

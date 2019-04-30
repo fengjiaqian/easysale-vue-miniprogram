@@ -1,6 +1,6 @@
-import VConsole from 'vconsole'
+// import VConsole from 'vconsole'
 
-new VConsole() // 初始化
+//new VConsole() // 初始化
 import Vue from 'vue'
 import './cube-ui'
 import App from './App.vue'
