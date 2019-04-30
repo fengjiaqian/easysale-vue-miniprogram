@@ -215,7 +215,7 @@ export default {
   activated() {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
-      this.currentDealer = storage.get("currentDealer", {});
+      this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
       this._listDealerLogs();
       this._queryHomeProducts();
