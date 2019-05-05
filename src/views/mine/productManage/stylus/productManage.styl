@@ -403,3 +403,61 @@
     c-9()
   }
 }
+.product-edit-content{
+  mb(118)
+}
+.set-property{
+  mt(20)
+  bg(#fff)
+  h5{
+    bg(#f6f6f6)
+    padding 16px 24px
+    ft(28)
+    c-9()
+  }
+  .option-list{
+    padding 0 24px
+    li{
+      border-bottom 1PX solid #EDEDED
+      ft(30)
+      c-3()
+      padding 16px 0
+      flex()
+      align-content center
+      justify-content space-between
+      span{
+        lh(56)
+      }
+      i{
+        w(102)
+        h(56)
+        background-image url(../../../assets/images/set_close_icon.png)
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+        &.open{
+          background-image url(../../../assets/images/set_open_icon.png)
+          }
+      }
+    }
+  }
+  .reward-column{
+    padding 0 24px
+    lh(90)
+    flex()
+    ft(30)
+    c-3()
+    textarea{
+      mt(20)
+      c-3()
+      flex-1()
+      ml(10)
+      outline none
+      border none
+      ft(30)
+      &::-webkit-textarea-placeholder{
+        c(#999)
+      }
+    }
+  }
+}
