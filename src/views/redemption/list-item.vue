@@ -58,9 +58,6 @@
         },
         computed: {
             isDealer() {
-                return this.userType == '1'
-            },
-            isSaleMan() {
                 return this.userType == '2'
             },
             isCustomer() {
