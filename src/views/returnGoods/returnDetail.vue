@@ -105,8 +105,8 @@
         <div v-if="isSaleMan&&customerReturn.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
         </div>
-        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
-                     @submitQuery="submitQuery"></saleman-pop>
+        <select-dialog :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
+                     @submitQuery="submitQuery"></select-dialog>
     </div>
 </template>
 
@@ -114,7 +114,7 @@
     import mHeader from "components/header.vue";
     import {returnDetail, updateReturnById, batchUpdateReturn, cancelCustomerReturn} from "api/fetch/returnGoods";
     import {queryStaffList} from "api/fetch/mine";
-    import salemanPop from "components/saleman-pop.vue"
+    import selectDialog from "components/select-dialog.vue"
 
     export default {
         name: 'returnDetail',
@@ -145,7 +145,7 @@
                 return this.userType == '3'
             },
         },
-        components: {mHeader, salemanPop},
+        components: {mHeader, selectDialog},
         created: function () {
             this.id = this.$route.params.id;
             this._QueryReturnDetail();

@@ -1,46 +1,42 @@
 <template>
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar " v-if="!isSaleMan">
-            <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
+        <section class="top-bar ">
+            <span v-for="(item,index) in stateList" :class="{'active': tabState == item.idx}" @click="switchTab(item.idx)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
-        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
+        <section class="dealer-list-wrap" v-if="tabState!=2&&isCustomer&&dealerList.length>0">
             <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
+        <empty :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}"
                style="height: 100%;overflow: hidden"
                :txt="'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <div v-if="redemptionList.length"
-             :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}" style="height: 100%">
+             :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}" style="height: 100%">
             <scroll
                     class="c-list"
                     :data="redemptionList"
                     ref="scrollRedemption"
+                    v-if="tabState==2"
             >
                 <div>
                     <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
-                               :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                               :tabState="tabState" @directProcessing="selectSingle"></list-item>
                 </div>
             </scroll>
+            <div v-else style="overflow: scroll">
+                <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
+                           :tabState="tabState" @directProcessing="selectSingle"></list-item>
+            </div>
         </div>
         <!--经销商可见-->
-        <div class="footer" v-if="isDealer&&tabState==0&&!empty">
-            <div class="footer-left">
-                <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click.stop="selectAll">
-                <span>{{isAllSelected?'取消全选':'全选'}}</span>
-            </div>
-            <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
-        </div>
         <button class="footer-btn" @click="addRedemption()" v-if="isCustomer">新建兑奖单</button>
-        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
-                     @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 <script>
-    import {awardList, batchUpdateAward, selectDealAward} from "api/fetch/redemption";
+    import {awardList, batchUpdateAward, selectDealAward, afterProductList} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import empty from "components/empty.vue";
@@ -49,12 +45,11 @@
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
     import iconUrl from "../../assets/images/empty_icon_1.png";
-    import salemanPop from "components/saleman-pop.vue"
 
     const selectImg = [ic1, ic2];
     export default {
-        name: 'redemptionHomepage',
-        components: {scroll, empty, mHeader, listItem, salemanPop},
+        name: 'clientRedemptionHomepage',
+        components: {scroll, empty, mHeader, listItem},
         data() {
             return {
                 stateList: [{
@@ -83,6 +78,16 @@
         created() {
             this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
             if (this.userType == '3') {
+                this.stateList = [{
+                    title: `可申请`,
+                    idx: 2
+                }, {
+                    title: `已申请`,
+                    idx: 0
+                }, {
+                    title: `已回复`,
+                    idx: 1
+                }]
                 this._QueryDealAward();
             }
             this._QueryAwardList();
@@ -108,8 +113,15 @@
              */
             switchTab(state) {
                 this.tabState = state;
-                this.redemptionList = [];
-                this._QueryAwardList()
+                // this.redemptionList = [];
+                if (state == 2) {
+
+                     this.afterProductList()
+                } else {
+                    this._QueryAwardList();
+                    this._QueryDealAward();
+                }
+
             },
 
             //切换经销商店铺
@@ -118,8 +130,6 @@
                 this.redemptionList = [];
                 this.dealerId = item.dealerId;
                 this._QueryAwardList();
-                this._QueryDealAward();
-
             },
 
             // 客户兑奖过的经销商列表
@@ -131,7 +141,8 @@
                         this.dealerId = this.dealerList[0].dealerId;
 
                     }
-                }).catch(() => {});
+                }).catch(() => {
+                });
 
             },
 
@@ -151,40 +162,17 @@
                         });
                         this.redemptionList = [...resultData];
                     }
-                }).catch(() => {});
-
-            },
-
-
-            /**
-             *单选
-             * @param id-兑奖单id
-             */
-            selectSingle(id) {
-                let listData = this.redemptionList;
-                listData.forEach(item => {
-                    if (item.customerAward) {
-                        let customerAward = item.customerAward;
-                        if (customerAward.id == id) {
-                            item.selected = !item.selected;
-                        }
-                    }
+                }).catch(() => {
                 });
-                this.isAllSelected = !listData.some(item => !item.selected);
-                this.redemptionList = [...listData];
+
             },
 
 
-            // 全选
-            selectAll() {
-                this.isAllSelected = !this.isAllSelected;
-                let listData = this.redemptionList;
-                listData.forEach(item => {
-                    item.selected = this.isAllSelected
-                });
-                this.redemptionList = [...listData]
-            },
+            // 可兑奖的商品列表
+            afterProductList() {
 
+
+            },
 
             /**
              * 跳转新增兑奖单
@@ -211,7 +199,8 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                }).catch(() => {});
+                }).catch(() => {
+                });
             },
 
             closePop() {
@@ -239,7 +228,7 @@
                 batchUpdateAward(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryAwardList()
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },

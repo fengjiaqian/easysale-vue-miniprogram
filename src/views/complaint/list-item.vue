@@ -1,14 +1,10 @@
 <template>
-    <div class="complaint-items" :style="{paddingLeft:tabState==0&&isDealer?'44px':'12px'}"
+    <div class="complaint-items" :style="{paddingLeft:'12px'}"
          v-if="listData.customerComplaint">
-        <img v-if="tabState==0&&isDealer" :src="listData.selected?selectImg[1]:selectImg[0]" class="select-img"
-             @click.stop="selectSingle(listData.customerComplaint.id)">
         <p class="dealer">{{ isCustomer?listData.dealer.dealerName: listData.customer.customerName}}</p>
         <p class="replyTime">{{listData.customerComplaint.createTime}}</p>
         <p class="complaintHeadLine">{{listData.customerComplaint.complaintHeadLine}}</p>
         <p class="complaintContent">{{listData.customerComplaint.complaintContent}}</p>
-        <p class="red-tip" v-if="isCustomer&&tabState==0&&listData.saleMan.dealingName">
-            {{listData.dealer.dealerName}}已经把您的投诉转交给销售人员-{{listData.saleMan.dealingName}}进行处理，请耐心等待哦！</p>
         <div class="continue" v-if="tabState==1">
             <div class="triangle"></div>
             <div class="report">
@@ -18,19 +14,13 @@
             <div class="tips">{{listData.customerComplaint.replyContent}}</div>
         </div>
         <p class="state">{{stateList[listData.customerComplaint.state]}}</p>
-        <div class="btn-warp" :style="{justifyContent:isNull ||isCustomer? 'flex-end':'space-between'}">
-            <p v-if="listData.saleMan.dealingName&&tabState==1&&!isCustomer" class="saleMan">
-                销售人员-{{listData.saleMan.dealingName}}已处理</p>
-            <p v-if="listData.saleMan.dealingName&&tabState==0&&!isCustomer" class="saleMan">
-                已移交销售人员-{{listData.saleMan.dealingName}}</p>
+        <div class="btn-warp">
             <button class="go-detail" @click.stop="toComplaintDetail(listData.customerComplaint.id)">查看详情</button>
+            <button v-if="!isCustomer&&tabState==0" class="handle-btn" @click.stop="directProcessing(listData.customerComplaint.id)">处理</button>
         </div>
     </div>
 </template>
 <script>
-    import ic1 from "../../assets/images/icon-check.png";
-    import ic2 from "../../assets/images/icon-checked.png";
-    const selectImg = [ic1, ic2];
     export default {
         name: 'list-item',
         props: {
@@ -51,14 +41,10 @@
         data() {
             return {
                 stateList: ['待处理', '已处理', '已取消'],
-                selectImg: selectImg,
             }
         },
         computed: {
             isDealer() {
-                return this.userType == '1'
-            },
-            isSaleMan() {
                 return this.userType == '2'
             },
             isCustomer() {
@@ -85,8 +71,8 @@
                     }
                 });
             },
-            selectSingle(id) {
-                this.$emit("selectSingle", id);
+            directProcessing(id) {
+                this.$emit("directProcessing", id);
             }
         }
     }
@@ -150,10 +136,12 @@
     }
 
     .btn-warp {
-        position: relative border-top 1px solid #F6F6F6;
+        position: relative
+        border-top 1px solid #F6F6F6;
         mt(24);
         display: flex;
         align-items center;
+        justify-content:flex-end
     }
 
     .go-detail {
@@ -166,6 +154,18 @@
         bg(#fff);
         margin: 16px 0
 
+    }
+
+    .handle-btn {
+        c(#fff);
+        ft(28);
+        padding 12px 52px;
+        bg(#FF5638)
+        border: 2px solid #FF5638;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
     }
 
     .select-img {

@@ -35,8 +35,8 @@
             <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
         </div>
         <button class="footer-btn" @click="addReturnGoods()" v-if="isCustomer">新建退货单</button>
-        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
-                     @submitQuery="submitQuery"></saleman-pop>
+        <select-dialog :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
+                     @submitQuery="submitQuery"></select-dialog>
     </div>
 </template>
 <script>
@@ -49,12 +49,12 @@
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
     import iconUrl from "../../assets/images/empty_icon_1.png";
-    import salemanPop from "components/saleman-pop.vue"
+    import selectDialog from "components/select-dialog.vue"
 
     const selectImg = [ic1, ic2];
     export default {
         name: 'returnHomepage',
-        components: {scroll, empty, mHeader, listItem, salemanPop},
+        components: {scroll, empty, mHeader, listItem, selectDialog},
         data() {
             return {
                 stateList: [{
