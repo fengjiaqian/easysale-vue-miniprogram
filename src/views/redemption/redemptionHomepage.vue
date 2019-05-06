@@ -14,7 +14,7 @@
                style="height: 100%;overflow: hidden"
                :txt="tabState==2?'暂无可申请的兑奖商品':'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div v-if="tabState==2" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}" style="height: 100%">
+        <div v-if="tabState==2" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}" style="height: 100%;background-color: #fff">
             <section>
                 <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
                             @emitEvt="handleChange"></search-bar>
@@ -110,11 +110,16 @@
         created() {
             this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
             if (this.userType == '3') {
-                let obj = {
+                this.stateList = [{
                     title: `可申请`,
                     idx: 2
-                };
-                this.stateList.unshift(obj);
+                }, {
+                    title: `已申请`,
+                    idx: 0
+                }, {
+                    title: `已回复`,
+                    idx: 1
+                }];
                 this.tabState = 2;
                 this.afterProductList();
             } else {
@@ -137,6 +142,12 @@
             },
         },
         watch: {
+            filterParam: {
+                handler(newVal, oldVal) {
+                    this.afterProductList();
+                },
+                deep: true
+            },
             productList(val) {
                 if (this.requestDone) {
                     if (!val.length) {
@@ -189,6 +200,7 @@
                 this.filterParam.searchKey = searchWord;
                 this.filterParam.pageNum = 1;
                 this.productList = [];
+                this.afterProductList()
 
 
             },
@@ -333,6 +345,7 @@
              * @param id-兑奖单id
              */
             addRedemption() {
+                storage.set("selectedProduct", this.selectedProduct);
                 this.$router.push({
                     name: "addNewRedemption",
                 });

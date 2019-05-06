@@ -2,41 +2,38 @@
     <div id="addNewRedemption">
         <m-header :isFixed="true"></m-header>
         <div class="body">
-        <div class="goods-box">
-            <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}">兑奖商品</p>
-            <div class="good-warp">
-                <div v-if="redemptionGoods.length">
-                    <ul>
-                        <li v-for="(item,index) in redemptionGoods">
-                            <div class="goods-list-box">
-                                <div class="goods-info">
-                                    <div class="img-box">
-                                        <img :src="item.productImageUrl">
+            <div class="goods-box">
+                <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}">兑奖商品</p>
+                <div class="good-warp">
+                    <div v-if="redemptionGoods.length">
+                        <ul>
+                            <li v-for="(item,index) in redemptionGoods">
+                                <div class="goods-list-box">
+                                    <div class="goods-info">
+                                        <div class="img-box">
+                                            <img :src="item.productImageUrl">
+                                        </div>
+                                        <p class="goods-name">{{item.productName}}</p>
+                                        <div class="del-btn" @click="delGoods(index)">删除</div>
                                     </div>
-                                    <p class="goods-name">{{item.productName}}</p>
-                                    <div class="del-btn" @click="delGoods(index)">删除</div>
+                                    <div class="count-box">
+                                        <span class="font-30-333">兑奖数量：</span>
+                                        <number-picker :product="item"></number-picker>
+                                    </div>
+                                    <p class="dividing-line" v-show="index<(redemptionGoods.length-1)"></p>
                                 </div>
-                                <div class="count-box">
-                                    <span class="font-30-333">兑奖数量：</span>
-                                    <number-picker :product="item"></number-picker>
-                                </div>
-                                <p class="dividing-line" v-show="index<(redemptionGoods.length-1)"></p>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <p class="add-tip"
-                   :style="{marginTop:redemptionGoods.length?'12px':'0',borderWidth:redemptionGoods.length?'0.5px':'0.01px'}"
-                   @click="toAddRedemptionGoods()">+添加兑奖商品</p>
+            </div>
+            <div class="remark-box">
+                <p class="title ">备注</p>
+                <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
+                          v-model="remark"></textarea>
             </div>
         </div>
-        <div class="remark-box">
-            <p class="title ">备注</p>
-            <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
-                      v-model="remark"></textarea>
-        </div>
-        </div>
-        <button class="submit-btn" :class="{'achieve':canOperate}"  @click="submitRedemption">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate}" @click="submitRedemption">提交</button>
     </div>
 </template>
 
@@ -59,32 +56,31 @@
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
-                if (from.name == 'chooseProductList') {
-                    let selectedProduct = storage.get("selectedProduct", "");
-                    selectedProduct.buyCount = 1;
-                    selectedProduct.minBuyNum = 1;
+                vm.redemptionGoods = [];
+                vm.remark = ''
+                let selectedProduct = storage.get("selectedProduct", "");
+                selectedProduct.forEach(selectItem => {
+                    selectItem.buyCount = 1;
+                    selectItem.minBuyNum = 1;
                     if (vm.redemptionGoods.length > 0) {
                         const index = vm.redemptionGoods.findIndex(
-                            item => item.id === selectedProduct.id
+                            item => item.id === selectItem.id
                         );
                         if (index != -1) {
                             vm.redemptionGoods[index].buyCount += 1
                         } else {
-                            vm.redemptionGoods.push(selectedProduct)
+                            vm.redemptionGoods.push(selectItem)
                         }
 
                     } else {
-                        vm.redemptionGoods.push(selectedProduct)
+                        vm.redemptionGoods.push(selectItem)
                     }
-                } else {
-                    storage.remove("selectedProduct");
-                    vm.redemptionGoods=[];
-                    vm.remark=''
-                }
+                });
+                storage.remove("selectedProduct");
             })
         },
 
-        computed:{
+        computed: {
             canOperate() {
                 return this.redemptionGoods.length
             }
@@ -121,7 +117,7 @@
                 saveAward(params).then(res => {
                     this.$toast('新增成功');
                     this.$router.go(-1)
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
@@ -150,7 +146,7 @@
         width 100%;
         height 100%;
         bg(#f6f6f6);
-        .body{
+        .body {
             height 100%;
             pt(114)
             pb(110)
@@ -195,7 +191,7 @@
             border: 0;
             outline: none;
         }
-        .achieve{
+        .achieve {
             bg(#FF5638)
 
         }
