@@ -14,11 +14,11 @@
                style="height: 100%;overflow: hidden"
                :txt="tabState==2?'暂无可申请的兑奖商品':'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div v-if="tabState==2" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}" style="height: 100%;background-color: #fff">
-            <section>
-                <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
-                            @emitEvt="handleChange"></search-bar>
-            </section>
+        <!--兑奖商品列表-->
+        <div v-if="tabState==2" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}"
+             style="height: 100%;background-color: #fff">
+            <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
+                        @emitEvt="handleChange"></search-bar>
             <scroll
                     v-if="productList.length"
                     class="c-list"
@@ -34,12 +34,13 @@
                 </div>
             </scroll>
         </div>
-        <!--兑奖商品列表-->
+        <!--兑奖单列表-->
         <div v-if="redemptionList.length" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}"
              style="overflow: scroll">
             <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
                        :tabState="tabState" @directProcessing="directProcessing"></list-item>
         </div>
+        <!--底部按钮-->
         <div class="footer" v-if="isCustomer&&tabState==2&&!empty">
             <div class="footer-left">
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click="selectAll">
@@ -100,7 +101,6 @@
                     pageSize: 20,
                     searchKey: "",
                     awardState: 1,
-                    shopId: 398796
                 }, //商品查询参数
                 selectedProduct: [],//选中的商品
                 length: 0
@@ -128,7 +128,7 @@
 
         },
         mounted() {
-            bus.$off("selectProduct")
+            bus.$off("selectProduct");
             bus.$on("selectProduct", (data) => {
                 this.selectSingle(data)
             });
@@ -168,7 +168,6 @@
         },
 
         methods: {
-
 
             /**
              * 切换顶部tabs
@@ -214,7 +213,6 @@
                         this.dealerId = this.dealerList[0].dealerId;
                         this._QueryAwardList();
                     }
-                }).catch(() => {
                 });
 
             },
@@ -232,7 +230,6 @@
                         this.empty = !resultData.length;
                         this.redemptionList = [...resultData];
                     }
-                }).catch(() => {
                 });
 
             },
@@ -301,25 +298,21 @@
                 });
             },
 
+
             /**
              *单选兑奖商品
-             * @param id-兑奖单id
+             * @param data
              */
             selectSingle(data) {
                 let listData = this.productList;
                 listData.forEach(item => {
-                    if (item.id == data.id) {
+                    if (item.id === data.id) {
                         item.select = !item.select;
                     }
                 });
                 this.isAllSelected = !listData.some(item => !item.select);
                 this.productList = [...listData];
-                this.selectedProduct=[];
-                this.productList.forEach(item=>{
-                    if(item.select){
-                        this.selectedProduct.push(item)
-                    }
-                })
+                this.pullSelected()
             },
 
 
@@ -331,21 +324,27 @@
                     item.select = this.isAllSelected
                 });
                 this.productList = [...listData];
-                this.selectedProduct=[];
-                this.productList.forEach(item=>{
-                    if(item.select){
+                this.pullSelected()
+
+            },
+
+
+            pullSelected() {
+                this.selectedProduct = [];
+                this.productList.forEach(item => {
+                    if (item.select) {
                         this.selectedProduct.push(item)
                     }
-                })
+                });
+                storage.set("selectedProduct", this.selectedProduct);
+
             },
 
 
             /**
              * 跳转新增兑奖单
-             * @param id-兑奖单id
              */
             addRedemption() {
-                storage.set("selectedProduct", this.selectedProduct);
                 this.$router.push({
                     name: "addNewRedemption",
                 });
