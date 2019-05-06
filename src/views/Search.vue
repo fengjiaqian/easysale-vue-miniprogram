@@ -1,31 +1,23 @@
 <template>
-  <div id="search">
-    <m-header :isSearch="true" placeholder="茅台 五粮液" @emitEvt="_searchKeyChange"></m-header>
+  <div id="search" class="pt90">
+    <m-header :isFixed="true" :isSearch="true" placeholder="茅台 五粮液" @emitEvt="_searchKeyChange"></m-header>
     <empty v-if="empty"></empty>
     <float-cart></float-cart>
     <div class="product-list-wrap">
-      <scroll
+      <cube-scroll
+        ref="goodsScroll"
         class="product-list-scroll"
         :data="products"
-        :probeType="3"
-        :pullup="true"
-        @scrollToEnd="loadMoreProducts"
-        ref="productScrollDom"
+        :options="options"
+        @pulling-up="loadMoreProducts"
       >
-        <div>
-          <product v-for="item in products" :product="item" :key="item.id"></product>
-        </div>
-      </scroll>
+        <product v-for="item in products" :product="item" :key="item.id"></product>
+      </cube-scroll>
     </div>
   </div>
 </template>
 
 <script>
-let paramsData = {
-  pageNum: 1,
-  pageSize: 10,
-  searchKey: null
-};
 import { ListProduct } from "api/fetch/home";
 import empty from "components/empty.vue";
 import product from "components/product.vue";
@@ -34,13 +26,22 @@ import scroll from "components/scroll.vue";
 import floatCart from "components/floatCart.vue";
 import { transformProductList } from "common/productUtil";
 import mHeader from "components/header.vue";
+import { setTimeout } from "timers";
 export default {
   name: "search",
   props: {},
   data() {
     return {
       products: [],
-      empty: false
+      empty: false,
+      options: {
+        click: true,
+        probeType: 1,
+        scrollbar: false,
+        pullUpLoad: {
+          txt: { more: "加载更多", noMore: "~我是有底线的~" }
+        }
+      }
     };
   },
   components: {
@@ -52,7 +53,11 @@ export default {
     mHeader
   },
   created() {
-    this.params = paramsData;
+    this.params = {
+      pageNum: 1,
+      pageSize: 10,
+      searchKey: null
+    };
     this._listProduct(this.params);
   },
   mounted() {},
@@ -82,7 +87,10 @@ export default {
         });
     },
     loadMoreProducts() {
-      if (this.loading || this.params.pageNum > this.totalPage) return false;
+      if (this.loading || this.params.pageNum > this.totalPage) {
+        this.$refs.goodsScroll.forceUpdate();
+        return false;
+      }
       this._listProduct(this.params);
     },
     _searchKeyChange(searchKey) {
@@ -102,6 +110,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 .product-list-wrap {
   height: 100%;
 }

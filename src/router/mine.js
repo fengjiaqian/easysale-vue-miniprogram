@@ -112,8 +112,8 @@ const customerInfo = (resolve) => { //wx 个人信息
     })
 }
 //编辑 用户
-const editCustomerInfo = (resolve) => {
-    import('views/mine/mine-user/editCustomerInfo.vue').then((module) => {
+const editUserInfo = (resolve) => {
+    import('views/mine/mine-user/editUserInfo.vue').then((module) => {
         resolve(module)
     })
 }
@@ -141,6 +141,12 @@ const applyDealer = (resolve) => { //wx 申请经销商
         resolve(module)
     })
 }
+//店主认证
+const shopkeeper = (resolve) => {
+    import('views/mine/user/shopkeeper.vue').then((module) => {
+        resolve(module)
+    })
+}
 
 const mine = [
     {
@@ -148,6 +154,14 @@ const mine = [
         name: 'my',
         component: My,
         children: [
+            {
+                path: 'shopkeeper',
+                name: 'shopkeeper',
+                meta: {
+                    title: '店主认证'
+                },
+                component: shopkeeper
+            },
             {
                 path: 'userInfo',
                 name: 'userInfo',
@@ -311,14 +325,14 @@ const mine = [
                 component: customerInfo
             },
             {
-                path: '/editCustomerInfo',
-                name: 'editCustomerInfo',
+                path: '/editUserInfo',
+                name: 'editUserInfo',
                 meta: {
                     title: '编辑个人信息',
                 },
-                component: editCustomerInfo
+                component: editUserInfo
             },
-            { //wx 我的收货人的页面
+            {
                 path: '/myConsignee',
                 name: 'myConsignee',
                 meta: {
@@ -327,7 +341,7 @@ const mine = [
                 },
                 component: myConsignee,
             },
-            {  //wx  编辑收货人+新增收货人公用的页面
+            {
                 path: '/updateConsignee/:code',
                 name: 'updateConsignee',
                 meta: {
@@ -335,16 +349,16 @@ const mine = [
                 },
                 component: updateConsignee,
             },
-            { //wx 填写申请信息
+            {
                 path: '/writeApplicationInformation',
                 name: 'writeApplicationInformation',
                 meta: {
-                    title: '填写申请信息',
+                    title: '申请开店',
                     requireAuth: true
                 },
                 component: writeApplicationInformation,
             },
-            { // 申请经销商查看   
+            {
                 path: '/applyDealer',
                 name: 'applyDealer',
                 meta: {

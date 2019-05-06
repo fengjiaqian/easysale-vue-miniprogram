@@ -17,7 +17,7 @@
       <div class="title" v-else>{{tit || title || ''}}</div>
     </div>
     <!--  -->
-    <div class="icon-shortcut" @click.stop="show=!show" ref="shortcut">
+    <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut">
       <span></span>
     </div>
     <!--  -->
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import storage from "common/storage";
 export default {
   name: "m-header",
   props: {
@@ -118,9 +119,21 @@ export default {
         case "exhibitList":
           this.$router.push({ path: "/navi/home" });
           break;
+        case "dealerList":
+          const currentDealerId = storage.get("currentDealerId", "");
+          if (!currentDealerId) {
+            this.$toast("请选择店铺");
+          } else {
+            this.$router.go(-1);
+          }
+          break;
         default:
           this.$router.go(-1);
       }
+    },
+    showShortList() {
+      if (!storage.get("currentDealerId", "")) return false;
+      this.show = !this.show;
     },
     handleChange($event) {
       this.searchKey = $event.target.value;

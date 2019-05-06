@@ -48,7 +48,7 @@ export function addShopHistory(dealerId) {
         method: 'post',
         url,
         data: {
-            dealerId: dealerId,
+            shopId: dealerId,
         }
     }).then((res) => {
         return Promise.resolve(res.data)

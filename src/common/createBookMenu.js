@@ -1,4 +1,4 @@
-import { pinyin,interceptStr } from "./getPinyin";
+import { pinyin,interceptStr,interceptChar } from "./getPinyin";
 import { checkEnglish } from "./validate";
 
 //构造通讯录结构数据
@@ -9,8 +9,8 @@ function creatBookMenuData(data) {
         "W": [],"X": [],"Y": [],"Z": []
     }
     data.forEach((item)=>{
-        //截取首个中文字符
-        let firstN = interceptStr(item.name)
+        //截取首个中英文字符
+        let firstN = interceptChar(item.name)
         //添加中文字符转拼音首字母的属性
         //如果是英文字母，直接赋值
         if(checkEnglish(firstN)){

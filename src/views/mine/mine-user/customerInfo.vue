@@ -68,7 +68,7 @@ export default {
         address: this.address
       };
       this.$router.push({
-        path: "/editCustomerInfo",
+        path: "/editUserInfo",
         query: {
           info: this.encodeUrl(params)
         }
