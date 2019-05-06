@@ -106,7 +106,7 @@ const AddCustomerInfo = (resolve) => {
 }
 
 // 终端用户
-const customerInfo = (resolve) => { //wx 个人信息
+const customerInfo = (resolve) => {
     import('views/mine/mine-user/customerInfo.vue').then((module) => {
         resolve(module)
     })
@@ -117,8 +117,8 @@ const editUserInfo = (resolve) => {
         resolve(module)
     })
 }
-
-const myConsignee = (resolve) => { //wx 我的收货人的页面
+// 我的收货人的页面
+const myConsignee = (resolve) => {
     import('views/mine/mine-user/myConsignee.vue').then((module) => {
         resolve(module)
     })
@@ -129,18 +129,13 @@ const updateConsignee = (resolve) => {
         resolve(module)
     })
 }
-
-const writeApplicationInformation = (resolve) => { //wx 填写申请信息
+// 填写申请信息
+const writeApplicationInformation = (resolve) => {
     import('views/mine/mine-user/writeApplicationInformation.vue').then((module) => {
         resolve(module)
     })
 }
 
-const applyDealer = (resolve) => { //wx 申请经销商
-    import('views/mine/mine-user/applyDealer.vue').then((module) => {
-        resolve(module)
-    })
-}
 //店主认证
 const shopkeeper = (resolve) => {
     import('views/mine/user/shopkeeper.vue').then((module) => {
@@ -357,15 +352,8 @@ const mine = [
                     requireAuth: true
                 },
                 component: writeApplicationInformation,
-            },
-            {
-                path: '/applyDealer',
-                name: 'applyDealer',
-                meta: {
-                    title: '申请经销商',
-                },
-                component: applyDealer,
             }
+
         ]
     }]
 

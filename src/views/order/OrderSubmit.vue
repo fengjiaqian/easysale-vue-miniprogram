@@ -9,17 +9,6 @@
         <span class="c-theme">&yen;{{payableAmount | priceToFixed}}</span>
       </div>
     </div>
-    <div class="select-customer" v-if="userType!=3">
-      <strong class="fz30">优惠</strong>
-      <input
-        ref="reduce"
-        type="number"
-        placeholder="请输入金额"
-        :value="reduce"
-        @change="handleChange"
-        :class="{'c-theme':!!reduce}"
-      >
-    </div>
     <!--  -->
     <div class="order-detail-area">
       <h5>
@@ -40,6 +29,17 @@
       </div>
     </div>
     <!--  -->
+    <div class="select-customer" v-if="userType!=3">
+      <strong class="fz30 fb">优惠</strong>
+      <input
+        ref="reduce"
+        type="number"
+        placeholder="请输入金额"
+        :value="reduce"
+        @change="handleChange"
+        :class="{'c-theme':!!reduce}"
+      >
+    </div>
     <!-- 备注 -->
     <div class="order-detail-area">
       <h5>备注</h5>

@@ -6,13 +6,15 @@ const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 
 axios.interceptors.request.use(function (config) {
 
+	/**
+	 * 2019/05/06 业务变更后  currentDealerId含义即为shopId  
+	 */
 	const token = storage.get("token", "");
-	const userType = storage.get("userType", "");
 	const currentDealerId = storage.get("currentDealerId", "") || "";
-	if (token) {
-		config.headers.token = token;
-	}
-	config.data.dealerId = config.data.dealerId || currentDealerId;
+	token && (config.headers.token = token);
+
+	//config.data.dealerId = config.data.dealerId || currentDealerId;
+	config.data.shopId = config.data.dealerId || currentDealerId;
 	config.data.dealer_id = config.data.dealer_id || currentDealerId;
 	//TODO:加载中的转圈
 	if (config.loading) {
@@ -46,19 +48,6 @@ axios.interceptors.response.use(function (response) {
 	// if (response.data && (response.data.message === '100102009'
 	// 	|| response.data.desc == '登录已过期，请重新登录~')) {
 
-	// 	if (window.__wxjs_environment === 'miniprogram') {
-	// 		//如果是易酒批商品
-	// 		let loginType = localStorage.getItem('loginType')
-	// 		if(loginType=='YjtBizuser'){
-	// 			wx.miniProgram.reLaunch({ url: '/pages/wechat/wechat' })
-	// 		}else{
-	// 			wx.miniProgram.reLaunch({ url: '/pages/login/login' })
-	// 		}
-	// 	} else {
-	// 		window.parent.postMessage({
-	// 			yijiupiType: 0
-	// 		}, "*");
-	// 	}
 	// }
 	return response;
 }, function (error) {
