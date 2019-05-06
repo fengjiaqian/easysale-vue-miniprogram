@@ -1,6 +1,14 @@
 <template>
   <div class="order-submit">
     <m-header :isFixed="true"></m-header>
+    <div class="order-detail-area product-Info">
+      <h5>商品信息</h5>
+      <order-products v-if="products.length" :products="products"></order-products>
+      <div class="order-detail-amount">
+        订单总金额：
+        <span class="c-theme">&yen;{{payableAmount | priceToFixed}}</span>
+      </div>
+    </div>
     <!--  -->
     <div class="order-detail-area">
       <h5>
@@ -21,16 +29,8 @@
       </div>
     </div>
     <!--  -->
-    <div class="order-detail-area product-Info">
-      <h5>商品信息</h5>
-      <order-products v-if="products.length" :products="products"></order-products>
-      <div class="order-detail-amount">
-        订单总金额：
-        <span class="c-theme">&yen;{{payableAmount | priceToFixed}}</span>
-      </div>
-    </div>
     <div class="select-customer" v-if="userType!=3">
-      <strong class="fz30">优惠</strong>
+      <strong class="fz30 fb">优惠</strong>
       <input
         ref="reduce"
         type="number"

@@ -76,7 +76,7 @@
                 return this.userType == '3'
             },
             isNull() {
-                return JSON.stringify( ) == "{}"
+                return JSON.stringify(this.listData.saleMan) == "{}"
             }
         },
         component: {

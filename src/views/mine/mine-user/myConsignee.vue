@@ -130,6 +130,7 @@ export default {
 }
 
 .consignee-address-item {
+  min-height 192px
   pos(relative);
   padding: 24px;
 

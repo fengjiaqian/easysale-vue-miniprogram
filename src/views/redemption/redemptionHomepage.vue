@@ -82,10 +82,10 @@
         },
         created() {
             this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
-            this._QueryAwardList();
             if (this.userType == '3') {
                 this._QueryDealAward();
             }
+            this._QueryAwardList();
         },
         computed: {
             isDealer() {
@@ -117,7 +117,8 @@
                 this.activeDealerIdx = idx;
                 this.redemptionList = [];
                 this.dealerId = item.dealerId;
-                this._QueryAwardList()
+                this._QueryAwardList();
+                this._QueryDealAward();
 
             },
 
@@ -130,7 +131,7 @@
                         this.dealerId = this.dealerList[0].dealerId;
 
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -150,7 +151,7 @@
                         });
                         this.redemptionList = [...resultData];
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -210,7 +211,7 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                });
+                }).catch(() => {});
             },
 
             closePop() {
@@ -238,6 +239,8 @@
                 batchUpdateAward(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryAwardList()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -360,9 +363,9 @@
             width: 100%;
             h(98);
             lh(98);
-            bg(#fff)
+            bg(#FF5638);
             font-size: 32px;
-            c(#FF5638);
+            c(#fff);
             text-align: center;
             z-index 44
         }

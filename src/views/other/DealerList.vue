@@ -1,12 +1,12 @@
 <template>
   <div class="dealer-list">
     <m-header :isSearch="true" placeholder="请输入店铺名称" @emitEvt="_searchKeyChange"></m-header>
-    <div class="current-dealer">
+    <div class="current-dealer" v-if="currentDealer.phone">
       <div class="title">当前商贸公司</div>
-      <div class="dealer-item" v-if="currentDealer.phone">
-        <div class="pic">
+      <div class="dealer-item">
+        <!-- <div class="pic">
           <img v-lazy="currentDealer.logoIamgeUrl || ''" alt>
-        </div>
+        </div>-->
         <div class="content" style="border: 0;">
           <p>{{currentDealer.shopName}}</p>
           <p>电话：{{currentDealer.phone}}</p>
@@ -15,9 +15,18 @@
       </div>
     </div>
     <!--  -->
-    <empty class="scroll-list" :txt="'当前没有可选经销商店铺'" v-if="empty"></empty>
+    <empty
+      class="dealer-scroll-list"
+      :class="{'pt90-i':!currentDealer.phone}"
+      :txt="'当前没有可选经销商店铺'"
+      v-if="empty"
+    ></empty>
     <!--  -->
-    <div class="scroll-list" v-if="dealerList.length">
+    <div
+      class="dealer-scroll-list"
+      v-if="dealerList.length"
+      :class="{'pt90-i':!currentDealer.phone}"
+    >
       <scroll
         class="scroll-dom"
         :data="dealerList"
@@ -32,9 +41,9 @@
             :key="item.id"
             @click="_chooseDealer(item)"
           >
-            <div class="pic">
+            <!-- <div class="pic">
               <img v-lazy="item.logoIamgeUrl || ''" alt>
-            </div>
+            </div>-->
             <div class="content">
               <p>{{item.shopName}}</p>
               <p>电话：{{item.phone}}</p>
@@ -55,6 +64,7 @@ import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
 import { addShopHistory } from "api/fetch/dealer";
 import storage from "common/storage";
+import { setTimeout } from "timers";
 export default {
   name: "dealer-list",
   data() {
@@ -80,6 +90,7 @@ export default {
   },
   methods: {
     _ListCurrentDealer() {
+      if (!this.currentId) return false;
       const storeDealer = storage.get("currentDealer", {});
       if (storeDealer.id == this.currentId) {
         return (this.currentDealer = storeDealer);
@@ -116,12 +127,19 @@ export default {
         });
     },
     _chooseDealer(dealer) {
-      addShopHistory(dealer.id).then(res => {});
+      if (storage.get("token", "")) {
+        addShopHistory(dealer.id).then(res => {});
+      }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
-      this.$router.push({
-        path: "/navi/home"
-      });
+      //todo
+      setTimeout(() => {
+        // 刷新token
+        storage.set("userType", "3");
+        this.$router.push({
+          path: "/navi/home"
+        });
+      }, 300);
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;
@@ -135,7 +153,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .dealer-list {
   pos(relative);
   width: 100%;
@@ -154,25 +172,29 @@ export default {
   top: 90px;
   left: 0;
   width: 100%;
+
+  .title {
+    lh(84);
+    bg(#fff);
+    pl(24);
+    ft(26);
+    c(#333);
+    border-bottom: 1PX solid #F2F2F2;
+  }
 }
 
-.scroll-list {
+.dealer-scroll-list {
   pt(340);
   height: 100%;
+
+  .scroll-dom {
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
-.scroll-dom {
-  height: 100%;
-  overflow: hidden;
-}
-
-.title {
-  lh(84);
-  bg(#fff);
-  pl(24);
-  ft(26);
-  c(#333);
-  border-bottom: 1PX solid #F2F2F2;
+.pt90-i {
+  padding-top: 90px;
 }
 
 .dealer-item {
@@ -211,7 +233,7 @@ export default {
   }
 
   .content {
-    ml(124);
+    ml(48);
     h(148);
     border-bottom: 1PX solid #F2F2F2;
 

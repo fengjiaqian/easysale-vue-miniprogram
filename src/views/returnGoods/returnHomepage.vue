@@ -85,6 +85,7 @@
             if (this.userType == '3') {
                 this._QueryDealReturn();
             }
+            this._QueryDealReturn()
         },
         computed: {
             isDealer() {
@@ -117,7 +118,8 @@
                 this.activeDealerIdx = idx;
                 this.returnGoodsList = [];
                 this.dealerId = item.dealerId;
-                this._QueryReturnList()
+                this._QueryReturnList();
+                this._QueryDealReturn()
 
             },
 
@@ -131,7 +133,7 @@
                         this.dealerId = this.dealerList[0].dealerId
                         this._QueryReturnList()
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -151,7 +153,7 @@
                         });
                         this.returnGoodsList = [...resultData];
                     }
-                });
+                }).catch(() => {});
 
             },
 
@@ -211,6 +213,9 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
+                }).catch(res=>{
+                    this.$toast(res.message)
+
                 });
             },
 
@@ -239,6 +244,8 @@
                 batchUpdateReturn(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryReturnList()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -362,9 +369,9 @@
             width: 100%;
             h(98);
             lh(98);
-            bg(#fff)
+            bg(#FF5638);
             font-size: 32px;
-            c(#FF5638);
+            c(#fff);
             text-align: center;
             z-index 44
         }

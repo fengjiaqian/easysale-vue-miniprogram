@@ -29,13 +29,11 @@
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <div>
-            <span
-              class="mr-12 c-theme"
-              v-if="item.path=='/writeApplicationInformation' && !applyDealerState"
-            >审核中</span>
+          <em></em>
+          <!-- <div>
+            <span class="mr-12 c-theme" v-if="item.path=='/writeApplicationInformation'"></span>
             <em></em>
-          </div>
+          </div>-->
         </div>
       </li>
     </ul>
@@ -57,8 +55,7 @@ export default {
       mobileNo: storage.get("mobileNo", ""),
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
-      mineMenu: [],
-      applyDealerState: 1 //0:正在申请成为经销商 1：没有申请
+      mineMenu: []
     };
   },
   computed: {},
@@ -80,10 +77,6 @@ export default {
     mineSkip(path) {
       if (this.navigateToLogin()) {
         return false;
-      }
-      //如果是看查看申请状态
-      if (!this.applyDealerState && path == "/writeApplicationInformation") {
-        path = "/applyDealer";
       }
       //mobileNo  带过去手机号码
       if (path == "/writeApplicationInformation") {
@@ -110,15 +103,15 @@ export default {
         this.mineSkip("/my/userInfo");
       }
     },
-    //申请经销商后  刷新申请中的状态  
+    //申请经销商后  刷新申请中的状态
     //TODO 区别角色
     _findCustomerOwerInfo() {
       if (this.isVisitor) return false;
       findCustomerOwerInfo()
         .then(res => {
-          this.applyDealerState = res.data.applyDealerState; //0:正在申请成为经销商 1：没有申请
           this.mobileNo = res.data.phone;
           this.nickName = res.data.wxNickName;
+          this.avatarUrl = res.data.iamgeUrl;
         })
         .catch(err => {});
     }

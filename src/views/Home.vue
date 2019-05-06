@@ -1,9 +1,10 @@
 <template>
   <div id="home" ref="scrollDom">
+    <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
     <!--  -->
     <div class="home-search-area">
-      <div class="dealer-name" v-if="userType==3" @click="_jumpDealerList">
+      <div class="dealer-name" @click="_jumpDealerList">
         {{currentDealer.shopName}}
         <em></em>
       </div>
@@ -11,8 +12,8 @@
     </div>
     <div class="view-wrapper">
       <!-- 定位导航 -->
-      <div class="fixed-nav">
-        <div class="scroll-menu-wrap clearfix" v-show="showFixed">
+      <div class="fixed-nav" v-show="showFixed">
+        <div class="scroll-menu-wrap clearfix">
           <div
             class="s-m-btn"
             v-if="menuCanScroll"
@@ -55,14 +56,13 @@
           </transition>
         </div>
       </div>
-      <scroll
+      <cube-scroll
         ref="scrollProduct"
         :data="scrollProducts"
-        :probeType="3"
-        :click="true"
-        :listenScroll="true"
-        @scroll="listenScroll"
-        class="view-wrapper"
+        :options="options"
+        @scroll="onScrollHandle"
+        :scrollEvents="options.scrollEvents"
+        @pulling-down="onPullingDown"
       >
         <main>
           <!--  -->
@@ -77,7 +77,7 @@
           </div>
           <!--  -->
           <ul class="home-icons clearfix">
-            <li v-for="(item,index) in appIcons">
+            <li v-for="(item, index) in appIcons">
               <a @click="jumpSecondsort(index)">
                 <img v-lazy="item.imgUrl || ''">
                 <span>{{item.value}}</span>
@@ -85,7 +85,7 @@
             </li>
           </ul>
           <!--  -->
-          <div class="mune-wrapper">
+          <div class="mune-wrapper" v-if="scrollMenu.length">
             <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-show="!showFixed">
               <div
                 class="s-m-btn"
@@ -137,36 +137,36 @@
             <product v-for="product in item.products " :product="product" :key="product.id"></product>
           </div>
         </main>
-      </scroll>
+      </cube-scroll>
     </div>
   </div>
 </template>
 
 <script>
-import icBanner from "../assets/images/ic-banner.png";
 import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
 import ic4 from "../assets/images/ic-chenglie.png";
-
+import ic5 from "../assets/images/ic-kaidian.png";
 const appIcons = [
-  { imgUrl: ic1, value: "投诉管理" },
-  { imgUrl: ic2, value: "兑奖管理" },
-  { imgUrl: ic3, value: "退货管理" },
-  { imgUrl: ic4, value: "陈列管理" }
+  { imgUrl: ic1, value: "投诉" },
+  { imgUrl: ic2, value: "兑奖" },
+  { imgUrl: ic3, value: "退货" },
+  { imgUrl: ic4, value: "陈列" },
+  { imgUrl: ic5, value: "开店" }
 ];
+import back from "components/back.vue";
 import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 import slider from "components/slider.vue";
-import { queryHomeProducts, ListProduct } from "api/fetch/home";
+import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
 import { mapGetters, mapActions } from "vuex";
-
 export default {
   name: "home",
   data() {
@@ -180,7 +180,17 @@ export default {
       scrollProducts: [],
       banners: [],
       posY: 0,
-      currentDealer: storage.get("currentDealer", {})
+      currentDealer: {},
+      options: {
+        click: true,
+        probeType: 1,
+        scrollbar: false,
+        pullDownRefresh: {
+          threshold: 70,
+          txt: "刷新成功"
+        },
+        scrollEvents: ["scroll", "scroll-end"]
+      }
     };
   },
   components: {
@@ -188,7 +198,8 @@ export default {
     scroll,
     product,
     floatCart,
-    slider
+    slider,
+    back
   },
   beforeCreate() {},
   computed: {
@@ -208,7 +219,8 @@ export default {
   activated() {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
-      this.currentDealer = storage.get("currentDealer", {});
+      this.currentDealerId = storage.get("currentDealerId", "");
+      this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
       this._listDealerLogs();
       this._queryHomeProducts();
@@ -228,6 +240,8 @@ export default {
         path: "/dealerList"
       });
     }
+    //页头显示经销商名称
+    this._ListCurrentDealer();
     this._listDealerLogs();
     this._queryHomeProducts();
   },
@@ -244,6 +258,7 @@ export default {
         userType,
         shareDealerId
       } = this.$route.query;
+      //shareDealerId currentDealerId 即 shopId
       // 以登录身份访问
       if (mobileNo && token && userType) {
         this.clearStorage(); //清楚部分缓存
@@ -281,9 +296,26 @@ export default {
       }
     },
     _listDealerLogs() {
-      ListDealerLogs().then(res => {
-        this.banners = res.data;
-        this.loop = this.banners.length > 1;
+      ListDealerLogs()
+        .then(res => {
+          this.banners = res.data;
+          this.loop = this.banners.length > 1;
+        })
+        .catch(_ => {});
+    },
+    //
+    _ListCurrentDealer() {
+      //第一次 切换 申请后 三种情况
+      const storeDealer = storage.get("currentDealer", {});
+      ListAllDealer({ id: this.currentDealerId }).then(res => {
+        const { dataList = [] } = res.data;
+        // dataList.length && (this.currentDealer = dataList[0]);
+        if (dataList.length) {
+          const matchItem = dataList.find(
+            item => item.id == this.currentDealerId
+          );
+          this.currentDealer = matchItem;
+        }
       });
     },
     _queryHomeProducts() {
@@ -293,11 +325,11 @@ export default {
           this.scrollMenu = menu;
           this.scrollProducts = brands;
           if (!this.scrollMenu.length) {
-            const msg =
-              this.userType == 3
-                ? "当前经销商暂无商品,请重新选择经销商"
-                : "您的店铺暂无上架商品,请尽快添加";
-            return this.$toast(msg);
+            // const msg =
+            //   this.userType == 3
+            //     ? "当前经销商暂无商品,请重新选择经销商"
+            //     : "您的店铺暂无上架商品,请尽快添加";
+            return this.$toast("当前经销商暂无商品");
           }
           this.$nextTick(() => {
             this.calculateScrollRect();
@@ -325,13 +357,17 @@ export default {
       this.menuCanScroll = w > clientWidth - (clientWidth * 88) / 750;
     },
     bindClickMenu(Index) {
+      if (this.posY == 0) {
+        this.firstClick = true;
+      }
       this.showSqure = false;
-      let domId = "dom" + this.scrollMenu[Index].brandId;
-      this.$refs.scrollProduct.scrollToElement(
-        document.getElementById(domId),
-        150
-      );
+      // let domId = "dom" + this.scrollMenu[Index].brandId;
+      // this.$refs.scrollProduct.scrollToElement(
+      //   document.getElementById(domId),
+      //   150
+      // );
       //
+      this.$refs.scrollProduct.scrollTo(0, -this.heightList[Index] - 1, 150);
       Index = Index > 2 ? Index - 2 : 0;
       let menuId = "menu" + this.scrollMenu[Index].brandId;
 
@@ -371,14 +407,24 @@ export default {
       }
       this.heightList = heightList;
     },
-    listenScroll(pos) {
+    onScrollHandle(pos) {
       this.posY = Math.abs(pos.y);
       !this.heightList && (this.heightList = [220]);
-      if (this.posY > this.heightList[0]) {
+      if (pos.y < 0 && this.posY > this.heightList[0]) {
         this.showFixed = true;
       } else {
         this.showFixed = false;
       }
+      if (this.firstClick) {
+        this.showFixed = true;
+        this.firstClick = false;
+      }
+    },
+    onPullingDown() {
+      this._queryHomeProducts();
+    },
+    backTop() {
+      this.$refs.scrollProduct.scrollTo(0, 0, 150);
     },
     _jumpDealerList() {
       this.$router.push({
@@ -389,7 +435,8 @@ export default {
       });
     },
     jumpSecondsort(Index) {
-      var jumpPath = "";
+      var jumpPath = "",
+        query = {};
       switch (Index) {
         case 3:
           if (this.userType == 1) {
@@ -409,16 +456,32 @@ export default {
         case 2:
           jumpPath = "/returnHomepage";
           break;
+        case 4:
+          if (!this.navigateToLogin()) {
+            jumpPath = "/writeApplicationInformation";
+            query = {
+              mobileNo: storage.get("mobileNo", "")
+            };
+          }
+          break;
         default:
           break;
       }
-      this.$router.push({ path: jumpPath });
+      jumpPath && this.$router.push({ path: jumpPath, query });
     }
   }
 };
 </script>
 
 <style lang="stylus">
+.scroll-item {
+  .H-product-item:nth-last-of-type(1) {
+    .H-product-content {
+      border: 0;
+    }
+  }
+}
+
 .view-wrapper {
   width: 100%;
   height: 100%;
@@ -433,7 +496,7 @@ export default {
   pos(absolute);
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
 }
 
 .mune-wrapper {
@@ -456,14 +519,14 @@ export default {
   font-size: 30px;
 }
 
-.menu-title::after {
+.menu-title:after {
   content: '';
   width: 80px;
   height: 2px;
   background: rgba(229, 229, 229, 1);
 }
 
-.menu-title::before {
+.menu-title:before {
   content: '';
   width: 80px;
   height: 2px;
@@ -567,10 +630,10 @@ export default {
   background: #fff;
   width: 100%;
   padding-bottom: 32px;
+  flex();
 
   li {
-    width: 25%;
-    float: left;
+    flex-1();
 
     > a {
       display: block;
@@ -720,6 +783,10 @@ export default {
       vm();
     }
   }
+}
+
+.cube-pulldown-loaded span {
+  ft(12);
 }
 </style>
 

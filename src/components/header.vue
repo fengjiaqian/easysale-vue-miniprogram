@@ -17,7 +17,7 @@
       <div class="title" v-else>{{tit || title || ''}}</div>
     </div>
     <!--  -->
-    <div class="icon-shortcut" @click.stop="show=!show" ref="shortcut">
+    <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut">
       <span></span>
     </div>
     <!--  -->
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import storage from "common/storage";
 export default {
   name: "m-header",
   props: {
@@ -114,6 +115,13 @@ export default {
         case "productList":
         case "staffList":
         case "customerList":
+          //如果是从订单界面过来的  返回订单 带入信息
+          if (storage.get("fromOrder", false)) {
+            this.$router.go(-1);
+          } else {
+            this.$router.push({ path: "/navi/mine" });
+          }
+          break;
         case "userInfo":
         case "writeApplicationInformation":
           jumpPath = "/navi/mine"
@@ -121,11 +129,23 @@ export default {
         case "exhibitList":
           jumpPath = "/navi/home"
           break;
+        case "dealerList":
+          const currentDealerId = storage.get("currentDealerId", "");
+          if (!currentDealerId) {
+            this.$toast("请选择店铺");
+          } else {
+            this.$router.go(-1);
+          }
+          break;
         default:
           this.$router.go(-1);
           break;
       }
       this.$router.push({ path: jumpPath });
+    },
+    showShortList() {
+      if (!storage.get("currentDealerId", "")) return false;
+      this.show = !this.show;
     },
     handleChange($event) {
       this.searchKey = $event.target.value;

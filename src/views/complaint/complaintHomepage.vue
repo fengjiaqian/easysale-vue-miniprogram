@@ -115,26 +115,8 @@
                 this.activeDealerIdx = idx;
                 this.complaintsList = [];
                 this.dealerId = item.dealerId;
-                this._QueryComplaintList()
-
-            },
-
-            // 加载列表数据
-            _QueryComplaintList() {
-                let params = {
-                    state: this.tabState,
-                    dealerId: this.dealerId
-                }
-                complaintList(params).then(res => {
-                    if (res.data) {
-                        let resultData = res.data;
-                        this.empty = !resultData.length;
-                        resultData.forEach(item => {
-                            item['selected'] = false;
-                        });
-                        this.complaintsList = [...resultData];
-                    }
-                });
+                this._QueryComplaintList();
+                this._QueryDealComplaint()
 
             },
 
@@ -146,9 +128,29 @@
                         this.dealerList = [...resultData];
                         this.dealerId = this.dealerList[0].dealerId
                     }
-                });
+                }).catch(() => {});
 
             },
+
+            // 加载列表数据
+            _QueryComplaintList() {
+                let params = {
+                    state: this.tabState,
+                    dealerId: this.dealerId
+                };
+                complaintList(params).then(res => {
+                    if (res.data) {
+                        let resultData = res.data;
+                        this.empty = !resultData.length;
+                        resultData.forEach(item => {
+                            item['selected'] = false;
+                        });
+                        this.complaintsList = [...resultData];
+                    }
+                }).catch(() => {});
+
+            },
+
 
 
             /**
@@ -205,7 +207,7 @@
                     if (res.result === "success") {
                         this.roleList = res.data;
                     }
-                });
+                }).catch(() => {});
             },
 
             closePop() {
@@ -233,6 +235,8 @@
                 batchUpdateComplaint(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryComplaintList()
+                }).catch(res=>{
+                    this.$toast(res.message)
                 });
             },
 
@@ -376,9 +380,9 @@
             width: 100%;
             h(98);
             lh(98);
-            bg(#fff)
+            bg(#FF5638)
             font-size: 32px;
-            c(#FF5638);
+            c(#fff);
             text-align: center;
             z-index 44
         }

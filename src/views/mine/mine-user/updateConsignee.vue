@@ -90,7 +90,7 @@ export default {
       const operate = this.code == 1 ? "addConsigneer" : "modifyConsignee";
       Operation[operate](params)
         .then(res => {
-          this.$router.push({
+          this.$router.replace({
             path: "/myConsignee"
           });
         })
