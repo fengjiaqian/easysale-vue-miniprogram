@@ -21,43 +21,45 @@
 </template>
 <script>
     export default {
-        name: 'saleman-pop',
-        props:{
-            rolePopShow:{
+        name: 'select-dialog',
+        props: {
+            rolePopShow: {
                 type: Boolean,
                 default: false
             },
-            title:{
+            title: {
                 type: String,
                 default: false
             },
-            roleList:{
-                type:Array,
+            roleList: {
+                type: Array,
                 default: false
             }
         },
         data() {
             return {
-                selectId:'',
+                selectId: '',
+                selectName:''
             }
         },
         component: {
             //someComponent
         },
 
-        methods:{
+        methods: {
 
-            selectRole(item){
-               this.selectId=item.id
+            selectRole(item) {
+                this.selectId = item.id
+                this.selectName = item.name
             },
 
-            closePop(){
+            closePop() {
 
                 this.$emit("closePop");
             },
 
-            submitQuery(){
-                this.$emit("submitQuery",this.selectId);
+            submitQuery() {
+                this.$emit("submitQuery", this.selectId,this.selectName);
             }
         }
     }
@@ -65,8 +67,8 @@
 
 <style lang="stylus" scoped>
     //弹出层
-    .popup-wrap{
-        .pw-content{
+    .popup-wrap {
+        .pw-content {
             position absolute
             left 0
             bottom 0
@@ -76,7 +78,7 @@
             overflow-y scroll
             z-index 100
             bg(#fff)
-            .header{
+            .header {
                 padding 24px
                 ft(36)
                 c-3()
@@ -84,7 +86,7 @@
                 flex()
                 align-items center
                 justify-content space-between
-                i{
+                i {
                     w(40)
                     h(40)
                     background-image url(../assets/images/role_icon_2.png)
@@ -93,18 +95,18 @@
                     background-position center
                 }
             }
-            .list{
+            .list {
                 ft(30)
                 c-3()
                 padding 0 24px
-                li{
+                li {
                     padding 24px 0
 
                 }
-                .active{
+                .active {
                     border-bottom 1PX solid #FF5638
                     position relative
-                    &:before{
+                    &:before {
                         content ""
                         position absolute
                         right 0
@@ -119,7 +121,7 @@
                     }
                 }
             }
-            .btn{
+            .btn {
                 position fixed
                 left 0
                 bottom 0
@@ -131,8 +133,8 @@
                 text-c()
             }
         }
-        .pop-mask{
-            background rgba(0,0,0,0.4)
+        .pop-mask {
+            background rgba(0, 0, 0, 0.4)
             position absolute
             left 0
             bottom 0

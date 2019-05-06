@@ -28,6 +28,24 @@
   .pw-r{
     flex-1()
     flex()
+    flex-direction column
+    .product-content{
+      flex()
+    }
+    .product-option{
+      ml(214)
+      pt(16)
+      flex()
+      align-content center
+      span{
+        background rgba(100,102,116,0.1)
+        border-radius 4px
+        ft(22)
+        c(#646674)
+        mr(16)
+        padding 2px 12px
+      }
+    }
     .product-pic{
       w(166)
       h(166)
@@ -142,6 +160,17 @@
   flex-center()
   padding 0 24px
   mt(24)
+  pb(24)
+  position relative
+  &:before{
+    content ""
+    position absolute
+    left 30%
+    bottom 0
+    width 100%
+    height 1PX
+    bg(#EDEDED)
+  }
   .pw-l{
       span{
         inline()
@@ -159,6 +188,7 @@
   .pw-r{
     flex-1()
     flex()
+    flex-direction row
     .product-pic{
       w(166)
       h(166)
@@ -181,6 +211,10 @@
         c-3()
         font-weight 600
         text-overflow-2()
+      }
+      .price{
+        font-size 26px !important
+        color #666 !important
       }
     }
     .product-pic-normal{

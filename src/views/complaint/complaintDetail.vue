@@ -5,15 +5,6 @@
             <div class="status">
                 <div class="state-title">投诉状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerComplaint.state]}}</span>
                 </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isCustomer">
-                    销售人员-{{saleMan.dealingName}}正在处理您的问题，请耐心等待！
-                </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==0">
-                    已移交销售人员-{{saleMan.dealingName}}
-                </div>
-                <div class="descrip" v-if="saleMan.dealingName&&isDealer&&customerComplaint.state==1">
-                    销售人员-{{saleMan.dealingName}}已处理
-                </div>
                 <div class="continue" v-if="customerComplaint.state==1">
                     <div class="triangle"></div>
                     <div class="report">
@@ -34,12 +25,12 @@
                 </div>
             </div>
             <!--终端可见-->
-            <div class="title-box" v-if="!isDealer">
-                <div class="title ">{{isCustomer?'商贸公司':'经销商'}}</div>
+            <div class="title-box">
+                <div class="title ">{{userType == 3?'商贸公司':'经销商'}}</div>
                 <div class="font-30-666 company-name">{{dealer.dealerName}}</div>
             </div>
             <!--经销商可见-->
-            <div class="title-box" v-if="!isCustomer">
+            <div class="title-box" v-if="userType != 3">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
                     <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
@@ -49,8 +40,7 @@
                     <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
-            <!--终端可见-->
-            <div class="title-box" v-if="isCustomer">
+            <div class="title-box" v-if="userType == 3">
                 <span class="title">投诉时间</span>
                 <span class="font-30-666 company-name">{{customerComplaint.createTime}}</span>
             </div>
@@ -58,28 +48,17 @@
                 <span class="title ">备注</span>
                 <span class="font-30-666 company-name">{{customerComplaint.remark}}</span>
             </div>
-            <!--经销商可见-->
-            <div class="title-box" v-if="!isCustomer&&customerComplaint.state==0">
+            <div class="title-box" v-if="userType != 3&&customerComplaint.state==0">
                 <p class="title">回复</p>
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉</button>
-        <!--经销商可见-->
-        <div v-if="isDealer&&customerComplaint.state==0">
-            <!--待处理-->
-            <div class="footer">
-                <button class="left-btn" @click.stop="handoverProcessing">移交处理</button>
-                <button class="right-btn" @click.stop="directProcessing">处理</button>
-            </div>
-        </div>
-        <!--销售人员可见-->
-        <div v-if="isSaleMan&&customerComplaint.state==0">
+        <button class="cancel-btn" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
+        </button>
+        <div v-if="userType !=3&&customerComplaint.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
         </div>
-        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
-                     @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 
@@ -87,7 +66,6 @@
     import mHeader from "components/header.vue";
     import {complainDetail, updateCustomerById, batchUpdateComplaint, cancelComplaint} from "api/fetch/complaints";
     import {queryStaffList} from "api/fetch/mine";
-    import salemanPop from "components/saleman-pop.vue"
 
     export default {
         name: 'complaintDetail',
@@ -100,24 +78,12 @@
                 customerComplaint: {},
                 dealer: {},
                 saleMan: {},
-                rolePopShow: false,
-                roleList: [],
                 id: ''
 
             }
         },
-        computed: {
-            isDealer() {
-                return this.userType == '1'
-            },
-            isSaleMan() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
-        },
-        components: {mHeader, salemanPop},
+
+        components: {mHeader,},
         created: function () {
             this.id = this.$route.params.id;
             this._QueryComplaintDetail();
@@ -138,47 +104,9 @@
                         this.dealer = {...dealer};
                         this.saleMan = {...saleMan}
                     }
-                }).catch(() => {});
-            },
-
-            /**
-             * 移交处理
-             */
-
-            handoverProcessing() {
-                this.rolePopShow = true;
-                //查询所有角色
-                queryStaffList({}).then(res => {
-                    if (res.result === "success") {
-                        this.roleList = res.data;
-                    }
-                }).catch(() => {});
-
-            },
-
-            closePop() {
-                this.rolePopShow = false;
-            },
-
-
-            /**
-             * 移交处理
-             * @param idealingId
-             */
-            submitQuery(dealingId) {
-                this.closePop();
-                let params = {
-                    idList: [this.id],
-                    dealingId: dealingId,
-                };
-                batchUpdateComplaint(params).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryComplaintDetail()
-                }).catch(res=>{
-                    this.$toast(res.message)
+                }).catch(() => {
                 });
             },
-
             /**
              * 处理
              */
@@ -191,7 +119,7 @@
                 updateCustomerById(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryComplaintDetail()
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
@@ -205,7 +133,8 @@
                         cancelComplaint(this.id).then(res => {
                             this.$toast('操作成功');
                             this._QueryComplaintDetail()
-                        }).catch(() => {});
+                        }).catch(() => {
+                        });
                     })
                     .catch(() => {
                     });

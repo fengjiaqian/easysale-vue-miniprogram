@@ -1,7 +1,7 @@
 <template>
   <div class="product-add-wrap pt90">
        <m-header :isFixed="true"></m-header>
-    <div>
+    <div class="product-edit-content">
       <ul class="add-column">
         <li>
           <span>商品名称：</span>
@@ -40,6 +40,27 @@
         <span>商品介绍：</span>
         <textarea v-model="productModal.description" :readonly="productType==0" maxlength="180" rows="4" placeholder="请输入介绍文字"></textarea>
       </div>
+      <div class="set-property">
+        <h5>设置商品属性</h5>
+        <ul class="option-list">
+          <li>
+            <span>可退货</span>
+            <i @click="switchOption('return')" :class="{'open':productModal.returnState}"></i>
+          </li>
+          <li>
+            <span>可兑奖</span>
+            <i @click="switchOption('award')" :class="{'open':productModal.awardState}"></i>
+          </li>
+          <li>
+            <span>可陈列</span>
+            <i @click="switchOption('display')" :class="{'open':productModal.displayState}"></i>
+          </li>
+        </ul>
+        <div class="reward-column">
+          <span>陈列奖励：</span>
+          <textarea cols="30" rows="3" placeholder="请输入陈列奖励"></textarea>
+        </div>
+      </div>
     </div>
     <div class="confirm" :class="{'achieve':achieve}" @click="verify">确认</div>
   </div>
@@ -63,11 +84,19 @@
           productType: '',//商品类型
           specification: '',//产品规格
           effectiveDate: null,//生效时间
+          returnState: 0,//退换
+          awardState: 0,//兑奖
+          displayState: 0,//陈列
         },
         productType: 0, //产品类型 0=酒批 1=经销商 ,酒批产品只能改价格
         limitUploadNum: 1,//上传图片的限制张数
         stagImgList: [],//暂存的图片数组
         achieve: false,//能否保存
+        setOptions: [
+          {title:`可退货`,switch:0},
+          {title:`可兑奖`,switch:0},
+          {title:`可陈列`,switch:0},
+        ],//商品属性设置项
       };
     },
     components: {
@@ -164,12 +193,30 @@
       fileFaild(){
         this.$alert('图片上传失败，请重试！')
       },
+      //删除图片
       deleteUploadImg(idx){
         this.stagImgList = this.stagImgList.filter((item,index)=>{
           return idx!=index
         })
         if(this.stagImgList.length < this.limitUploadNum){
           document.querySelector('.el-upload--picture-card').removeAttribute('style')
+        }
+      },
+      //切换商品设置
+      switchOption(type){
+        const {returnState,awardState,displayState} = this.productModal
+        switch (type) {
+          case `return`:
+            this.productModal.returnState = returnState ==1 ? 0 : 1
+            break;
+          case `award`:
+            this.productModal.awardState = awardState ==1 ? 0 : 1
+            break;
+          case `display`:
+            this.productModal.displayState = displayState ==1 ? 0 : 1
+            break;
+          default :
+            break;
         }
       },
     },

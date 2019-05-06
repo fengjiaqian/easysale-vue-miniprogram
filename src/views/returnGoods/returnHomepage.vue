@@ -1,46 +1,62 @@
 <template>
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar " v-if="!isSaleMan">
-            <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
+        <section class="top-bar ">
+            <span v-for="(item,index) in stateList" :class="{'active': tabState == item.idx}"
+                  @click="switchTab(item.idx)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
-        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
-            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
+        <section class="dealer-list-wrap" v-if="userType == 3&&dealerList.length>0">
+            <span :class="{'active':activeshopIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
-               :txt="'暂无相关退货单'" v-if="empty"
+        <!--空页面-->
+        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+               style="height: 100%;overflow: hidden"
+               :txt="tabState==2?'暂无可申请的退货商品':'暂无相关退货单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div v-if="returnGoodsList.length"
-             :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
-             style="height: 100%">
+        <!--退货商品列表-->
+        <div v-if="tabState==2"
+             :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+             style="height: 100%;background-color: #fff">
+            <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
+                        @emitEvt="handleChange"></search-bar>
             <scroll
+                    v-if="productList.length"
                     class="c-list"
-                    :data="returnGoodsList"
-                    ref="scrollRedemption"
+                    :data="productList"
+                    ref="scrollReturn"
+                    :pullup="true"
+                    @scrollToEnd="loadMoreProducts"
             >
-                <div>
-                    <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
-                               :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                <div style="background-color: #fff">
+                    <product-normal v-for="(product,index) in productList"
+                                    :key="product.productSpecificationId+index+product.productName"
+                                    :product="product"></product-normal>
                 </div>
             </scroll>
         </div>
-        <!--经销商可见-->
-        <div class="footer" v-if="isDealer&&tabState==0&&!empty">
+        <!--兑奖单列表-->
+        <div v-if="returnGoodsList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+             style="overflow: scroll">
+            <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
+                       :tabState="tabState" @directProcessing="directProcessing"></list-item>
+        </div>
+        <!--底部按钮-->
+        <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
             <div class="footer-left">
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click.stop="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
             </div>
-            <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
+            <button class="handle-btn" :class="{'achieve':achieve}" @click="achieve?addReturnGoods():''">
+                {{'申请退货('+length+')'}}
+            </button>
         </div>
-        <button class="footer-btn" @click="addReturnGoods()" v-if="isCustomer">新建退货单</button>
-        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
-                     @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 <script>
-    import {returnList, batchUpdateReturn, selectDealReturn} from "api/fetch/returnGoods";
+    import {returnList, selectDealReturn, updateReturnById} from "api/fetch/returnGoods";
+    import {afterProductList} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import empty from "components/empty.vue";
@@ -49,12 +65,15 @@
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
     import iconUrl from "../../assets/images/empty_icon_1.png";
-    import salemanPop from "components/saleman-pop.vue"
+    import searchBar from "components/searchBar.vue"
+    import storage from 'common/storage';
+    import productNormal from "components/productManage/product-manage-normal.vue";
+    import bus from "common/Bus";
 
     const selectImg = [ic1, ic2];
     export default {
         name: 'returnHomepage',
-        components: {scroll, empty, mHeader, listItem, salemanPop},
+        components: {scroll, empty, mHeader, listItem, searchBar, productNormal},
         data() {
             return {
                 stateList: [{
@@ -72,33 +91,77 @@
                 isAllSelected: false,
                 title: '退货管理',
                 returnGoodsList: [],
-                roleList: [],
-                rolePopShow: false,
-                activeDealerIdx: 0,
+                activeshopIdx: 0,
                 dealerList: [],
-                dealerId: ''
+                shopId: '',
+                // 分页
+                productList: [],
+                loading: false,
+                requestDone: false,
+                totalPage: 0,
+                filterParam: {
+                    pageNum: 1,
+                    pageSize: 20,
+                    searchKey: "",
+                    returnState: 1,
+                }, //商品查询参数
+                selectedProduct: [],//选中的商品
+                length: 0,
+                achieve: false
 
             }
         },
         created() {
             this.title = this.userType == '3' ? '退货列表' : '退货管理';
             if (this.userType == '3') {
-                this._QueryDealReturn();
+                this.stateList = [{
+                    title: `可申请`,
+                    idx: 2
+                }, {
+                    title: `已申请`,
+                    idx: 0
+                }, {
+                    title: `已回复`,
+                    idx: 1
+                }];
+                this.tabState = 2;
+                this.afterProductList();
+            } else {
+                this._QueryReturnList();
             }
-            this._QueryDealReturn()
         },
-        computed: {
-            isDealer() {
-                return this.userType == '1'
-            },
-            isSaleMan() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
+        mounted() {
+            bus.$off("selectProduct");
+            bus.$on("selectProduct", (data) => {
+                this.selectSingle(data)
+            });
         },
 
+        watch: {
+            filterParam: {
+                handler(newVal, oldVal) {
+                    this.afterProductList();
+                },
+                deep: true
+            },
+            productList(val) {
+                if (this.requestDone) {
+                    if (!val.length) {
+                        this.empty = true;
+                    } else {
+                        this.empty = false;
+                    }
+                }
+            },
+            selectedProduct(val) {
+                this.length = val.length;
+                if (val.length) {
+                    this.achieve = true
+                } else {
+                    this.achieve = false
+                }
+            }
+        },
         methods: {
 
 
@@ -109,31 +172,51 @@
             switchTab(state) {
                 this.tabState = state;
                 this.returnGoodsList = [];
-                this._QueryReturnList()
+                this.productList = [];
+                this.filterParam.pageNum = 1;
+                if (state == 2) {
+                    this.afterProductList()
+                } else {
+
+                    if (this.userType == '3') {
+                        this._QueryDealReturn()
+                    } else {
+                        this._QueryReturnList();
+                    }
+                }
             },
 
 
             //切换经销商店铺
             switchShop(item, idx) {
-                this.activeDealerIdx = idx;
+                this.activeshopIdx = idx;
                 this.returnGoodsList = [];
-                this.dealerId = item.dealerId;
+                this.shopId = item.shopId;
                 this._QueryReturnList();
-                this._QueryDealReturn()
-
             },
 
+
+            //搜索
+            handleChange(searchWord) {
+                this.filterParam.searchKey = searchWord;
+                this.filterParam.pageNum = 1;
+                this.productList = [];
+                this.afterProductList()
+
+            },
 
             // 客户退货的经销商列表
             _QueryDealReturn() {
                 selectDealReturn(this.tabState).then(res => {
                     if (res.data) {
                         let resultData = res.data;
+                        this.empty = !resultData.length;
                         this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId
+                        this.shopId = this.dealerList[0].shopId
                         this._QueryReturnList()
                     }
-                }).catch(() => {});
+                }).catch(() => {
+                });
 
             },
 
@@ -142,7 +225,7 @@
             _QueryReturnList() {
                 let params = {
                     state: this.tabState,
-                    dealerId: this.dealerId
+                    dealerId: this.shopId
                 };
                 returnList(params).then(res => {
                     if (res.data) {
@@ -153,44 +236,103 @@
                         });
                         this.returnGoodsList = [...resultData];
                     }
-                }).catch(() => {});
+                }).catch(() => {
+                });
 
+            },
+
+            // 可兑奖的商品列表
+            afterProductList() {
+                this.loading = true;
+                this.requestDone = false;
+                afterProductList(this.filterParam)
+                    .then(res => {
+                        if (res.result === "success" && res.data) {
+                            if (res.data.dataList) {
+                                this.domShow = true;
+                                const {dataList = [], pager} = res.data;
+                                const {currentPage, totalPage} = pager;
+                                if (currentPage == 1) {
+                                    this.totalPage = totalPage;
+                                }
+                                dataList.forEach(item => {
+                                    item.select = false;
+                                });
+                                this.productList = this.productList.concat(dataList);
+                                this.loading = false;
+                                this.requestDone = true;
+                            } else {
+                                this.requestDone = true;
+                                this.totalPage = 1;
+                                this.productList = []
+
+                            }
+
+                        }
+                    })
+                    .catch(err => {
+                        this.loading = false;
+                        this.requestDone = true;
+                        this.productList = []
+                    });
+
+
+            },
+
+            //加载更多
+            loadMoreProducts() {
+                if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
+                this.filterParam.pageNum += 1;
             },
 
 
             /**
-             *单选
-             * @param id-退货单id
+             *单选兑奖商品
+             * @param data
              */
-            selectSingle(id) {
-                let listData = this.returnGoodsList;
+            selectSingle(data) {
+                let listData = this.productList;
                 listData.forEach(item => {
-                    if (item.customerReturn) {
-                        let customerReturn = item.customerReturn;
-                        if (customerReturn.id == id) {
-                            item.selected = !item.selected;
-                        }
+                    if (item.id === data.id) {
+                        item.select = !item.select;
                     }
                 });
-                this.isAllSelected = !listData.some(item => !item.selected);
-                this.returnGoodsList = [...listData];
+                this.isAllSelected = !listData.some(item => !item.select);
+                this.productList = [...listData];
+                this.pullSelected()
             },
 
 
-            // 全选
+            // 全选兑奖商品
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.returnGoodsList;
+                let listData = this.productList;
                 listData.forEach(item => {
-                    item.selected = this.isAllSelected
+                    item.select = this.isAllSelected
                 });
-                this.returnGoodsList = [...listData]
+                this.productList = [...listData];
+                this.pullSelected()
+
+            },
+
+
+            pullSelected() {
+                this.selectedProduct = [];
+                if (this.productList.length) {
+                    this.productList.forEach(item => {
+                        if (item.select) {
+                            this.selectedProduct.push(item)
+                        }
+                    });
+                }
+
+                storage.set("selectedProduct", this.selectedProduct);
+
             },
 
 
             /**
              * 跳转新增退货单
-             * @param id-退货单id
              */
             addReturnGoods() {
                 this.$router.push({
@@ -198,53 +340,20 @@
                 });
             },
 
-
             /**
-             * 批量移交处理
+             * 处理
              */
-            handoverProcessing() {
-                const selectedComplaints = this.returnGoodsList.filter(item => item.selected);
-                if (!selectedComplaints.length) {
-                    return this.$toast("请选择退货单");
-                }
-                this.rolePopShow = true;
-                //查询所有角色
-                queryStaffList({}).then(res => {
-                    if (res.result === "success") {
-                        this.roleList = res.data;
-                    }
-                }).catch(res=>{
-                    this.$toast(res.message)
-
-                });
-            },
-
-            closePop() {
-                this.rolePopShow = false;
-            },
-
-
-            /**
-             * 移交处理
-             * @param idealingId
-             */
-            submitQuery(dealingId) {
-                this.closePop();
-                let idList = [];
-                const selectedRedemption = this.returnGoodsList.filter(item => item.selected);
-                selectedRedemption.forEach(item => {
-                    if (item.customerReturn) {
-                        idList.push(item.customerReturn.id)
-                    }
-                });
+            directProcessing(id) {
                 let params = {
-                    idList: [...idList],
-                    dealingId: dealingId,
+                    id: id,
+                    replyContent: '',
+                    state: 1
                 };
-                batchUpdateReturn(params).then(res => {
+                updateReturnById(params).then(res => {
                     this.$toast('操作成功');
-                    this._QueryReturnList()
-                }).catch(res=>{
+                    this.returnGoodsList = [];
+                    this._QueryReturnList();
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
@@ -323,7 +432,7 @@
             display flex;
             justify-content space-between
             align-items center
-            padding 0 24px
+            pl(24)
             img {
                 w(40)
                 h(40)
@@ -341,13 +450,11 @@
             ft(30)
         }
         .handle-btn {
-            w(160)
-            h(64)
-            lh(64)
-            bg(#FF5638)
-            border-radius: 8px;
-            border: 1px solid rgba(255, 86, 56, 1)
-            ft(28)
+            w(224)
+            h(98)
+            lh(98)
+            bg(#bdbdbd)
+            ft(32)
             c(#fff)
             border: 0
             outline: none
@@ -407,6 +514,19 @@
                     c(#FF5638)
                 }
             }
+        }
+        .pi-header {
+            position fixed;
+            border-bottom 1PX solid #EDEDED
+            top: 185px;
+            left 0
+            width 100%
+            bg(#fff)
+            z-index 1
+        }
+        .achieve {
+            bg(#FF5638)
+
         }
     }
 

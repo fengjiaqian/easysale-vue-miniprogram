@@ -3,8 +3,12 @@
         <m-header :isFixed="true"></m-header>
         <div class="body">
             <div class="reason">
-                <p class="title">投诉原因</p>
-                <input type="text" placeholder="请输入投诉原因" v-model="complaintHeadLine">
+                <p class="title">投诉类型</p>
+                <div class="complaint-type" @click="openDialog">
+                    <p :style="{color:complaintHeadLine?'#333':'#BDBDBD'}">
+                        {{complaintHeadLine||'请选择投诉类型'}}</p>
+                    <img :src="arrowUrl" class="arrow-img">
+                </div>
             </div>
             <div class="description">
                 <p class="title">内容描述</p>
@@ -18,8 +22,9 @@
                           v-model="remark"></textarea>
             </div>
         </div>
-
         <button class="submit" :class="{'achieve':canOperate}" @click="addNewComplaint">提交</button>
+        <select-dialog :roleList="typeList" :rolePopShow="rolePopShow" title="选择投诉类型" @closePop="closePop"
+                       @submitQuery="certain"></select-dialog>
     </div>
 </template>
 
@@ -27,7 +32,10 @@
     import {saveComplain} from "api/fetch/complaints";
     import storage from "common/storage";
     import mHeader from "components/header.vue";
+    import arrow from "../../assets/images/icon-enter.png";
+    import selectDialog from "components/select-dialog.vue"
 
+    const arrowUrl = arrow;
     export default {
         name: 'addNewComplaint',
         data() {
@@ -36,10 +44,35 @@
                 complaintContent: '',
                 remark: '',
                 length: 0,
+                arrowUrl: arrowUrl,
+                rolePopShow: false,
+                complaintType: '',
+                typeList: [
+                    {
+                        id: 1,
+                        name: '商品质量'
+                    },
+                    {
+                        id: 2,
+                        name: '商品日期'
+                    },
+                    {
+                        id: 3,
+                        name: '商品价格'
+                    },
+                    {
+                        id: 4,
+                        name: '送货服务'
+                    },
+                    {
+                        id: 5,
+                        name: '其他问题'
+                    }
+                ]
 
             }
         },
-        components: {mHeader},
+        components: {mHeader, selectDialog},
 
         watch: {
             complaintContent(val, oval) {
@@ -53,18 +86,35 @@
         },
         methods: {
 
+            openDialog() {
+                this.rolePopShow = true
+            },
+
+            closePop() {
+                this.rolePopShow = false;
+            },
+
+            certain(id, name) {
+                this.closePop();
+                this.complaintType = id;
+                this.complaintHeadLine = name;
+
+            },
+
+
             /**
              * 校验表单
              * @returns {boolean}
              */
             isValid() {
                 let errList = [];
-                if (!this.complaintHeadLine) {
-                    errList.push({errMsg: '请填写投诉原因'});
+                if (!this.complaintType) {
+                    errList.push({errMsg: '请选项投诉类型'});
                 }
                 if (!this.complaintContent) {
                     errList.push({errMsg: '请填写投诉内容'});
                 }
+
                 if (errList.length !== 0) {
                     this.$toast(errList[0].errMsg)
                 }
@@ -73,12 +123,12 @@
 
             addNewComplaint() {
                 if (!this.isValid()) return;
-                const currentDealerId = storage.get("currentDealerId", "") || "";
                 let params = {
-                    dealerId: currentDealerId,
                     complaintContent: this.complaintContent,
                     complaintHeadLine: this.complaintHeadLine,
                     remark: this.remark,
+                    complaintType: this.complaintType
+
                 };
                 saveComplain(params).then(res => {
                     this.$toast('新增成功');
@@ -130,6 +180,18 @@
             font-size: 30px;
             c(#333);
             font-weight: bold;
+        }
+        .complaint-type {
+            padding 24px 0;
+            display flex;
+            align-items center;
+            justify-content space-between;
+            ft(30)
+        }
+
+        .arrow-img {
+            h(26);
+            w(16);
         }
 
         .description {

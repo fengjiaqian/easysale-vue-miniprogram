@@ -2,10 +2,6 @@
     <div id="addNewReturnOrder">
         <m-header :isFixed="true"></m-header>
         <div class="body">
-            <div class="reason-box">
-                <p class="title">退货原因</p>
-                <input type="text" placeholder="请输入退货原因" v-model="returnContent">
-            </div>
             <div class="goods-box">
                 <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}">退货商品</p>
                 <div class="good-warp">
@@ -33,10 +29,11 @@
                             </li>
                         </ul>
                     </div>
-                    <p class="add-tip"
-                       :style="{marginTop:returnGoods.length?'12px':'0',borderWidth:returnGoods.length?'0.5px':'0.01px'}"
-                       @click="toAddReturnGoods()">+添加退货商品</p>
                 </div>
+            </div>
+            <div class="reason-box">
+                <p class="title">退货原因</p>
+                <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
             <div class="remark-box">
                 <p class="title ">备注</p>
@@ -69,32 +66,17 @@
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
-                if (from.name == 'chooseReturnGoods') {
-                    let selectedProduct = storage.get("selectedProduct", "");
-                    selectedProduct.buyCount = 1;
-                    selectedProduct.minBuyNum = 1;
-                    selectedProduct.maxBuyNum = selectedProduct.count;
-                    if (vm.returnGoods.length > 0) {
-                        const index = vm.returnGoods.findIndex(
-                            item => item.id === selectedProduct.id
-                        );
-                        if (index != -1) {
-                            let addBuyCount = vm.returnGoods[index].buyCount;
-                            if (addBuyCount >= selectedProduct.count) return;
-                            vm.returnGoods[index].buyCount += 1;
-                        } else {
-                            vm.returnGoods.push(selectedProduct)
-                        }
-
-                    } else {
-                        vm.returnGoods.push(selectedProduct)
-                    }
-                } else {
-                    storage.remove("selectedProduct");
-                    vm.returnGoods = [];
-                    vm.remark = '';
-                    vm.returnContent = ''
-                }
+                vm.returnGoods = [];
+                vm.remark = '';
+                vm.returnContent = '';
+                let selectedProduct = storage.get("selectedProduct", "");
+                selectedProduct.forEach(selectItem => {
+                    selectItem.buyCount = 1;
+                    selectItem.minBuyNum = 1;
+                    selectItem.maxBuyNum = selectItem.count;
+                    vm.returnGoods.push(selectItem)
+                });
+                storage.remove("selectedProduct");
             })
         },
 
@@ -105,10 +87,6 @@
         },
 
         methods: {
-            //跳转到添加退货商品
-            toAddReturnGoods() {
-                this.$router.push({path: "/chooseReturnGoods"});
-            },
             // 删除已添加的退货商品
             delGoods(selectIndex) {
                 this.returnGoods.splice(selectIndex, 1);
@@ -117,7 +95,6 @@
             //新建退货单
             submitReturnOrder() {
                 if (!this.isValid()) return;
-                const currentDealerId = storage.get("currentDealerId", "") || "";
                 let items = [];
                 for (let item of this.returnGoods) {
                     let obj = {
@@ -128,7 +105,6 @@
                     items.push(obj)
                 }
                 let params = {
-                    dealerId: currentDealerId,
                     items: items,
                     remark: this.remark,
                     returnContent: this.returnContent
@@ -147,11 +123,11 @@
              */
             isValid() {
                 let errList = [];
-                if (!this.returnContent) {
-                    errList.push({errMsg: '请填写退货原因'});
-                }
                 if (!this.returnGoods.length) {
                     errList.push({errMsg: '请添加退货商品'});
+                }
+                if (!this.returnContent) {
+                    errList.push({errMsg: '请填写退货原因'});
                 }
                 if (errList.length !== 0) {
                     this.$toast(errList[0].errMsg)

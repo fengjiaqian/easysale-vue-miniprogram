@@ -1,8 +1,6 @@
 <template>
-    <div class="redemption-items" v-if="listData.customerAward" :style="{paddingLeft:tabState==0&&isDealer?'44px':'12px'}">
-        <img v-if="tabState==0&&isDealer" :src="listData.selected?selectImg[1]:selectImg[0]" class="select-img"
-             @click.stop="selectSingle(listData.customerAward.id)">
-        <p class="dealer">{{ isCustomer?listData.dealer.dealerName: listData.customer.customerName}}</p>
+    <div class="redemption-items" v-if="listData.customerAward" :style="{paddingLeft:'12px'}">
+        <p class="dealer">{{ userType == 3?listData.dealer.dealerName: listData.customer.customerName}}</p>
         <p class="replyTime">{{listData.customerAward.createTime}}</p>
         <p class="redemptionHeadLine">兑奖申请</p>
         <ul v-if="listData.customerAward.items.length>0">
@@ -16,7 +14,9 @@
                     <span>X{{skuItem.awardCount}}</span>
                 </div>
             </li>
-            <div class="expand" @click="isShowMoreInfo()" v-if="listData.customerAward.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+            <div class="expand" @click="isShowMoreInfo()" v-if="listData.customerAward.items.length>2">
+                {{isShowMore?'收起':'展开更多'}}
+            </div>
         </ul>
         <div class="continue" v-if="tabState==1">
             <div class="triangle"></div>
@@ -27,20 +27,16 @@
             <div class="tips">{{listData.customerAward.replyContent}}</div>
         </div>
         <p class="state">{{stateList[0]}}</p>
-        <div class="btn-warp" :style="{justifyContent:isNull ||isCustomer? 'flex-end':'space-between'}">
-            <p v-if="listData.saleMan.dealingName&&tabState==1&&!isCustomer" class="saleMan">
-                销售人员-{{listData.saleMan.dealingName}}已处理</p>
-            <p v-if="listData.saleMan.dealingName&&tabState==0&&!isCustomer" class="saleMan">
-                已移交销售人员-{{listData.saleMan.dealingName}}</p>
+        <div class="btn-warp">
             <button class="go-detail" @click="toRedemptionDetail(listData.customerAward.id)">查看详情</button>
+            <button v-if="userType != 3&&tabState==0" class="handle-btn"
+                    @click.stop="directProcessing(listData.customerAward.id)">处理
+            </button>
         </div>
     </div>
 </template>
 
 <script>
-    import ic1 from "../../assets/images/icon-check.png";
-    import ic2 from "../../assets/images/icon-checked.png";
-    const selectImg = [ic1, ic2];
     export default {
         name: 'list-item',
         props: {
@@ -61,20 +57,10 @@
         data() {
             return {
                 stateList: ['待处理', '已处理', '已取消'],
-                selectImg: selectImg,
                 isShowMore: false,
             }
         },
         computed: {
-            isDealer() {
-                return this.userType == '1'
-            },
-            isSaleMan() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
             isNull() {
                 return JSON.stringify(this.listData.saleMan) == "{}"
             }
@@ -88,10 +74,10 @@
                 this.isShowMore = !this.isShowMore;
             },
 
-            selectSingle(id) {
-                this.$emit("selectSingle", id);
-            },
 
+            directProcessing(id) {
+                this.$emit("directProcessing", id);
+            },
 
             /**
              * 跳转兑奖详情
@@ -163,10 +149,12 @@
     }
 
     .btn-warp {
-        position: relative border-top 1px solid #F6F6F6;
+        position: relative
+        border-top 1px solid #F6F6F6;
         mt(24);
         display: flex;
         align-items center;
+        justify-content flex-end
     }
 
     .go-detail {
@@ -179,6 +167,18 @@
         bg(#fff);
         margin: 16px 0
 
+    }
+
+    .handle-btn {
+        c(#fff);
+        ft(28);
+        padding 12px 52px;
+        bg(#FF5638)
+        border: 2px solid #FF5638;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
     }
 
     .select-img {
@@ -248,6 +248,7 @@
         c(#0096FF);
         mt(16)
     }
+
     .saleMan {
         c(#999);
         ft(28)
