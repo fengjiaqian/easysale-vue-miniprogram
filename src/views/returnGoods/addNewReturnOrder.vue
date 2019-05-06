@@ -123,11 +123,11 @@
              */
             isValid() {
                 let errList = [];
-                if (!this.returnContent) {
-                    errList.push({errMsg: '请填写退货原因'});
-                }
                 if (!this.returnGoods.length) {
                     errList.push({errMsg: '请添加退货商品'});
+                }
+                if (!this.returnContent) {
+                    errList.push({errMsg: '请填写退货原因'});
                 }
                 if (errList.length !== 0) {
                     this.$toast(errList[0].errMsg)

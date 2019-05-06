@@ -1,7 +1,7 @@
 <template>
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar " >
+        <section class="top-bar ">
             <span v-for="(item,index) in stateList" :class="{'active': tabState == item.idx}"
                   @click="switchTab(item.idx)">{{item.title}}</span>
         </section>
@@ -48,7 +48,9 @@
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click.stop="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
             </div>
-            <button class="handle-btn" @click="addReturnGoods">{{'退货兑奖('+length+')'}}</button>
+            <button class="handle-btn" :class="{'achieve':achieve}" @click="achieve?addReturnGoods():''">
+                {{'申请退货('+length+')'}}
+            </button>
         </div>
     </div>
 </template>
@@ -104,7 +106,8 @@
                     returnState: 1,
                 }, //商品查询参数
                 selectedProduct: [],//选中的商品
-                length: 0
+                length: 0,
+                achieve: false
 
             }
         },
@@ -152,7 +155,7 @@
             },
             selectedProduct(val) {
                 this.length = val.length;
-                if (val.id) {
+                if (val.length) {
                     this.achieve = true
                 } else {
                     this.achieve = false
@@ -315,7 +318,7 @@
 
             pullSelected() {
                 this.selectedProduct = [];
-                if(this.productList.length){
+                if (this.productList.length) {
                     this.productList.forEach(item => {
                         if (item.select) {
                             this.selectedProduct.push(item)
@@ -450,7 +453,7 @@
             w(224)
             h(98)
             lh(98)
-            bg(#FF5638)
+            bg(#bdbdbd)
             ft(32)
             c(#fff)
             border: 0
@@ -520,6 +523,10 @@
             width 100%
             bg(#fff)
             z-index 1
+        }
+        .achieve {
+            bg(#FF5638)
+
         }
     }
 
