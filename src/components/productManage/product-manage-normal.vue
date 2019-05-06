@@ -9,6 +9,8 @@
       </div>
       <div class="product-info-normal">
         <h5 class="name">{{product.productName}}</h5>
+        <div style="flex:1;"></div>
+        <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
       </div>
     </div>
   </div>

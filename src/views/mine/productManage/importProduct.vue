@@ -96,7 +96,10 @@ export default {
                 : Math.ceil(res.totalCount / 20);
             //当前加载的页码数大于等于最大页码数时，不在加载更多数据
             res.data.forEach(item => {
-              item.select = false;
+              item.select = false
+              item.awardState = 0
+              item.returnState = 0
+              item.displayState = 0
             });
             this.productList = this.productList.concat(res.data);
             this.loading = false;

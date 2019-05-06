@@ -15,7 +15,15 @@
     <div class="D-price">
       <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
     </div>
-    <!--  -->
+    <!-- 退换，兑奖，陈列 标签 -->
+    <div class="D-options" v-if="product.returnState || product.awardState || product.displayState">
+      <div class="tags">
+        <span v-if="product.returnState">可退货</span>
+        <span v-if="product.awardState">可兑奖</span>
+        <span v-if="product.displayState">可陈列</span>
+      </div>
+      <div class="reward">陈列奖励：</div>
+    </div>
     <div class="D-info">
       <h3>商品介绍</h3>
       <ul class="D-info-list">
@@ -249,6 +257,29 @@ export default {
 
 .s-fail {
   background: #BDBDBD !important;
+}
+.D-options{
+  padding 0 24px 24px
+  bg(#fff)
+  .tags{
+    border-top 1PX solid #EDEDED
+    pt(24)
+    flex()
+    align-content center
+    span{
+      background rgba(100,102,116,0.1)
+      border-radius 4px
+      ft(24)
+      c(#646674)
+      mr(16)
+      padding 2px 12px
+    }
+  }
+  .reward{
+    mt(24)
+    ft(28)
+    c-6()
+  }
 }
 </style>
 
