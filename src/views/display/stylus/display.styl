@@ -1,0 +1,130 @@
+.display-wrap{
+  height 100%
+  bg(#fff)
+  .header{
+    width 100%
+    position fixed
+    left 0
+    top 0
+    z-index 2
+    .top-bar{
+      bg(#fff)
+      border-bottom 1PX solid #EDEDED
+      flex-center()
+      width 100%
+      h(98)
+      box-sizing border-box
+      span{
+        width 33.3%
+        text-c()
+        lh(98)
+        c-6()
+        ft(28)
+      }
+      .active{
+        font-weight 600
+        ft(34)
+        c-3()
+        position relative
+        &:before{
+          content ""
+          position absolute
+          left 50%
+          bottom 0
+          transform translateX(-50%)
+          w(40)
+          h(6)
+          bg(#FF5638)
+        }
+      }
+    }
+    .h-search-bar{
+      padding 14px 24px
+      bg(#fff)
+      input{
+        outline none
+        width 100%
+        bg(#F6F6F6)
+        h(72)
+        lh(72)
+        ft(28)
+        c(#888)
+        text-c()
+        border-radius 10px
+      }
+    }
+  }
+  .footer{
+    position fixed
+    left 0
+    bottom 0
+    z-index 2
+    width 100%
+    flex()
+    align-content center
+    justify-content space-between
+    h(98)
+    box-sizing border-box
+    border-top 1PX solid #EDEDED
+    bg(#fff)
+    .f-all{
+      pl(24)
+      flex-center()
+      lh(98)
+      i{
+        mr(24)
+        w(40)
+        h(40)
+        background-image url(../../assets/images/icon-check.png)
+        background-size contain
+        background-repeat no-repeat
+        background-position center
+        &.selected{
+          background-image url(../../assets/images/icon-checked.png)
+        }
+      }
+      span{
+        ft(30)
+        c-3()
+      }
+    }
+    .f-apply{
+      bg(#BDBDBD)
+      lh(98)
+      w(224)
+      text-c()
+      c(#fff)
+      ft(32)
+      &.achieve{
+        bg(#FF5638)
+      }
+    }
+  }
+  .content{
+    height 100%
+    padding 200px 0 118px
+    .product-list-scroll{
+      height 100%
+    }
+  }
+}
+
+.display-wrap /deep/{
+  .empty-page{
+    position absolute
+    left 50%
+    top 50%
+    transform translate(-50%,-75%)
+    div{
+      width 340px !important
+      height 340px !important
+    }
+    p{
+      margin-top 0 !important
+      c(#999)
+    }
+  }
+  .empty{
+    mt(100)
+  }
+}

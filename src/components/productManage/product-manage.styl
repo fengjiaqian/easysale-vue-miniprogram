@@ -160,6 +160,17 @@
   flex-center()
   padding 0 24px
   mt(24)
+  pb(24)
+  position relative
+  &:before{
+    content ""
+    position absolute
+    left 30%
+    bottom 0
+    width 100%
+    height 1PX
+    bg(#EDEDED)
+  }
   .pw-l{
       span{
         inline()
@@ -200,6 +211,10 @@
         c-3()
         font-weight 600
         text-overflow-2()
+      }
+      .price{
+        font-size 26px !important
+        color #666 !important
       }
     }
     .product-pic-normal{

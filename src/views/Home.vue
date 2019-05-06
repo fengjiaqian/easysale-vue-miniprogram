@@ -397,7 +397,7 @@ export default {
           } else if (this.userType == 2) {
             jumpPath = "/saleSignExhibitList";
           } else {
-            jumpPath = "/saleExhibitList";
+            jumpPath = "/displayList";
           }
           break;
         case 0:

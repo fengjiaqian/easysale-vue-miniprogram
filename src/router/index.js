@@ -6,8 +6,9 @@ import main from './main'//主要页面
 import mine from './mine'//我的模块
 import manageInit from './manageInit'// 投诉、兑奖、退货管理相关
 import exhibit from './exhibit'//陈列模块
+import display from './display'//陈列模块-V2
 const routes = [
-    ...main, ...mine, ...manageInit,...exhibit
+    ...main, ...mine, ...manageInit,...exhibit, ...display
 ];
 Vue.use(Router);
 
