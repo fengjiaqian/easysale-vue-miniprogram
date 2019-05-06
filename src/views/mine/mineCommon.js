@@ -20,6 +20,11 @@ const dealerAccessModule = [
         class: "staff",
         path: "/my/staffList"
     },
+    {
+        title: "认证店主",
+        class: "staff",
+        path: "/my/shopkeeper"
+    },
 ]
 const customerAccessModule = [
     {
@@ -34,18 +39,7 @@ const customerAccessModule = [
     }
 ]
 
-const salerAccessModule = [
-    {
-        title: "业绩报表",
-        class: "data_static",
-        path: "/my/statistical"
-    },
-    {
-        title: "客户管理",
-        class: "customer",
-        path: "/my/customerList"
-    },
-]
+
 export function initAccessModule(userType) {
 
     switch (userType) {
@@ -53,7 +47,7 @@ export function initAccessModule(userType) {
             return dealerAccessModule;
             break;
         case '2':
-            return salerAccessModule;
+            return dealerAccessModule;
             break;
         case '3':
             return customerAccessModule;

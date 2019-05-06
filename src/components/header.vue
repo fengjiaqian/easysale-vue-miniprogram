@@ -115,6 +115,13 @@ export default {
         case "productList":
         case "staffList":
         case "customerList":
+          //如果是从订单界面过来的  返回订单 带入信息
+          if (storage.get("fromOrder", false)) {
+            this.$router.go(-1);
+          } else {
+            this.$router.push({ path: "/navi/mine" });
+          }
+          break;
         case "userInfo":
         case "writeApplicationInformation":
           jumpPath = "/navi/mine"

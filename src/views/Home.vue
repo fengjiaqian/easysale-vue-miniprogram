@@ -85,7 +85,7 @@
             </li>
           </ul>
           <!--  -->
-          <div class="mune-wrapper">
+          <div class="mune-wrapper" v-if="scrollMenu.length">
             <div class="scroll-menu-wrap clearfix" ref="scrollMenuWrap" v-show="!showFixed">
               <div
                 class="s-m-btn"
@@ -258,6 +258,7 @@ export default {
         userType,
         shareDealerId
       } = this.$route.query;
+      //shareDealerId currentDealerId 即 shopId
       // 以登录身份访问
       if (mobileNo && token && userType) {
         this.clearStorage(); //清楚部分缓存
@@ -295,20 +296,26 @@ export default {
       }
     },
     _listDealerLogs() {
-      ListDealerLogs().then(res => {
-        this.banners = res.data;
-        this.loop = this.banners.length > 1;
-      });
+      ListDealerLogs()
+        .then(res => {
+          this.banners = res.data;
+          this.loop = this.banners.length > 1;
+        })
+        .catch(_ => {});
     },
     //
     _ListCurrentDealer() {
+      //第一次 切换 申请后 三种情况
       const storeDealer = storage.get("currentDealer", {});
-      if (storeDealer.id == this.currentDealerId) {
-        return (this.currentDealer = storeDealer);
-      }
       ListAllDealer({ id: this.currentDealerId }).then(res => {
         const { dataList = [] } = res.data;
-        dataList.length && (this.currentDealer = dataList[0]);
+        // dataList.length && (this.currentDealer = dataList[0]);
+        if (dataList.length) {
+          const matchItem = dataList.find(
+            item => item.id == this.currentDealerId
+          );
+          this.currentDealer = matchItem;
+        }
       });
     },
     _queryHomeProducts() {
@@ -318,11 +325,11 @@ export default {
           this.scrollMenu = menu;
           this.scrollProducts = brands;
           if (!this.scrollMenu.length) {
-            const msg =
-              this.userType == 3
-                ? "当前经销商暂无商品,请重新选择经销商"
-                : "您的店铺暂无上架商品,请尽快添加";
-            return this.$toast(msg);
+            // const msg =
+            //   this.userType == 3
+            //     ? "当前经销商暂无商品,请重新选择经销商"
+            //     : "您的店铺暂无上架商品,请尽快添加";
+            return this.$toast("当前经销商暂无商品");
           }
           this.$nextTick(() => {
             this.calculateScrollRect();

@@ -58,7 +58,7 @@ export default {
           if (res.result === "success" && res.data) {
             this.customerList = res.data;
             if (fromOrder) {
-              //state1：代表启用  0：代表停用
+              //state1：代表启用   0：代表停用
               this.customerList = this.customerList.filter(
                 item => item.state == 1
               );
