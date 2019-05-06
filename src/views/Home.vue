@@ -222,6 +222,7 @@ export default {
       this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
+      this.showFixed = false;
       this._listDealerLogs();
       this._queryHomeProducts();
     } else {
