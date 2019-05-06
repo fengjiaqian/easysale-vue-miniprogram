@@ -30,7 +30,8 @@
         <li>{{product.description}}</li>
       </ul>
     </div>
-    <div class="D-bottom">
+    <div class="bottom-btn" v-if="sourceType=='display'" @click="apply">申请陈列</div>
+    <div class="D-bottom" v-else>
       <span @click="deleteProduct">删除</span>
       <span class="edit" @click="editProduct">编辑</span>
     </div>
@@ -39,7 +40,7 @@
 
 <script>
 import { productDetail, oprateManageProduct } from "api/fetch/mine";
-
+import { displayApply } from "api/fetch/display";
 export default {
   data() {
     return {
@@ -49,13 +50,15 @@ export default {
       oprateParam: {
         idList: [],
         state: 0 //状态 0:删除 1：已上架  2：已下架
-      } //商品操作查询参数
+      }, //商品操作查询参数
+      sourceType: '',//来源页面
     };
   },
   components: {},
   created() {
     localStorage.removeItem("productInfo");
-    this.id = this.$route.query.code;
+    this.sourceType = this.$route.query.source;
+    this.id = this.$route.query.id;
     this.oprateParam.idList = [this.id];
     this._queryDetail();
   },
@@ -88,7 +91,26 @@ export default {
     editProduct() {
       localStorage.setItem("productInfo", JSON.stringify(this.product));
       this.$router.push({ path: "/my/editProduct" });
-    }
+    },
+    //底部申请操作
+    apply(){
+      let param = {
+        remark: '',
+        items: [{
+          productId: this.id
+        }]
+      }
+      displayApply(param)
+          .then(res => {
+            if (res.result === "success") {
+              this.$toast("申请提交成功！");
+              this.$router.go(-1);
+            }
+          })
+          .catch(err => {
+            this.$toast(err.message);
+          });
+    },
   }
 };
 </script>
@@ -280,6 +302,18 @@ export default {
     ft(28)
     c-6()
   }
+}
+.bottom-btn{
+  position fixed
+  left 0
+  bottom 0
+  z-index 2
+  width 100%
+  lh(98)
+  bg(#FF5638)
+  ft(32)
+  c(#fff)
+  text-c()
 }
 </style>
 

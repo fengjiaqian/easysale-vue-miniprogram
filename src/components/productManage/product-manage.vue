@@ -56,12 +56,12 @@
     mounted() {},
     methods: {
       goToDetail(){
-        const code = this.product.id;
-        if(!code) return
+        const id = this.product.id;
+        if(!id) return
         this.$router.push({
           path: "/my/productDetail",
           query: {
-            code
+            id
           }
         });
       },

@@ -13,7 +13,7 @@ axios.interceptors.request.use(function (config) {
 	const currentDealerId = storage.get("currentDealerId", "") || "";
 	token && (config.headers.token = token);
 
-	//config.data.dealerId = config.data.dealerId || currentDealerId;
+	config.data.dealerId = config.data.dealerId || currentDealerId;
 	config.data.shopId = config.data.dealerId || currentDealerId;
 	config.data.dealer_id = config.data.dealer_id || currentDealerId;
 	//TODO:加载中的转圈

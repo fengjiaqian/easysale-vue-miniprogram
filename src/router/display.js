@@ -14,6 +14,13 @@ const DisplayApply = (resolve) => {
     })
 }
 
+//陈列-终端客户-陈列详情
+const DisplayDetail = (resolve) => {
+    import('@/views/display/displayDetail.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 
 const display = [
     {
@@ -31,6 +38,14 @@ const display = [
             title: '申请陈列'
         },
         component: DisplayApply
+    },
+    {
+        path: '/displayDetail',
+        name: 'displayDetail',
+        meta: {
+            title: '陈列详情'
+        },
+        component: DisplayDetail
     },
 ]
 

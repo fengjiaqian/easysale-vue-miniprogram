@@ -60,12 +60,13 @@
             //提交申请
             confirm(){
                 this.productList.forEach((item)=>{
-                    this.param.items.push(item.id)
+                    this.param.items.push({productId:item.id})
                 })
                 displayApply(this.param)
                     .then(res => {
                         if (res.result === "success") {
                             this.$toast("申请提交成功！");
+                            this.$router.go(-1)
                         }
                     })
                     .catch(err => {
