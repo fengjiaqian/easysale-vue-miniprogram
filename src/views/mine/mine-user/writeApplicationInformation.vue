@@ -2,10 +2,11 @@
 <template>
   <div class="common pt90">
     <m-header :isFixed="true"></m-header>
-    <div class="mc-item">
+    <div class="mc-item mt20">
       <div class="left">客户姓名 :</div>
       <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入姓名">
     </div>
+    <div class="mc-item-hr"></div>
     <div class="mc-item">
       <div class="left">联系电话 :</div>
       <input
@@ -17,10 +18,11 @@
         readonly
       >
     </div>
-    <div class="mc-item">
+    <div class="mc-item mt20">
       <div class="left">店铺名称 :</div>
       <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入店铺名称">
     </div>
+    <div class="mc-item-hr"></div>
     <div class="mc-item pre">
       <div class="left">店铺地址 :</div>
       <input class="right" value v-model="applyInfo.address" type="text" placeholder="请输入店铺地址">
@@ -194,7 +196,20 @@ export default {
   height: 100%;
 }
 
+.mc-item-hr {
+  bg(#fff);
+
+  &:after {
+    content: '';
+    block();
+    h(0);
+    margin: 0 24px;
+    border-bottom: 1PX solid #ededed;
+  }
+}
+
 .mc-item {
+  pos(relative);
   padding: 0 24px;
   bg(#fff);
   flex();

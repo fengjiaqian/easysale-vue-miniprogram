@@ -1,10 +1,10 @@
 <template>
   <div id="home" ref="scrollDom">
-    <div class="back-top" v-show="posY>600" @click="backTop"></div>
+    <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
     <!--  -->
     <div class="home-search-area">
-      <div class="dealer-name" v-if="userType==3" @click="_jumpDealerList">
+      <div class="dealer-name" @click="_jumpDealerList">
         {{currentDealer.shopName}}
         <em></em>
       </div>
@@ -12,8 +12,8 @@
     </div>
     <div class="view-wrapper">
       <!-- 定位导航 -->
-      <div class="fixed-nav">
-        <div class="scroll-menu-wrap clearfix" v-show="showFixed">
+      <div class="fixed-nav" v-show="showFixed">
+        <div class="scroll-menu-wrap clearfix">
           <div
             class="s-m-btn"
             v-if="menuCanScroll"
@@ -77,7 +77,7 @@
           </div>
           <!--  -->
           <ul class="home-icons clearfix">
-            <li v-for="(item,index) in appIcons">
+            <li v-for="(item, index) in appIcons">
               <a @click="jumpSecondsort(index)">
                 <img v-lazy="item.imgUrl || ''">
                 <span>{{item.value}}</span>
@@ -147,13 +147,15 @@ import ic1 from "../assets/images/ic-tousu.png";
 import ic2 from "../assets/images/ic-duijiang.png";
 import ic3 from "../assets/images/ic-tuihuo.png";
 import ic4 from "../assets/images/ic-chenglie.png";
-
+import ic5 from "../assets/images/ic-kaidian.png";
 const appIcons = [
-  { imgUrl: ic1, value: "投诉管理" },
-  { imgUrl: ic2, value: "兑奖管理" },
-  { imgUrl: ic3, value: "退货管理" },
-  { imgUrl: ic4, value: "陈列管理" }
+  { imgUrl: ic1, value: "投诉" },
+  { imgUrl: ic2, value: "兑奖" },
+  { imgUrl: ic3, value: "退货" },
+  { imgUrl: ic4, value: "陈列" },
+  { imgUrl: ic5, value: "开店" }
 ];
+import back from "components/back.vue";
 import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
@@ -196,7 +198,8 @@ export default {
     scroll,
     product,
     floatCart,
-    slider
+    slider,
+    back
   },
   beforeCreate() {},
   computed: {
@@ -216,6 +219,7 @@ export default {
   activated() {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
+      this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
       this._listDealerLogs();
@@ -298,9 +302,6 @@ export default {
     },
     //
     _ListCurrentDealer() {
-      if (this.userType != 3) {
-        return false;
-      }
       const storeDealer = storage.get("currentDealer", {});
       if (storeDealer.id == this.currentDealerId) {
         return (this.currentDealer = storeDealer);
@@ -427,7 +428,8 @@ export default {
       });
     },
     jumpSecondsort(Index) {
-      var jumpPath = "";
+      var jumpPath = "",
+        query = {};
       switch (Index) {
         case 3:
           if (this.userType == 1) {
@@ -447,26 +449,30 @@ export default {
         case 2:
           jumpPath = "/returnHomepage";
           break;
+        case 4:
+          if (!this.navigateToLogin()) {
+            jumpPath = "/writeApplicationInformation";
+            query = {
+              mobileNo: storage.get("mobileNo", "")
+            };
+          }
+          break;
         default:
           break;
       }
-      this.$router.push({ path: jumpPath });
+      jumpPath && this.$router.push({ path: jumpPath, query });
     }
   }
 };
 </script>
 
 <style lang="stylus">
-.back-top {
-  position: fixed;
-  left: 80%;
-  top: 72%;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: url('../assets/images/ic_back_top.png') center center no-repeat, rgba(0, 0, 0, 0.4);
-  background-size: 120% 120%;
-  z-index: 50;
+.scroll-item {
+  .H-product-item:nth-last-of-type(1) {
+    .H-product-content {
+      border: 0;
+    }
+  }
 }
 
 .view-wrapper {
@@ -617,10 +623,10 @@ export default {
   background: #fff;
   width: 100%;
   padding-bottom: 32px;
+  flex();
 
   li {
-    width: 25%;
-    float: left;
+    flex-1();
 
     > a {
       display: block;

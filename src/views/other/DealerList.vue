@@ -64,6 +64,7 @@ import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
 import { addShopHistory } from "api/fetch/dealer";
 import storage from "common/storage";
+import { setTimeout } from "timers";
 export default {
   name: "dealer-list",
   data() {
@@ -131,9 +132,14 @@ export default {
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
-      this.$router.push({
-        path: "/navi/home"
-      });
+      //todo
+      setTimeout(() => {
+        // 刷新token
+        storage.set("userType", "3");
+        this.$router.push({
+          path: "/navi/home"
+        });
+      }, 300);
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;
