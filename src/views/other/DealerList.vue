@@ -64,7 +64,7 @@ import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
 import { addShopHistory, changeShop } from "api/fetch/dealer";
 import storage from "common/storage";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "dealer-list",
   data() {
@@ -87,6 +87,9 @@ export default {
     this.currentId = this.$route.query.id || "";
     this._ListCurrentDealer();
     this._ListAllDealer(this.params);
+  },
+  computed: {
+    ...mapGetters(["userInSwitching"])
   },
   methods: {
     ...mapActions(["setUserType"]),
@@ -127,22 +130,28 @@ export default {
           this.loading = false;
         });
     },
+    /***
+     *todo 经销商切换店铺 变为终端用户，购物车、订单、我的都是用户的界面。
+     *  切回自己店铺  变为经销商。
+     *  (经销商 && 没有切换 ) || 切换中 可以切换店铺。
+     */
     _chooseDealer(dealer) {
-      /***
-       *todo
-       *
-       *
-       */
-      changeShop(dealer.id)
-        .then(res => {
-          this.setUserType(3);
-          storage.set("currentDealerId", dealer.id);
-          storage.set("currentDealer", dealer);
-          this.$router.push({
-            path: "/navi/home"
-          });
-        })
-        .catch(_ => {});
+      if (
+        (this.userType != 3 && !this.userInSwitching) ||
+        this.userInSwitching
+      ) {
+        changeShop(dealer.id)
+          .then(res => {
+            this.setUserType(res.data || 3);
+            storage.set("currentDealerId", dealer.id);
+            storage.set("currentDealer", dealer);
+            this.$router.push({
+              path: "/navi/home"
+            });
+          })
+          .catch(_ => {});
+        return false;
+      }
       if (storage.get("token", "")) {
         addShopHistory(dealer.id).then(res => {});
       }

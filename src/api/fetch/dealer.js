@@ -66,7 +66,7 @@ export function changeShop(id) {
         method: 'post',
         url: '/shop/changeShop',
         data: {
-            id: id,
+            id,
         }
     }).then((res) => {
         return Promise.resolve(res.data)
