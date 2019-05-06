@@ -1,3 +1,4 @@
+//陈列列表页
 .display-wrap{
   height 100%
   bg(#fff)
@@ -126,5 +127,81 @@
   }
   .empty{
     mt(100)
+  }
+}
+
+//陈列申请页
+.display-apply{
+  height 100%
+  bg(#F6F6F6)
+  padding 20px 16px 0
+  .da-remark{
+    margin-bottom 118px !important
+    textarea{
+      padding 8px
+      width 100%
+      ft(30)
+      c-3()
+      flex-1()
+      outline none
+      border none
+      &::-webkit-textarea-placeholder{
+        c(#999)
+      }
+    }
+  }
+  .da-product,.da-remark{
+    padding 0 24px
+    mb(20)
+    bg(#fff)
+    border-radius 2px
+    >h5{
+      font-weight 600
+      ft(30)
+      c-3()
+      padding 24px 0
+      border-bottom 1PX solid #EDEDED
+    }
+  }
+  .dap-list{
+    pb(40)
+    li{
+      flex()
+      mt(24)
+      img{
+        min-width 120px
+        w(120)
+        h(120)
+        mr(24)
+      }
+      .product-info-normal{
+        flex-1()
+        flex()
+        flex-direction column
+        h(120)
+        .p-name{
+          ft(30)
+          c-3()
+          text-overflow-2()
+          font-weight 600
+        }
+        .p-price{
+          ft(26)
+          c-6()
+        }
+      }
+    }
+  }
+  .da-confirm{
+    position fixed
+    width 100%
+    left 0
+    bottom 0
+    z-index 2
+    lh(98)
+    bg(#FF5638)
+    c(#fff)
+    ft(32)
+    text-c()
   }
 }

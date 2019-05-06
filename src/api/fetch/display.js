@@ -15,8 +15,21 @@ function queryDisplayProduct(params) {
 	});
 }
 
-
+//陈列管理-客户新增陈列
+function displayApply(params) {
+	const url = "/display/saveDisplay"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
 
 export {
-	queryDisplayProduct
+	queryDisplayProduct, displayApply
 }

@@ -28,7 +28,7 @@
                 <i :class="{'selected':allSelected}"></i>
                 <span>全选</span>
             </div>
-            <div class="f-apply" :class="{'achieve':achieve}">
+            <div class="f-apply" :class="{'achieve':achieve}" @click="apply">
                 申请陈列<span v-if="achieve">({{selectedProduct.length}})</span>
             </div>
         </section>
@@ -43,6 +43,7 @@
     import { queryDisplayProduct } from "api/fetch/display";
     import bus from "common/Bus";
     import empty from "components/empty.vue";
+    import storage from 'common/storage'
     export default {
         data() {
             return {
@@ -90,6 +91,7 @@
             }
         },
         created() {
+            storage.remove("selectedProduct");
             this.queryProducts()
         },
         mounted() {
@@ -172,6 +174,11 @@
                 this.filterParam.searchKey = event.currentTarget.value;
                 this.selectedProduct = []
                 this.productList = []
+            },
+            //申请陈列
+            apply(){
+                storage.set("selectedProduct", this.selectedProduct);
+                this.$router.push({ path: "/displayApply" });
             },
         },
         watch: {
