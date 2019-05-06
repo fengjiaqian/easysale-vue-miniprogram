@@ -8,15 +8,7 @@
       @file-success="onFileSuccess"
       @file-removed="onFileRemoved"
       @file-error="onFileError"
-    >
-      <!-- <div class="inner-viewer" ref="inner">
-        <div class="inner-content">
-          <i></i>
-          <span>添加营业执照</span>
-        </div>
-      </div>-->
-      添加营业执照
-    </cube-upload>
+    ></cube-upload>
   </div>
 </template>
 <script>

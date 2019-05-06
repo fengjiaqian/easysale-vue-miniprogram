@@ -62,9 +62,9 @@
 import scroll from "components/scroll.vue";
 import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
-import { addShopHistory } from "api/fetch/dealer";
+import { addShopHistory, changeShop } from "api/fetch/dealer";
 import storage from "common/storage";
-import { setTimeout } from "timers";
+import { mapActions } from "vuex";
 export default {
   name: "dealer-list",
   data() {
@@ -89,6 +89,7 @@ export default {
     this._ListAllDealer(this.params);
   },
   methods: {
+    ...mapActions(["setUserType"]),
     _ListCurrentDealer() {
       if (!this.currentId) return false;
       const storeDealer = storage.get("currentDealer", {});
@@ -127,19 +128,29 @@ export default {
         });
     },
     _chooseDealer(dealer) {
+      /***
+       *todo
+       *
+       *
+       */
+      changeShop(dealer.id)
+        .then(res => {
+          this.setUserType(3);
+          storage.set("currentDealerId", dealer.id);
+          storage.set("currentDealer", dealer);
+          this.$router.push({
+            path: "/navi/home"
+          });
+        })
+        .catch(_ => {});
       if (storage.get("token", "")) {
         addShopHistory(dealer.id).then(res => {});
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
-      //todo
-      setTimeout(() => {
-        // 刷新token
-        storage.set("userType", "3");
-        this.$router.push({
-          path: "/navi/home"
-        });
-      }, 300);
+      this.$router.push({
+        path: "/navi/home"
+      });
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;

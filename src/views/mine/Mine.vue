@@ -5,7 +5,7 @@
         <img v-lazy="avatarUrl" alt>
       </div>
       <div class="user-tel" @click="_jumpUserInfo">
-        <h5>{{nickName || '未命名'}}</h5>
+        <h5>{{nickName || ''}}</h5>
 
         <p>{{isVisitor?'未绑定':mobileNo}}</p>
       </div>
@@ -30,10 +30,6 @@
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
           <em></em>
-          <!-- <div>
-            <span class="mr-12 c-theme" v-if="item.path=='/writeApplicationInformation'"></span>
-            <em></em>
-          </div>-->
         </div>
       </li>
     </ul>
@@ -45,10 +41,10 @@
  * isVisitor：展示差异 auth权限控制。
  * userType default 3  终端用户
  */
-//TODO: 终端用户 申请经销商待审核状态显示
-import * as mineUtil from "./mineCommon";
+import { initAccessModule } from "./mineCommon";
 import storage from "common/storage";
 import { findCustomerOwerInfo } from "api/fetch/endCustomer";
+
 export default {
   data() {
     return {
@@ -62,13 +58,14 @@ export default {
   components: {},
   beforeCreate: function() {},
   created: function() {
-    this.mineMenu = mineUtil.initAccessModule(this.userType);
+    this.mineMenu = initAccessModule(this.userType);
     this._findCustomerOwerInfo();
   },
   beforeDestory() {},
   destoryed() {},
   mounted() {},
   activated() {
+    this.mineMenu = initAccessModule(this.userType);
     const refresh = storage.get("mineRefresh", false);
     refresh && this._findCustomerOwerInfo();
     storage.set("mineRefresh", false);

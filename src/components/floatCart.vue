@@ -6,7 +6,7 @@
     @touchmove.prevent="move($event)"
     @touchend="end"
   >
-    <span class="cart-count" v-show="count>0">{{cartCount}}</span>
+    <span class="cart-count" v-show="cartCount>0">{{cartCount}}</span>
   </div>
 </template>
 
@@ -17,9 +17,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   mixins: [mixin],
   data() {
-    return {
-      count: 8
-    };
+    return {};
   },
   computed: {
     ...mapGetters(["cartCount"])

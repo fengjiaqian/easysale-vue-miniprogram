@@ -21,10 +21,10 @@ export function findCustomerList(keyword = "") {
 }
 
 /**
- * 客户或者经销商fetch店铺log 
+ * 客户或者经销商fetch店铺log    
  */
 export function ListDealerLogs() {
-    let url = "/dealer/findShopLogoListByCustomer";
+    let url = "/dealer/findShopLogoListByShopId";
     return axios({
         method: 'post',
         url,
@@ -49,6 +49,24 @@ export function addShopHistory(dealerId) {
         url,
         data: {
             shopId: dealerId,
+        }
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+
+/***
+ * 切换店铺
+ * id 店铺id 
+ */
+export function changeShop(id) {
+    return axios({
+        method: 'post',
+        url: '/shop/changeShop',
+        data: {
+            id: id,
         }
     }).then((res) => {
         return Promise.resolve(res.data)
