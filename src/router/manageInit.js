@@ -56,13 +56,6 @@ const addNewReturnOrder = (resolve) => {
         resolve(module)
     })
 };
-
-// 选择退货商品
-const chooseReturnGoods = (resolve) => {
-    import('views/returnGoods/chooseReturnGoods.vue').then((module) => {
-        resolve(module)
-    })
-};
 const manageInit = [
 
     {
@@ -142,14 +135,7 @@ const manageInit = [
         },
         component: addNewReturnOrder,
     },
-    {
-        path: '/chooseReturnGoods',
-        name: 'chooseReturnGoods',
-        meta: {
-            title: '可选退货商品',
-        },
-        component: chooseReturnGoods,
-    }
+
 ]
 
 

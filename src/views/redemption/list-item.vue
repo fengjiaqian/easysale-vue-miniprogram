@@ -1,6 +1,6 @@
 <template>
     <div class="redemption-items" v-if="listData.customerAward" :style="{paddingLeft:'12px'}">
-        <p class="dealer">{{ isCustomer?listData.dealer.dealerName: listData.customer.customerName}}</p>
+        <p class="dealer">{{ userType == 3?listData.dealer.dealerName: listData.customer.customerName}}</p>
         <p class="replyTime">{{listData.customerAward.createTime}}</p>
         <p class="redemptionHeadLine">兑奖申请</p>
         <ul v-if="listData.customerAward.items.length>0">
@@ -14,7 +14,9 @@
                     <span>X{{skuItem.awardCount}}</span>
                 </div>
             </li>
-            <div class="expand" @click="isShowMoreInfo()" v-if="listData.customerAward.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+            <div class="expand" @click="isShowMoreInfo()" v-if="listData.customerAward.items.length>2">
+                {{isShowMore?'收起':'展开更多'}}
+            </div>
         </ul>
         <div class="continue" v-if="tabState==1">
             <div class="triangle"></div>
@@ -27,7 +29,9 @@
         <p class="state">{{stateList[0]}}</p>
         <div class="btn-warp">
             <button class="go-detail" @click="toRedemptionDetail(listData.customerAward.id)">查看详情</button>
-            <button v-if="!isCustomer&&tabState==0" class="handle-btn" @click.stop="directProcessing(listData.customerAward.id)">处理</button>
+            <button v-if="userType != 3&&tabState==0" class="handle-btn"
+                    @click.stop="directProcessing(listData.customerAward.id)">处理
+            </button>
         </div>
     </div>
 </template>
@@ -57,12 +61,6 @@
             }
         },
         computed: {
-            isDealer() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
             isNull() {
                 return JSON.stringify(this.listData.saleMan) == "{}"
             }
@@ -170,6 +168,7 @@
         margin: 16px 0
 
     }
+
     .handle-btn {
         c(#fff);
         ft(28);
@@ -249,6 +248,7 @@
         c(#0096FF);
         mt(16)
     }
+
     .saleMan {
         c(#999);
         ft(28)

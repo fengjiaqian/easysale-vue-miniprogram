@@ -46,7 +46,7 @@
                 length: 0,
                 arrowUrl: arrowUrl,
                 rolePopShow: false,
-                complaintType:'',
+                complaintType: '',
                 typeList: [
                     {
                         id: 1,
@@ -123,13 +123,11 @@
 
             addNewComplaint() {
                 if (!this.isValid()) return;
-                const currentDealerId = storage.get("currentDealerId", "") || "";
                 let params = {
-                    dealerId: currentDealerId,
                     complaintContent: this.complaintContent,
                     complaintHeadLine: this.complaintHeadLine,
                     remark: this.remark,
-                    complaintType:this.complaintType
+                    complaintType: this.complaintType
 
                 };
                 saveComplain(params).then(res => {

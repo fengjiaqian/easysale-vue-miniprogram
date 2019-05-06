@@ -1,7 +1,7 @@
 <template>
     <div class="complaint-items" :style="{paddingLeft:'12px'}"
          v-if="listData.customerComplaint">
-        <p class="dealer">{{ isCustomer?listData.dealer.dealerName: listData.customer.customerName}}</p>
+        <p class="dealer">{{userType == 3?listData.dealer.dealerName: listData.customer.customerName}}</p>
         <p class="replyTime">{{listData.customerComplaint.createTime}}</p>
         <p class="complaintHeadLine">{{listData.customerComplaint.complaintHeadLine}}</p>
         <p class="complaintContent">{{listData.customerComplaint.complaintContent}}</p>
@@ -16,7 +16,9 @@
         <p class="state">{{stateList[listData.customerComplaint.state]}}</p>
         <div class="btn-warp">
             <button class="go-detail" @click.stop="toComplaintDetail(listData.customerComplaint.id)">查看详情</button>
-            <button v-if="!isCustomer&&tabState==0" class="handle-btn" @click.stop="directProcessing(listData.customerComplaint.id)">处理</button>
+            <button v-if="userType != 3&&tabState==0" class="handle-btn"
+                    @click.stop="directProcessing(listData.customerComplaint.id)">处理
+            </button>
         </div>
     </div>
 </template>
@@ -44,12 +46,6 @@
             }
         },
         computed: {
-            isDealer() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
             isNull() {
                 return JSON.stringify(this.listData.saleMan) == "{}"
             }
@@ -141,7 +137,7 @@
         mt(24);
         display: flex;
         align-items center;
-        justify-content:flex-end
+        justify-content: flex-end
     }
 
     .go-detail {

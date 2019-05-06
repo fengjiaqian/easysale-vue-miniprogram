@@ -1,18 +1,18 @@
 <template>
     <div id="complaint">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar " >
+        <section class="top-bar ">
             <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
-        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
-            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
-                  @click="switchShop(item,idx)">{{item.dealerName}}</span>
+        <section class="dealer-list-wrap" v-if="userType == 3&&dealerList.length>0">
+            <span :class="{'active':activeshopIdx==idx}" v-for="(item,idx) in dealerList"
+                  @click="switchShop(item,idx)">{{item.shopName}}</span>
         </section>
-        <empty :class="{'mt-185':!isCustomer,'mt-275':isCustomer,'mb':isCustomer}"
+        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
                :txt="'暂无相关投诉单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div :class="{'mt-185':!isCustomer,'mt-275':isCustomer,'mb':isCustomer}"
+        <div :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%" v-if="complaintsList.length">
             <scroll
                     class="c-list"
@@ -26,11 +26,11 @@
 
             </scroll>
         </div>
-        <button class="footer-btn" @click="addComplaints()" v-if="isCustomer">新建投诉单</button>
+        <button class="footer-btn" @click="addComplaints()" v-if="userType == 3">新建投诉单</button>
     </div>
 </template>
 <script>
-    import {complaintList, selectDealComplaint,updateCustomerById} from "api/fetch/complaints";
+    import {complaintList, selectDealComplaint, updateCustomerById} from "api/fetch/complaints";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import listItem from "./list-item.vue";
@@ -57,8 +57,8 @@
                 iconUrl: iconUrl,
                 title: '投诉管理',
                 dealerList: [],
-                activeDealerIdx: 0,//默认选中的经销商
-                dealerId: ''
+                activeshopIdx: 0,//默认选中的经销商
+                shopId: ''
             }
         },
         created() {
@@ -69,17 +69,6 @@
                 this._QueryComplaintList();
             }
         },
-
-        computed: {
-            isDealer() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
-
-
-        },
         methods: {
 
             /**
@@ -89,15 +78,18 @@
             switchTab(state) {
                 this.tabState = state;
                 this.complaintsList = [];
-                this._QueryComplaintList();
-                this._QueryDealComplaint()
+                if (this.userType == '3') {
+                    this._QueryDealComplaint();
+                } else {
+                    this._QueryComplaintList();
+                }
             },
 
             //切换经销商店铺
             switchShop(item, idx) {
-                this.activeDealerIdx = idx;
+                this.activeshopIdx = idx;
                 this.complaintsList = [];
-                this.dealerId = item.dealerId;
+                this.shopId = item.shopId;
                 this._QueryComplaintList();
 
             },
@@ -107,8 +99,9 @@
                 selectDealComplaint(this.tabState).then(res => {
                     if (res.data) {
                         let resultData = res.data;
+                        this.empty = !resultData.length;
                         this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId;
+                        this.shopId = this.dealerList[0].shopId;
                         this._QueryComplaintList()
 
                     }
@@ -121,7 +114,7 @@
             _QueryComplaintList() {
                 let params = {
                     state: this.tabState,
-                    dealerId: this.dealerId
+                    dealerId: this.shopId
                 };
                 complaintList(params).then(res => {
                     if (res.data) {
@@ -160,13 +153,10 @@
                     this.$toast('操作成功');
                     this.complaintsList = [];
                     this._QueryComplaintList();
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
-
-
-
 
 
             /**

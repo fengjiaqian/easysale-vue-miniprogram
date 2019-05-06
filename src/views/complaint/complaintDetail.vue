@@ -25,12 +25,12 @@
                 </div>
             </div>
             <!--终端可见-->
-            <div class="title-box" v-if="!isDealer">
-                <div class="title ">{{isCustomer?'商贸公司':'经销商'}}</div>
+            <div class="title-box">
+                <div class="title ">{{userType == 3?'商贸公司':'经销商'}}</div>
                 <div class="font-30-666 company-name">{{dealer.dealerName}}</div>
             </div>
             <!--经销商可见-->
-            <div class="title-box" v-if="!isCustomer">
+            <div class="title-box" v-if="userType != 3">
                 <div class="title">客户信息</div>
                 <div class="customer-info">
                     <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
@@ -40,7 +40,7 @@
                     <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
-            <div class="title-box" v-if="isCustomer">
+            <div class="title-box" v-if="userType == 3">
                 <span class="title">投诉时间</span>
                 <span class="font-30-666 company-name">{{customerComplaint.createTime}}</span>
             </div>
@@ -48,14 +48,15 @@
                 <span class="title ">备注</span>
                 <span class="font-30-666 company-name">{{customerComplaint.remark}}</span>
             </div>
-            <div class="title-box" v-if="!isCustomer&&customerComplaint.state==0">
+            <div class="title-box" v-if="userType != 3&&customerComplaint.state==0">
                 <p class="title">回复</p>
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="isCustomer&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉</button>
-        <div v-if="!isCustomer&&customerComplaint.state==0">
+        <button class="cancel-btn" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
+        </button>
+        <div v-if="userType !=3&&customerComplaint.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
         </div>
     </div>
@@ -81,14 +82,7 @@
 
             }
         },
-        computed: {
-            isDealer() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
-        },
+
         components: {mHeader,},
         created: function () {
             this.id = this.$route.params.id;

@@ -6,23 +6,24 @@
                   @click="switchTab(item.idx)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
-        <section class="dealer-list-wrap" v-if="tabState!=2&&isCustomer&&dealerList.length>0">
-            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
+        <section class="dealer-list-wrap" v-if="tabState!=2&&userType == 3&&dealerList.length>0">
+            <span :class="{'active':activeshopIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}"
+        <!--空页面-->
+        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
                style="height: 100%;overflow: hidden"
                :txt="tabState==2?'暂无可申请的兑奖商品':'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <!--兑奖商品列表-->
-        <div v-if="tabState==2" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}"
+        <div v-if="tabState==2" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%;background-color: #fff">
             <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
                         @emitEvt="handleChange"></search-bar>
             <scroll
                     v-if="productList.length"
                     class="c-list"
-                    :data="redemptionList"
+                    :data="productList"
                     ref="scrollRedemption"
                     :pullup="true"
                     @scrollToEnd="loadMoreProducts"
@@ -35,13 +36,13 @@
             </scroll>
         </div>
         <!--兑奖单列表-->
-        <div v-if="redemptionList.length" :class="{'mt-185':isDealer,'mt-275':isCustomer,'mb':isCustomer}"
+        <div v-if="redemptionList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="overflow: scroll">
             <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
                        :tabState="tabState" @directProcessing="directProcessing"></list-item>
         </div>
         <!--底部按钮-->
-        <div class="footer" v-if="isCustomer&&tabState==2&&!empty">
+        <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
             <div class="footer-left">
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
@@ -88,9 +89,9 @@
                 redemptionList: [],
                 roleList: [],
                 rolePopShow: false,
-                activeDealerIdx: 0,
+                activeshopIdx: 0,
                 dealerList: [],
-                dealerId: '',
+                shopId: '',
                 // 分页
                 productList: [],
                 loading: false,
@@ -133,14 +134,6 @@
                 this.selectSingle(data)
             });
         },
-        computed: {
-            isDealer() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
-        },
         watch: {
             filterParam: {
                 handler(newVal, oldVal) {
@@ -181,16 +174,20 @@
                 if (state == 2) {
                     this.afterProductList()
                 } else {
-                    this._QueryDealAward();
+                    if (this.userType == '3') {
+                        this._QueryDealAward();
+                    } else {
+                        this._QueryAwardList();
+                    }
                 }
 
             },
 
             //切换经销商店铺
             switchShop(item, idx) {
-                this.activeDealerIdx = idx;
+                this.activeshopIdx = idx;
                 this.redemptionList = [];
-                this.dealerId = item.dealerId;
+                this.shopId = item.shopId;
                 this._QueryAwardList();
             },
 
@@ -209,8 +206,9 @@
                 selectDealAward(this.tabState).then(res => {
                     if (res.data) {
                         let resultData = res.data;
+                        this.empty = !resultData.length;
                         this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId;
+                        this.shopId = this.dealerList[0].shopId;
                         this._QueryAwardList();
                     }
                 });
@@ -222,7 +220,7 @@
             _QueryAwardList() {
                 let params = {
                     state: this.tabState,
-                    dealerId: this.dealerId
+                    dealerId: this.shopId
                 };
                 awardList(params).then(res => {
                     if (res.data) {
@@ -331,11 +329,14 @@
 
             pullSelected() {
                 this.selectedProduct = [];
-                this.productList.forEach(item => {
-                    if (item.select) {
-                        this.selectedProduct.push(item)
-                    }
-                });
+                if (this.productList.length) {
+                    this.productList.forEach(item => {
+                        if (item.select) {
+                            this.selectedProduct.push(item)
+                        }
+                    });
+                }
+
                 storage.set("selectedProduct", this.selectedProduct);
 
             },

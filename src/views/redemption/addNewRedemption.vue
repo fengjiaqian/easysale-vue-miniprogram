@@ -62,19 +62,7 @@
                 selectedProduct.forEach(selectItem => {
                     selectItem.buyCount = 1;
                     selectItem.minBuyNum = 1;
-                    if (vm.redemptionGoods.length > 0) {
-                        const index = vm.redemptionGoods.findIndex(
-                            item => item.id === selectItem.id
-                        );
-                        if (index != -1) {
-                            vm.redemptionGoods[index].buyCount += 1
-                        } else {
-                            vm.redemptionGoods.push(selectItem)
-                        }
-
-                    } else {
-                        vm.redemptionGoods.push(selectItem)
-                    }
+                    vm.redemptionGoods.push(selectItem)
                 });
                 storage.remove("selectedProduct");
             })
@@ -86,12 +74,6 @@
             }
         },
         methods: {
-
-            //跳转到添加兑奖商品
-            toAddRedemptionGoods() {
-                this.$router.push({path: "/chooseProductList"});
-            },
-
             // 删除已添加的兑奖商品
             delGoods(selectIndex) {
                 this.redemptionGoods.splice(selectIndex, 1);
