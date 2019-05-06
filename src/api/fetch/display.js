@@ -91,7 +91,23 @@ function cancelDisplayApply(params) {
 	});
 }
 
+//陈列管理-处理陈列
+function dealApply(params) {
+	const url = "/display/updateDisplayById"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 export {
 	queryDisplayProduct, displayApply, queryDisplays, queryDealerShops,
-	queryDisplayDetail, cancelDisplayApply
+	queryDisplayDetail, cancelDisplayApply,
+	dealApply
 }

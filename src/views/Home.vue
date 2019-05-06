@@ -439,10 +439,8 @@ export default {
         query = {};
       switch (Index) {
         case 3:
-          if (this.userType == 1) {
-            jumpPath = "/exhibitList";
-          } else if (this.userType == 2) {
-            jumpPath = "/saleSignExhibitList";
+          if (this.userType == 1 || this.userType == 2) {
+            jumpPath = "/displayManage";
           } else {
             jumpPath = "/displayList";
           }

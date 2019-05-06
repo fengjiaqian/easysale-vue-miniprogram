@@ -21,6 +21,20 @@ const DisplayDetail = (resolve) => {
     })
 }
 
+//陈列管理列表
+const DisplayManage = (resolve) => {
+    import('@/views/display/displayManage.vue').then((module) => {
+        resolve(module)
+    })
+}
+
+//陈列管理详情
+const DetailManage = (resolve) => {
+    import('@/views/display/detailManage.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 
 const display = [
     {
@@ -46,6 +60,22 @@ const display = [
             title: '陈列详情'
         },
         component: DisplayDetail
+    },
+    {
+        path: '/displayManage',
+        name: 'displayManage',
+        meta: {
+            title: '陈列管理'
+        },
+        component: DisplayManage
+    },
+    {
+        path: '/detailManage',
+        name: 'detailManage',
+        meta: {
+            title: '陈列详情'
+        },
+        component: DetailManage
     },
 ]
 
