@@ -58,7 +58,7 @@
         </ul>
         <div class="reward-column">
           <span>陈列奖励：</span>
-          <textarea cols="30" rows="3" placeholder="请输入陈列奖励"></textarea>
+          <textarea v-model="productModal.displayAward" cols="30" rows="3" placeholder="请输入陈列奖励"></textarea>
         </div>
       </div>
     </div>
@@ -87,6 +87,7 @@
           returnState: 0,//退换
           awardState: 0,//兑奖
           displayState: 0,//陈列
+          displayAward: '',//陈列奖励（选填）
         },
         productType: 0, //产品类型 0=酒批 1=经销商 ,酒批产品只能改价格
         limitUploadNum: 1,//上传图片的限制张数
