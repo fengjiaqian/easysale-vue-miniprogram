@@ -22,7 +22,7 @@
         <span v-if="product.awardState">可兑奖</span>
         <span v-if="product.displayState">可陈列</span>
       </div>
-      <div class="reward" v-if="product.displayAward">陈列奖励：{{product.displayAward}}</div>
+      <div class="reward" v-if="product.displayState&&product.displayAward">陈列奖励：{{product.displayAward}}</div>
     </div>
     <div class="D-info">
       <h3>商品介绍</h3>

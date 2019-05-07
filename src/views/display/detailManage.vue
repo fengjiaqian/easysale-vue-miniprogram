@@ -30,7 +30,7 @@
                 <li>客户姓名：{{displayInfo.customer.customerName}}</li>
                 <li>手机号码：{{displayInfo.customer.customerPhone}}</li>
                 <li>申请时间：{{displayInfo.customer.createTime}}</li>
-                <li v-if="displayInfo.customer.saleName">消失负责人：{{displayInfo.customer.saleName}}</li>
+                <li v-if="displayInfo.customer.saleName">销售负责人：{{displayInfo.customer.saleName}}</li>
             </ul>
         </div>
         <div class="dd-column dd-remark" v-if="displayInfo.customerDisplay.state==0">
