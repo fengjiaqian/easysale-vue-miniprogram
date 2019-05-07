@@ -12,10 +12,8 @@
 </template>
 
 <script>
-import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
 import { shopkeeperCertification } from "api/fetch/dealer";
 import storage from "common/storage";
-import { evokeWxLocation } from "common/location";
 import compress from "common/image";
 
 import mUpload from "components/m-upload.vue";
@@ -63,8 +61,9 @@ export default {
       }
       shopkeeperCertification(logoIamgeUrls)
         .then(res => {
-          this.$toast("上传成功，等待审核");
-          this.$router.push({ path: "/my/mine" });
+          storage.set("mineRefresh", true);
+          this.$toast("上传成功，请耐心等待审核");
+          this.$router.push({ path: "/navi/mine" });
         })
         .catch(_ => {});
     }

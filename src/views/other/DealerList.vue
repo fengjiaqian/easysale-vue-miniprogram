@@ -148,6 +148,9 @@ export default {
             this.setUserType(res.data || 3);
             storage.set("currentDealerId", dealer.id);
             storage.set("currentDealer", dealer);
+            storage.set("homeRefresh", true);
+            storage.set("mineRefresh", true);
+            storage.set("orderRefresh", true);
             this.$router.push({
               path: "/navi/home"
             });

@@ -29,7 +29,13 @@
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <em></em>
+          <div>
+            <span
+              class="mr-12 c-theme"
+              v-if="item.path=='/writeApplicationInformation' && auditState==0"
+            >审核中</span>
+            <em></em>
+          </div>
         </div>
       </li>
     </ul>
@@ -37,24 +43,24 @@
 </template>
 
 <script>
-/** 公共页面 三种角色 + 游客模式。
- * isVisitor：展示差异 auth权限控制。
- * userType default 3  终端用户
- */
 import { initAccessModule } from "./mineCommon";
 import storage from "common/storage";
 import { findCustomerOwerInfo } from "api/fetch/endCustomer";
-
+import { queryShopInfo } from "api/fetch/mine";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       mobileNo: storage.get("mobileNo", ""),
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
-      mineMenu: []
+      mineMenu: [],
+      auditState: 1
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["userInSwitching"])
+  },
   components: {},
   beforeCreate: function() {},
   created: function() {
@@ -84,31 +90,42 @@ export default {
           }
         });
       }
+      if (path == "/my/shopkeeper" && this.auditState == 0) {
+        return false;
+      }
       this.$router.push(path);
     },
     _bindPhone() {
       this.navigateToLogin();
     },
-    //TODO 销售人员
     //分角色跳转个人信息
     _jumpUserInfo() {
       this.navigateToLogin();
-      if (this.userType == 3) {
+      if (this.userType == 3 && !this.userInSwitching) {
         this.mineSkip("/customerInfo");
-      }
-      if (this.userType == 1) {
+      } else {
         this.mineSkip("/my/userInfo");
       }
     },
-    //申请经销商后  刷新申请中的状态
     //TODO 区别角色
     _findCustomerOwerInfo() {
       if (this.isVisitor) return false;
-      findCustomerOwerInfo()
+      if (this.userType == 3 && !this.userInSwitching) {
+        findCustomerOwerInfo()
+          .then(res => {
+            this.mobileNo = res.data.phone;
+            this.nickName = res.data.wxNickName;
+            this.avatarUrl = res.data.iamgeUrl;
+          })
+          .catch(err => {});
+        return false;
+      }
+      queryShopInfo({})
         .then(res => {
           this.mobileNo = res.data.phone;
           this.nickName = res.data.wxNickName;
           this.avatarUrl = res.data.iamgeUrl;
+          this.auditState = res.data.auditState; //经销商进行店主认证（0：审核中，1：审核通过）
         })
         .catch(err => {});
     }
