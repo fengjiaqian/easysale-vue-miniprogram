@@ -1,5 +1,5 @@
 <template>
-  <div id="detail pt90" v-show="domShow">
+  <div id="detail" class="pt90" v-show="domShow">
     <m-header :isFixed="true"></m-header>
     <div class="D-img">
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">

@@ -24,10 +24,26 @@
           mt(8)
         }
         .product-list{
+          position relative
           li{
             ft(28)
             c-6()
             mt(8)
+            &:nth-of-type(n+3){
+              display none
+            }
+          }
+          .growth-btn{
+            width 100%
+            display inline-block
+            mt(8)
+            ft(28)
+            c(#2C91E2)
+          }
+          &.list-unfold{
+            li{
+              display block
+            }
           }
         }
       }
@@ -87,10 +103,26 @@
         mt(8)
       }
       .product-list{
+        position relative
         li{
           ft(28)
           c-6()
           mt(8)
+          &:nth-of-type(n+3){
+            display none
+          }
+        }
+        .growth-btn{
+          width 100%
+          display inline-block
+          mt(8)
+          ft(28)
+          c(#2C91E2)
+        }
+        &.list-unfold{
+          li{
+            display block
+          }
         }
       }
     }

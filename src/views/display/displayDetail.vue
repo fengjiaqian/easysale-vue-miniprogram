@@ -1,5 +1,6 @@
 <template>
-    <div class="display-detail" v-if="domShow">
+    <div class="display-detail pt90" v-if="domShow">
+        <m-header :isFixed="true"></m-header>
         <div class="dd-header">
             <p class="state">陈列状态：<span>{{stateText}}</span></p>
             <div class="reply-box" v-if="displayInfo.customerDisplay.state!=0&&displayInfo.customerDisplay.replyContent">
@@ -18,7 +19,7 @@
                     <div class="product-info-normal">
                         <h5 class="p-name">{{product.productName}}</h5>
                         <div style="flex:1;"></div>
-                        <div class="p-price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
+                        <div class="p-price">规格：{{product.specification}}</div>
                     </div>
                 </li>
             </ul>
