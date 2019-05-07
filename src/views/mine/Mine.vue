@@ -58,7 +58,8 @@ export default {
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
       mineMenu: [],
-      auditState: 1
+      auditState: 1,
+      imgUrl: ""
     };
   },
   computed: {
@@ -272,14 +273,15 @@ export default {
 }
 
 .manager {
-    .enter-item-img {
-        span {
-            background-image: url('../../assets/images/manager_icon.png');
-        }
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/manager_icon.png');
     }
-    .enter-item-txt {
-        border-top: 1PX solid #ededed !important;
-    }
+  }
+
+  .enter-item-txt {
+    border-top: 1PX solid #ededed !important;
+  }
 }
 
 .setting {
