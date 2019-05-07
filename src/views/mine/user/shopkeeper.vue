@@ -63,8 +63,7 @@ export default {
       }
       shopkeeperCertification(logoIamgeUrls)
         .then(res => {
-          this.setUserType(1);
-          storage.set("originUserType", 1);
+          this.$toast("上传成功，等待审核");
           this.$router.push({ path: "/my/mine" });
         })
         .catch(_ => {});
