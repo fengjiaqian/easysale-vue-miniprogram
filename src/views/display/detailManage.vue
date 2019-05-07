@@ -19,7 +19,7 @@
                     <div class="product-info-normal">
                         <h5 class="p-name">{{product.productName}}</h5>
                         <div style="flex:1;"></div>
-                        <div class="p-price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
+                        <div class="p-price">规格：{{product.specification}}</div>
                     </div>
                 </li>
             </ul>
