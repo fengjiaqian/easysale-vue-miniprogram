@@ -75,7 +75,6 @@ export default {
   },
   mounted() {
     Bus.$on("deleteOneInCart", id => {
-      console.log("on" + id);
       this._delete(id);
     });
   },
@@ -101,7 +100,6 @@ export default {
       this.isAllSelected = !this.isAllSelected;
       this.products.forEach(product => {
         product.checked = this.isAllSelected;
-        return product;
       });
     },
     //处理商品单选
@@ -111,7 +109,6 @@ export default {
     },
     //删除单个或者多个商品
     _delete(id) {
-      console.log(id);
       let selectedProducts = [];
       if (typeof id === "object") {
         //此时id为$event

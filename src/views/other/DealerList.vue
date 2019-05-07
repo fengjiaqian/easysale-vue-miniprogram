@@ -62,9 +62,9 @@
 import scroll from "components/scroll.vue";
 import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
-import { addShopHistory } from "api/fetch/dealer";
+import { addShopHistory, changeShop } from "api/fetch/dealer";
 import storage from "common/storage";
-import { setTimeout } from "timers";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "dealer-list",
   data() {
@@ -88,7 +88,11 @@ export default {
     this._ListCurrentDealer();
     this._ListAllDealer(this.params);
   },
+  computed: {
+    ...mapGetters(["userInSwitching"])
+  },
   methods: {
+    ...mapActions(["setUserType"]),
     _ListCurrentDealer() {
       if (!this.currentId) return false;
       const storeDealer = storage.get("currentDealer", {});
@@ -126,20 +130,36 @@ export default {
           this.loading = false;
         });
     },
+    /***
+     *todo 经销商切换店铺 变为终端用户，购物车、订单、我的都是用户的界面。
+     *  切回自己店铺  变为经销商。
+     *  (经销商 && 没有切换 ) || 切换中 可以切换店铺。
+     */
     _chooseDealer(dealer) {
+      if (
+        (this.userType != 3 && !this.userInSwitching) ||
+        this.userInSwitching
+      ) {
+        changeShop(dealer.id)
+          .then(res => {
+            this.setUserType(res.data || 3);
+            storage.set("currentDealerId", dealer.id);
+            storage.set("currentDealer", dealer);
+            this.$router.push({
+              path: "/navi/home"
+            });
+          })
+          .catch(_ => {});
+        return false;
+      }
       if (storage.get("token", "")) {
         addShopHistory(dealer.id).then(res => {});
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
-      //todo
-      setTimeout(() => {
-        // 刷新token
-        storage.set("userType", "3");
-        this.$router.push({
-          path: "/navi/home"
-        });
-      }, 300);
+      this.$router.push({
+        path: "/navi/home"
+      });
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;

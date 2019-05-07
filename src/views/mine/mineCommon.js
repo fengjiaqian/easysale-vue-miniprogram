@@ -1,4 +1,4 @@
-
+import storage from 'common/storage'
 const dealerAccessModule = [
     {
         title: "商品管理",
@@ -39,21 +39,13 @@ const customerAccessModule = [
     }
 ]
 
-
 export function initAccessModule(userType) {
-
-    switch (userType) {
-        case '1':
-            return dealerAccessModule;
-            break;
-        case '2':
-            return dealerAccessModule;
-            break;
-        case '3':
+    const originUserType = storage.get('originUserType', '')
+    if (userType == 3) {
+        if (userType == originUserType) {
             return customerAccessModule;
-            break;
-        default:
-            return customerAccessModule;
-            break;
+        }
+        return customerAccessModule.slice(0, 1);
     }
+    return dealerAccessModule;
 }

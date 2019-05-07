@@ -1,5 +1,6 @@
 import storage from "common/storage";
 import mHeader from "components/header.vue";
+import { mapGetters } from "vuex"
 const mixin = {
     data() {
         const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
@@ -9,10 +10,12 @@ const mixin = {
             uploadUrl = "/easysaleapi/file/uploadProductImg"
         }
         return {
-            userType: storage.get("userType", 3), //用户类型(1:经销商 2：销售人员  3：终端客户)
             isVisitor: !storage.get("token", ''),
             uploadImgUrl: uploadUrl
         }
+    },
+    computed: {
+        ...mapGetters(["userType"]) //用户类型(1:经销商 2：销售人员  3：终端客户)
     },
     components: {
         mHeader

@@ -1,3 +1,4 @@
+//陈列列表页
 .display-wrap{
   height 100%
   bg(#fff)
@@ -51,6 +52,35 @@
         c(#888)
         text-c()
         border-radius 10px
+      }
+    }
+    .dealer-list-wrap{
+      width 100%
+      flex()
+      align-content center
+      flex-wrap nowrap
+      padding 16px 24px
+      z-index 5
+      bg(#fff)
+      border-bottom 1PX solid #EDEDED
+      overflow-x scroll
+      span{
+        bg(#F6F6F6)
+        lh(60)
+        padding 0 20px
+        ft(26)
+        c-6()
+        border-radius 8px
+        mr(20)
+        max-width 220px
+        text-overflow-1()
+        &:last-child{
+          margin-right 0
+        }
+        &.active{
+          bg(#FFEEEB)
+          c(#FF5638)
+        }
       }
     }
   }
@@ -109,6 +139,12 @@
   }
 }
 
+.display-content{
+  height 100%
+  pt(210)
+  bg(#F6F6F6)
+}
+
 .display-wrap /deep/{
   .empty-page{
     position absolute
@@ -126,5 +162,272 @@
   }
   .empty{
     mt(100)
+  }
+}
+
+//陈列申请页
+.display-apply{
+  height 100%
+  bg(#F6F6F6)
+  padding 20px 16px 0
+  .da-remark{
+    margin-bottom 118px !important
+    textarea{
+      padding 8px
+      width 100%
+      ft(30)
+      c-3()
+      flex-1()
+      outline none
+      border none
+      &::-webkit-textarea-placeholder{
+        c(#999)
+      }
+    }
+  }
+  .da-product,.da-remark{
+    padding 0 24px
+    mb(20)
+    bg(#fff)
+    border-radius 2px
+    >h5{
+      font-weight 600
+      ft(30)
+      c-3()
+      padding 24px 0
+      border-bottom 1PX solid #EDEDED
+    }
+  }
+  .dap-list{
+    pb(40)
+    li{
+      flex()
+      mt(24)
+      img{
+        min-width 120px
+        w(120)
+        h(120)
+        mr(24)
+      }
+      .product-info-normal{
+        flex-1()
+        flex()
+        flex-direction column
+        h(120)
+        .p-name{
+          ft(30)
+          c-3()
+          text-overflow-2()
+          font-weight 600
+        }
+        .p-price{
+          ft(26)
+          c-6()
+        }
+      }
+    }
+  }
+  .da-confirm{
+    position fixed
+    width 100%
+    left 0
+    bottom 0
+    z-index 2
+    lh(98)
+    bg(#FF5638)
+    c(#fff)
+    ft(32)
+    text-c()
+  }
+}
+
+
+//陈列详情页
+.display-detail{
+  .dd-header{
+    bg(#fff)
+    padding 24px
+    .state{
+      ft(34)
+      c-3()
+      font-weight 600
+      span{
+        c(#FF5638)
+        font-weight 600
+      }
+    }
+    .reply-box{
+      mt(24)
+      bg(#F6F6F6)
+      padding 16px 24px
+      position relative
+      border-radius 10px
+      .rb-t{
+        flex()
+        align-content center
+        justify-content space-between
+        span{
+          c-9()
+          ft(24)
+          &.red{
+            ft(26)
+            c(#FF5638)
+          }
+        }
+      }
+      .rb-b{
+        mt(8)
+        ft(26)
+        c-6()
+        line-height 1.4
+      }
+      &:before{
+        content ""
+        position absolute
+        left 50px
+        top -18px
+        width:0;
+        height:0;
+        border-width:0 18px 18px;
+        border-style:solid;
+        border-color:transparent transparent #F6F6F6;
+      }
+    }
+  }
+  .dd-column{
+    margin 20px 16px 0
+    padding 0 24px 24px
+    bg(#fff)
+    border-radius 2px
+    >h5{
+      font-weight 600
+      ft(30)
+      c-3()
+      padding 24px 0
+      border-bottom 1PX solid #EDEDED
+    }
+  }
+  .dd-remark{
+    p{
+      mt(24)
+      ft(28)
+      c-6()
+    }
+    textarea{
+      width 100%
+      padding 8px 0
+      ft(30)
+      c-3()
+      flex-1()
+      outline none
+      border none
+      &::-webkit-textarea-placeholder{
+        c(#999)
+      }
+    }
+  }
+  .dap-list{
+    li{
+      flex()
+      mt(24)
+      img{
+        min-width 120px
+        w(120)
+        h(120)
+        mr(24)
+      }
+      .product-info-normal{
+        flex-1()
+        flex()
+        flex-direction column
+        h(120)
+        .p-name{
+          ft(30)
+          c-3()
+          text-overflow-2()
+          font-weight 600
+        }
+        .p-price{
+          ft(26)
+          c-6()
+        }
+      }
+    }
+  }
+  .dd-info{
+    >ul{
+      pt(24)
+      li{
+        mb(16)
+        ft(28)
+        c-6()
+      }
+    }
+  }
+  .bottom-btn{
+    position fixed
+    left 0
+    bottom 0
+    z-index 2
+    bg(#fff)
+    c(#FF5638)
+    lh(98)
+    ft(32)
+    width 100%
+    text-c()
+    &.deal{
+      c(#fff)
+      bg(#FF5638)
+    }
+  }
+}
+
+
+
+//陈列管理
+.display-manage{
+  .header{
+    position fixed
+    left 0
+    top 0
+    width 100%
+    z-index 2
+    bg(#fff)
+    .top-bar{
+      bg(#fff)
+      border-bottom 1PX solid #EDEDED
+      flex-center()
+      width 100%
+      h(98)
+      box-sizing border-box
+      span{
+        width 50%
+        text-c()
+        lh(98)
+        c-6()
+        ft(28)
+      }
+      .active{
+        font-weight 600
+        ft(34)
+        c-3()
+        position relative
+        &:before{
+          content ""
+          position absolute
+          left 50%
+          bottom 0
+          transform translateX(-50%)
+          w(40)
+          h(6)
+          bg(#FF5638)
+        }
+      }
+    }
+  }
+  .content{
+    height 100%
+    pt(118)
+    bg(#F6F6F6)
   }
 }
