@@ -1,5 +1,6 @@
 <template>
-    <div class="display-wrap">
+    <div class="display-wrap pt90">
+        <m-header :isFixed="true"></m-header>
         <section class="header">
             <div class="top-bar">
                 <span v-for="(item,index) in stateList" :class="{'active': activeIdx == index}" @click="switchBar(index)">{{item.title}}</span>
