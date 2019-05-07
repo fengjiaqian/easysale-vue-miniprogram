@@ -22,7 +22,7 @@ const dealerAccessModule = [
     },
     {
         title: "认证店主",
-        class: "staff",
+        class: "manager",
         path: "/my/shopkeeper"
     },
 ]
