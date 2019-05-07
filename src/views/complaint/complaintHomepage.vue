@@ -37,7 +37,6 @@
     import empty from "components/empty.vue";
     import mHeader from "components/header.vue";
     import iconUrl from "../../assets/images/empty_icon_1.png"
-
     export default {
         name: 'complaintHomepage',
         components: {listItem, empty, mHeader, scroll},

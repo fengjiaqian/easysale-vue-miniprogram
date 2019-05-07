@@ -102,7 +102,6 @@ const manageInit = [
         path: '/addNewRedemption',
         name: 'addNewRedemption',
         meta: {
-            keepAlive: true ,
             title: '新建兑奖单',
         },
         component: addNewRedemption,
@@ -130,7 +129,6 @@ const manageInit = [
         path: '/addNewReturnOrder',
         name: 'addNewReturnOrder',
         meta: {
-            keepAlive: true ,
             title: '新建退货单',
         },
         component: addNewReturnOrder,
