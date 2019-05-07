@@ -129,7 +129,6 @@ export default {
 </script>
 
 <style lang='stylus' scoped>
-@import './common.styl';
 
 #orderDetail {
   pt(90);

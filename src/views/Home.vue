@@ -166,7 +166,7 @@ import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "home",
   data() {
@@ -222,6 +222,7 @@ export default {
       this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
+      this.showFixed = false;
       this._listDealerLogs();
       this._queryHomeProducts();
     } else {
@@ -232,7 +233,7 @@ export default {
     storage.set("homeRefresh", false);
   },
   created() {
-    this._initAuth(); //该步骤有判断有没有带入shareDealerId,有则缓存currentDealerId
+    this._initAuth(); //该步骤有判断有没有带入shareDealerId, 有则缓存currentDealerId
     this.currentDealerId = storage.get("currentDealerId", "");
     if (!this.currentDealerId) {
       //如果没有currentDealerId的话，跳转选择经销商。
@@ -247,7 +248,7 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions(["saveCartCount"]),
+    ...mapActions(["saveCartCount", "setUserType"]),
     //初始化auth
     _initAuth() {
       const {
@@ -264,9 +265,9 @@ export default {
         this.clearStorage(); //清楚部分缓存
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
-        storage.set("userType", userType);
+        storage.set("originUserType", userType);
+        this.setUserType(userType);
         shareDealerId && storage.set("currentDealerId", shareDealerId);
-        this.userType = userType;
         return false;
       }
       //只有nickName和avatarUrl, cache for mine page。  以终端访客身份访问
@@ -278,7 +279,8 @@ export default {
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
-        this.userType = 3;
+        storage.set("originUserType", 3);
+        this.setUserType(3);
       }
     },
     clearStorage() {

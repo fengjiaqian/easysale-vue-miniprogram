@@ -1,46 +1,58 @@
 <template>
     <div id="redemption">
         <m-header :isFixed="true" :tit="title"></m-header>
-        <section class="top-bar " v-if="!isSaleMan">
-            <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
+        <section class="top-bar ">
+            <span v-for="(item,index) in stateList" :class="{'active': tabState == item.idx}"
+                  @click="switchTab(item.idx)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
-        <section class="dealer-list-wrap" v-if="isCustomer&&dealerList.length>0">
-            <span :class="{'active':activeDealerIdx==idx}" v-for="(item,idx) in dealerList"
+        <section class="dealer-list-wrap" v-if="tabState!=2&&userType == 3&&dealerList.length>0">
+            <span :class="{'active':activeshopIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
-        <empty :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}"
+        <!--空页面-->
+        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
                style="height: 100%;overflow: hidden"
-               :txt="'暂无相关兑奖单'" v-if="empty"
+               :txt="tabState==2?'暂无可申请的兑奖商品':'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
-        <div v-if="redemptionList.length"
-             :class="{'mt-185':isDealer,'mt-110':isSaleMan,'mt-275':isCustomer,'mb':!isSaleMan}" style="height: 100%">
+        <!--兑奖商品列表-->
+        <div v-if="tabState==2" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+             style="height: 100%;background-color: #fff">
+            <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
+                        @emitEvt="handleChange"></search-bar>
             <scroll
+                    v-if="productList.length"
                     class="c-list"
-                    :data="redemptionList"
+                    :data="productList"
                     ref="scrollRedemption"
+                    :pullup="true"
+                    @scrollToEnd="loadMoreProducts"
             >
-                <div>
-                    <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
-                               :tabState="tabState" @selectSingle="selectSingle"></list-item>
+                <div style="background-color: #fff">
+                    <product-normal v-for="(product,index) in productList"
+                                    :key="product.productSpecificationId+index+product.productName"
+                                    :product="product"></product-normal>
                 </div>
             </scroll>
         </div>
-        <!--经销商可见-->
-        <div class="footer" v-if="isDealer&&tabState==0&&!empty">
+        <!--兑奖单列表-->
+        <div v-if="redemptionList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+             style="overflow: scroll">
+            <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
+                       :tabState="tabState" @directProcessing="directProcessing"></list-item>
+        </div>
+        <!--底部按钮-->
+        <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
             <div class="footer-left">
-                <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click.stop="selectAll">
+                <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
             </div>
-            <button class="handle-btn" @click.stop="handoverProcessing">移交处理</button>
+            <button class="handle-btn " :class="{'achieve':achieve}" @click="achieve?addRedemption():''">{{'申请兑奖('+length+')'}}</button>
         </div>
-        <button class="footer-btn" @click="addRedemption()" v-if="isCustomer">新建兑奖单</button>
-        <saleman-pop :roleList="roleList" :rolePopShow="rolePopShow" title="移交给" @closePop="closePop"
-                     @submitQuery="submitQuery"></saleman-pop>
     </div>
 </template>
 <script>
-    import {awardList, batchUpdateAward, selectDealAward} from "api/fetch/redemption";
+    import {awardList, selectDealAward, afterProductList, updateAwardById} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import empty from "components/empty.vue";
@@ -49,12 +61,15 @@
     import ic1 from "../../assets/images/icon-check.png";
     import ic2 from "../../assets/images/icon-checked.png";
     import iconUrl from "../../assets/images/empty_icon_1.png";
-    import salemanPop from "components/saleman-pop.vue"
+    import searchBar from "components/searchBar.vue"
+    import storage from 'common/storage';
+    import productNormal from "components/productManage/product-manage-normal.vue";
+    import bus from "common/Bus";
 
     const selectImg = [ic1, ic2];
     export default {
-        name: 'redemptionHomepage',
-        components: {scroll, empty, mHeader, listItem, salemanPop},
+        name: 'clientRedemptionHomepage',
+        components: {scroll, empty, mHeader, listItem, searchBar, productNormal},
         data() {
             return {
                 stateList: [{
@@ -74,33 +89,78 @@
                 redemptionList: [],
                 roleList: [],
                 rolePopShow: false,
-                activeDealerIdx: 0,
+                activeshopIdx: 0,
                 dealerList: [],
-                dealerId: ''
+                shopId: '',
+                // 分页
+                productList: [],
+                loading: false,
+                requestDone: false,
+                totalPage: 0,
+                filterParam: {
+                    pageNum: 1,
+                    pageSize: 20,
+                    searchKey: "",
+                    awardState: 1,
+                }, //商品查询参数
+                selectedProduct: [],//选中的商品
+                length: 0,
+                achieve:false
 
             }
         },
         created() {
             this.title = this.userType == '3' ? '兑奖列表' : '兑奖管理';
             if (this.userType == '3') {
-                this._QueryDealAward();
+                this.stateList = [{
+                    title: `可申请`,
+                    idx: 2
+                }, {
+                    title: `已申请`,
+                    idx: 0
+                }, {
+                    title: `已回复`,
+                    idx: 1
+                }];
+                this.tabState = 2;
+                this.afterProductList();
+            } else {
+                this._QueryAwardList();
             }
-            this._QueryAwardList();
-        },
-        computed: {
-            isDealer() {
-                return this.userType == '1'
-            },
-            isSaleMan() {
-                return this.userType == '2'
-            },
-            isCustomer() {
-                return this.userType == '3'
-            },
-        },
 
+        },
+        mounted() {
+            bus.$off("selectProduct");
+            bus.$on("selectProduct", (data) => {
+                this.selectSingle(data)
+            });
+        },
+        watch: {
+            filterParam: {
+                handler(newVal, oldVal) {
+                    this.afterProductList();
+                },
+                deep: true
+            },
+            productList(val) {
+                if (this.requestDone) {
+                    if (!val.length) {
+                        this.empty = true;
+                    } else {
+                        this.empty = false;
+                    }
+                }
+            },
+            selectedProduct(val) {
+                this.length = val.length;
+                if (val.length) {
+                    this.achieve = true
+                } else {
+                    this.achieve = false
+                }
+            }
+        },
         methods: {
-
 
             /**
              * 切换顶部tabs
@@ -109,16 +169,35 @@
             switchTab(state) {
                 this.tabState = state;
                 this.redemptionList = [];
-                this._QueryAwardList()
+                this.productList = [];
+                this.filterParam.pageNum = 1;
+                if (state == 2) {
+                    this.afterProductList()
+                } else {
+                    if (this.userType == '3') {
+                        this._QueryDealAward();
+                    } else {
+                        this._QueryAwardList();
+                    }
+                }
+
             },
 
             //切换经销商店铺
             switchShop(item, idx) {
-                this.activeDealerIdx = idx;
+                this.activeshopIdx = idx;
                 this.redemptionList = [];
-                this.dealerId = item.dealerId;
+                this.shopId = item.shopId;
                 this._QueryAwardList();
-                this._QueryDealAward();
+            },
+
+            //搜索
+            handleChange(searchWord) {
+                this.filterParam.searchKey = searchWord;
+                this.filterParam.pageNum = 1;
+                this.productList = [];
+                this.afterProductList()
+
 
             },
 
@@ -127,11 +206,12 @@
                 selectDealAward(this.tabState).then(res => {
                     if (res.data) {
                         let resultData = res.data;
+                        this.empty = !resultData.length;
                         this.dealerList = [...resultData];
-                        this.dealerId = this.dealerList[0].dealerId;
-
+                        this.shopId = this.dealerList[0].shopId;
+                        this._QueryAwardList();
                     }
-                }).catch(() => {});
+                });
 
             },
 
@@ -140,107 +220,134 @@
             _QueryAwardList() {
                 let params = {
                     state: this.tabState,
-                    dealerId: this.dealerId
+                    dealerId: this.shopId
                 };
                 awardList(params).then(res => {
                     if (res.data) {
                         let resultData = res.data;
                         this.empty = !resultData.length;
-                        resultData.forEach(item => {
-                            item['selected'] = false;
-                        });
                         this.redemptionList = [...resultData];
                     }
-                }).catch(() => {});
+                });
 
+            },
+
+
+            // 可兑奖的商品列表
+            afterProductList() {
+                this.loading = true;
+                this.requestDone = false;
+                afterProductList(this.filterParam)
+                    .then(res => {
+                        if (res.result === "success" && res.data) {
+                            if (res.data.dataList) {
+                                this.domShow = true;
+                                const {dataList = [], pager} = res.data;
+                                const {currentPage, totalPage} = pager;
+                                if (currentPage == 1) {
+                                    this.totalPage = totalPage;
+                                }
+                                dataList.forEach(item => {
+                                    item.select = false;
+                                });
+                                this.productList = this.productList.concat(dataList);
+                                this.loading = false;
+                                this.requestDone = true;
+                            } else {
+                                this.requestDone = true;
+                                this.totalPage = 1;
+                                this.productList = []
+
+                            }
+
+                        }
+                    })
+                    .catch(err => {
+                        this.loading = false;
+                        this.requestDone = true;
+                        this.productList = []
+                    });
+
+
+            },
+
+            //加载更多
+            loadMoreProducts() {
+                if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
+                this.filterParam.pageNum += 1;
             },
 
 
             /**
-             *单选
-             * @param id-兑奖单id
+             * 处理
              */
-            selectSingle(id) {
-                let listData = this.redemptionList;
-                listData.forEach(item => {
-                    if (item.customerAward) {
-                        let customerAward = item.customerAward;
-                        if (customerAward.id == id) {
-                            item.selected = !item.selected;
-                        }
-                    }
+            directProcessing(id) {
+                let params = {
+                    id: id,
+                    replyContent: '',
+                    state: 1
+                };
+                updateAwardById(params).then(res => {
+                    this.$toast('操作成功');
+                    this.redemptionList = [];
+                    this._QueryAwardList();
+                }).catch(res => {
+                    this.$toast(res.message)
                 });
-                this.isAllSelected = !listData.some(item => !item.selected);
-                this.redemptionList = [...listData];
             },
 
 
-            // 全选
+            /**
+             *单选兑奖商品
+             * @param data
+             */
+            selectSingle(data) {
+                let listData = this.productList;
+                listData.forEach(item => {
+                    if (item.id === data.id) {
+                        item.select = !item.select;
+                    }
+                });
+                this.isAllSelected = !listData.some(item => !item.select);
+                this.productList = [...listData];
+                this.pullSelected()
+            },
+
+
+            // 全选兑奖商品
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.redemptionList;
+                let listData = this.productList;
                 listData.forEach(item => {
-                    item.selected = this.isAllSelected
+                    item.select = this.isAllSelected
                 });
-                this.redemptionList = [...listData]
+                this.productList = [...listData];
+                this.pullSelected()
+
+            },
+
+
+            pullSelected() {
+                this.selectedProduct = [];
+                if (this.productList.length) {
+                    this.productList.forEach(item => {
+                        if (item.select) {
+                            this.selectedProduct.push(item)
+                        }
+                    });
+                }
+
+                storage.set("selectedProduct", this.selectedProduct);
+
             },
 
 
             /**
              * 跳转新增兑奖单
-             * @param id-兑奖单id
              */
             addRedemption() {
                 this.$router.push({
                     name: "addNewRedemption",
-                });
-            },
-
-
-            /**
-             * 批量移交处理
-             */
-            handoverProcessing() {
-                const selectedComplaints = this.redemptionList.filter(item => item.selected);
-                if (!selectedComplaints.length) {
-                    return this.$toast("请选择兑奖单");
-                }
-                this.rolePopShow = true;
-                //查询所有角色
-                queryStaffList({}).then(res => {
-                    if (res.result === "success") {
-                        this.roleList = res.data;
-                    }
-                }).catch(() => {});
-            },
-
-            closePop() {
-                this.rolePopShow = false;
-            },
-
-
-            /**
-             * 移交处理
-             * @param idealingId
-             */
-            submitQuery(dealingId) {
-                this.closePop();
-                let idList = [];
-                const selectedRedemption = this.redemptionList.filter(item => item.selected);
-                selectedRedemption.forEach(item => {
-                    if (item.customerAward) {
-                        idList.push(item.customerAward.id)
-                    }
-                });
-                let params = {
-                    idList: [...idList],
-                    dealingId: dealingId,
-                };
-                batchUpdateAward(params).then(res => {
-                    this.$toast('操作成功');
-                    this._QueryAwardList()
-                }).catch(res=>{
-                    this.$toast(res.message)
                 });
             },
 
@@ -317,7 +424,7 @@
             display flex;
             justify-content space-between
             align-items center
-            padding 0 24px
+            pl(24)
             img {
                 w(40)
                 h(40)
@@ -335,13 +442,11 @@
             ft(30)
         }
         .handle-btn {
-            w(160)
-            h(64)
-            lh(64)
-            bg(#FF5638)
-            border-radius: 8px;
-            border: 1px solid rgba(255, 86, 56, 1)
-            ft(28)
+            w(224)
+            h(98)
+            lh(98)
+            bg(#bdbdbd)
+            ft(32)
             c(#fff)
             border: 0
             outline: none
@@ -402,6 +507,19 @@
                     c(#FF5638)
                 }
             }
+        }
+        .pi-header {
+            position fixed;
+            border-bottom 1PX solid #EDEDED
+            top: 185px;
+            left 0
+            width 100%
+            bg(#fff)
+            z-index 1
+        }
+        .achieve {
+            bg(#FF5638)
+
         }
     }
 

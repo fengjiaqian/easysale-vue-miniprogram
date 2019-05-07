@@ -7,34 +7,35 @@
         <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>
       </div>
     </div>
-    <a href="javascript:;" class="authenticate-btn">立即认证</a>
+    <a href="javascript:;" class="authenticate-btn" @click="_submit">立即认证</a>
   </div>
 </template>
 
 <script>
 import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
+import { shopkeeperCertification } from "api/fetch/dealer";
 import storage from "common/storage";
 import { evokeWxLocation } from "common/location";
 import compress from "common/image";
 
 import mUpload from "components/m-upload.vue";
+import { mapActions } from "vuex";
 export default {
   data() {
-    return {
-      fieldList: []
-    };
+    return {};
   },
   components: {
     mUpload
   },
   computed: {},
   created() {
-    // this.fieldList = [];
+    this.fieldList = [];
   },
   mounted() {
     // this.calculateShape();
   },
   methods: {
+    ...mapActions(["setUserType"]),
     onFileSuccess(file) {
       console.log(file);
       var response = file.response || {};
@@ -49,6 +50,23 @@ export default {
       const w = clientW - (80 * clientW) / 750;
       this.$refs.inner.style.width = w + "px";
       this.$refs.inner.style.height = w / 2 + "px";
+    },
+    _submit() {
+      let logoIamgeUrls = this.fieldList.map(file => {
+        const response = file.response;
+        if (response && response.data) {
+          return response.data;
+        }
+      });
+      if (!logoIamgeUrls.length) {
+        return this.$toast("请上传营业执照");
+      }
+      shopkeeperCertification(logoIamgeUrls)
+        .then(res => {
+          this.$toast("上传成功，等待审核");
+          this.$router.push({ path: "/my/mine" });
+        })
+        .catch(_ => {});
     }
   }
 };

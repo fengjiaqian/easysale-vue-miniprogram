@@ -119,3 +119,19 @@ export function selectDealAward(state) {
         return Promise.reject(res.data)
     });
 }
+
+
+// 查寻经销商兑奖退货陈列产品列表
+export function afterProductList(params) {
+    let url = "/product/afterProductList";
+    return axios({
+        method: 'post',
+        url,
+        data:params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
