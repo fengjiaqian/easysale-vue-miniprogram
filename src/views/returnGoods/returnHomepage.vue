@@ -461,6 +461,7 @@
             border-bottom 1PX solid #EDEDED
             overflow-x scroll
             span {
+                min-width 150px
                 bg(#F6F6F6)
                 lh(60)
                 padding 0 20px
