@@ -18,7 +18,7 @@
         <!--兑奖商品列表-->
         <div v-if="tabState==2" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%;background-color: #fff">
-            <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
+            <search-bar class="pi-header"  :emit="true" placeHolder="请输入商品名称"
                         @emitEvt="handleChange"></search-bar>
             <scroll
                     v-if="productList.length"
@@ -47,7 +47,9 @@
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
             </div>
-            <button class="handle-btn " :class="{'achieve':achieve}" @click="achieve?addRedemption():''">{{'申请兑奖('+length+')'}}</button>
+            <button class="handle-btn " :class="{'achieve':selectedProduct.length}" @click="addRedemption">
+                {{'申请兑奖('+selectedProduct.length+')'}}
+            </button>
         </div>
     </div>
 </template>
@@ -95,18 +97,9 @@
                 // 分页
                 productList: [],
                 loading: false,
-                requestDone: false,
                 totalPage: 0,
-                filterParam: {
-                    pageNum: 1,
-                    pageSize: 20,
-                    searchKey: "",
-                    awardState: 1,
-                }, //商品查询参数
                 selectedProduct: [],//选中的商品
                 length: 0,
-                achieve:false
-
             }
         },
         created() {
@@ -123,7 +116,16 @@
                     idx: 1
                 }];
                 this.tabState = 2;
-                this.afterProductList();
+                this.filterParam = {
+                    pageNum: 1,
+                    pageSize: 20,
+                    searchKey: "",
+                    awardState: 1,
+                }; //商品查询参数
+
+                this.afterProductList(this.filterParam);
+
+
             } else {
                 this._QueryAwardList();
             }
@@ -135,31 +137,6 @@
                 this.selectSingle(data)
             });
         },
-        watch: {
-            filterParam: {
-                handler(newVal, oldVal) {
-                    this.afterProductList();
-                },
-                deep: true
-            },
-            productList(val) {
-                if (this.requestDone) {
-                    if (!val.length) {
-                        this.empty = true;
-                    } else {
-                        this.empty = false;
-                    }
-                }
-            },
-            selectedProduct(val) {
-                this.length = val.length;
-                if (val.length) {
-                    this.achieve = true
-                } else {
-                    this.achieve = false
-                }
-            }
-        },
         methods: {
 
             /**
@@ -169,10 +146,8 @@
             switchTab(state) {
                 this.tabState = state;
                 this.redemptionList = [];
-                this.productList = [];
-                this.filterParam.pageNum = 1;
                 if (state == 2) {
-                    this.afterProductList()
+                    this.refreshProducts();
                 } else {
                     if (this.userType == '3') {
                         this._QueryDealAward();
@@ -194,11 +169,7 @@
             //搜索
             handleChange(searchWord) {
                 this.filterParam.searchKey = searchWord;
-                this.filterParam.pageNum = 1;
-                this.productList = [];
-                this.afterProductList()
-
-
+                this.refreshProducts();
             },
 
             // 客户兑奖过的经销商列表
@@ -234,10 +205,9 @@
 
 
             // 可兑奖的商品列表
-            afterProductList() {
+            afterProductList(params) {
                 this.loading = true;
-                this.requestDone = false;
-                afterProductList(this.filterParam)
+                afterProductList(params)
                     .then(res => {
                         if (res.result === "success" && res.data) {
                             if (res.data.dataList) {
@@ -247,14 +217,13 @@
                                 if (currentPage == 1) {
                                     this.totalPage = totalPage;
                                 }
+                                this.empty = !dataList.length;
                                 dataList.forEach(item => {
                                     item.select = false;
                                 });
                                 this.productList = this.productList.concat(dataList);
                                 this.loading = false;
-                                this.requestDone = true;
                             } else {
-                                this.requestDone = true;
                                 this.totalPage = 1;
                                 this.productList = []
 
@@ -264,7 +233,6 @@
                     })
                     .catch(err => {
                         this.loading = false;
-                        this.requestDone = true;
                         this.productList = []
                     });
 
@@ -275,6 +243,14 @@
             loadMoreProducts() {
                 if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
                 this.filterParam.pageNum += 1;
+                this.afterProductList(this.filterParam);
+            },
+
+            // 下拉刷新
+            refreshProducts() {
+                this.filterParam.pageNum = 1;
+                this.productList = [];
+                this.afterProductList(this.filterParam);
             },
 
 
@@ -299,17 +275,11 @@
 
             /**
              *单选兑奖商品
-             * @param data
+             * @param product
              */
-            selectSingle(data) {
-                let listData = this.productList;
-                listData.forEach(item => {
-                    if (item.id === data.id) {
-                        item.select = !item.select;
-                    }
-                });
-                this.isAllSelected = !listData.some(item => !item.select);
-                this.productList = [...listData];
+            selectSingle(product) {
+                product.select = !product.select;
+                this.isAllSelected = !this.productList.some(item => !item.select);
                 this.pullSelected()
             },
 
@@ -317,28 +287,17 @@
             // 全选兑奖商品
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.productList;
-                listData.forEach(item => {
+                this.productList.forEach(item => {
                     item.select = this.isAllSelected
                 });
-                this.productList = [...listData];
                 this.pullSelected()
 
             },
 
 
             pullSelected() {
-                this.selectedProduct = [];
-                if (this.productList.length) {
-                    this.productList.forEach(item => {
-                        if (item.select) {
-                            this.selectedProduct.push(item)
-                        }
-                    });
-                }
-
+                this.selectedProduct = this.productList.filter(item => item.select);
                 storage.set("selectedProduct", this.selectedProduct);
-
             },
 
 
@@ -346,6 +305,7 @@
              * 跳转新增兑奖单
              */
             addRedemption() {
+                if (this.selectedProduct.length == 0) return false;
                 this.$router.push({
                     name: "addNewRedemption",
                 });
@@ -490,6 +450,7 @@
             border-bottom 1PX solid #EDEDED
             overflow-x scroll
             span {
+                min-width 150px
                 bg(#F6F6F6)
                 lh(60)
                 padding 0 20px

@@ -13,6 +13,10 @@
         <i></i>
         <span>邀请码</span>
       </div>-->
+      <div class="user-code" @click="shareShop">
+        <i></i>
+        <span>分享</span>
+      </div>
       <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
     </div>
     <!-- 功能模块 -->
@@ -30,15 +34,13 @@
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
           <div>
-            <span
-              class="mr-12 c-theme"
-              v-if="item.path=='/writeApplicationInformation' && auditState==0"
-            >审核中</span>
+            <span class="mr-12 c-theme" v-if="item.path=='/my/shopkeeper' && auditState==0">审核中</span>
             <em></em>
           </div>
         </div>
       </li>
     </ul>
+    <img :src="imgUrl">
   </div>
 </template>
 
@@ -48,6 +50,7 @@ import storage from "common/storage";
 import { findCustomerOwerInfo } from "api/fetch/endCustomer";
 import { queryShopInfo } from "api/fetch/mine";
 import { mapGetters } from "vuex";
+import { synthesisroutineimg } from "api/fetch/mine";
 export default {
   data() {
     return {
@@ -128,6 +131,39 @@ export default {
           this.auditState = res.data.auditState; //经销商进行店主认证（0：审核中，1：审核通过）
         })
         .catch(err => {});
+    },
+    //分享店铺
+    shareShop() {
+      const currentDealer = storage.get("currentDealer") || {};
+      const shopId = currentDealer.id || "";
+      let params = {
+        avatarImg: this.avatarUrl,
+        userText: `${this.nickName}邀请您访问`,
+        shopText: `${"「" + currentDealer.shopName + "」"}`
+      };
+      if (!this.lock) {
+        this.lock = true;
+        synthesisroutineimg(params)
+          .then(res => {
+            if (res.data) {
+              let resultData = res.data;
+              resultData.shopId = shopId;
+              resultData = JSON.stringify(resultData);
+              resultData = encodeURIComponent(resultData);
+              const jumpUrl = encodeURIComponent(`navi/mine`);
+              const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${resultData}`;
+              window.wx.miniProgram.navigateTo({
+                url: path
+              });
+            }
+          })
+          .catch(res => {
+            this.$toast("分享失败，请点击重试。");
+          });
+      }
+      setTimeout(() => {
+        this.lock = false;
+      }, 2000);
     }
   },
   watch: {}
@@ -308,12 +344,14 @@ export default {
   flex-direction: column;
   align-items: center;
   mt(12);
+  c(#666);
+  ft(24);
 
   i {
-    inline;
+    inline();
     w(48);
     h(48);
-    background-image: url('../../assets/images/user_code_icon.png');
+    background-image: url('../../assets/images/ic_share_shop.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -325,4 +363,3 @@ export default {
   mt(20);
 }
 </style>
-

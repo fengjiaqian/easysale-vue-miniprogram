@@ -15,7 +15,7 @@
                                         </div>
                                         <div class="column">
                                             <p class="goods-name">{{item.productName}}</p>
-                                            <p class="goods-price">{{item.price}}元/{{item.priceUnit}}</p>
+                                            <p class="goods-price">规格：{{item.specification}}</p>
                                         </div>
                                         <div class="del-btn" @click="delGoods(index)">删除</div>
 
@@ -64,26 +64,20 @@
         components: {
             numberPicker, mHeader
         },
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                vm.returnGoods = [];
-                vm.remark = '';
-                vm.returnContent = '';
-                let selectedProduct = storage.get("selectedProduct", "");
-                selectedProduct.forEach(selectItem => {
-                    selectItem.buyCount = 1;
-                    selectItem.minBuyNum = 1;
-                    selectItem.maxBuyNum = selectItem.count;
-                    vm.returnGoods.push(selectItem)
-                });
-                storage.remove("selectedProduct");
-            })
-        },
-
         computed: {
             canOperate() {
                 return this.returnContent.trim() && this.returnGoods.length;
             }
+        },
+        created(){
+            let selectedProduct = storage.get("selectedProduct");
+            selectedProduct.forEach(selectItem => {
+                selectItem.buyCount = 1;
+                selectItem.minBuyNum = 1;
+                selectItem.maxBuyNum = selectItem.count;
+                this.returnGoods.push(selectItem)
+            });
+            storage.remove("selectedProduct");
         },
 
         methods: {
@@ -101,7 +95,7 @@
                         productId: item.id,
                         returnCount: item.buyCount,
                         price: item.price
-                    }
+                    };
                     items.push(obj)
                 }
                 let params = {
