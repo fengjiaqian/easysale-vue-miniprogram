@@ -274,12 +274,12 @@ export default {
       if (nickName && avatarUrl) {
         this.clearStorage(); //清楚部分缓存
         storage.remove("token");
-        storage.remove("originUserType");
         storage.remove("userType");
         storage.remove("currentDealerId");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+        storage.set("originUserType", 3);
         this.setUserType(3);
       }
     },

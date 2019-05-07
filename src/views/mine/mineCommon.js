@@ -33,7 +33,7 @@ const customerAccessModule = [
         path: "/myConsignee"
     },
     {
-        title: "申请经销商",
+        title: "申请开店",
         class: "customer",
         path: "/writeApplicationInformation"
     }

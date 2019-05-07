@@ -62,7 +62,7 @@ import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
 import storage from "common/storage";
 import { evokeWxLocation } from "common/location";
 import { compress } from "common/util";
-
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -106,6 +106,7 @@ export default {
     this.applyInfo.phone = this.$route.query.mobileNo;
   },
   methods: {
+    ...mapActions(["setUserType"]),
     //TODO: 带入电话号码和姓名
     //TODO: 上传参数加入图片
     _applyDealer() {
@@ -125,7 +126,18 @@ export default {
       };
       applyDealer(params)
         .then(res => {
-          this.$toast("申请信息提交成功");
+          this.$toast("申请成功");
+          const { mobileNo, token, userType, shopId } = res.data;
+          storage.set("mobileNo", mobileNo);
+          storage.set("token", token);
+          storage.set("originUserType", userType);
+          this.setUserType(userType);
+          shopId && storage.set("currentDealerId", shopId);
+          //
+          storage.remove("currentDealer");
+          storage.set("homeRefresh", true);
+          storage.set("mineRefresh", true);
+          storage.set("orderRefresh", true);
           this.$router.push({ path: "/navi/mine" });
         })
         .catch(err => {

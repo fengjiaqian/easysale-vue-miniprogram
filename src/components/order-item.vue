@@ -92,7 +92,6 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../views/order/common.styl';
 
 .single-sku {
   .s-s-img {

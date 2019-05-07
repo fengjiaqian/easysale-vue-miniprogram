@@ -3,14 +3,16 @@
  */
 import storage from 'common/storage'
 //TODO 如果用户没有登录 没有手机 登录后带入之前选择的商品 
-const _userId = storage.get('mobileNo', '');
+
 const _storageKey = 'yjxGoods'
 
 function getAllGoods() {
+    const _userId = storage.get('currentDealerId', '') + storage.get('mobileNo', '');
     return storage.get(_userId + _storageKey, [])
 }
 
 function setAllGoods(goods) {
+    const _userId = storage.get('currentDealerId', '') + storage.get('mobileNo', '');
     if (!goods && !goods.length) {
         return false;
     }
@@ -81,6 +83,7 @@ function batchRemoveItem(skus) {
 
 //clear goods
 function clearGoods() {
+    const _userId = storage.get('currentDealerId', '') + storage.get('mobileNo', '');
     storage.remove(_userId + _storageKey)
 }
 export {

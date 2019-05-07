@@ -163,7 +163,8 @@ export default {
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;
-      this._ListAllDealer(searchKey.trim());
+      this.params.shopName = searchKey.trim();
+      this._ListAllDealer(this.params);
     },
     loadMore() {
       if (this.loading || this.params.pageNum > this.totalPage) return false;
