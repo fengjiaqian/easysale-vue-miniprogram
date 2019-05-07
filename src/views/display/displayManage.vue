@@ -13,13 +13,16 @@
                     :key="item.customerDisplay.id"
             ></display-manage>
         </section>
+        <empty v-if="isEmpty" txt="暂无陈列数据~" :iconUrl="avatarUrl"></empty>
     </div>
 </template>
 
 <script>
+    import avatarUrl from "@/assets/images/empty_icon_1.png";
     import { queryDisplays } from "api/fetch/display";
     import displayManage from "components/display/display-manage";
     import bus from "common/Bus";
+    import empty from "components/empty.vue";
     export default {
         data() {
             return {
@@ -35,13 +38,20 @@
                 param: {
                     state: 0
                 },//待处理，已处理的查询条件
+                requestDone: false,
+                avatarUrl,
             };
         },
         components: {
-            displayManage
+            displayManage,
+            empty
         },
         computed: {
-
+            isEmpty(){
+                if(this.requestDone){
+                    return !this.displayList.length
+                }
+            }
         },
         created() {
             this.queryList()
@@ -65,14 +75,17 @@
             },
             //查询列表
             queryList(){
+                this.requestDone = false
                 queryDisplays(this.param)
                     .then(res => {
                         if (res.result === "success") {
                             this.displayList = res.data
+                            this.requestDone = true
                         }
                     })
                     .catch(err => {
                         this.$toast(err.message);
+                        this.requestDone = true
                     });
             },
         },
