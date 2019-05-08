@@ -7,11 +7,11 @@
       <div class="user-tel" @click="_jumpUserInfo">
         <h5>{{nickName || ''}}</h5>
 
-        <p>{{isVisitor?'未绑定':mobileNo}}</p>
+        <p>{{isVisitor ? '未绑定' : mobileNo}}</p>
       </div>
       <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
-        <i></i>
-        <span>邀请码</span>
+              <i></i>
+              <span>邀请码</span>
       </div>-->
       <div class="user-code" @click="shareShop">
         <i></i>
@@ -168,6 +168,7 @@ export default {
       }, 2000);
     }
   },
+
   watch: {}
 };
 </script>

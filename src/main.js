@@ -1,4 +1,4 @@
-// import VConsole from 'vconsole'
+//import VConsole from 'vconsole'
 
 //new VConsole() // 初始化
 import Vue from 'vue'
