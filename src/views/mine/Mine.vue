@@ -1,15 +1,15 @@
 <template>
-  <div id="mine">
-    <div class="user-info">
-      <div class="user-avart" @click="_jumpUserInfo">
-        <img v-lazy="avatarUrl" alt>
-      </div>
-      <div class="user-tel" @click="_jumpUserInfo">
-        <h5>{{nickName || ''}}</h5>
-
-        <p>{{isVisitor ? '未绑定' : mobileNo}}</p>
-      </div>
-      <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
+    <div id="mine">
+        <div class="user-info">
+            <div class="user-avart" @click="_jumpUserInfo">
+                <img v-lazy="avatarUrl" alt>
+            </div>
+            <div class="user-tel" @click="_jumpUserInfo">
+                <h5>{{nickName || ''}}</h5>
+                <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
+                <p v-else>{{mobileNo}}</p>
+            </div>
+            <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
               <i></i>
               <span>邀请码</span>
       </div>-->
@@ -17,7 +17,6 @@
         <i></i>
         <span>分享</span>
       </div>
-      <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
     </div>
     <!-- 功能模块 -->
     <ul class="enter-list">
@@ -195,9 +194,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.enter-list {
-  mt(20);
-}
+    .enter-list {
+        mt(20);
+    }
 
 .enter-item {
   bg(#fff);
@@ -247,40 +246,40 @@ export default {
       background-size: contain;
     }
 
-    .mr-12 {
-      mr(12);
+            .mr-12 {
+                mr(12);
+            }
+        }
     }
-  }
-}
 
-.product_manage {
-  .enter-item-img {
-    span {
-      background-image: url('../../assets/images/product_manage_icon.png');
+    .product_manage {
+        .enter-item-img {
+            span {
+                background-image: url('../../assets/images/product_manage_icon.png');
+            }
+        }
+
+        .enter-item-txt {
+            border-bottom: 1PX solid #ededed;
+        }
     }
-  }
 
-  .enter-item-txt {
-    border-bottom: 1PX solid #ededed;
-  }
-}
-
-.data_static {
-  .enter-item-img {
-    span {
-      background-image: url('../../assets/images/data_static_icon.png');
+    .data_static {
+        .enter-item-img {
+            span {
+                background-image: url('../../assets/images/data_static_icon.png');
+            }
+        }
     }
-  }
-}
 
-.customer {
-  mt(20);
+    .customer {
+        mt(20);
 
-  .enter-item-img {
-    span {
-      background-image: url('../../assets/images/customer_icon.png');
-    }
-  }
+        .enter-item-img {
+            span {
+                background-image: url('../../assets/images/customer_icon.png');
+            }
+        }
 
   .enter-item-txt {
     border-bottom: 1PX solid #ededed;
@@ -360,19 +359,17 @@ export default {
   }
 }
 
-.bind-tel {
-  pos(absolute);
-  top: 70px;
-  right: 24px;
-  block();
-  w(154);
-  lh(48);
-  bg(#FFBD38);
-  c(#fff);
-  ft(26);
-  text-c();
-  radius(24);
-}
+    .bind-tel {
+        mt(32)
+        block();
+        w(154);
+        lh(48);
+        bg(#FFBD38);
+        c(#fff);
+        ft(26);
+        text-c();
+        radius(24);
+    }
 
 .user-code {
   float: right;

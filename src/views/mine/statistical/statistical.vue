@@ -40,6 +40,7 @@
 
 <script>
   import { queryStatisticalData } from "api/fetch/mine";
+  import storage from 'common/storage'
   export default {
     data() {
 
@@ -69,6 +70,7 @@
     },
     methods: {
       switchBar(idx) {
+        if(this.activeIdx == idx) return
         this.activeIdx = idx
         switch (idx) {
           case 0:
@@ -90,6 +92,7 @@
           default:
             break;
         }
+        this.initStatistical()
       },
       initStatistical(){
         let param = {
@@ -103,13 +106,14 @@
       },
       skipTo(type){
         let path = type == 'product' ? '/my/statisProductList' : '/my/statisCustomerList'
-        this.$router.push({ path });
+        storage.set("recordIdx",this.activeIdx)
+        this.$router.push({
+          path,
+          query: {idx:this.activeIdx}
+        });
       },
     },
     watch: {
-      dayNum: function(val) {
-          this.initStatistical()
-        }
     }
   }
 </script>

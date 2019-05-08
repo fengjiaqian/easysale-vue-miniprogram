@@ -47,7 +47,7 @@
                 </div>
             </div>
             <!--终端可见-->
-            <div class="title-box" >
+            <div class="title-box">
                 <div class="title ">{{userType == 3?'商贸公司':'经销商'}}</div>
                 <div class="font-30-666 company-name">{{dealer.dealerName}}</div>
             </div>
@@ -116,6 +116,9 @@
         },
         components: {mHeader,},
         created: function () {
+            if (this.userType == 3) {
+                this.stateList = ['已申请', '已回复', '已取消']
+            }
             this.id = this.$route.params.id;
             this._QueryReturnDetail();
         },
@@ -156,7 +159,7 @@
                 updateReturnById(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryReturnDetail()
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
