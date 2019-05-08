@@ -87,6 +87,7 @@
         activeRoleName: '',
         roleId: '',//角色id
         achieve: false,//能否保存
+        canSave: true,
       };
     },
     components: {
@@ -146,14 +147,18 @@
           this.$alert(`请选择雇佣日期！`)
           return
         }
-        this.saveAdd()
+        if(this.canSave){
+          this.saveAdd()
+        }
       },
       saveAdd(){
+        this.canSave = false
         this.staffInfo.hireDate = new Date(this.staffInfo.hireDate).getTime()
         addStaff(this.staffInfo).then(res => {
           if (res.result === "success") {
             //商品添加成功后回到商品管理列表页
             this.$toast("添加成功！");
+            this.canSave = true
             this.$router.push({ path: "/my/staffList" });
           }
         });

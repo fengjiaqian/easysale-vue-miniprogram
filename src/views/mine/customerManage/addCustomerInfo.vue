@@ -89,7 +89,8 @@ export default {
       activeIdx: null,
       activeName: "",
       currentDealerId: "", //
-      achieve: false //能否保存
+      achieve: false, //能否保存
+      canSave: true,
     };
   },
   components: {},
@@ -155,9 +156,12 @@ export default {
         this.$alert(`请输入客户的店铺地址！`);
         return;
       }
-      this.saveAdd();
+      if(this.canSave){
+        this.saveAdd()
+      }
     },
     saveAdd() {
+      this.canSave = false
       //经销商客户管理  新增客户 销售负责人 非必填   为空时 默认为  当前登录人id （经销商id），如果指定销售人员那就属于那个销售人员
       this.customerInfo.salesPersonUserId =
         this.customerInfo.salesPersonUserId || this.currentDealerId;
@@ -168,6 +172,7 @@ export default {
         .then(res => {
           if (res.result === "success") {
             this.$toast("添加成功！");
+            this.canSave = true
             this.$router.push({ path: "/my/customerList" });
           }
         })
