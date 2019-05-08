@@ -60,7 +60,7 @@ export default {
     return {
       activeIdx: 0, //选中的区间
       filterParam: {
-        dayNum: 1,
+        dayNum: null,
         pageNum: 1,
         pageSize: 20,
         orderByNum: 0, //1=数量排序，0=不按数量排序
@@ -81,7 +81,8 @@ export default {
   },
 
   created() {
-    this.queryRecordList();
+    let idx = this.$route.query.idx;
+    this.switchBar(idx)
   },
   beforeCreate() {},
   beforeDestroy() {},
