@@ -27,7 +27,7 @@ import bookMenuSide from "components/bookMenu/bookMenuSide.vue";
 import { queryCustomerList } from "api/fetch/mine";
 import { creatBookMenuData } from "common/createBookMenu";
 import empty from "components/empty.vue";
-import storage from 'common/storage'
+import storage from "common/storage";
 export default {
   data() {
     return {

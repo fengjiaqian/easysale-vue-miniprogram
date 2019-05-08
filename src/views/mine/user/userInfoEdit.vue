@@ -108,6 +108,7 @@ export default {
       let param = this.shopInfo;
       editShopInfo(param).then(res => {
         if (res.result === "success") {
+          storage.set("homeRefresh", true);
           this.$router.push({ path: "/my/userInfo" });
         }
       });

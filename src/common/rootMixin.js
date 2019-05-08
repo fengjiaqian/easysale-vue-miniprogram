@@ -23,9 +23,9 @@ const mixin = {
     methods: {
         //auth权限控制
         navigateToLogin() {
-            if (this.isVisitor) {
+            if (!storage.get("token", '')) {
                 if (window.__wxjs_environment === "miniprogram") {
-                   // storage.set('homeRefresh', true);
+                    storage.set('homeRefresh', true);
                     wx.miniProgram.navigateTo({
                         url: `/pages/mobile/mobile`
                     });
