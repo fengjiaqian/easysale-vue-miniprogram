@@ -31,7 +31,9 @@
                 <div style="background-color: #fff">
                     <product-normal v-for="(product,index) in productList"
                                     :key="product.productSpecificationId+index+product.productName"
-                                    :product="product"></product-normal>
+                                    :product="product"
+                                    :source="'redemption'"
+                    ></product-normal>
                 </div>
             </scroll>
         </div>

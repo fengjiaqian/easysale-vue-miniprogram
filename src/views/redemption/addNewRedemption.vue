@@ -97,7 +97,7 @@
                     remark: this.remark,
                 };
                 saveAward(params).then(res => {
-                    this.$toast('新增成功');
+                    this.$toast('申请提交成功');
                     this.$router.go(-1)
                 }).catch(res => {
                     this.$toast(res.message)
