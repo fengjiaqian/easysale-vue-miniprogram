@@ -6,18 +6,17 @@
             </div>
             <div class="user-tel" @click="_jumpUserInfo">
                 <h5>{{nickName || ''}}</h5>
-
-                <p>{{isVisitor ? '未绑定' : mobileNo}}</p>
+                <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
+                <p v-else>{{mobileNo}}</p>
             </div>
             <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
               <i></i>
               <span>邀请码</span>
             </div>-->
-            <div class="user-code" @click="shareShop" >
+            <div class="user-code" @click="shareShop">
                 <i></i>
                 <span>分享</span>
             </div>
-            <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
         </div>
         <!-- 功能模块 -->
         <ul class="enter-list">
