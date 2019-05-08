@@ -119,15 +119,12 @@ export default {
           if (storage.get("fromOrder", false)) {
             this.$router.go(-1);
           } else {
-            this.$router.push({ path: "/navi/mine" });
+            jumpPath = "/navi/mine"
           }
           break;
         case "userInfo":
         case "writeApplicationInformation":
           jumpPath = "/navi/mine"
-          break;
-        case "exhibitList":
-          jumpPath = "/navi/home"
           break;
         case "dealerList":
           const currentDealerId = storage.get("currentDealerId", "");
@@ -141,7 +138,9 @@ export default {
           this.$router.go(-1);
           break;
       }
-      this.$router.push({ path: jumpPath });
+      if(jumpPath){
+        this.$router.push({ path: jumpPath });
+      }
     },
     showShortList() {
       if (!storage.get("currentDealerId", "")) return false;
