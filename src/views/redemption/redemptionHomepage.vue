@@ -18,7 +18,7 @@
         <!--兑奖商品列表-->
         <div v-if="tabState==2" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%;background-color: #fff">
-            <search-bar class="pi-header"  :emit="true" placeHolder="请输入商品名称"
+            <search-bar class="pi-header" :emit="true" placeHolder="请输入商品名称"
                         @emitEvt="handleChange"></search-bar>
             <scroll
                     v-if="productList.length"
@@ -41,7 +41,8 @@
         <div v-if="redemptionList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="overflow: scroll">
             <list-item v-for="(item,index) in redemptionList" :listData="item" :key="index"
-                       :tabState="tabState" @directProcessing="directProcessing"></list-item>
+                       :tabState="tabState" @directProcessing="directProcessing"
+                       @cancelRedemption="cancelRedemption"></list-item>
         </div>
         <!--底部按钮-->
         <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
@@ -56,7 +57,7 @@
     </div>
 </template>
 <script>
-    import {awardList, selectDealAward, afterProductList, updateAwardById} from "api/fetch/redemption";
+    import {awardList, selectDealAward, afterProductList, updateAwardById, cancelAward} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import empty from "components/empty.vue";
@@ -312,7 +313,22 @@
                     name: "addNewRedemption",
                 });
             },
+            /**
+             * 取消兑奖
+             */
+            cancelRedemption(id) {
+                this.$confirm('您确定取消兑奖吗？')
+                    .then(() => {
+                        cancelAward(id).then(res => {
+                            this.$toast('操作成功');
+                            this.redemptionList = [];
+                            this._QueryAwardList();
+                        });
+                    })
+                    .catch(() => {
+                    });
 
+            }
 
         }
     }

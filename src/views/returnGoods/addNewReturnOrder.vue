@@ -74,7 +74,6 @@
             selectedProduct.forEach(selectItem => {
                 selectItem.buyCount = 1;
                 selectItem.minBuyNum = 1;
-                selectItem.maxBuyNum = selectItem.count;
                 this.returnGoods.push(selectItem)
             });
             storage.remove("selectedProduct");

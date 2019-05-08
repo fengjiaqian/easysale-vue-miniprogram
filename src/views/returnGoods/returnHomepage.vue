@@ -42,7 +42,8 @@
         <div v-if="returnGoodsList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="overflow: scroll">
             <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
-                       :tabState="tabState" @directProcessing="directProcessing"></list-item>
+                       :tabState="tabState" @directProcessing="directProcessing"
+                       @cancelReturn="cancelReturn"></list-item>
         </div>
         <!--底部按钮-->
         <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
@@ -57,7 +58,7 @@
     </div>
 </template>
 <script>
-    import {returnList, selectDealReturn, updateReturnById} from "api/fetch/returnGoods";
+    import {returnList, selectDealReturn, updateReturnById, cancelCustomerReturn} from "api/fetch/returnGoods";
     import {afterProductList} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
@@ -100,12 +101,7 @@
                 productList: [],
                 loading: false,
                 totalPage: 0,
-                filterParam: {
-                    pageNum: 1,
-                    pageSize: 20,
-                    searchKey: "",
-                    returnState: 1,
-                }, //商品查询参数
+
                 selectedProduct: [],//选中的商品
 
             }
@@ -128,10 +124,9 @@
                     pageNum: 1,
                     pageSize: 20,
                     searchKey: "",
-                    awardState: 1,
-                }; //商品查询参数
-
-                this.afterProductList(this.filterParam);
+                    returnState: 1,
+                }, //商品查询参数
+                    this.afterProductList(this.filterParam);
 
             } else {
                 this._QueryReturnList();
@@ -217,7 +212,7 @@
 
             },
 
-            // 可兑奖的商品列表
+            // 可退货的商品列表
             afterProductList(params) {
                 this.loading = true;
                 afterProductList(params)
@@ -323,7 +318,21 @@
                     this.$toast(res.message)
                 });
             },
-
+            /**
+             * 取消申请
+             */
+            cancelReturn(id) {
+                this.$confirm('您确定取消申请吗？')
+                    .then(() => {
+                        cancelCustomerReturn(id).then(res => {
+                            this.$toast('操作成功');
+                            this.returnGoodsList = [];
+                            this._QueryReturnList();
+                        });
+                    })
+                    .catch(() => {
+                    });
+            }
 
         }
     }

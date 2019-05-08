@@ -25,6 +25,7 @@ const mixin = {
         navigateToLogin() {
             if (this.isVisitor) {
                 if (window.__wxjs_environment === "miniprogram") {
+                   // storage.set('homeRefresh', true);
                     wx.miniProgram.navigateTo({
                         url: `/pages/mobile/mobile`
                     });
