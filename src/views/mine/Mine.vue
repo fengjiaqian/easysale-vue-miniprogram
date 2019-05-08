@@ -48,9 +48,9 @@
 import { initAccessModule } from "./mineCommon";
 import storage from "common/storage";
 import { findCustomerOwerInfo } from "api/fetch/endCustomer";
-import { queryShopInfo } from "api/fetch/mine";
+import { queryShopInfo, synthesisroutineimg } from "api/fetch/mine";
 import { mapGetters } from "vuex";
-import { synthesisroutineimg } from "api/fetch/mine";
+
 export default {
   data() {
     return {
@@ -95,7 +95,7 @@ export default {
         });
       }
       if (path == "/my/shopkeeper" && this.auditState == 0) {
-        return false;
+        path = "/my/authentication";
       }
       this.$router.push(path);
     },
@@ -129,7 +129,8 @@ export default {
           this.mobileNo = res.data.phone;
           this.nickName = res.data.wxNickName;
           this.avatarUrl = res.data.iamgeUrl;
-          this.auditState = res.data.auditState; //经销商进行店主认证（0：审核中，1：审核通过）
+          this.auditState = res.data.auditState; //经销商进行店主认证（0：认证中，1：已认证  2.未认证）
+          this.mineMenu = initAccessModule(this.userType, this.auditState);
         })
         .catch(err => {});
     },
