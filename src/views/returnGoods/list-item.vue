@@ -32,6 +32,9 @@
             <button v-if="userType != 3&&tabState==0" class="handle-btn"
                     @click.stop="directProcessing(listData.customerReturn.id)">处理
             </button>
+            <button v-if="userType == 3&&tabState==0" class="cancel-btn"
+                    @click.stop="cancelReturn(listData.customerReturn.id)">取消退货
+            </button>
         </div>
     </div>
 </template>
@@ -70,7 +73,7 @@
         },
         created() {
             if (this.userType == 3) {
-                this.stateList = ['申请中', '已回复', '已取消']
+                this.stateList = ['已申请', '已回复', '已取消']
             }
 
         },
@@ -98,6 +101,11 @@
                     }
                 });
             },
+
+            cancelReturn(id){
+                this.$emit("cancelReturn", id);
+
+            }
 
         },
 
@@ -259,6 +267,17 @@
     .saleMan {
         c(#999);
         ft(28)
+    }
+    .cancel-btn {
+        c(#FF5638);
+        ft(28);
+        padding 12px 24px;
+        bg(#fff);
+        border: 2px solid #DDDDDD;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
     }
 </style>
 

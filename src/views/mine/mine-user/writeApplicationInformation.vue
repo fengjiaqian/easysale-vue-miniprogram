@@ -127,13 +127,13 @@ export default {
       applyDealer(params)
         .then(res => {
           this.$toast("申请成功");
-          const { mobileNo, token, userType, shopId } = res.data;
+          const { mobileNo, token, userType, shopId = "" } = res.data;
           storage.set("mobileNo", mobileNo);
           storage.set("token", token);
           storage.set("originUserType", userType);
           this.setUserType(userType);
           shopId && storage.set("currentDealerId", shopId);
-          //
+          //todo remove currentDealer
           storage.remove("currentDealer");
           storage.set("homeRefresh", true);
           storage.set("mineRefresh", true);

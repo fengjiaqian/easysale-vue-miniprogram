@@ -1,6 +1,7 @@
 
 <template>
-  <div class="shop-keeper">
+  <div class="shop-keeper pt90">
+    <m-header :isFixed="true"></m-header>
     <div class="upload-viewer">
       <h5>上传营业执照</h5>
       <div class="upload-area">
@@ -62,6 +63,7 @@ export default {
       shopkeeperCertification(logoIamgeUrls)
         .then(res => {
           storage.set("mineRefresh", true);
+          storage.set("homeRefresh", true);
           this.$toast("上传成功，请耐心等待审核");
           this.$router.push({ path: "/navi/mine" });
         })

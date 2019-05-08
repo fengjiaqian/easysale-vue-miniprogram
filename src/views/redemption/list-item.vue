@@ -32,11 +32,15 @@
             <button v-if="userType != 3&&tabState==0" class="handle-btn"
                     @click.stop="directProcessing(listData.customerAward.id)">处理
             </button>
+            <button v-if="userType == 3&&tabState==0" class="cancel-btn"
+                    @click.stop="cancelRedemption(listData.customerAward.id)">取消兑奖
+            </button>
         </div>
     </div>
 </template>
 
 <script>
+
     export default {
         name: 'list-item',
         props: {
@@ -67,7 +71,7 @@
         },
         created() {
             if (this.userType == 3) {
-                this.stateList = ['申请中', '已回复', '已取消']
+                this.stateList = ['已申请', '已回复', '已取消']
             }
 
         },
@@ -94,6 +98,12 @@
                     }
                 });
             },
+            /**
+             * 取消兑奖
+             */
+            cancelRedemption(id) {
+                this.$emit("cancelRedemption", id);
+            }
 
         },
 
@@ -183,7 +193,17 @@
         margin: 16px 0;
         ml(24)
     }
-
+    .cancel-btn {
+        c(#FF5638);
+        ft(28);
+        padding 12px 24px;
+        bg(#fff);
+        border: 2px solid #DDDDDD;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
+    }
     .select-img {
         position absolute
         w(40)
