@@ -13,7 +13,7 @@
               <i></i>
               <span>邀请码</span>
             </div>-->
-            <div class="user-code" @click="shareShop" v-if="userType==2">
+            <div class="user-code" @click="shareShop" >
                 <i></i>
                 <span>分享</span>
             </div>

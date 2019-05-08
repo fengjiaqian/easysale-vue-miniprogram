@@ -26,7 +26,7 @@
 
             </scroll>
         </div>
-        <button class="footer-btn" @click="addComplaints()" v-if="userType == 3">新建投诉单</button>
+        <button class="footer-btn" @click="addComplaints()" v-if="userType == 3">我要投诉</button>
     </div>
 </template>
 <script>
