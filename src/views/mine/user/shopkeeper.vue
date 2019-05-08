@@ -64,7 +64,7 @@ export default {
         .then(res => {
           storage.set("mineRefresh", true);
           storage.set("homeRefresh", true);
-          this.$toast("上传成功，请耐心等待审核");
+          this.$toast("认证申请已提交，请等待审核结果");
           this.$router.push({ path: "/navi/mine" });
         })
         .catch(_ => {});

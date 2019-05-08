@@ -48,7 +48,7 @@ export function initAccessModule(userType, auditState = '') {
         return customerAccessModule.slice(0, 1);
     }
     if (auditState == 1) {  //已经认证了
-        return  dealerAccessModule.slice(0, 4);
+        return dealerAccessModule.slice(0, 4);
     }
     return dealerAccessModule;
 }
