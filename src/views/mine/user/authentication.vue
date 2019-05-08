@@ -8,7 +8,7 @@
         <span class="frt c-theme">认证中</span>
       </h5>
       <div class="upload-area" v-for="file in fieldList" v-if="fieldList.length">
-        <img v-lazy="file || ''" class="license-pic" alt>
+        <img :src="file" class="license-pic" alt>
       </div>
     </div>
     <div class="authentication-desc" v-if="fieldList.length">工作人员正在审核，请耐心等待。</div>
