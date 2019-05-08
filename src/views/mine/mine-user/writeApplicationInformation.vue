@@ -34,8 +34,8 @@
       >
     </div>
     <div class="uiw-pic">
-      <div class="left">上传门头照 :</div>
-      <ul class="img-list">
+      <div class="left" style="width: 80px">上传门头照 :</div>
+      <ul class="img-list" >
         <li v-for="(item,index) in stagImgList">
           <img :src="item">
           <i @click="deleteUploadImg(index)"></i>
@@ -290,6 +290,7 @@ export default {
     flex();
     flex-wrap: wrap;
     justify-content: flex-start;
+    ml(24)
 
     >li {
       position: relative;
