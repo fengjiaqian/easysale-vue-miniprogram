@@ -39,13 +39,16 @@ const customerAccessModule = [
     }
 ]
 
-export function initAccessModule(userType) {
+export function initAccessModule(userType, auditState = '') {
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {
         if (userType == originUserType) {
             return customerAccessModule;
         }
         return customerAccessModule.slice(0, 1);
+    }
+    if (auditState == 1) {  //已经认证了
+        return  dealerAccessModule.slice(0, 4);
     }
     return dealerAccessModule;
 }

@@ -15,12 +15,14 @@
               <span>规格：{{product.specification}}</span>
             </div>
             <div class="price">
+              <strong v-if="userType==3">{{product.price}}</strong>
               <input
+                v-else
                 type="text"
                 :value="product.price"
                 @change="handleProductPrice(product,$event)"
               >
-              元/{{product.priceUnit}}
+              <span class="unit">元/{{product.priceUnit}}</span>
               <span class="frt fz28">X{{product.buyCount}}</span>
             </div>
           </div>
@@ -264,6 +266,11 @@ export default {
       mt(22);
       lh(56);
 
+      strong {
+        ft(32);
+        c($color-theme);
+      }
+
       input {
         w(160);
         h(56);
@@ -273,6 +280,11 @@ export default {
         ft(30);
         c($color-theme);
         text-indent: 16px;
+      }
+
+      .unit {
+        ft(26);
+        c(#666);
       }
     }
 
