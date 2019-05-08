@@ -166,14 +166,14 @@ import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "home",
   data() {
     return {
       showFixed: false,
       loop: true,
-      appIcons: appIcons,
+      appIcons: appIcons.slice(0, 4),
       showSqure: false,
       menuCanScroll: false,
       scrollMenu: [],
@@ -203,6 +203,7 @@ export default {
   },
   beforeCreate() {},
   computed: {
+    ...mapGetters(["userInSwitching"]),
     currentIndex() {
       var h = this.posY,
         arr = this.heightList || [];
@@ -219,6 +220,11 @@ export default {
   activated() {
     this.saveCartCount();
     if (storage.get("homeRefresh", false)) {
+      if (this.userType == 3 && !this.userInSwitching) {
+        this.appIcons = appIcons.slice();
+      } else {
+        this.appIcons = appIcons.slice(0, 4);
+      }
       this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);

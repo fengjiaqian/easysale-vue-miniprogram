@@ -34,7 +34,7 @@
       >
     </div>
     <div class="uiw-pic">
-      <div class="left">营业执照 :</div>
+      <div class="left">上传门头照 :</div>
       <ul class="img-list">
         <li v-for="(item,index) in stagImgList">
           <img :src="item">

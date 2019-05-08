@@ -11,6 +11,9 @@
           </div>
           <div class="s-s-main">
             <p class="name">{{product.productName}}</p>
+            <div class="spec">
+              <span>规格：{{product.specification}}</span>
+            </div>
             <div class="price">
               <input
                 type="text"
@@ -18,9 +21,6 @@
                 @change="handleProductPrice(product,$event)"
               >
               元/{{product.priceUnit}}
-            </div>
-            <div class="spec">
-              <span>规格：{{product.specification}}</span>
               <span class="frt fz28">X{{product.buyCount}}</span>
             </div>
           </div>
@@ -99,7 +99,6 @@ import { OrderSubmit } from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
 import { queryAddressList } from "api/fetch/endCustomer";
 import { findCustomerList } from "api/fetch/dealer";
-import orderProducts from "components/order-products.vue";
 export default {
   name: "order-submit",
   data() {
@@ -122,9 +121,6 @@ export default {
       return this.payableAmount - this.reduce;
     }
   },
-  components: {
-    orderProducts
-  },
   beforeCreate() {},
   created() {
     this._initOrderInfo();
@@ -140,7 +136,7 @@ export default {
        */
       this.products = storage.get("orderPrequeryParams", []);
       this.products = this.products.map(item => {
-        item.price = item.price.toFixed(2);
+        item.price = Number(item.price).toFixed(2);
         return item;
       });
       const orderExtraParams = storage.get("orderExtraParams", {});
@@ -188,6 +184,7 @@ export default {
         reduce: this.reduce,
         remark: this.remark
       };
+      storage.set("orderPrequeryParams", this.products);
       storage.set("orderExtraParams", orderExtraParams);
       const path = this.userType == 3 ? "/myConsignee" : "/my/customerList";
       this.$router.push({
@@ -282,7 +279,7 @@ export default {
     .spec {
       mt(21);
       ft(25);
-      c(#333);
+      c(#999);
     }
   }
 }

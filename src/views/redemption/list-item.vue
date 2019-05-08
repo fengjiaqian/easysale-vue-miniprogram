@@ -26,7 +26,7 @@
             </div>
             <div class="tips">{{listData.customerAward.replyContent}}</div>
         </div>
-        <p class="state">{{stateList[0]}}</p>
+        <p class="state">{{stateList[listData.customerAward.state]}}</p>
         <div class="btn-warp">
             <button class="go-detail" @click="toRedemptionDetail(listData.customerAward.id)">查看详情</button>
             <button v-if="userType != 3&&tabState==0" class="handle-btn"
@@ -65,8 +65,11 @@
                 return JSON.stringify(this.listData.saleMan) == "{}"
             }
         },
-        component: {
-            //someComponent
+        created() {
+            if (this.userType == 3) {
+                this.stateList = ['申请中', '已回复', '已取消']
+            }
+
         },
         methods: {
             // 是否展示更多信息
