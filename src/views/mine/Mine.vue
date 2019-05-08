@@ -344,9 +344,7 @@
     }
 
     .bind-tel {
-        pos(absolute);
-        top: 70px;
-        right: 24px;
+        mt(32)
         block();
         w(154);
         lh(48);
