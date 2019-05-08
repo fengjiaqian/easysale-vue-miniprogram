@@ -243,6 +243,7 @@
 
     .tips {
         c(#666);
+        ft(26)
     }
 
     .triangle {

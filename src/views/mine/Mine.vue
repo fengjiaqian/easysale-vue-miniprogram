@@ -17,7 +17,6 @@
         <i></i>
         <span>分享</span>
       </div>
-      <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
     </div>
     <!-- 功能模块 -->
     <ul class="enter-list">
