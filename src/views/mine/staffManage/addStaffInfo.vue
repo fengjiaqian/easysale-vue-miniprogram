@@ -34,11 +34,11 @@
         </el-date-picker>
         <i class="extension"></i>
       </li>
-      <li>
+<!--      <li>
         <span>角色设置：</span>
         <div @click="rolePopToggle">{{activeRoleName}}</div>
         <i class="extension"></i>
-      </li>
+      </li>-->
       <li class="special-li">
         <span>折扣权限：</span>
         <div><input class="discount-int" v-model="staffInfo.discount" type="number" placeholder="请输入折扣"><span>折</span></div>
@@ -47,7 +47,7 @@
     <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
 
     <!--角色设置弹出层-->
-    <div class="popup-wrap" v-if="rolePopShow">
+    <!--<div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
         <h5 class="header">
           <span>角色设置</span>
@@ -61,7 +61,7 @@
         <div class="btn" @click="rolePopShow=false">确定</div>
       </div>
       <div class="pop-mask"></div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -112,7 +112,7 @@
       next()
     },
     created(){
-      this._queryRole()
+      //this._queryRole()
     },
     methods: {
       limitName(e){
