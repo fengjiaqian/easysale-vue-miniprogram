@@ -77,7 +77,8 @@ export default {
       },
       activeIdx: null,
       activeName: "",
-      achieve: false
+      achieve: false,
+      canSave: true,
     };
   },
   components: {},
@@ -153,13 +154,17 @@ export default {
         this.$alert(`请输入客户的销售负责人！`);
         return;
       }
-      this.saveAdd();
+      if(this.canSave){
+        this.saveAdd()
+      }
     },
     saveAdd() {
+      this.canSave = false
       editCustomer(this.customerInfo).then(res => {
         if (res.result === "success") {
           //商品添加成功后回到商品管理列表页
           this.$toast("修改成功！");
+          this.canSave = true
           this.$router.go(-1);
         }
       });
