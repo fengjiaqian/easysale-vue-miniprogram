@@ -219,12 +219,12 @@ export default {
   },
   activated() {
     this.saveCartCount();
+    if (this.userType == 3 && !this.userInSwitching) {
+      this.appIcons = appIcons.slice();
+    } else {
+      this.appIcons = appIcons.slice(0, 4);
+    }
     if (storage.get("homeRefresh", false)) {
-      if (this.userType == 3 && !this.userInSwitching) {
-        this.appIcons = appIcons.slice();
-      } else {
-        this.appIcons = appIcons.slice(0, 4);
-      }
       this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
@@ -314,16 +314,21 @@ export default {
     },
     //
     _ListCurrentDealer() {
-      //第一次 切换 申请后 三种情况
+      //第一次 切换  申请后 三种情况
       const storeDealer = storage.get("currentDealer", {});
+      if (storeDealer.id == this.currentDealerId) {
+        return (this.currentDealer = storeDealer);
+      }
       ListAllDealer({ id: this.currentDealerId }).then(res => {
-        const { dataList = [] } = res.data;
-        // dataList.length && (this.currentDealer = dataList[0]);
+        const dataList = res.data.dataList || [];
         if (dataList.length) {
           const matchItem = dataList.find(
             item => item.id == this.currentDealerId
           );
           this.currentDealer = matchItem;
+          if (JSON.stringify(storeDealer) == "{}") {
+            storage.set("currentDealer", matchItem);
+          }
         }
       });
     },
@@ -446,6 +451,9 @@ export default {
     jumpSecondsort(Index) {
       var jumpPath = "",
         query = {};
+      if (this.navigateToLogin()) {
+        return false;
+      }
       switch (Index) {
         case 3:
           if (this.userType == 1 || this.userType == 2) {
@@ -464,12 +472,10 @@ export default {
           jumpPath = "/returnHomepage";
           break;
         case 4:
-          if (!this.navigateToLogin()) {
-            jumpPath = "/writeApplicationInformation";
-            query = {
-              mobileNo: storage.get("mobileNo", "")
-            };
-          }
+          jumpPath = "/writeApplicationInformation";
+          query = {
+            mobileNo: storage.get("mobileNo", "")
+          };
           break;
         default:
           break;

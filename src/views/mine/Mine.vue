@@ -33,7 +33,7 @@
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
           <div>
-            <span class="mr-12 c-theme" v-if="item.path=='/my/shopkeeper' && auditState==0">审核中</span>
+            <span class="mr-12 c-theme" v-if="item.path=='/my/shopkeeper' && auditState==0">认证中</span>
             <em></em>
           </div>
         </div>
@@ -93,6 +93,27 @@ export default {
           }
         });
       }
+      //数据统计 权限
+      if (path == "/my/statistical" && this.userType != 1) {
+        if (this.auditState == 2) {
+          const msg =
+            "您的店铺尚未认证，认证需要上传营业执照照片，是否立即认证？";
+          this.$confirm(msg)
+            .then(() => {
+              this.$router.push({ path: "/my/shopkeeper" });
+            })
+            .catch(() => {});
+        }
+        if (this.auditState == 0) {
+          this.$confirm("您的店铺正在认证中，查看详情？")
+            .then(() => {
+              this.$router.push({ path: "/my/authentication" });
+            })
+            .catch(() => {});
+        }
+        return false;
+      }
+      //认证控制
       if (path == "/my/shopkeeper" && this.auditState == 0) {
         path = "/my/authentication";
       }
