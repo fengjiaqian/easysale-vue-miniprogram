@@ -217,7 +217,7 @@ export default {
         if (val > max) this.reduce = max;
         if (val < 0) this.reduce = 0;
       } else {
-        event.target.value = this.reduce;
+        event.target.value = Number(this.reduce).toFixed(2);
       }
     },
     handleProductPrice(product, event) {
