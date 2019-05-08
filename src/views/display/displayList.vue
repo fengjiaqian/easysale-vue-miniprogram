@@ -7,6 +7,7 @@
             </div>
             <div class="h-search-bar" v-if="activeIdx==0">
                 <input v-model="searchKey" placeholder="请输入商品名称" @change="handleChange($event)">
+                <i></i>
             </div>
             <!--经销商店铺列表-->
             <div class="dealer-list-wrap" v-if="activeIdx!=0&&shopList.length">
