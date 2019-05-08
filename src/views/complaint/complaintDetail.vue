@@ -37,7 +37,7 @@
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
                         <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
                     <p class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</p>
-                    <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
+                    <p class="font-30-666" v-if="customer.saleName">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <div class="title-box" v-if="userType == 3">

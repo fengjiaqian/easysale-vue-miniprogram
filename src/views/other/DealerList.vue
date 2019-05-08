@@ -136,20 +136,28 @@ export default {
      *  (经销商 && 没有切换 ) || 切换中 可以切换店铺。
      */
     _chooseDealer(dealer) {
+      if (this.changing) return false;
       if (
         (this.userType != 3 && !this.userInSwitching) ||
         this.userInSwitching
       ) {
+        this.changing = true;
         changeShop(dealer.id)
           .then(res => {
+            this.changing = false;
             this.setUserType(res.data || 3);
             storage.set("currentDealerId", dealer.id);
             storage.set("currentDealer", dealer);
+            storage.set("homeRefresh", true);
+            storage.set("mineRefresh", true);
+            storage.set("orderRefresh", true);
             this.$router.push({
               path: "/navi/home"
             });
           })
-          .catch(_ => {});
+          .catch(_ => {
+            this.changing = false;
+          });
         return false;
       }
       if (storage.get("token", "")) {
@@ -163,7 +171,8 @@ export default {
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;
-      this._ListAllDealer(searchKey.trim());
+      this.params.shopName = searchKey.trim();
+      this._ListAllDealer(this.params);
     },
     loadMore() {
       if (this.loading || this.params.pageNum > this.totalPage) return false;

@@ -7,12 +7,10 @@ export const cartCount = state => {
     return state.cartCount
 }
 
-export const userType = state => {
-    return state.userType;
-}
+export const userType = state => state.userType;
 
-//用户切换状态
+//用户切换状态()
 export const userInSwitching = state => {
-    const originUserType = storage.get('originUserType', "")
-    return state.userType != originUserType
+    const originUserType = storage.get('originUserType', 3)
+    return originUserType != 3 && state.userType != originUserType
 }

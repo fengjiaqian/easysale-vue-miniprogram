@@ -10,6 +10,7 @@ export function transformOrderList(list) {
         );
         for (let item of order.orderItem) {
             item.product.buyCount = item.quantity;
+            item.product.price = item.salePrice;
         }
         if (order.orderState == 1 && storage.get('userType', '3') != 3) {
             order.canRefuse = true;
@@ -28,6 +29,7 @@ export function transformOrderList(list) {
 export function pullProductsFromOrder(order) {
     return order.orderItem.map(item => {
         item.product.buyCount = item.quantity;
+        item.product.price = item.salePrice;
         return item.product
     })
 }

@@ -10,7 +10,7 @@
       <div class="product-info-normal" @click="goDetail">
         <h5 class="name">{{product.productName}}</h5>
         <div style="flex:1;"></div>
-        <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
+        <div class="price">规格：{{product.specification}}</div>
       </div>
     </div>
   </div>

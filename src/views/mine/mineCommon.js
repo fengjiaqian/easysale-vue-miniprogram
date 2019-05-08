@@ -22,7 +22,7 @@ const dealerAccessModule = [
     },
     {
         title: "认证店主",
-        class: "staff",
+        class: "manager",
         path: "/my/shopkeeper"
     },
 ]
@@ -33,7 +33,7 @@ const customerAccessModule = [
         path: "/myConsignee"
     },
     {
-        title: "申请经销商",
+        title: "申请开店",
         class: "customer",
         path: "/writeApplicationInformation"
     }

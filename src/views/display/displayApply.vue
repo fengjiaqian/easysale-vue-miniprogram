@@ -1,5 +1,6 @@
 <template>
-    <div class="display-apply">
+    <div class="display-apply pt90">
+        <m-header :isFixed="true"></m-header>
         <div class="da-product">
             <h5>陈列商品</h5>
             <ul class="dap-list">

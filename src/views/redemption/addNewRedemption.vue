@@ -13,7 +13,11 @@
                                         <div class="img-box">
                                             <img :src="item.productImageUrl">
                                         </div>
-                                        <p class="goods-name">{{item.productName}}</p>
+                                        <div class="info-box">
+                                            <p class="goods-name">{{item.productName}}</p>
+                                            <p class="goods-name">规格：{{item.specification}}</p>
+                                        </div>
+
                                         <div class="del-btn" @click="delGoods(index)">删除</div>
                                     </div>
                                     <div class="count-box">
@@ -54,18 +58,14 @@
         components: {
             numberPicker, mHeader
         },
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                vm.redemptionGoods = [];
-                vm.remark = ''
-                let selectedProduct = storage.get("selectedProduct", "");
-                selectedProduct.forEach(selectItem => {
-                    selectItem.buyCount = 1;
-                    selectItem.minBuyNum = 1;
-                    vm.redemptionGoods.push(selectItem)
-                });
-                storage.remove("selectedProduct");
-            })
+        created(){
+            let selectedProduct = storage.get("selectedProduct");
+            selectedProduct.forEach(selectItem => {
+                selectItem.buyCount = 1;
+                selectItem.minBuyNum = 1;
+                this.redemptionGoods.push(selectItem)
+            });
+            storage.remove("selectedProduct");
         },
 
         computed: {
@@ -97,7 +97,7 @@
                     remark: this.remark,
                 };
                 saveAward(params).then(res => {
-                    this.$toast('新增成功');
+                    this.$toast('申请提交成功');
                     this.$router.go(-1)
                 }).catch(res => {
                     this.$toast(res.message)
@@ -253,6 +253,11 @@
         .font-30-333 {
             ft(30);
             c(#333)
+        }
+        .info-box{
+            display flex;
+            flex-direction column;
+            justify-content space-between
         }
     }
 

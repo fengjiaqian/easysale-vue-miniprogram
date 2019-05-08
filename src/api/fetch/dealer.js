@@ -66,7 +66,24 @@ export function changeShop(id) {
         method: 'post',
         url: '/shop/changeShop',
         data: {
-            id,
+            id
+        }
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+
+/***
+ * 认证店主 
+ */
+export function shopkeeperCertification(logoIamgeUrls) {
+    return axios({
+        method: 'post',
+        url: '/dealer/shopkeeperCertification',
+        data: {
+            logoIamgeUrls
         }
     }).then((res) => {
         return Promise.resolve(res.data)
