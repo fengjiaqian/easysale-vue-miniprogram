@@ -102,6 +102,9 @@
         },
         components: {mHeader,},
         created: function () {
+            if (this.userType == 3) {
+                this.stateList = ['已申请', '已回复', '已取消']
+            }
             this.id = this.$route.params.id;
             this._QueryRedemptionDetail();
         },

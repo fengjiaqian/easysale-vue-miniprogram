@@ -67,7 +67,7 @@
         },
         created() {
             if (this.userType == 3) {
-                this.stateList = ['申请中', '已回复', '已取消']
+                this.stateList = ['已申请', '已回复', '已取消']
             }
 
         },
