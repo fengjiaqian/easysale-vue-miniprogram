@@ -95,7 +95,8 @@ export default {
       rolePopShow: false,
       roleList: [],
       activeRoleName: "",
-      achieve: false
+      achieve: false,
+      canSave: true,
     };
   },
   components: {},
@@ -148,13 +149,17 @@ export default {
         this.$alert(`请选择雇佣日期！`);
         return;
       }
-      this.saveAdd();
+      if(this.canSave){
+          this.saveAdd();
+      }
     },
     saveAdd() {
+      this.canSave = false
       editStaff(this.staffInfo).then(res => {
         if (res.result === "success") {
           //商品添加成功后回到商品管理列表页
           this.$toast("修改成功！");
+          this.canSave = true
           this.$router.go(-1);
         }
       });
