@@ -124,6 +124,9 @@ export default {
         case "updateConsignee":
           jumpPath = "/myConsignee";
           break;
+        case "userInfoEdit":
+          jumpPath = "/my/userInfo";
+          break;
         case "customerList":
           //如果是从订单界面过来的  返回订单 带入信息
           if (storage.get("fromOrder", false)) {
