@@ -329,6 +329,10 @@ export default {
           if (JSON.stringify(storeDealer) == "{}") {
             storage.set("currentDealer", matchItem);
           }
+        } else {
+          this.$router.push({
+            path: "/dealerList"
+          });
         }
       });
     },

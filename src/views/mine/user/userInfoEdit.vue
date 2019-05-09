@@ -20,6 +20,13 @@
         <div>店铺介绍：</div>
         <textarea v-model="shopInfo.instruction" maxlength="180" rows="4" placeholder="请输入店铺介绍"></textarea>
       </li>
+      <li class="mb-20 uiw-info info-address">
+        <div class="ia-title">店铺地址：</div>
+        <div class="ia-value">
+          <input v-model="shopInfo.address" type="text" maxlength="50" placeholder="请输入店铺地址">
+        </div>
+        <i @click="obtainAddress" class="position"></i>
+      </li>
       <li class="uiw-pic">
         <div>店铺图片：</div>
         <ul class="img-list">
@@ -54,7 +61,12 @@ import { evokeWxLocation } from "common/location";
 export default {
   data() {
     return {
-      shopInfo: {},
+      shopInfo: {
+        shopName: '',
+        phone: '',
+        instruction: '',
+        address: '',
+      },
       domShow: false,
       limitUploadNum: 5, //上传图片的限制张数
       stagImgList: [], //暂存的图片数组
@@ -70,6 +82,16 @@ export default {
       };
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      let passData = to.query.passData ? to.query.passData : null;
+      if (passData) {
+        passData = JSON.parse(passData);
+        Object.assign(vm.shopInfo, passData.pageData);
+        vm.shopInfo.address = passData.addressData.address;
+      }
+    });
+  },
   created() {
     this.initShopInfo();
   },
@@ -81,7 +103,7 @@ export default {
     initShopInfo() {
       queryShopInfo({}).then(res => {
         if (res.result === "success" && res.data) {
-          this.shopInfo = res.data;
+          Object.assign(this.shopInfo, res.data);
           this.stagImgList = res.data.logoIamgeUrls;
           this.domShow = true;
         }
@@ -160,7 +182,7 @@ export default {
     obtainAddress(){
       let recordData = {
         path: this.$route.path,
-        pageData: this.staffInfo
+        pageData: this.shopInfo
       }
       evokeWxLocation(recordData)
     },

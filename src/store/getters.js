@@ -11,6 +11,7 @@ export const userType = state => state.userType;
 
 //用户切换状态()
 export const userInSwitching = state => {
+    console.log('getter changed')
     const originUserType = storage.get('originUserType', 3)
-    return originUserType != 3 && state.userType != originUserType
+    return state.userType == 3 && state.userType != originUserType
 }
