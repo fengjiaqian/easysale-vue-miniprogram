@@ -253,6 +253,10 @@
           return new Promise((resolve, reject)=>{
             compress(file, function(val) {
               //console.log('压缩后',val)
+              if( val.size/1024/1024 > 1 ){
+                this.$alert('图片过大，请重新选择');
+                return
+              }
               resolve(val)
             })
           })

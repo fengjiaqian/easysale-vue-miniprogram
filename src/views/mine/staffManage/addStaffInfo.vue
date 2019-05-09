@@ -17,7 +17,7 @@
         <input v-model="staffInfo.cardId" @input="limitCardId" type="number" placeholder="请输入身份证号">
       </li>
       <li class="special-li">
-        <span>详细地址：</span>
+        <span>家庭地址：</span>
         <div>
           <input v-model="staffInfo.address" type="text" maxlength="50" placeholder="请输入员工地址">
         </div>
@@ -25,12 +25,12 @@
       </li>
       <div class="h20"></div>
       <li>
-        <span>雇佣日期：</span>
+        <span>入职日期：</span>
         <el-date-picker
                 class="date-pick-wrap"
                 v-model="staffInfo.hireDate"
                 type="date"
-                placeholder="请选择雇佣日期">
+                placeholder="请选择入职日期">
         </el-date-picker>
         <i class="extension"></i>
       </li>
@@ -39,10 +39,10 @@
         <div @click="rolePopToggle">{{activeRoleName}}</div>
         <i class="extension"></i>
       </li>-->
-      <li class="special-li">
+<!--      <li class="special-li">
         <span>折扣权限：</span>
         <div><input class="discount-int" v-model="staffInfo.discount" type="number" placeholder="请输入折扣"><span>折</span></div>
-      </li>
+      </li>-->
     </ul>
     <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
 
@@ -144,7 +144,7 @@
           this.$alert(`请输入正确的员工身份证号！`)
           return
         }else if(!hireDate){
-          this.$alert(`请选择雇佣日期！`)
+          this.$alert(`请选择入职日期！`)
           return
         }
         if(this.canSave){
@@ -161,6 +161,9 @@
             this.canSave = true
             this.$router.push({ path: "/my/staffList" });
           }
+        }).catch((err)=>{
+          this.canSave = true
+          this.$toast(err.message);
         });
       },
       //查询所有角色
