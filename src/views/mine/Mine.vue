@@ -39,7 +39,6 @@
         </div>
       </li>
     </ul>
-    <img :src="imgUrl">
   </div>
 </template>
 
@@ -57,8 +56,7 @@ export default {
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
       mineMenu: [],
-      auditState: 1,
-      imgUrl: ""
+      auditState: 1
     };
   },
   computed: {
@@ -75,10 +73,8 @@ export default {
   mounted() {},
   activated() {
     const refresh = storage.get("mineRefresh", false);
-    refresh && this._findCustomerOwerInfo();
     if (refresh) {
       this._findCustomerOwerInfo();
-      this.mineMenu = initAccessModule(this.userType, this.auditState);
     }
     storage.set("mineRefresh", false);
   },
@@ -137,24 +133,29 @@ export default {
     //TODO 区别角色
     _findCustomerOwerInfo() {
       if (this.isVisitor) return false;
+      const { nickName, avatarUrl } = this;
+      //终端客户
       if (this.userType == 3 && !this.userInSwitching) {
-        findCustomerOwerInfo()
+        this.mineMenu = initAccessModule(this.userType);
+        if (nickName && avatarUrl) return false;
+        return findCustomerOwerInfo()
           .then(res => {
             this.mobileNo = res.data.phone;
             this.nickName = res.data.wxNickName;
             this.avatarUrl = res.data.iamgeUrl;
           })
           .catch(err => {});
-        return false;
       }
+      //非终端客户
       queryShopInfo({})
         .then(res => {
           this.mobileNo = res.data.phone;
-          this.nickName = res.data.wxNickName;
-          this.avatarUrl = res.data.iamgeUrl;
+          !nickName && (this.nickName = res.data.wxNickName);
+          !avatarUrl && (this.avatarUrl = res.data.iamgeUrl);
           this.auditState = res.data.auditState; //经销商进行店主认证（0：认证中，1：已认证  2.未认证）
-          const userType = res.data.userType || this.userType;
-          this.mineMenu = initAccessModule(userType, this.auditState);
+          const originUserType = res.data.userType; //返回的是原始状态  userType是当前状态。
+          originUserType && storage.set("originUserType", originUserType);
+          this.mineMenu = initAccessModule(this.userType, this.auditState);
         })
         .catch(err => {});
     },

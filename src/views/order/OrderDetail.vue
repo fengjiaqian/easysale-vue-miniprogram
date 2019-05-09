@@ -287,7 +287,8 @@
 
         .tips {
             c(#666);
-            ft(26)
+            ft(26);
+            word-wrap break-word
         }
         .triangle {
             width: 0;
