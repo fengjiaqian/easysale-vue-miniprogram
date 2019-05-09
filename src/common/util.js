@@ -15,7 +15,7 @@ function compress(fileObj, callback) {
             const scale = w / h
             w = fileObj.width || w
             h = fileObj.height || (w / scale)
-            let quality = 0.5 // 默认图片质量为0.7
+            let quality = 0.4 // 默认图片质量为0.7
             // 生成canvas
             const canvas = document.createElement('canvas')
             const ctx = canvas.getContext('2d')
