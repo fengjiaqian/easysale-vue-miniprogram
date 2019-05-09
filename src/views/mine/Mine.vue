@@ -154,7 +154,7 @@ export default {
           this.avatarUrl = res.data.iamgeUrl;
           this.auditState = res.data.auditState; //经销商进行店主认证（0：认证中，1：已认证  2.未认证）
           const originUserType = res.data.userType; //返回的是原始状态  userType是当前状态。
-          storage.set("originUserType", originUserType);
+          originUserType && storage.set("originUserType", originUserType);
           this.mineMenu = initAccessModule(this.userType, this.auditState);
         })
         .catch(err => {});
