@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import avatar from "@/assets/images/icon-cart.png";
+import avatarUrl from "@/assets/images/icon-product-empty.png";
 export default {
   name: "empty-page",
   props: {
     iconUrl: {
       type: String,
-      default: avatar
+      default: avatarUrl
     },
     txt: {
       type: String,

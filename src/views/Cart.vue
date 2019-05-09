@@ -1,7 +1,7 @@
 <template>
   <div id="cart">
     <m-header :isFixed="true"></m-header>
-    <empty v-if="!products.length" :txt="'购物车暂无商品'"></empty>
+    <empty v-if="!products.length" :txt="'购物车暂无商品'" :iconUrl="avatar"></empty>
     <div class="C-header" v-if="products.length">
       <strong>共{{products.length}}商品</strong>
       <a href="javascript:;" class="c-3" @click="_delete">删除</a>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import avatar from "@/assets/images/icon-cart.png";
 import productCart from "components/product-cart.vue";
 import {
   getAllGoods,
@@ -47,7 +48,8 @@ export default {
   data() {
     return {
       isAllSelected: false, //商品全选
-      products: []
+      products: [],
+      avatar
     };
   },
   components: {
