@@ -2,7 +2,10 @@ import storage from 'common/storage'
 import { UpdateOrder } from "api/fetch/order";
 
 export function transformOrderList(list) {
-
+    //
+    // const userType = storage.get('userType', '3');
+    // const originUserType = storage.get('originUserType', '3');
+    // const userInSwitching = originUserType != 3 && userType != originUserType;
     for (let order of list) {
         order.totalQuantity = order.orderItem.reduce(
             (acc, cur) => acc + cur.quantity,
@@ -47,7 +50,7 @@ export function orderOperate(options, cb) {
     const params = {
         id: options.orderId,
         orderState: options.state,
-        auditRemark:options.audit_remark
+        auditRemark: options.audit_remark
     };
     UpdateOrder(params)
         .then(() => {

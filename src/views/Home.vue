@@ -219,7 +219,10 @@ export default {
   },
   activated() {
     this.saveCartCount();
-    if (this.userType == 3 && !this.userInSwitching) {
+    const originUserType = storage.get("originUserType", "3");
+    const userInSwitching =
+      originUserType != 3 && this.userType != originUserType;
+    if (this.userType == 3 && !userInSwitching) {
       this.appIcons = appIcons.slice();
     } else {
       this.appIcons = appIcons.slice(0, 4);
@@ -329,6 +332,10 @@ export default {
           if (JSON.stringify(storeDealer) == "{}") {
             storage.set("currentDealer", matchItem);
           }
+        } else {
+          this.$router.push({
+            path: "/dealerList"
+          });
         }
       });
     },
