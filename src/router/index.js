@@ -8,7 +8,7 @@ import manageInit from './manageInit'// 投诉、兑奖、退货管理相关
 import exhibit from './exhibit'//陈列模块
 import display from './display'//陈列模块-V2
 const routes = [
-    ...main, ...mine, ...manageInit,...exhibit, ...display
+    ...main, ...mine, ...manageInit, ...exhibit, ...display
 ];
 Vue.use(Router);
 
@@ -36,7 +36,7 @@ const isNeedRefreshOrder = function () {
 };
 
 const isNeedRefreshMine = function () {
-    const routes = ['writeApplicationInformation'];
+    const routes = ['writeApplicationInformation', "shopkeeper"];
     if (routes.includes(this.name)) {
         storage.set("mineRefresh", true)
     }

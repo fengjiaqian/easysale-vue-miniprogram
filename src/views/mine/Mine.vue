@@ -153,7 +153,8 @@ export default {
           this.nickName = res.data.wxNickName;
           this.avatarUrl = res.data.iamgeUrl;
           this.auditState = res.data.auditState; //经销商进行店主认证（0：认证中，1：已认证  2.未认证）
-          this.mineMenu = initAccessModule(this.userType, this.auditState);
+          const userType = res.data.userType || this.userType;
+          this.mineMenu = initAccessModule(userType, this.auditState);
         })
         .catch(err => {});
     },
