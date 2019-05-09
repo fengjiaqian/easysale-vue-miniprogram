@@ -103,7 +103,10 @@ export default {
     initShopInfo() {
       queryShopInfo({}).then(res => {
         if (res.result === "success" && res.data) {
+          //如果定位的地址有值，则取定位后的地址
+          let posAddress = this.shopInfo.address || ''
           Object.assign(this.shopInfo, res.data);
+          if(posAddress) this.shopInfo.address = posAddress
           this.stagImgList = res.data.logoIamgeUrls;
           this.domShow = true;
         }
