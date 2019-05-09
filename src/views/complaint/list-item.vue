@@ -11,7 +11,7 @@
                 <div class="left" v-if="listData.dealer">{{listData.dealer.dealerName}}回复：</div>
                 <div class="right">{{listData.customerComplaint.replyTime}}</div>
             </div>
-            <div class="tips">{{listData.customerComplaint.replyContent}}</div>
+            <div class="tips">{{listData.customerComplaint.replyContent||'我们会尽快为您处理'}}</div>
         </div>
         <p class="state">{{stateList[listData.customerComplaint.state]}}</p>
         <div class="btn-warp">
