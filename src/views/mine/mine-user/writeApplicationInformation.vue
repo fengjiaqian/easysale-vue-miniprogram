@@ -3,8 +3,8 @@
   <div class="common pt90">
     <m-header :isFixed="true"></m-header>
     <div class="mc-item mt20">
-      <div class="left">客户姓名 :</div>
-      <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入姓名">
+      <div class="left">您的姓名 :</div>
+      <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入您的姓名">
     </div>
     <div class="mc-item-hr"></div>
     <div class="mc-item">
