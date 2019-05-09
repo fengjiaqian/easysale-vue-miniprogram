@@ -24,7 +24,7 @@ export function transformOrderList(list) {
 }
 /**
  * 从订单详情中得到products
- * @param {*} order 
+ * @param {*} order
  */
 export function pullProductsFromOrder(order) {
     return order.orderItem.map(item => {
@@ -35,7 +35,7 @@ export function pullProductsFromOrder(order) {
 }
 /**
  *  订单操作
- *  @param {*} options  object {state,orderId}   
+ *  @param {*} options  object {state,orderId}
  */
 export function orderOperate(options, cb) {
     const tipObj = {
@@ -46,7 +46,8 @@ export function orderOperate(options, cb) {
     const tip = tipObj[options.state] || '';
     const params = {
         id: options.orderId,
-        orderState: options.state
+        orderState: options.state,
+        auditRemark:options.audit_remark
     };
     UpdateOrder(params)
         .then(() => {
