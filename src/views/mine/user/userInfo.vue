@@ -14,6 +14,10 @@
         <div>店铺介绍：</div>
         <div>{{shopInfo.instruction}}</div>
       </li>
+      <li class="mb-20 uiw-info">
+        <div>店铺地址：</div>
+        <div>{{shopInfo.address}}</div>
+      </li>
       <li class="uiw-pic">
         <div>店铺图片：</div>
         <ul class="img-list">

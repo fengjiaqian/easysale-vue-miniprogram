@@ -148,9 +148,7 @@ export default {
             this.setUserType(res.data || 3);
             storage.set("currentDealerId", dealer.id);
             storage.set("currentDealer", dealer);
-            storage.set("homeRefresh", true);
-            storage.set("mineRefresh", true);
-            storage.set("orderRefresh", true);
+            this.handlerStorage();
             this.$router.push({
               path: "/navi/home"
             });
@@ -165,9 +163,15 @@ export default {
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
+      this.handlerStorage();
       this.$router.push({
         path: "/navi/home"
       });
+    },
+    handlerStorage() {
+      storage.set("homeRefresh", true);
+      storage.set("mineRefresh", true);
+      storage.set("orderRefresh", true);
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;

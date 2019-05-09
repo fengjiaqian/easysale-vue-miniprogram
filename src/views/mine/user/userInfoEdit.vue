@@ -50,6 +50,7 @@ import { queryShopInfo, editShopInfo } from "api/fetch/mine";
 import storage from "common/storage";
 import { verifyPhone } from "common/validate";
 import { compress } from "common/util";
+import { evokeWxLocation } from "common/location";
 export default {
   data() {
     return {
@@ -155,7 +156,14 @@ export default {
           .querySelector(".el-upload--picture-card")
           .removeAttribute("style");
       }
-    }
+    },
+    obtainAddress(){
+      let recordData = {
+        path: this.$route.path,
+        pageData: this.staffInfo
+      }
+      evokeWxLocation(recordData)
+    },
   },
   watch: {
     shopInfo: {
