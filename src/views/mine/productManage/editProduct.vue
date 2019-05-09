@@ -154,6 +154,9 @@
         if(this.stagImgList.length&&this.productType==1){
           this.productModal.productImageUrl = this.stagImgList[0]
         }
+        if(this.productModal.displayState==0){
+          this.productModal.displayAward = ''
+        }
         editProduct(this.productModal).then(res => {
           if (res.result === "success") {
              //商品添加成功后回到商品详情
