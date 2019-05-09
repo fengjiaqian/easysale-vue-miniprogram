@@ -23,7 +23,7 @@
                     <span v-if="product.awardState">可兑奖</span>
                     <span v-if="product.displayState">可陈列</span>
                 </div>
-                <div class="reward" v-if="product.displayState&&product.displayAward&&sourceType=='display'">
+                <div class="reward" v-if="product.displayState&&product.displayAward&&(sourceType=='display'||sourceType=='')">
                     陈列奖励：{{product.displayAward}}
                 </div>
             </div>
@@ -73,7 +73,7 @@
         components: {},
         created() {
             localStorage.removeItem("productInfo");
-            this.sourceType = this.$route.query.source;
+            this.sourceType = this.$route.query.source || '';
             this.id = this.$route.query.id;
             this.oprateParam.idList = [this.id];
             this._queryDetail();
