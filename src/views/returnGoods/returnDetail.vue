@@ -11,7 +11,7 @@
                         <p class="left">{{dealer.dealerName}}回复：</p>
                         <div class="right">{{customerReturn.replyTime}}</div>
                     </div>
-                    <div class="tips">{{customerReturn.replyContent}}</div>
+                    <div class="tips">{{customerReturn.replyContent||'我们会尽快为您处理'}}</div>
                 </div>
             </div>
             <div class="title-box">
@@ -277,10 +277,10 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(white);
+            bg(#FF5638);
             text-align: center;
             lh(98);
-            c(#FF5638);
+            c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;

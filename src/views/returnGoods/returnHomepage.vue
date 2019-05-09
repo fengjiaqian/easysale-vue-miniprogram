@@ -11,8 +11,7 @@
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
         <!--空页面-->
-        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
-               style="height: 100%;overflow: hidden"
+        <empty style="margin-top: 100px"
                :txt="tabState==2?'暂无可申请的退货商品':'暂无相关退货单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <!--退货商品列表-->
