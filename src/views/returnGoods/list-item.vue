@@ -24,7 +24,7 @@
                 <div class="left">{{listData.dealer.dealerName}}回复：</div>
                 <div class="right">{{listData.customerReturn.replyTime}}</div>
             </div>
-            <div class="tips">{{listData.customerReturn.replyContent}}</div>
+            <div class="tips">{{listData.customerReturn.replyContent||'我们会尽快为您处理'}}</div>
         </div>
         <p class="state">{{stateList[listData.customerReturn.state]}}</p>
         <div class="btn-warp">

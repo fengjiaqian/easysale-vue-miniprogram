@@ -11,7 +11,7 @@
                         <div class="left">{{dealer.dealerName}}回复：</div>
                         <div class="right">{{customerComplaint.replyTime}}</div>
                     </div>
-                    <div class="tips">{{customerComplaint.replyContent}}</div>
+                    <div class="tips">{{customerComplaint.replyContent||'我们会尽快为您处理'}}</div>
                 </div>
             </div>
             <div class="title-box">
