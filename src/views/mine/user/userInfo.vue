@@ -19,7 +19,7 @@
         <div>{{shopInfo.address}}</div>
       </li>
       <li class="uiw-pic">
-        <div>店铺图片：</div>
+        <div>门头图片：</div>
         <ul class="img-list">
           <li v-for="item in shopInfo.logoIamgeUrls">
             <img v-lazy="item || ''">

@@ -28,7 +28,7 @@
         <i @click="obtainAddress" class="position"></i>
       </li>
       <li class="uiw-pic">
-        <div>店铺图片：</div>
+        <div>门头图片：</div>
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
