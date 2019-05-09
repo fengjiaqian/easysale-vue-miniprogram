@@ -180,11 +180,11 @@ export default {
 .my-consignee .edit {
   width: 100%;
   height: 98px;
-  background: rgba(255, 255, 255, 1);
+  color: rgba(255, 255, 255, 1);
   position: fixed;
   bottom: 0;
   font-size: 32px;
-  color: rgba(255, 86, 56, 1);
+  background: rgba(255, 86, 56, 1);
   line-height: 98px;
   text-align: center;
   border-top: 1PX solid #ededed;
