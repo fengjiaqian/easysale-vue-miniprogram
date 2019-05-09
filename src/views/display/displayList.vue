@@ -226,6 +226,7 @@
             },
             //申请陈列
             apply(){
+                if(!this.selectedProduct.length) return
                 storage.set("selectedProduct", this.selectedProduct);
                 this.$router.push({ path: "/displayApply" });
             },
