@@ -16,7 +16,7 @@
 import { shopkeeperCertification } from "api/fetch/dealer";
 import storage from "common/storage";
 import compress from "common/image";
-
+import { refreshTabPages } from "common/authStorage";
 import mUpload from "components/m-upload.vue";
 import { mapActions } from "vuex";
 export default {
@@ -62,8 +62,7 @@ export default {
       }
       shopkeeperCertification(logoIamgeUrls)
         .then(res => {
-          storage.set("mineRefresh", true);
-          storage.set("homeRefresh", true);
+          refreshTabPages();
           this.$toast("认证申请已提交，请等待审核结果");
           this.$router.push({ path: "/navi/mine" });
         })

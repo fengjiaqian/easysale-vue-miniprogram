@@ -16,12 +16,11 @@
                :txt="tabState==2?'暂无可申请的兑奖商品':'暂无相关兑奖单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <!--兑奖商品列表-->
-        <div v-if="tabState==2" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+        <search-bar v-if="tabState==2" class="pi-header" :emit="true" placeHolder="请输入商品名称"
+                    @emitEvt="handleChange"></search-bar>
+        <div v-if="tabState==2&&productList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%;background-color: #fff">
-            <search-bar class="pi-header" :emit="true" placeHolder="请输入商品名称"
-                        @emitEvt="handleChange"></search-bar>
             <scroll
-                    v-if="productList.length"
                     class="c-list"
                     :data="productList"
                     ref="scrollRedemption"

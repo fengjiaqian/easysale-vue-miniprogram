@@ -1,15 +1,15 @@
 <template>
-    <div id="mine">
-        <div class="user-info">
-            <div class="user-avart" @click="_jumpUserInfo">
-                <img v-lazy="avatarUrl" alt>
-            </div>
-            <div class="user-tel" @click="_jumpUserInfo">
-                <h5>{{nickName || ''}}</h5>
-                <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
-                <p v-else>{{mobileNo}}</p>
-            </div>
-            <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
+  <div id="mine">
+    <div class="user-info">
+      <div class="user-avart" @click="_jumpUserInfo">
+        <img v-lazy="avatarUrl" alt>
+      </div>
+      <div class="user-tel" @click="_jumpUserInfo">
+        <h5>{{nickName || ''}}</h5>
+        <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
+        <p v-else>{{mobileNo}}</p>
+      </div>
+      <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
               <i></i>
               <span>邀请码</span>
       </div>-->
@@ -74,9 +74,12 @@ export default {
   destoryed() {},
   mounted() {},
   activated() {
-    this.mineMenu = initAccessModule(this.userType);
     const refresh = storage.get("mineRefresh", false);
     refresh && this._findCustomerOwerInfo();
+    if (refresh) {
+      this._findCustomerOwerInfo();
+      this.mineMenu = initAccessModule(this.userType, this.auditState);
+    }
     storage.set("mineRefresh", false);
   },
   methods: {
@@ -150,7 +153,8 @@ export default {
           this.nickName = res.data.wxNickName;
           this.avatarUrl = res.data.iamgeUrl;
           this.auditState = res.data.auditState; //经销商进行店主认证（0：认证中，1：已认证  2.未认证）
-          this.mineMenu = initAccessModule(this.userType, this.auditState);
+          const userType = res.data.userType || this.userType;
+          this.mineMenu = initAccessModule(userType, this.auditState);
         })
         .catch(err => {});
     },
@@ -194,9 +198,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    .enter-list {
-        mt(20);
-    }
+.enter-list {
+  mt(20);
+}
 
 .enter-item {
   bg(#fff);
@@ -246,40 +250,40 @@ export default {
       background-size: contain;
     }
 
-            .mr-12 {
-                mr(12);
-            }
-        }
+    .mr-12 {
+      mr(12);
     }
+  }
+}
 
-    .product_manage {
-        .enter-item-img {
-            span {
-                background-image: url('../../assets/images/product_manage_icon.png');
-            }
-        }
-
-        .enter-item-txt {
-            border-bottom: 1PX solid #ededed;
-        }
+.product_manage {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/product_manage_icon.png');
     }
+  }
 
-    .data_static {
-        .enter-item-img {
-            span {
-                background-image: url('../../assets/images/data_static_icon.png');
-            }
-        }
+  .enter-item-txt {
+    border-bottom: 1PX solid #ededed;
+  }
+}
+
+.data_static {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/data_static_icon.png');
     }
+  }
+}
 
-    .customer {
-        mt(20);
+.customer {
+  mt(20);
 
-        .enter-item-img {
-            span {
-                background-image: url('../../assets/images/customer_icon.png');
-            }
-        }
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/customer_icon.png');
+    }
+  }
 
   .enter-item-txt {
     border-bottom: 1PX solid #ededed;
@@ -359,17 +363,17 @@ export default {
   }
 }
 
-    .bind-tel {
-        mt(32)
-        block();
-        w(154);
-        lh(48);
-        bg(#FFBD38);
-        c(#fff);
-        ft(26);
-        text-c();
-        radius(24);
-    }
+.bind-tel {
+  mt(32);
+  block();
+  w(154);
+  lh(48);
+  bg(#FFBD38);
+  c(#fff);
+  ft(26);
+  text-c();
+  radius(24);
+}
 
 .user-code {
   float: right;

@@ -265,7 +265,7 @@ export default {
         userType,
         shareDealerId
       } = this.$route.query;
-      shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId
+      shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
       // 以登录身份访问
       if (mobileNo && token && userType) {
