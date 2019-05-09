@@ -712,14 +712,15 @@ export default {
 
   .s-m-btn {
     float: right;
-    width: 88px;
-    height: 88px;
+    width: 70px;
+    height: 70px;
     position: relative;
     z-index: 1;
-    box-shadow: -1PX 0px 4px 0px rgba(0, 0, 0, 0.1);
     background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
     background-size: 42px 42px;
     transition: all 0.2s;
+    border-radius 25px;
+    top:10px
 
     &.active {
       transform: rotate(-180deg);
