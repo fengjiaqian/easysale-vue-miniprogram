@@ -9,7 +9,7 @@
             <span :class="{'active':activeshopIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.shopName}}</span>
         </div>
-        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+        <empty style="margin-top: 100px"
                :txt="'暂无相关投诉单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <div :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
