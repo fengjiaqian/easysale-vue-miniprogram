@@ -105,6 +105,7 @@ const main = [{
 		name: 'mine',
 		meta: {
 			title: '我的',
+			keepAlive: true
 		},
 		component: Mine
 	}]
