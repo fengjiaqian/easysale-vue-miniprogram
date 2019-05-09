@@ -219,10 +219,7 @@ export default {
   },
   activated() {
     this.saveCartCount();
-    const originUserType = storage.get("originUserType", "3");
-    const userInSwitching =
-      originUserType != 3 && this.userType != originUserType;
-    if (this.userType == 3 && !userInSwitching) {
+    if (this.userType == 3 && !this.userInSwitching) {
       this.appIcons = appIcons.slice();
     } else {
       this.appIcons = appIcons.slice(0, 4);
