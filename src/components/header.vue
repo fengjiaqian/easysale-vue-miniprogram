@@ -107,16 +107,22 @@ export default {
       let jumpPath = "";
       switch (name) {
         case "addCustomerInfo":
+        case "editCustomerInfo":
           jumpPath = "/my/customerList";
           break;
         case "addStaffInfo":
+        case "editStaffInfo":
           jumpPath = "/my/staffList";
           break;
         case "productList":
+        case "myConsignee":
           jumpPath = "/navi/mine";
           break;
         case "staffList":
           jumpPath = "/navi/mine";
+          break;
+        case "updateConsignee":
+          jumpPath = "/myConsignee";
           break;
         case "customerList":
           //如果是从订单界面过来的  返回订单 带入信息

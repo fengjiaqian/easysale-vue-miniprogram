@@ -53,6 +53,7 @@
         ></el-upload>
       </ul>
     </div>
+    <div class="logos-desc">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
     <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
   </div>
 </template>
@@ -199,6 +200,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.logos-desc {
+  ft(24);
+  c(#999);
+  bg(#fff);
+  pb(16);
+  pl(24);
+}
+
 .common {
   background-color: #F6F6F6;
   position: relative;

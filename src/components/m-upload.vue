@@ -32,7 +32,7 @@ export default {
         {
           compress: {
             width: 1024,
-            height: 1024,
+            height: 1024 * 2,
             quality: 0.5
           },
           type: "file"
