@@ -18,7 +18,7 @@
             <cube-upload-btn :multiple="false">
               <div>
                 <i></i>
-                <p style="color:#bdbdbd">添加营业执照</p>
+                <p style="color:#bdbdbd;font-size: 14px">添加营业执照</p>
               </div>
             </cube-upload-btn>
           </div>

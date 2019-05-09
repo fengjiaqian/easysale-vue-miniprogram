@@ -162,6 +162,7 @@ import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 
 import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
+import { queryShopInfo } from "api/fetch/mine";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -251,6 +252,7 @@ export default {
     this._ListCurrentDealer();
     this._listDealerLogs();
     this._queryHomeProducts();
+    this.queryOwnerShop();
   },
   mounted() {},
   methods: {
@@ -263,7 +265,8 @@ export default {
         mobileNo,
         token,
         userType,
-        shareDealerId
+        shareDealerId,
+        shareUserType = ""
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
@@ -273,7 +276,7 @@ export default {
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);
-        this.setUserType(userType);
+        this.setUserType(shareUserType || userType);
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         return false;
       }
@@ -303,6 +306,15 @@ export default {
       for (let key of keys) {
         storage.remove(key);
       }
+    },
+    //请求自己的店铺
+    queryOwnerShop() {
+      if (storage.get("originUserType", 3) == 3) return false;
+      queryShopInfo({}).then(res => {
+        const { shopName, shopId, phone } = res.data;
+        const ownerShop = { shopName, shopId, phone, id: shopId, owner: true };
+        storage.set("ownerShop", ownerShop);
+      });
     },
     _listDealerLogs() {
       ListDealerLogs()
@@ -605,6 +617,8 @@ export default {
     overflow: hidden;
 
     .banner-item {
+      padding: 0 1PX;
+      bg(#fff);
       width: 100%;
       h(250);
 
