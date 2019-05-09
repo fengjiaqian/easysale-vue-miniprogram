@@ -3,7 +3,7 @@
     <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
     <!--  -->
-    <div class="home-search-area">
+    <div class="home-search-area" v-if="currentDealer.shopName">
       <div class="dealer-name" @click="_jumpDealerList">
         {{currentDealer.shopName}}
         <em></em>

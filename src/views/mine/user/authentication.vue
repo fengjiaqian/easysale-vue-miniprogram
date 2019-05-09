@@ -74,6 +74,10 @@ export default {
     width: 100%;
     h(335);
     background: rgba(250, 250, 250, 1);
+    img{
+      block()
+      margin 0 auto;
+    }
   }
 }
 </style>
