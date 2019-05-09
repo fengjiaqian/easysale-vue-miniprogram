@@ -3,7 +3,7 @@
         <m-header :isFixed="true"></m-header>
         <div class="body">
             <div class="goods-box">
-                <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}">退货商品</p>
+                <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}"><i>*</i>退货商品</p>
                 <div class="good-warp">
                     <div v-if="returnGoods.length">
                         <ul>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="reason-box">
-                <p class="title">退货原因</p>
+                <p class="title"><i>*</i>退货原因</p>
                 <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
             <div class="remark-box">
@@ -170,6 +170,10 @@
             ft(30);
             fb();
             border-bottom 1px solid #EDEDED
+            i{
+                c(#E53935)
+                ft(32)
+            }
         }
         .remark-input {
             padding 24px 0 0;

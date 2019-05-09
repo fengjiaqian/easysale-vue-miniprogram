@@ -12,7 +12,7 @@
                     <div class="left">{{order.dealerName}}回复：</div>
                     <div class="right">{{order.updateTime}}</div>
                 </div>
-                <div class="tips">{{order.auditRemark||'我们会尽快为您处理'}}</div>
+                <div class="tips">{{order.auditRemark||(order.orderState==2?'我们会尽快为您处理':'抱歉，暂时无法为您提供服务')}}</div>
             </div>
 
         </div>
@@ -137,7 +137,8 @@
                 };
                 orderOperate.call(this, options, this._QueryOrders.bind(this));
             }
-        }
+        },
+
     };
 </script>
 

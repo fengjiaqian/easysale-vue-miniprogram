@@ -277,10 +277,10 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(white);
+            bg(#FF5638);
             text-align: center;
             lh(98);
-            c(#FF5638);
+            c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;
