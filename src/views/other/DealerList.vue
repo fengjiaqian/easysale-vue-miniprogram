@@ -64,6 +64,7 @@ import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
 import { addShopHistory, changeShop } from "api/fetch/dealer";
 import storage from "common/storage";
+import { refreshTabPages } from "common/authStorage";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "dealer-list",
@@ -148,7 +149,6 @@ export default {
             this.setUserType(res.data || 3);
             storage.set("currentDealerId", dealer.id);
             storage.set("currentDealer", dealer);
-            this.handlerStorage();
             this.$router.push({
               path: "/navi/home"
             });
@@ -163,15 +163,10 @@ export default {
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
-      this.handlerStorage();
+      refreshTabPages();
       this.$router.push({
         path: "/navi/home"
       });
-    },
-    handlerStorage() {
-      storage.set("homeRefresh", true);
-      storage.set("mineRefresh", true);
-      storage.set("orderRefresh", true);
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;

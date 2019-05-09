@@ -35,7 +35,7 @@
     </div>
     <div class="uiw-pic">
       <div class="left" style="width: 80px">上传门头照 :</div>
-      <ul class="img-list" >
+      <ul class="img-list">
         <li v-for="(item,index) in stagImgList">
           <img :src="item">
           <i @click="deleteUploadImg(index)"></i>
@@ -135,9 +135,6 @@ export default {
           shopId && storage.set("currentDealerId", shopId);
           //todo remove currentDealer
           storage.remove("currentDealer");
-          storage.set("homeRefresh", true);
-          storage.set("mineRefresh", true);
-          storage.set("orderRefresh", true);
           this.$router.push({ path: "/navi/home" });
         })
         .catch(err => {
@@ -290,7 +287,7 @@ export default {
     flex();
     flex-wrap: wrap;
     justify-content: flex-start;
-    ml(24)
+    ml(24);
 
     >li {
       position: relative;
