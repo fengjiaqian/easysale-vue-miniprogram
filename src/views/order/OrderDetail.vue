@@ -5,7 +5,7 @@
             订单状态：
             <strong class="c-theme">{{order.orderState | orderState}}</strong>
         </div>
-        <div class="continue" v-if="order.orderState==2">
+        <div class="continue" v-if="order.orderState==2||order.orderState==3">
             <div class="triangle"></div>
             <div class="bg">
                 <div class="report">
