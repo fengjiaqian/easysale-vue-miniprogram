@@ -12,6 +12,7 @@ axios.interceptors.request.use(function (config) {
 	const token = storage.get("token", "");
 	const currentDealerId = storage.get("currentDealerId", "") || "";
 	token && (config.headers.token = token);
+	currentDealerId && (config.headers.currentShopId = currentDealerId);
 
 	config.data.dealerId = config.data.dealerId || currentDealerId;
 	config.data.shopId = config.data.dealerId || currentDealerId;

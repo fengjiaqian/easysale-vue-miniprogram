@@ -155,6 +155,10 @@ export default {
       if (isIMAGE && isLt1M) {
         return new Promise((resolve, reject) => {
           compress(file, function(val) {
+            if( val.size/1024/1024 > 1 ){
+              this.$alert('图片过大，请重新选择');
+              return
+            }
             resolve(val);
           });
         });
@@ -188,6 +192,7 @@ export default {
     },
     //去小程序定位地址
     obtainAddress() {
+      storage.set('ApplyToLocation', true);
       let recordData = {
         path: this.$route.path,
         pageData: this.applyInfo

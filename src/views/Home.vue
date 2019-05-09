@@ -755,6 +755,7 @@ export default {
   top: 88px;
   left: 0;
   z-index: 5;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px 1px;
 
   .squre-item-wrap {
     padding: 8px;

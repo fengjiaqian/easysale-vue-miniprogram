@@ -5,9 +5,27 @@
     <div class="upload-viewer">
       <h5>上传营业执照</h5>
       <div class="upload-area">
-        <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>
+        <!-- <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/> -->
+        <cube-upload
+          ref="upload"
+          v-model="files"
+          :action="uploadImgUrl"
+          @files-added="addedHandler"
+          @file-error="errHandler"
+        >
+          <div class="clear-fix">
+            <cube-upload-file v-for="(file, i) in files" :file="file" :key="i"></cube-upload-file>
+            <cube-upload-btn :multiple="false">
+              <div>
+                <i></i>
+                <p style="color:#bdbdbd">添加营业执照</p>
+              </div>
+            </cube-upload-btn>
+          </div>
+        </cube-upload>
       </div>
     </div>
+
     <a href="javascript:;" class="authenticate-btn" @click="_submit">立即认证</a>
   </div>
 </template>
@@ -21,37 +39,27 @@ import mUpload from "components/m-upload.vue";
 import { mapActions } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      files: []
+    };
   },
   components: {
     mUpload
   },
   computed: {},
-  created() {
-    this.fieldList = [];
-  },
-  mounted() {
-    // this.calculateShape();
-  },
+  created() {},
+  mounted() {},
   methods: {
     ...mapActions(["setUserType"]),
-    onFileSuccess(file) {
-      console.log(file);
-      var response = file.response || {};
-      response.result === "success" && this.fieldList.push(file);
-    },
-    onFileRemoved(file) {
-      this.fieldList = this.fieldList.filter(item => item.name != file.name);
-    },
-    calculateShape() {
-      const clientW =
-        document.body.clientWidth || document.documentElement.clientWidth;
-      const w = clientW - (80 * clientW) / 750;
-      this.$refs.inner.style.width = w + "px";
-      this.$refs.inner.style.height = w / 2 + "px";
-    },
+    // onFileSuccess(file) {
+    //   var response = file.response || {};
+    //   response.result === "success" && this.fieldList.push(file);
+    // },
+    // onFileRemoved(file) {
+    //   this.fieldList = this.fieldList.filter(item => item.name != file.name);
+    // },
     _submit() {
-      let logoIamgeUrls = this.fieldList.map(file => {
+      let logoIamgeUrls = this.files.map(file => {
         const response = file.response;
         if (response && response.data) {
           return response.data;
@@ -67,53 +75,81 @@ export default {
           this.$router.push({ path: "/navi/mine" });
         })
         .catch(_ => {});
+    },
+    addedHandler() {
+      const file = this.files[0];
+      file && this.$refs.upload.removeFile(file);
+    },
+    errHandler(file) {
+      this.$alert("图片上传失败，请重试");
     }
   }
 };
 </script>
 
 <style lang="stylus">
-.upload-hr {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 72px;
-  height: 1PX;
-  transform: translate(-50%, -50%);
-  background-color: #BDBDBD;
-}
+.cube-upload {
+  .cube-upload-file, .cube-upload-btn {
+    margin: 0;
+    h(335);
+  }
 
-.inner-viewer {
-  pos(relative);
-}
+  .cube-upload-file {
+    margin: 0;
 
-.inner-content {
-  pos(absolute);
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-
-  i {
-    block();
-    squ(80);
-    margin: 0 auto;
-    pos(relative);
-
-    &:after {
-      @extend .upload-hr;
-      transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    &:before {
-      @extend .upload-hr;
+    + .cube-upload-btn {
+      margin-top: -200px;
+      opacity: 0;
     }
   }
 
-  span {
-    mt(24);
-    ft(26);
-    c(#bdbdbd);
+  .cube-upload-file-def {
+    width: 100%;
+    height: 100%;
+
+    .cubeic-wrong {
+      display: none;
+    }
+  }
+
+  .cube-upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > div {
+      text-align: center;
+    }
+
+    i {
+      display: inline-flex;
+      squ(80);
+      mb(20);
+      pos(relative);
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 72px;
+        height: 1PX;
+        transform: translate(-50%, -50%);
+        background-color: #BDBDBD;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 72px;
+        height: 1PX;
+        transform: translate(-50%, -50%);
+        background-color: #BDBDBD;
+      }
+    }
   }
 }
 

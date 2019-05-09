@@ -19,18 +19,18 @@
         <div>{{staffInfo.address}}</div>
       </li>
       <li>
-        <span>雇佣日期</span>
+        <span>入职日期</span>
         <div>{{staffInfo.hireDateStr}}</div>
       </li>
-      <li class="special-li">
+<!--      <li class="special-li">
         <span>折扣权限</span>
         <div>{{staffInfo.discount || '无'}}</div>
-      </li>
+      </li>-->
     </ul>
     <ul class="sd-oprate">
       <!--<li class="sd-c-b">重置账号密码</li>-->
       <li class="sd-c-b" @click="skipTo">编辑</li>
-      <li class="sd-c-o" @click="freeze">删除</li>
+      <!--<li class="sd-c-o" @click="freeze">删除</li>-->
     </ul>
   </div>
 </template>
