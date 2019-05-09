@@ -3,7 +3,7 @@
         <m-header :isFixed="true"></m-header>
         <div class="body">
             <div class="goods-box">
-                <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}">兑奖商品</p>
+                <p class="title" :style="{borderWidth:redemptionGoods.length?'0.5px':'0.25px'}"><i>*</i>兑奖商品</p>
                 <div class="good-warp">
                     <div v-if="redemptionGoods.length">
                         <ul>
@@ -154,6 +154,10 @@
             ft(30);
             fb();
             border-bottom 1px solid #EDEDED
+            i{
+                c(#E53935)
+                ft(32)
+            }
         }
         .remark-input {
             padding 24px 0 0;

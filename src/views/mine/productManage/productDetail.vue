@@ -34,7 +34,7 @@
                 </ul>
             </div>
             <div class="reason-box" v-if="sourceType=='return'">
-                <p class="title">退货原因</p>
+                <p class="title"><i>*</i>退货原因</p>
                 <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
         </div>
@@ -154,6 +154,7 @@
 
             },
             returnGoods() {
+                if(!this.returnContent) return this.$toast('请填写退货原因');
                 let items = [];
                 let obj = {
                     productId: this.id,
@@ -420,6 +421,10 @@
         ft(30);
         fb();
         border-bottom 1px solid #EDEDED
+        i{
+           c(#E53935)
+           ft(32)
+        }
     }
 </style>
 
