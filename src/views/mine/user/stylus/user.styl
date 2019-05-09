@@ -93,6 +93,38 @@
 .mb-20{
   mb(20)
 }
+.info-address{
+  flex()
+  align-items center
+  justify-content flex-start
+  ft(30)
+  c-3()
+  .ia-title{
+    c-6()
+    mr(12)
+    min-width 150px
+  }
+  .ia-value{
+    flex-1()
+    input{
+      width 100%
+      flex-1()
+      &::-webkit-input-placeholder{
+        c(#bdbdbd)
+      }
+    }
+  }
+  i{
+    background-size contain
+    background-repeat no-repeat
+    background-position center
+  }
+  .position{
+    w(48)
+    h(48)
+    background-image url(../../../assets/images/address_position_icon.png)
+  }
+}
 
 
 //用户邀请码页面
