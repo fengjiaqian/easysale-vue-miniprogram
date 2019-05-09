@@ -68,11 +68,11 @@
           <!--  -->
           <div class="home-banner" v-if="banners.length">
             <div class="slider-body">
-              <slider :loop="loop" :data="banners" ref="slider_dom">
-                <div class="banner-item" v-for="item in banners" :key="item.id">
+              <cube-slide ref="slide" :data="banners">
+                <cube-slide-item class="banner-item" v-for="(item, index) in banners" :key="index">
                   <img :src="item.cloudSrc">
-                </div>
-              </slider>
+                </cube-slide-item>
+              </cube-slide>
             </div>
           </div>
           <!--  -->
@@ -160,7 +160,7 @@ import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
-import slider from "components/slider.vue";
+
 import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
@@ -198,7 +198,7 @@ export default {
     scroll,
     product,
     floatCart,
-    slider,
+
     back
   },
   beforeCreate() {},
@@ -491,6 +491,30 @@ export default {
 </script>
 
 <style lang="stylus">
+.cube-slide-dots {
+  position: absolute;
+  bottom: 4PX;
+  right: 0;
+  left: 0;
+  padding: 0 6PX;
+  font-size: 0;
+  text-align: center;
+  transform: translateZ(1px);
+
+  > span {
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 1PX;
+    width: 10PX;
+    height: 1PX;
+    background: #fff;
+
+    &.active {
+      background: $color-theme;
+    }
+  }
+}
+
 .scroll-item {
   .H-product-item:nth-last-of-type(1) {
     .H-product-content {
