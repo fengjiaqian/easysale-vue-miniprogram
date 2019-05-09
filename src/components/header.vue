@@ -116,8 +116,6 @@ export default {
           break;
         case "productList":
         case "myConsignee":
-          jumpPath = "/navi/mine";
-          break;
         case "staffList":
           jumpPath = "/navi/mine";
           break;
@@ -139,7 +137,12 @@ export default {
           jumpPath = "/navi/mine";
           break;
         case "writeApplicationInformation":
-          jumpPath = "/navi/mine";
+          if (storage.get("ApplyToLocation", false)) {
+            jumpPath = "/navi/mine";
+            storage.set("ApplyToLocation", false);
+          } else {
+            this.$router.go(-1);
+          }
           break;
         case "dealerList":
           const currentDealerId = storage.get("currentDealerId", "");

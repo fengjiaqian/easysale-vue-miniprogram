@@ -21,7 +21,7 @@
             >
                 <div>
                     <list-item v-for="(item,index) in complaintsList" :listData="item" :key="index"
-                               :tabState="tabState" @directProcessing="directProcessing"></list-item>
+                               :tabState="tabState" @directProcessing="directProcessing" @cancelComplaint="cancelComplaint"></list-item>
                 </div>
 
             </scroll>
@@ -30,7 +30,7 @@
     </div>
 </template>
 <script>
-    import {complaintList, selectDealComplaint, updateCustomerById} from "api/fetch/complaints";
+    import {complaintList, selectDealComplaint, updateCustomerById,cancelComplaint} from "api/fetch/complaints";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import listItem from "./list-item.vue";
@@ -168,6 +168,23 @@
                     name: "addNewComplaint",
                 });
             },
+
+            /**
+             * 撤销投诉
+             */
+            cancelComplaint(id) {
+                this.$confirm('您确定撤销投诉吗？')
+                    .then(() => {
+                        cancelComplaint(id).then(res => {
+                            this.$toast('操作成功');
+                            this.complaintsList = [];
+                            this._QueryComplaintList();
+                        }).catch(() => {
+                        });
+                    })
+                    .catch(() => {
+                    });
+            }
         }
     }
 </script>

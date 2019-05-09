@@ -192,6 +192,7 @@ export default {
     },
     //去小程序定位地址
     obtainAddress() {
+      storage.set('ApplyToLocation', true);
       let recordData = {
         path: this.$route.path,
         pageData: this.applyInfo
