@@ -29,8 +29,8 @@
       </li>
       <li class="special-li">
         <span>详细地址：</span>
-        <div>
-          <input v-model="customerInfo.address" type="text" maxlength="50" placeholder="请输入客户地址">
+        <div class="locate-address">
+          <textarea v-model="customerInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入客户地址"></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
@@ -98,6 +98,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       let passData = to.query.passData ? to.query.passData : null;
+      //console.log(passData)
       if (passData) {
         passData = JSON.parse(passData);
         Object.assign(vm.customerInfo, passData.pageData);
