@@ -4,6 +4,7 @@
 //const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const path = require('path');
 const resolve = (dir) => path.join(__dirname, dir);
+const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 
 function addStyleResource(rule) {
@@ -44,7 +45,11 @@ module.exports = {
                             pure_funcs: ['console.log'] //移除console
                         }
                     }
-                })
+                }),
+                //微信域名效验文件
+                new TransferWebpackPlugin([{
+                    from: 'weChatCheck',
+                }], path.resolve(__dirname, 'src'))
             );
             config.plugins = [
                 ...config.plugins,
@@ -71,19 +76,19 @@ module.exports = {
         extract: false,
         sourceMap: false,
         loaderOptions: {
-          stylus: {
-            'resolve url': true,
-            'import': [
-              './src/theme'
-            ]
-          }
+            stylus: {
+                'resolve url': true,
+                'import': [
+                    './src/theme'
+                ]
+            }
         }
     },
     pluginOptions: {
-      'cube-ui': {
-        postCompile: true,
-        theme: true
-      }
+        'cube-ui': {
+            postCompile: true,
+            theme: true
+        }
     },
     parallel: require('os').cpus().length > 1,
     pwa: {},

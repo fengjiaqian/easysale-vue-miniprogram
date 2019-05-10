@@ -84,7 +84,8 @@ export function shopkeeperCertification(logoIamgeUrls) {
         url: '/dealer/shopkeeperCertification',
         data: {
             logoIamgeUrls
-        }
+        },
+        loading: true
     }).then((res) => {
         return Promise.resolve(res.data)
     }).catch(res => {

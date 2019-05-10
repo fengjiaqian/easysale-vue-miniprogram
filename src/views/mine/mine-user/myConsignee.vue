@@ -42,7 +42,7 @@ export default {
       showOperation: true,
       empty: false,
       avatarUrl,
-      userPhone: '',//用户手机号
+      userPhone: "" //用户手机号
     };
   },
   components: {
@@ -53,7 +53,7 @@ export default {
   created() {
     this.showOperation = !storage.get("fromOrder", false);
     this._queryCustomerConsigneeList();
-    this.userPhone = storage.get('mobileNo', '')
+    this.userPhone = storage.get("mobileNo", "");
   },
   methods: {
     _queryCustomerConsigneeList(keyword = "") {
@@ -85,17 +85,22 @@ export default {
       });
     },
     _delet(id) {
-      deleteConsignee(id)
-        .then(res => {
-          if (res.result === "success") {
-            this.$toast("删除成功");
-            const Idx = this.addressList.findIndex(item => item.id == id);
-            if (Idx != -1) {
-              this.addressList.splice(Idx, 1);
-            }
-          }
+      this.$confirm("确定删除当前收货人？")
+        .then(() => {
+          deleteConsignee(id)
+            .then(res => {
+              if (res.result === "success") {
+                this.$toast("删除成功");
+                const Idx = this.addressList.findIndex(item => item.id == id);
+                if (Idx != -1) {
+                  this.addressList.splice(Idx, 1);
+                }
+                this.empty = !this.addressList.length;
+              }
+            })
+            .catch(err => {});
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     _bindTap(item) {
       if (storage.get("fromOrder", false)) {
@@ -130,7 +135,7 @@ export default {
 }
 
 .consignee-address-item {
-  min-height 192px
+  min-height: 192px;
   pos(relative);
   padding: 24px;
 
