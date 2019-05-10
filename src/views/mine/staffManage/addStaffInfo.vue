@@ -18,8 +18,8 @@
       </li>
       <li class="special-li">
         <span>家庭地址：</span>
-        <div>
-          <input v-model="staffInfo.address" type="text" maxlength="50" placeholder="请输入员工地址">
+        <div class="locate-address">
+          <textarea v-model="staffInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入员工地址"></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>

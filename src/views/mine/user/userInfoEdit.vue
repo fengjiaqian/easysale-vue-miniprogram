@@ -22,8 +22,8 @@
       </li>
       <li class="mb-20 uiw-info info-address">
         <div class="ia-title">店铺地址：</div>
-        <div class="ia-value">
-          <input v-model="shopInfo.address" type="text" maxlength="50" placeholder="请输入店铺地址">
+        <div class="ia-value locate-address">
+          <textarea v-model="shopInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入店铺地址"></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
