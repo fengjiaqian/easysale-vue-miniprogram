@@ -11,7 +11,7 @@
                         <div class="left">{{dealer.dealerName}}回复：</div>
                         <div class="right">{{customerAward.replyTime}}</div>
                     </div>
-                    <div class="tips">{{customerAward.replyContent}}</div>
+                    <div class="tips">{{customerAward.replyContent||'我们会尽快为您处理'}}</div>
                 </div>
             </div>
             <div class="title-box">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <!--终端可见-->
-            <div class="title-box" >
+            <div class="title-box">
                 <div class="title ">{{userType == 3?'商贸公司':'经销商'}}</div>
                 <div class="font-30-666 company-name">{{dealer.dealerName}}</div>
             </div>
@@ -53,7 +53,7 @@
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
                         <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
                     <p class="font-30-666 margin-bottom-8">申请时间：{{customer.createTime}}</p>
-                    <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
+                    <p class="font-30-666" v-if="customer.saleName">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <!--终端可见-->
@@ -84,6 +84,7 @@
     import mHeader from "components/header.vue";
     import {awardDetail, updateAwardById, batchUpdateAward, cancelAward} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
+
     export default {
         name: 'complaintDetail',
         data() {
@@ -102,6 +103,9 @@
         },
         components: {mHeader,},
         created: function () {
+            if (this.userType == 3) {
+                this.stateList = ['已申请', '已回复', '已取消']
+            }
             this.id = this.$route.params.id;
             this._QueryRedemptionDetail();
         },
@@ -127,9 +131,10 @@
                         this.dealer = {...dealer};
                         this.saleMan = {...saleMan}
                     }
-                }).catch(() => {});;
+                }).catch(() => {
+                });
+                ;
             },
-
 
 
             /**
@@ -144,7 +149,7 @@
                 updateAwardById(params).then(res => {
                     this.$toast('操作成功');
                     this._QueryRedemptionDetail()
-                }).catch(res=>{
+                }).catch(res => {
                     this.$toast(res.message)
                 });
             },
@@ -220,6 +225,7 @@
         }
         .tips {
             c(#666);
+            ft(26);
         }
 
         .title-box {
@@ -261,10 +267,10 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(white);
+            bg(#FF5638);
             text-align: center;
             lh(98);
-            c(#FF5638);
+            c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;

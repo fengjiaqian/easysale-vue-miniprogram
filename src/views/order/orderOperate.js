@@ -2,7 +2,10 @@ import storage from 'common/storage'
 import { UpdateOrder } from "api/fetch/order";
 
 export function transformOrderList(list) {
-
+    //
+    // const userType = storage.get('userType', '3');
+    // const originUserType = storage.get('originUserType', '3');
+    // const userInSwitching = originUserType != 3 && userType != originUserType;
     for (let order of list) {
         order.totalQuantity = order.orderItem.reduce(
             (acc, cur) => acc + cur.quantity,
@@ -10,6 +13,7 @@ export function transformOrderList(list) {
         );
         for (let item of order.orderItem) {
             item.product.buyCount = item.quantity;
+            item.product.price = item.salePrice;
         }
         if (order.orderState == 1 && storage.get('userType', '3') != 3) {
             order.canRefuse = true;
@@ -23,17 +27,18 @@ export function transformOrderList(list) {
 }
 /**
  * 从订单详情中得到products
- * @param {*} order 
+ * @param {*} order
  */
 export function pullProductsFromOrder(order) {
     return order.orderItem.map(item => {
         item.product.buyCount = item.quantity;
+        item.product.price = item.salePrice;
         return item.product
     })
 }
 /**
  *  订单操作
- *  @param {*} options  object {state,orderId}   
+ *  @param {*} options  object {state,orderId}
  */
 export function orderOperate(options, cb) {
     const tipObj = {
@@ -44,7 +49,8 @@ export function orderOperate(options, cb) {
     const tip = tipObj[options.state] || '';
     const params = {
         id: options.orderId,
-        orderState: options.state
+        orderState: options.state,
+        auditRemark: options.audit_remark
     };
     UpdateOrder(params)
         .then(() => {

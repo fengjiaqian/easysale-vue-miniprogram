@@ -11,18 +11,17 @@
                   @click="switchShop(item,idx)">{{item.dealerName}}</span>
         </section>
         <!--空页面-->
-        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
-               style="height: 100%;overflow: hidden"
+        <empty style="margin-top: 100px"
                :txt="tabState==2?'暂无可申请的退货商品':'暂无相关退货单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <!--退货商品列表-->
-        <div v-if="tabState==2"
+        <search-bar v-if="tabState==2" class="pi-header" :emit="true" placeHolder="请输入商品名称"
+                    @emitEvt="handleChange"></search-bar>
+        <div v-if="tabState==2&&productList.length"
              :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%;background-color: #fff">
-            <search-bar class="pi-header" :isSearch="true" placeHolder="请输入商品名称"
-                        @emitEvt="handleChange"></search-bar>
+
             <scroll
-                    v-if="productList.length"
                     class="c-list"
                     :data="productList"
                     ref="scrollReturn"
@@ -32,7 +31,9 @@
                 <div style="background-color: #fff">
                     <product-normal v-for="(product,index) in productList"
                                     :key="product.productSpecificationId+index+product.productName"
-                                    :product="product"></product-normal>
+                                    :product="product"
+                                    :source="'return'"
+                    ></product-normal>
                 </div>
             </scroll>
         </div>
@@ -40,7 +41,8 @@
         <div v-if="returnGoodsList.length" :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="overflow: scroll">
             <list-item v-for="(item,index) in returnGoodsList" :listData="item" :key="index"
-                       :tabState="tabState" @directProcessing="directProcessing"></list-item>
+                       :tabState="tabState" @directProcessing="directProcessing"
+                       @cancelReturn="cancelReturn"></list-item>
         </div>
         <!--底部按钮-->
         <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
@@ -48,14 +50,14 @@
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click.stop="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
             </div>
-            <button class="handle-btn" :class="{'achieve':achieve}" @click="achieve?addReturnGoods():''">
-                {{'申请退货('+length+')'}}
+            <button class="handle-btn" :class="{'achieve':selectedProduct.length}" @click="addReturnGoods">
+                {{'申请退货('+selectedProduct.length+')'}}
             </button>
         </div>
     </div>
 </template>
 <script>
-    import {returnList, selectDealReturn, updateReturnById} from "api/fetch/returnGoods";
+    import {returnList, selectDealReturn, updateReturnById, cancelCustomerReturn} from "api/fetch/returnGoods";
     import {afterProductList} from "api/fetch/redemption";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
@@ -97,17 +99,9 @@
                 // 分页
                 productList: [],
                 loading: false,
-                requestDone: false,
                 totalPage: 0,
-                filterParam: {
-                    pageNum: 1,
-                    pageSize: 20,
-                    searchKey: "",
-                    returnState: 1,
-                }, //商品查询参数
+
                 selectedProduct: [],//选中的商品
-                length: 0,
-                achieve: false
 
             }
         },
@@ -125,7 +119,14 @@
                     idx: 1
                 }];
                 this.tabState = 2;
-                this.afterProductList();
+                this.filterParam = {
+                    pageNum: 1,
+                    pageSize: 20,
+                    searchKey: "",
+                    returnState: 1,
+                }, //商品查询参数
+                    this.afterProductList(this.filterParam);
+
             } else {
                 this._QueryReturnList();
             }
@@ -136,34 +137,7 @@
                 this.selectSingle(data)
             });
         },
-
-        watch: {
-            filterParam: {
-                handler(newVal, oldVal) {
-                    this.afterProductList();
-                },
-                deep: true
-            },
-            productList(val) {
-                if (this.requestDone) {
-                    if (!val.length) {
-                        this.empty = true;
-                    } else {
-                        this.empty = false;
-                    }
-                }
-            },
-            selectedProduct(val) {
-                this.length = val.length;
-                if (val.length) {
-                    this.achieve = true
-                } else {
-                    this.achieve = false
-                }
-            }
-        },
         methods: {
-
 
             /**
              * 切换顶部tabs
@@ -172,10 +146,8 @@
             switchTab(state) {
                 this.tabState = state;
                 this.returnGoodsList = [];
-                this.productList = [];
-                this.filterParam.pageNum = 1;
                 if (state == 2) {
-                    this.afterProductList()
+                    this.refreshProducts()
                 } else {
 
                     if (this.userType == '3') {
@@ -199,9 +171,7 @@
             //搜索
             handleChange(searchWord) {
                 this.filterParam.searchKey = searchWord;
-                this.filterParam.pageNum = 1;
-                this.productList = [];
-                this.afterProductList()
+                this.refreshProducts()
 
             },
 
@@ -212,7 +182,7 @@
                         let resultData = res.data;
                         this.empty = !resultData.length;
                         this.dealerList = [...resultData];
-                        this.shopId = this.dealerList[0].shopId
+                        this.shopId = this.dealerList[0].shopId;
                         this._QueryReturnList()
                     }
                 }).catch(() => {
@@ -241,16 +211,16 @@
 
             },
 
-            // 可兑奖的商品列表
-            afterProductList() {
+            // 可退货的商品列表
+            afterProductList(params) {
                 this.loading = true;
-                this.requestDone = false;
-                afterProductList(this.filterParam)
+                afterProductList(params)
                     .then(res => {
                         if (res.result === "success" && res.data) {
                             if (res.data.dataList) {
                                 this.domShow = true;
                                 const {dataList = [], pager} = res.data;
+                                this.empty = !dataList.length;
                                 const {currentPage, totalPage} = pager;
                                 if (currentPage == 1) {
                                     this.totalPage = totalPage;
@@ -260,9 +230,7 @@
                                 });
                                 this.productList = this.productList.concat(dataList);
                                 this.loading = false;
-                                this.requestDone = true;
                             } else {
-                                this.requestDone = true;
                                 this.totalPage = 1;
                                 this.productList = []
 
@@ -272,7 +240,6 @@
                     })
                     .catch(err => {
                         this.loading = false;
-                        this.requestDone = true;
                         this.productList = []
                     });
 
@@ -283,6 +250,14 @@
             loadMoreProducts() {
                 if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
                 this.filterParam.pageNum += 1;
+                this.afterProductList(this.filterParam);
+            },
+
+            // 下拉刷新
+            refreshProducts() {
+                this.filterParam.pageNum = 1;
+                this.productList = [];
+                this.afterProductList(this.filterParam);
             },
 
 
@@ -290,15 +265,9 @@
              *单选兑奖商品
              * @param data
              */
-            selectSingle(data) {
-                let listData = this.productList;
-                listData.forEach(item => {
-                    if (item.id === data.id) {
-                        item.select = !item.select;
-                    }
-                });
-                this.isAllSelected = !listData.some(item => !item.select);
-                this.productList = [...listData];
+            selectSingle(product) {
+                product.select = !product.select;
+                this.isAllSelected = !this.productList.some(item => !item.select);
                 this.pullSelected()
             },
 
@@ -306,26 +275,16 @@
             // 全选兑奖商品
             selectAll() {
                 this.isAllSelected = !this.isAllSelected;
-                let listData = this.productList;
-                listData.forEach(item => {
+                this.productList.forEach(item => {
                     item.select = this.isAllSelected
                 });
-                this.productList = [...listData];
                 this.pullSelected()
 
             },
 
 
             pullSelected() {
-                this.selectedProduct = [];
-                if (this.productList.length) {
-                    this.productList.forEach(item => {
-                        if (item.select) {
-                            this.selectedProduct.push(item)
-                        }
-                    });
-                }
-
+                this.selectedProduct = this.productList.filter(item => item.select)
                 storage.set("selectedProduct", this.selectedProduct);
 
             },
@@ -335,6 +294,7 @@
              * 跳转新增退货单
              */
             addReturnGoods() {
+                if (this.selectedProduct.length == 0) return false;
                 this.$router.push({
                     name: "addNewReturnOrder",
                 });
@@ -357,7 +317,21 @@
                     this.$toast(res.message)
                 });
             },
-
+            /**
+             * 取消申请
+             */
+            cancelReturn(id) {
+                this.$confirm('您确定取消申请吗？')
+                    .then(() => {
+                        cancelCustomerReturn(id).then(res => {
+                            this.$toast('操作成功');
+                            this.returnGoodsList = [];
+                            this._QueryReturnList();
+                        });
+                    })
+                    .catch(() => {
+                    });
+            }
 
         }
     }
@@ -497,6 +471,7 @@
             border-bottom 1PX solid #EDEDED
             overflow-x scroll
             span {
+                min-width 150px
                 bg(#F6F6F6)
                 lh(60)
                 padding 0 20px

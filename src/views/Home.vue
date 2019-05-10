@@ -3,7 +3,7 @@
     <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
     <!--  -->
-    <div class="home-search-area">
+    <div class="home-search-area" v-if="currentDealer.shopName">
       <div class="dealer-name" @click="_jumpDealerList">
         {{currentDealer.shopName}}
         <em></em>
@@ -68,11 +68,11 @@
           <!--  -->
           <div class="home-banner" v-if="banners.length">
             <div class="slider-body">
-              <slider :loop="loop" :data="banners" ref="slider_dom">
-                <div class="banner-item" v-for="item in banners" :key="item.id">
+              <cube-slide ref="slide" :data="banners">
+                <cube-slide-item class="banner-item" v-for="(item, index) in banners" :key="index">
                   <img :src="item.cloudSrc">
-                </div>
-              </slider>
+                </cube-slide-item>
+              </cube-slide>
             </div>
           </div>
           <!--  -->
@@ -160,20 +160,21 @@ import floatCart from "components/floatCart.vue";
 import searchBar from "components/searchBar.vue";
 import product from "components/product.vue";
 import scroll from "components/scroll.vue";
-import slider from "components/slider.vue";
+
 import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
+import { queryShopInfo } from "api/fetch/mine";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
 import storage from "common/storage";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "home",
   data() {
     return {
       showFixed: false,
       loop: true,
-      appIcons: appIcons,
+      appIcons: appIcons.slice(0, 4),
       showSqure: false,
       menuCanScroll: false,
       scrollMenu: [],
@@ -198,11 +199,12 @@ export default {
     scroll,
     product,
     floatCart,
-    slider,
+
     back
   },
   beforeCreate() {},
   computed: {
+    ...mapGetters(["userInSwitching"]),
     currentIndex() {
       var h = this.posY,
         arr = this.heightList || [];
@@ -218,6 +220,11 @@ export default {
   },
   activated() {
     this.saveCartCount();
+    if (this.userType == 3 && !this.userInSwitching) {
+      this.appIcons = appIcons.slice();
+    } else {
+      this.appIcons = appIcons.slice(0, 4);
+    }
     if (storage.get("homeRefresh", false)) {
       this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
@@ -245,20 +252,23 @@ export default {
     this._ListCurrentDealer();
     this._listDealerLogs();
     this._queryHomeProducts();
+    this.queryOwnerShop();
   },
   mounted() {},
   methods: {
     ...mapActions(["saveCartCount", "setUserType"]),
     //初始化auth
     _initAuth() {
-      const {
+      let {
         nickName,
         avatarUrl,
         mobileNo,
         token,
         userType,
-        shareDealerId
+        shareDealerId,
+        shareUserType = ""
       } = this.$route.query;
+      shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
       // 以登录身份访问
       if (mobileNo && token && userType) {
@@ -266,7 +276,7 @@ export default {
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);
-        this.setUserType(userType);
+        this.setUserType(shareUserType || userType);
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         return false;
       }
@@ -274,12 +284,12 @@ export default {
       if (nickName && avatarUrl) {
         this.clearStorage(); //清楚部分缓存
         storage.remove("token");
-        storage.remove("originUserType");
         storage.remove("userType");
         storage.remove("currentDealerId");
         storage.set("nickName", decodeURIComponent(nickName));
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
+        storage.set("originUserType", 3);
         this.setUserType(3);
       }
     },
@@ -297,6 +307,15 @@ export default {
         storage.remove(key);
       }
     },
+    //请求自己的店铺
+    queryOwnerShop() {
+      if (storage.get("originUserType", 3) == 3) return false;
+      queryShopInfo({}).then(res => {
+        const { shopName, shopId, phone } = res.data;
+        const ownerShop = { shopName, shopId, phone, id: shopId, owner: true };
+        storage.set("ownerShop", ownerShop);
+      });
+    },
     _listDealerLogs() {
       ListDealerLogs()
         .then(res => {
@@ -307,16 +326,25 @@ export default {
     },
     //
     _ListCurrentDealer() {
-      //第一次 切换 申请后 三种情况
+      //第一次 切换  申请后 三种情况
       const storeDealer = storage.get("currentDealer", {});
+      if (storeDealer.id == this.currentDealerId) {
+        return (this.currentDealer = storeDealer);
+      }
       ListAllDealer({ id: this.currentDealerId }).then(res => {
-        const { dataList = [] } = res.data;
-        // dataList.length && (this.currentDealer = dataList[0]);
+        const dataList = res.data.dataList || [];
         if (dataList.length) {
           const matchItem = dataList.find(
             item => item.id == this.currentDealerId
           );
           this.currentDealer = matchItem;
+          if (JSON.stringify(storeDealer) == "{}") {
+            storage.set("currentDealer", matchItem);
+          }
+        } else {
+          this.$router.push({
+            path: "/dealerList"
+          });
         }
       });
     },
@@ -439,6 +467,9 @@ export default {
     jumpSecondsort(Index) {
       var jumpPath = "",
         query = {};
+      if (this.navigateToLogin()) {
+        return false;
+      }
       switch (Index) {
         case 3:
           if (this.userType == 1 || this.userType == 2) {
@@ -457,12 +488,10 @@ export default {
           jumpPath = "/returnHomepage";
           break;
         case 4:
-          if (!this.navigateToLogin()) {
-            jumpPath = "/writeApplicationInformation";
-            query = {
-              mobileNo: storage.get("mobileNo", "")
-            };
-          }
+          jumpPath = "/writeApplicationInformation";
+          query = {
+            mobileNo: storage.get("mobileNo", "")
+          };
           break;
         default:
           break;
@@ -474,6 +503,30 @@ export default {
 </script>
 
 <style lang="stylus">
+.cube-slide-dots {
+  position: absolute;
+  bottom: 4PX;
+  right: 0;
+  left: 0;
+  padding: 0 6PX;
+  font-size: 0;
+  text-align: center;
+  transform: translateZ(1px);
+
+  > span {
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 1PX;
+    width: 10PX;
+    height: 1PX;
+    background: #fff;
+
+    &.active {
+      background: $color-theme;
+    }
+  }
+}
+
 .scroll-item {
   .H-product-item:nth-last-of-type(1) {
     .H-product-content {
@@ -564,6 +617,8 @@ export default {
     overflow: hidden;
 
     .banner-item {
+      padding: 0 1PX;
+      bg(#fff);
       width: 100%;
       h(250);
 
@@ -671,14 +726,15 @@ export default {
 
   .s-m-btn {
     float: right;
-    width: 88px;
-    height: 88px;
+    width: 70px;
+    height: 70px;
     position: relative;
     z-index: 1;
-    box-shadow: -1PX 0px 4px 0px rgba(0, 0, 0, 0.1);
     background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
     background-size: 42px 42px;
     transition: all 0.2s;
+    border-radius 25px;
+    top:10px
 
     &.active {
       transform: rotate(-180deg);
@@ -714,6 +770,7 @@ export default {
   top: 88px;
   left: 0;
   z-index: 5;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px 1px;
 
   .squre-item-wrap {
     padding: 8px;

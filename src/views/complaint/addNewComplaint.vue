@@ -3,7 +3,7 @@
         <m-header :isFixed="true"></m-header>
         <div class="body">
             <div class="reason">
-                <p class="title">投诉类型</p>
+                <p class="title"><i>*</i>投诉类型</p>
                 <div class="complaint-type" @click="openDialog">
                     <p :style="{color:complaintHeadLine?'#333':'#BDBDBD'}">
                         {{complaintHeadLine||'请选择投诉类型'}}</p>
@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="description">
-                <p class="title">内容描述</p>
+                <p class="title"><i>*</i>内容描述</p>
                 <textarea id="description" cols="30" rows="9" placeholder="请输入投诉内容"
                           v-model="complaintContent"></textarea>
                 <p class="count">{{length}}/100</p>
@@ -180,6 +180,10 @@
             font-size: 30px;
             c(#333);
             font-weight: bold;
+            i{
+                c(#E53935)
+                ft(32)
+            }
         }
         .complaint-type {
             padding 24px 0;

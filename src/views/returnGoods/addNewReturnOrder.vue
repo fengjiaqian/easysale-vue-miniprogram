@@ -3,7 +3,7 @@
         <m-header :isFixed="true"></m-header>
         <div class="body">
             <div class="goods-box">
-                <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}">退货商品</p>
+                <p class="title" :style="{borderWidth:returnGoods.length?'0.5px':'0.25px'}"><i>*</i>退货商品</p>
                 <div class="good-warp">
                     <div v-if="returnGoods.length">
                         <ul>
@@ -15,7 +15,7 @@
                                         </div>
                                         <div class="column">
                                             <p class="goods-name">{{item.productName}}</p>
-                                            <p class="goods-price">{{item.price}}元/{{item.priceUnit}}</p>
+                                            <p class="goods-price">规格：{{item.specification}}</p>
                                         </div>
                                         <div class="del-btn" @click="delGoods(index)">删除</div>
 
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="reason-box">
-                <p class="title">退货原因</p>
+                <p class="title"><i>*</i>退货原因</p>
                 <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
             <div class="remark-box">
@@ -64,26 +64,19 @@
         components: {
             numberPicker, mHeader
         },
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                vm.returnGoods = [];
-                vm.remark = '';
-                vm.returnContent = '';
-                let selectedProduct = storage.get("selectedProduct", "");
-                selectedProduct.forEach(selectItem => {
-                    selectItem.buyCount = 1;
-                    selectItem.minBuyNum = 1;
-                    selectItem.maxBuyNum = selectItem.count;
-                    vm.returnGoods.push(selectItem)
-                });
-                storage.remove("selectedProduct");
-            })
-        },
-
         computed: {
             canOperate() {
                 return this.returnContent.trim() && this.returnGoods.length;
             }
+        },
+        created(){
+            let selectedProduct = storage.get("selectedProduct");
+            selectedProduct.forEach(selectItem => {
+                selectItem.buyCount = 1;
+                selectItem.minBuyNum = 1;
+                this.returnGoods.push(selectItem)
+            });
+            storage.remove("selectedProduct");
         },
 
         methods: {
@@ -101,7 +94,7 @@
                         productId: item.id,
                         returnCount: item.buyCount,
                         price: item.price
-                    }
+                    };
                     items.push(obj)
                 }
                 let params = {
@@ -110,7 +103,7 @@
                     returnContent: this.returnContent
                 };
                 saveCustomerReturn(params).then(res => {
-                    this.$toast('新增成功');
+                    this.$toast('申请提交成功');
                     this.$router.go(-1)
                 }).catch(res => {
                     this.$toast(res.message)
@@ -177,6 +170,10 @@
             ft(30);
             fb();
             border-bottom 1px solid #EDEDED
+            i{
+                c(#E53935)
+                ft(32)
+            }
         }
         .remark-input {
             padding 24px 0 0;

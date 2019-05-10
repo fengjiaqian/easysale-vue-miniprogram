@@ -8,7 +8,10 @@
           <img v-lazy="currentDealer.logoIamgeUrl || ''" alt>
         </div>-->
         <div class="content" style="border: 0;">
-          <p>{{currentDealer.shopName}}</p>
+          <p>
+            {{currentDealer.shopName}}
+            <em class="m-shop-tag" v-if="currentDealer.owner">我的店铺</em>
+          </p>
           <p>电话：{{currentDealer.phone}}</p>
         </div>
         <span class="checked"></span>
@@ -45,7 +48,10 @@
               <img v-lazy="item.logoIamgeUrl || ''" alt>
             </div>-->
             <div class="content">
-              <p>{{item.shopName}}</p>
+              <p>
+                {{item.shopName}}
+                <em class="m-shop-tag" v-if="item.owner">我的店铺</em>
+              </p>
               <p>电话：{{item.phone}}</p>
             </div>
           </div>
@@ -64,6 +70,7 @@ import empty from "components/empty.vue";
 import { ListAllDealer } from "api/fetch/home";
 import { addShopHistory, changeShop } from "api/fetch/dealer";
 import storage from "common/storage";
+import { refreshTabPages } from "common/authStorage";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "dealer-list",
@@ -109,13 +116,19 @@ export default {
       ListAllDealer(params)
         .then(res => {
           if (res.data) {
-            const { dataList, pager } = res.data;
+            let { dataList, pager } = res.data;
             const { currentPage, totalPage } = pager;
             if (currentPage === 1) {
+              const ownerShop = storage.get("ownerShop", "");
+              ownerShop &&
+                (dataList = dataList.filter(item => item.id != ownerShop.id));
               this.dealerList = dataList.filter(
                 item => item.id != this.currentId
               );
               this.totalPage = totalPage;
+              if (ownerShop && this.currentId != ownerShop.id) {
+                this.dealerList.unshift(ownerShop);
+              }
               this.empty = !this.dealerList.length;
             } else {
               this.dealerList = this.dealerList.concat(
@@ -136,12 +149,15 @@ export default {
      *  (经销商 && 没有切换 ) || 切换中 可以切换店铺。
      */
     _chooseDealer(dealer) {
+      if (this.changing) return false;
       if (
         (this.userType != 3 && !this.userInSwitching) ||
         this.userInSwitching
       ) {
+        this.changing = true;
         changeShop(dealer.id)
           .then(res => {
+            this.changing = false;
             this.setUserType(res.data || 3);
             storage.set("currentDealerId", dealer.id);
             storage.set("currentDealer", dealer);
@@ -149,7 +165,9 @@ export default {
               path: "/navi/home"
             });
           })
-          .catch(_ => {});
+          .catch(_ => {
+            this.changing = false;
+          });
         return false;
       }
       if (storage.get("token", "")) {
@@ -157,13 +175,15 @@ export default {
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
+      refreshTabPages();
       this.$router.push({
         path: "/navi/home"
       });
     },
     _searchKeyChange(searchKey) {
       this.params.pageNum = 1;
-      this._ListAllDealer(searchKey.trim());
+      this.params.shopName = searchKey.trim();
+      this._ListAllDealer(this.params);
     },
     loadMore() {
       if (this.loading || this.params.pageNum > this.totalPage) return false;
@@ -256,6 +276,15 @@ export default {
     ml(48);
     h(148);
     border-bottom: 1PX solid #F2F2F2;
+
+    .m-shop-tag {
+      ml(24);
+      padding: 2Px 5Px;
+      ft(12);
+      c($color-theme);
+      b1($color-theme);
+      radius(3);
+    }
 
     p {
       &:nth-of-type(1) {

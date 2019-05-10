@@ -11,13 +11,16 @@
                 <div class="left" v-if="listData.dealer">{{listData.dealer.dealerName}}回复：</div>
                 <div class="right">{{listData.customerComplaint.replyTime}}</div>
             </div>
-            <div class="tips">{{listData.customerComplaint.replyContent}}</div>
+            <div class="tips">{{listData.customerComplaint.replyContent||'我们会尽快为您处理'}}</div>
         </div>
         <p class="state">{{stateList[listData.customerComplaint.state]}}</p>
         <div class="btn-warp">
             <button class="go-detail" @click.stop="toComplaintDetail(listData.customerComplaint.id)">查看详情</button>
             <button v-if="userType != 3&&tabState==0" class="handle-btn"
                     @click.stop="directProcessing(listData.customerComplaint.id)">处理
+            </button>
+            <button v-if="userType == 3&&tabState==0" class="cancel-btn"
+                    @click.stop="cancelComplaint(listData.customerComplaint.id)">撤销投诉
             </button>
         </div>
     </div>
@@ -69,6 +72,9 @@
             },
             directProcessing(id) {
                 this.$emit("directProcessing", id);
+            },
+            cancelComplaint(id){
+                this.$emit("cancelComplaint", id);
             }
         }
     }
@@ -220,6 +226,17 @@
     .saleMan {
         c(#999);
         ft(28)
+    }
+    .cancel-btn {
+        c(#FF5638);
+        ft(28);
+        padding 12px 24px;
+        bg(#fff);
+        border: 2px solid #DDDDDD;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
     }
 </style>
 

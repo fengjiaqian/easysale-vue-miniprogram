@@ -20,8 +20,15 @@
         <div>店铺介绍：</div>
         <textarea v-model="shopInfo.instruction" maxlength="180" rows="4" placeholder="请输入店铺介绍"></textarea>
       </li>
+      <li class="mb-20 uiw-info info-address">
+        <div class="ia-title">店铺地址：</div>
+        <div class="ia-value">
+          <input v-model="shopInfo.address" type="text" maxlength="50" placeholder="请输入店铺地址">
+        </div>
+        <i @click="obtainAddress" class="position"></i>
+      </li>
       <li class="uiw-pic">
-        <div>店铺图片：</div>
+        <div>门头图片：</div>
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
@@ -50,10 +57,16 @@ import { queryShopInfo, editShopInfo } from "api/fetch/mine";
 import storage from "common/storage";
 import { verifyPhone } from "common/validate";
 import { compress } from "common/util";
+import { evokeWxLocation } from "common/location";
 export default {
   data() {
     return {
-      shopInfo: {},
+      shopInfo: {
+        shopName: '',
+        phone: '',
+        instruction: '',
+        address: '',
+      },
       domShow: false,
       limitUploadNum: 5, //上传图片的限制张数
       stagImgList: [], //暂存的图片数组
@@ -69,6 +82,16 @@ export default {
       };
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      let passData = to.query.passData ? to.query.passData : null;
+      if (passData) {
+        passData = JSON.parse(passData);
+        Object.assign(vm.shopInfo, passData.pageData);
+        vm.shopInfo.address = passData.addressData.address;
+      }
+    });
+  },
   created() {
     this.initShopInfo();
   },
@@ -80,7 +103,10 @@ export default {
     initShopInfo() {
       queryShopInfo({}).then(res => {
         if (res.result === "success" && res.data) {
-          this.shopInfo = res.data;
+          //如果定位的地址有值，则取定位后的地址
+          let posAddress = this.shopInfo.address || ''
+          Object.assign(this.shopInfo, res.data);
+          if(posAddress) this.shopInfo.address = posAddress
           this.stagImgList = res.data.logoIamgeUrls;
           this.domShow = true;
         }
@@ -108,6 +134,7 @@ export default {
       let param = this.shopInfo;
       editShopInfo(param).then(res => {
         if (res.result === "success") {
+          storage.set("homeRefresh", true);
           this.$router.push({ path: "/my/userInfo" });
         }
       });
@@ -125,6 +152,10 @@ export default {
       if (isIMAGE && isLt1M) {
         return new Promise((resolve, reject) => {
           compress(file, function(val) {
+            if( val.size/1024/1024 > 1 ){
+              this.$alert('图片过大，请重新选择');
+              return
+            }
             resolve(val);
           });
         });
@@ -154,7 +185,14 @@ export default {
           .querySelector(".el-upload--picture-card")
           .removeAttribute("style");
       }
-    }
+    },
+    obtainAddress(){
+      let recordData = {
+        path: this.$route.path,
+        pageData: this.shopInfo
+      }
+      evokeWxLocation(recordData)
+    },
   },
   watch: {
     shopInfo: {

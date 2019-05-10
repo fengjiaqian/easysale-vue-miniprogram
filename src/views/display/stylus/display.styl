@@ -6,7 +6,7 @@
     width 100%
     position fixed
     left 0
-    top 0
+    top 90px
     z-index 2
     .top-bar{
       bg(#fff)
@@ -42,6 +42,7 @@
     .h-search-bar{
       padding 14px 24px
       bg(#fff)
+      position relative
       input{
         outline none
         width 100%
@@ -50,8 +51,18 @@
         lh(72)
         ft(28)
         c(#888)
-        text-c()
         border-radius 10px
+        pl(60)
+      }
+      i{
+        position absolute
+        left 24px
+        top 30px
+        display: inline-block;
+        squ(33);
+        margin: 0 16px;
+        background: url('../../assets/images/ic_sousuo@2x.png') no-repeat center;
+        background-size: contain;
       }
     }
     .dealer-list-wrap{
@@ -65,6 +76,7 @@
       border-bottom 1PX solid #EDEDED
       overflow-x scroll
       span{
+        min-width 180px
         bg(#F6F6F6)
         lh(60)
         padding 0 20px
@@ -145,16 +157,16 @@
   bg(#F6F6F6)
 }
 
-.display-wrap /deep/{
+.display-wrap /deep/,.display-manage /deep/{
   .empty-page{
     position absolute
     left 50%
     top 50%
     transform translate(-50%,-75%)
-    div{
+    /*div{
       width 340px !important
       height 340px !important
-    }
+    }*/
     p{
       margin-top 0 !important
       c(#999)
@@ -169,7 +181,7 @@
 .display-apply{
   height 100%
   bg(#F6F6F6)
-  padding 20px 16px 0
+  padding 110px 16px 0
   .da-remark{
     margin-bottom 118px !important
     textarea{
@@ -389,7 +401,7 @@
   .header{
     position fixed
     left 0
-    top 0
+    top 90px
     width 100%
     z-index 2
     bg(#fff)
@@ -427,7 +439,7 @@
   }
   .content{
     height 100%
-    pt(118)
+    pt(208)
     bg(#F6F6F6)
   }
 }

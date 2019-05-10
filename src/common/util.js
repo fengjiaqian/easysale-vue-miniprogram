@@ -15,7 +15,7 @@ function compress(fileObj, callback) {
             const scale = w / h
             w = fileObj.width || w
             h = fileObj.height || (w / scale)
-            let quality = 0.7 // 默认图片质量为0.7
+            let quality = 0.4 // 默认图片质量为0.7
             // 生成canvas
             const canvas = document.createElement('canvas')
             const ctx = canvas.getContext('2d')
@@ -28,9 +28,9 @@ function compress(fileObj, callback) {
             canvas.setAttributeNode(anh)
             ctx.drawImage(that, 0, 0, w, h)
             // 图像质量
-            if (fileObj.quality && fileObj.quality <= 1 && fileObj.quality > 0) {
+/*            if (fileObj.quality && fileObj.quality <= 1 && fileObj.quality > 0) {
                 quality = fileObj.quality
-            }
+            }*/
             // quality值越小，所绘制出的图像越模糊
             const data = canvas.toDataURL('image/jpeg', quality)
             // 压缩完成执行回调

@@ -7,10 +7,11 @@
             </div>
             <div class="dct-target">
                 <h5>陈列申请</h5>
-                <ul class="product-list">
+                <ul class="product-list" :class="{'list-unfold':isUnfold}">
                     <li v-for="product in display.customerDisplay.items" :key="product.id">
                         {{product.productName}}
                     </li>
+                    <div class="growth-btn" @click="growth" v-if="showGrowth">{{this.isUnfold?`收起`:`展开更多`}}</div>
                 </ul>
             </div>
         </div>
@@ -34,14 +35,15 @@
         },
         data() {
             return {
-
+                showGrowth: false,//显示收缩栏
+                isUnfold: false,//是否展开
             };
         },
         components: {
 
         },
         created() {
-
+            this.showGrowth = this.display.customerDisplay.items.length > 2 ? true : false
         },
         mounted() {},
         methods: {
@@ -71,6 +73,10 @@
                     .catch(err => {
                         this.$toast(err.message);
                     });
+            },
+            //陈列列表项展开收缩
+            growth(){
+                this.isUnfold = !this.isUnfold
             },
         },
     };

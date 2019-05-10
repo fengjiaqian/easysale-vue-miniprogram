@@ -1,6 +1,6 @@
 // import VConsole from 'vconsole'
 
-//new VConsole() // 初始化
+// new VConsole() // 初始化
 import Vue from 'vue'
 import './cube-ui'
 import App from './App.vue'
@@ -12,7 +12,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'api/index'
 import 'common/appConfig'
 import './assets/stylus/index.styl'
-import {Toast, Alert, Confirm} from './plugins/dialog/index.js'
+import { Toast, Alert, Confirm } from './plugins/dialog/index.js'
 import mixin from 'common/rootMixin'
 import './plugins/element.js'
 

@@ -143,6 +143,13 @@ const shopkeeper = (resolve) => {
     })
 }
 
+//店主认证中状态 
+const authentication = (resolve) => {
+    import('views/mine/user/authentication.vue').then((module) => {
+        resolve(module)
+    })
+}
+
 const mine = [
     {
         path: '/my',
@@ -156,6 +163,14 @@ const mine = [
                     title: '店主认证'
                 },
                 component: shopkeeper
+            },
+            {
+                path: 'authentication',
+                name: 'authentication',
+                meta: {
+                    title: '认证中'
+                },
+                component: authentication
             },
             {
                 path: 'userInfo',

@@ -5,11 +5,11 @@
             <span v-for="(item,index) in stateList" :class="{'active': tabState == index}" @click="switchTab(index)">{{item.title}}</span>
         </section>
         <!--经销商店铺列表-->
-        <section class="dealer-list-wrap" v-if="userType == 3&&dealerList.length>0">
+        <div class="dealer-list-wrap" v-if="userType == 3&&dealerList.length>0">
             <span :class="{'active':activeshopIdx==idx}" v-for="(item,idx) in dealerList"
                   @click="switchShop(item,idx)">{{item.shopName}}</span>
-        </section>
-        <empty :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
+        </div>
+        <empty style="margin-top: 100px"
                :txt="'暂无相关投诉单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <div :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
@@ -21,16 +21,16 @@
             >
                 <div>
                     <list-item v-for="(item,index) in complaintsList" :listData="item" :key="index"
-                               :tabState="tabState" @directProcessing="directProcessing"></list-item>
+                               :tabState="tabState" @directProcessing="directProcessing" @cancelComplaint="cancelComplaint"></list-item>
                 </div>
 
             </scroll>
         </div>
-        <button class="footer-btn" @click="addComplaints()" v-if="userType == 3">新建投诉单</button>
+        <button class="footer-btn" @click="addComplaints()" v-if="userType == 3">我要投诉</button>
     </div>
 </template>
 <script>
-    import {complaintList, selectDealComplaint, updateCustomerById} from "api/fetch/complaints";
+    import {complaintList, selectDealComplaint, updateCustomerById,cancelComplaint} from "api/fetch/complaints";
     import {queryStaffList} from "api/fetch/mine";
     import scroll from "components/scroll.vue";
     import listItem from "./list-item.vue";
@@ -168,6 +168,23 @@
                     name: "addNewComplaint",
                 });
             },
+
+            /**
+             * 撤销投诉
+             */
+            cancelComplaint(id) {
+                this.$confirm('您确定撤销投诉吗？')
+                    .then(() => {
+                        cancelComplaint(id).then(res => {
+                            this.$toast('操作成功');
+                            this.complaintsList = [];
+                            this._QueryComplaintList();
+                        }).catch(() => {
+                        });
+                    })
+                    .catch(() => {
+                    });
+            }
         }
     }
 </script>
@@ -319,7 +336,9 @@
             border-top 1px solid #EDEDED
             border-bottom 1PX solid #EDEDED
             overflow-x scroll
+            overflow-y hidden
             span {
+                min-width 150px
                 bg(#F6F6F6)
                 lh(60)
                 padding 0 20px

@@ -3,8 +3,8 @@
   <div class="common pt90">
     <m-header :isFixed="true"></m-header>
     <div class="mc-item mt20">
-      <div class="left">客户姓名 :</div>
-      <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入姓名">
+      <div class="left">您的姓名 :</div>
+      <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入您的姓名">
     </div>
     <div class="mc-item-hr"></div>
     <div class="mc-item">
@@ -34,7 +34,7 @@
       >
     </div>
     <div class="uiw-pic">
-      <div class="left">营业执照 :</div>
+      <div class="left" style="width: 80px">上传门头照 :</div>
       <ul class="img-list">
         <li v-for="(item,index) in stagImgList">
           <img :src="item">
@@ -53,6 +53,7 @@
         ></el-upload>
       </ul>
     </div>
+    <div class="logos-desc">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
     <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
   </div>
 </template>
@@ -62,7 +63,7 @@ import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
 import storage from "common/storage";
 import { evokeWxLocation } from "common/location";
 import { compress } from "common/util";
-
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -106,6 +107,7 @@ export default {
     this.applyInfo.phone = this.$route.query.mobileNo;
   },
   methods: {
+    ...mapActions(["setUserType"]),
     //TODO: 带入电话号码和姓名
     //TODO: 上传参数加入图片
     _applyDealer() {
@@ -125,8 +127,16 @@ export default {
       };
       applyDealer(params)
         .then(res => {
-          this.$toast("申请信息提交成功");
-          this.$router.push({ path: "/navi/mine" });
+          this.$toast("恭喜，您的店铺已经开张");
+          const { mobileNo, token, userType, shopId = "" } = res.data;
+          storage.set("mobileNo", mobileNo);
+          storage.set("token", token);
+          storage.set("originUserType", userType);
+          this.setUserType(userType);
+          shopId && storage.set("currentDealerId", shopId);
+          //todo remove currentDealer
+          storage.remove("currentDealer");
+          this.$router.push({ path: "/navi/home" });
         })
         .catch(err => {
           this.$toast(err.message);
@@ -145,6 +155,10 @@ export default {
       if (isIMAGE && isLt1M) {
         return new Promise((resolve, reject) => {
           compress(file, function(val) {
+            if( val.size/1024/1024 > 1 ){
+              this.$alert('图片过大，请重新选择');
+              return
+            }
             resolve(val);
           });
         });
@@ -178,6 +192,7 @@ export default {
     },
     //去小程序定位地址
     obtainAddress() {
+      storage.set('ApplyToLocation', true);
       let recordData = {
         path: this.$route.path,
         pageData: this.applyInfo
@@ -190,6 +205,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.logos-desc {
+  ft(24);
+  c(#999);
+  bg(#fff);
+  pb(16);
+  pl(24);
+}
+
 .common {
   background-color: #F6F6F6;
   position: relative;
@@ -278,6 +301,7 @@ export default {
     flex();
     flex-wrap: wrap;
     justify-content: flex-start;
+    ml(24);
 
     >li {
       position: relative;

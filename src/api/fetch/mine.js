@@ -1,5 +1,21 @@
 import axios from 'axios'
 
+// 查看店主认证详情
+function listShopCertificationFile() {
+
+	return axios({
+		method: 'post',
+		url: "/dealer/listShopCertificationFile",
+		data: {},
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
+
 //我的模块-用户店铺信息
 function queryShopInfo(params) {
 	const url = "/dealer/findDealerInfo"
@@ -336,11 +352,25 @@ function uploadImg(params) {
 	});
 }
 
+// 分享店铺图片合成
+function synthesisroutineimg(params) {
+	const url = "/file/synthesisroutineimg"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading:true
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
 export {
-	queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
+	listShopCertificationFile, queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
 	queryProductList, queryProductBrand, oprateManageProduct,
 	addProduct, productDetail, editProduct, queryJyProduct,
 	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole,
 	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer,
-	uploadImg
+	uploadImg, synthesisroutineimg
 }

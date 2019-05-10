@@ -11,7 +11,7 @@
                         <div class="left">{{dealer.dealerName}}回复：</div>
                         <div class="right">{{customerComplaint.replyTime}}</div>
                     </div>
-                    <div class="tips">{{customerComplaint.replyContent}}</div>
+                    <div class="tips">{{customerComplaint.replyContent||'我们会尽快为您处理'}}</div>
                 </div>
             </div>
             <div class="title-box">
@@ -37,7 +37,7 @@
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
                         <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
                     <p class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</p>
-                    <p class="font-30-666">销售负责人：{{customer.saleName}}</p>
+                    <p class="font-30-666" v-if="customer.saleName">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <div class="title-box" v-if="userType == 3">
@@ -236,10 +236,10 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            bg(white);
+            bg(#FF5638);
             text-align: center;
             lh(98);
-            c(#FF5638);
+            c(#fff);
             font-size: 32px;
             border: 0;
             outline: none;

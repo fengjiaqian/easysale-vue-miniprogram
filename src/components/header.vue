@@ -104,30 +104,45 @@ export default {
        *  1.地图定位后，点击返回上一页，手动返回到改页面的上一页面
        *  2.商品管理列表，客户管理列表，员工管理列表，返回我的页面
        * */
-      let jumpPath = ""
+      let jumpPath = "";
       switch (name) {
         case "addCustomerInfo":
-          jumpPath = "/my/customerList"
+        case "editCustomerInfo":
+          jumpPath = "/my/customerList";
           break;
         case "addStaffInfo":
-          jumpPath = "/my/staffList"
+        case "editStaffInfo":
+          jumpPath = "/my/staffList";
           break;
         case "productList":
+        case "myConsignee":
         case "staffList":
+          jumpPath = "/navi/mine";
+          break;
+        case "updateConsignee":
+          jumpPath = "/myConsignee";
+          break;
+        case "userInfoEdit":
+          jumpPath = "/my/userInfo";
+          break;
         case "customerList":
           //如果是从订单界面过来的  返回订单 带入信息
           if (storage.get("fromOrder", false)) {
             this.$router.go(-1);
           } else {
-            this.$router.push({ path: "/navi/mine" });
+            jumpPath = "/navi/mine";
           }
           break;
         case "userInfo":
-        case "writeApplicationInformation":
-          jumpPath = "/navi/mine"
+          jumpPath = "/navi/mine";
           break;
-        case "exhibitList":
-          jumpPath = "/navi/home"
+        case "writeApplicationInformation":
+          if (storage.get("ApplyToLocation", false)) {
+            jumpPath = "/navi/mine";
+            storage.set("ApplyToLocation", false);
+          } else {
+            this.$router.go(-1);
+          }
           break;
         case "dealerList":
           const currentDealerId = storage.get("currentDealerId", "");
@@ -141,7 +156,7 @@ export default {
           this.$router.go(-1);
           break;
       }
-      this.$router.push({ path: jumpPath });
+      jumpPath && this.$router.push({ path: jumpPath });
     },
     showShortList() {
       if (!storage.get("currentDealerId", "")) return false;

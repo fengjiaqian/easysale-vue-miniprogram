@@ -1,6 +1,6 @@
 <template>
     <div class="return-items" v-if="listData.customerReturn" :style="{paddingLeft:'12px'}">
-        <p class="dealer">{{ userType == 3?listData.dealer.dealerName: listData.customer.customerName}}</p>
+        <p class="dealer">{{ userType == 3 ? listData.dealer.dealerName : listData.customer.customerName}}</p>
         <p class="replyTime">{{listData.customerReturn.createTime}}</p>
         <p class="returnHeadLine">{{listData.customerReturn.returnContent}}</p>
         <ul v-if="listData.customerReturn.items.length>0">
@@ -14,7 +14,9 @@
                     <span>X{{skuItem.returnCount}}</span>
                 </div>
             </li>
-            <div class="expand" @click="isShowMoreInfo()" v-if="listData.customerReturn.items.length>2">{{isShowMore?'收起':'展开更多'}}</div>
+            <div class="expand" @click="isShowMoreInfo()" v-if="listData.customerReturn.items.length>2">
+                {{isShowMore ? '收起' : '展开更多'}}
+            </div>
         </ul>
         <div class="continue" v-if="tabState==1">
             <div class="triangle"></div>
@@ -22,12 +24,17 @@
                 <div class="left">{{listData.dealer.dealerName}}回复：</div>
                 <div class="right">{{listData.customerReturn.replyTime}}</div>
             </div>
-            <div class="tips">{{listData.customerReturn.replyContent}}</div>
+            <div class="tips">{{listData.customerReturn.replyContent||'我们会尽快为您处理'}}</div>
         </div>
-        <p class="state">{{stateList[0]}}</p>
+        <p class="state">{{stateList[listData.customerReturn.state]}}</p>
         <div class="btn-warp">
             <button class="go-detail" @click="toReturnDetail(listData.customerReturn.id)">查看详情</button>
-            <button v-if="userType != 3&&tabState==0" class="handle-btn" @click.stop="directProcessing(listData.customerReturn.id)">处理</button>
+            <button v-if="userType != 3&&tabState==0" class="handle-btn"
+                    @click.stop="directProcessing(listData.customerReturn.id)">处理
+            </button>
+            <button v-if="userType == 3&&tabState==0" class="cancel-btn"
+                    @click.stop="cancelReturn(listData.customerReturn.id)">取消退货
+            </button>
         </div>
     </div>
 </template>
@@ -64,6 +71,12 @@
         component: {
             //someComponent
         },
+        created() {
+            if (this.userType == 3) {
+                this.stateList = ['已申请', '已回复', '已取消']
+            }
+
+        },
         methods: {
             // 是否展示更多信息
             isShowMoreInfo(id) {
@@ -88,6 +101,11 @@
                     }
                 });
             },
+
+            cancelReturn(id){
+                this.$emit("cancelReturn", id);
+
+            }
 
         },
 
@@ -164,6 +182,7 @@
         margin: 16px 0
 
     }
+
     .handle-btn {
         c(#fff);
         ft(28);
@@ -244,9 +263,21 @@
         c(#0096FF);
         mt(16)
     }
+
     .saleMan {
         c(#999);
         ft(28)
+    }
+    .cancel-btn {
+        c(#FF5638);
+        ft(28);
+        padding 12px 24px;
+        bg(#fff);
+        border: 2px solid #DDDDDD;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
     }
 </style>
 

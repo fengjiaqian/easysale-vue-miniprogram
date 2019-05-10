@@ -3,10 +3,34 @@
     <m-header :isFixed="true"></m-header>
     <div class="order-detail-area product-Info">
       <h5>商品信息</h5>
-      <order-products v-if="products.length" :products="products"></order-products>
+      <!--  -->
+      <div class="submit-skus">
+        <div class="submit-single-sku clearfix" v-for="product in products" :key="product.id">
+          <div class="s-s-img">
+            <img v-lazy="product.productImageUrl" alt>
+          </div>
+          <div class="s-s-main">
+            <p class="name">{{product.productName}}</p>
+            <div class="spec">
+              <span>规格：{{product.specification}}</span>
+            </div>
+            <div class="price">
+              <strong v-if="userType==3">{{product.price}}</strong>
+              <input
+                v-else
+                type="text"
+                :value="product.price"
+                @change="handleProductPrice(product,$event)"
+              >
+              <span class="unit">元/{{product.priceUnit}}</span>
+              <span class="frt fz28">X{{product.buyCount}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="order-detail-amount">
         订单总金额：
-        <span class="c-theme">&yen;{{payableAmount | priceToFixed}}</span>
+        <span class="c-theme">&yen;{{actualAmount | priceToFixed}}</span>
       </div>
     </div>
     <!--  -->
@@ -57,8 +81,8 @@
     </div>
     <!--  -->
     <div class="bottom" ref="bottomDom">
-      <a href="javascript:;" @click="_OrderSubmit">提交订单</a>
-      &yen;{{payableAmount | priceToFixed}}
+      <a href="javascript:;" @click="_OrderSubmit" :class="{'active':currentCustomer.phone}">提交订单</a>
+      &yen;{{actualAmount | priceToFixed}}
     </div>
   </div>
 </template>
@@ -77,25 +101,27 @@ import { OrderSubmit } from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
 import { queryAddressList } from "api/fetch/endCustomer";
 import { findCustomerList } from "api/fetch/dealer";
-import orderProducts from "components/order-products.vue";
 export default {
   name: "order-submit",
   data() {
     return {
       reduce: 0,
       products: [],
-      orderAmount: 0,
       currentCustomer: {},
       remark: ""
     };
   },
   computed: {
     payableAmount() {
-      return this.orderAmount - this.reduce;
+      //应付金额
+      return this.products.reduce(
+        (ac, cur) => (ac += cur.buyCount * cur.price),
+        0
+      );
+    },
+    actualAmount() {
+      return this.payableAmount - this.reduce;
     }
-  },
-  components: {
-    orderProducts
   },
   beforeCreate() {},
   created() {
@@ -111,20 +137,19 @@ export default {
        * 初始化商品信息，优惠，备注，客户收货人信息。
        */
       this.products = storage.get("orderPrequeryParams", []);
+      this.products = this.products.map(item => {
+        item.price = Number(item.price).toFixed(2);
+        return item;
+      });
       const orderExtraParams = storage.get("orderExtraParams", {});
       this.reduce = orderExtraParams.reduce || "";
       this.remark = orderExtraParams.remark || "";
-      this.orderAmount = this.products.reduce(
-        (ac, cur) => (ac += cur.buyCount * cur.price),
-        0
-      );
       const customerInfo = this.$route.query.customerInfo || "";
       customerInfo && (this.currentCustomer = this.decodeUrl(customerInfo));
       storage.set("fromOrder", false);
       storage.set("orderExtraParams", {});
     },
     _OrderSubmit() {
-      // payableAmount是应付金额，orderAmount是实付金额
       const customerId = this.currentCustomer.id;
       if (!customerId) {
         const msg = this.userType == 3 ? "请选择收货人" : "请选择客户";
@@ -134,14 +159,13 @@ export default {
       const params = {
         receiverId: customerId,
         orderItem,
-        orderAmount: this.payableAmount, //
+        orderAmount: this.actualAmount,
         reduceAmount: this.reduce || 0,
-        payableAmount: this.orderAmount,
+        payableAmount: this.payableAmount,
         orderRemark: this.remark
       };
       OrderSubmit(params)
         .then(res => {
-          console.log(res);
           //批量删除购物车中商品
           batchRemoveItem(this.products);
           this.$router.push({ path: "/orderResult" });
@@ -162,6 +186,7 @@ export default {
         reduce: this.reduce,
         remark: this.remark
       };
+      storage.set("orderPrequeryParams", this.products);
       storage.set("orderExtraParams", orderExtraParams);
       const path = this.userType == 3 ? "/myConsignee" : "/my/customerList";
       this.$router.push({
@@ -183,17 +208,28 @@ export default {
       };
       window.addEventListener("resize", resizeFn);
     },
-    handleChange: function(event) {
+    handleChange(event) {
       var val = event.target.value.trim();
       if (isValueNumber(val)) {
-        var max = this.orderAmount;
-        val = Number(val);
+        var max = this.payableAmount;
+        val = Number(val).toFixed(2);
         this.reduce = val;
         if (val > max) this.reduce = max;
         if (val < 0) this.reduce = 0;
       } else {
-        // 如果输入的非数字，则保留之前的数据
-        event.target.value = this.reduce;
+        event.target.value = Number(this.reduce).toFixed(2);
+      }
+    },
+    handleProductPrice(product, event) {
+      var val = event.target.value.trim();
+      if (isValueNumber(val)) {
+        var max = 99999;
+        val = Number(val).toFixed(2);
+        product.price = val;
+        if (val > max) product.price = max.toFixed(2);
+        if (val < 0) product.price = 0.0;
+      } else {
+        event.target.value = product.price;
       }
     }
   }
@@ -201,8 +237,66 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import './common.styl';
+.submit-skus {
+  pt(24);
+}
 
+.submit-single-sku {
+  mb(24);
+
+  .s-s-img {
+    flt();
+    squ(150);
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .s-s-main {
+    ml(175);
+
+    .name {
+      ft(29);
+      c(#333);
+    }
+
+    .price {
+      mt(22);
+      lh(56);
+
+      strong {
+        ft(32);
+        c($color-theme);
+      }
+
+      input {
+        w(160);
+        h(56);
+        lh(56);
+        radius(2);
+        b1(rgba(221, 221, 221, 1));
+        ft(30);
+        c($color-theme);
+        text-indent: 16px;
+      }
+
+      .unit {
+        ft(26);
+        c(#666);
+      }
+    }
+
+    .spec {
+      mt(21);
+      ft(25);
+      c(#999);
+    }
+  }
+}
+
+/* * */
 .order-submit {
   pt(90);
   pb(92);
@@ -243,10 +337,14 @@ export default {
     w(224);
     h(98);
     frt();
-    bg($color-theme);
+    bg(#BDBDBD);
     c(#fff);
     ft(32);
     text-c();
+
+    &.active {
+      bg($color-theme);
+    }
   }
 }
 

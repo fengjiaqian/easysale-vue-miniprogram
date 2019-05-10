@@ -140,6 +140,10 @@ export default {
 .O-list {
   height: 100%;
   overflow: hidden;
+
+  .O-item:nth-of-type(1) {
+    mt(0);
+  }
 }
 
 #orders {

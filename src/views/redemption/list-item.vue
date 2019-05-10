@@ -24,19 +24,23 @@
                 <div class="left">{{listData.dealer.dealerName}}回复：</div>
                 <div class="right">{{listData.customerAward.replyTime}}</div>
             </div>
-            <div class="tips">{{listData.customerAward.replyContent}}</div>
+            <div class="tips">{{listData.customerAward.replyContent||'我们会尽快为您处理'}}</div>
         </div>
-        <p class="state">{{stateList[0]}}</p>
+        <p class="state">{{stateList[listData.customerAward.state]}}</p>
         <div class="btn-warp">
             <button class="go-detail" @click="toRedemptionDetail(listData.customerAward.id)">查看详情</button>
             <button v-if="userType != 3&&tabState==0" class="handle-btn"
                     @click.stop="directProcessing(listData.customerAward.id)">处理
+            </button>
+            <button v-if="userType == 3&&tabState==0" class="cancel-btn"
+                    @click.stop="cancelRedemption(listData.customerAward.id)">取消兑奖
             </button>
         </div>
     </div>
 </template>
 
 <script>
+
     export default {
         name: 'list-item',
         props: {
@@ -65,8 +69,11 @@
                 return JSON.stringify(this.listData.saleMan) == "{}"
             }
         },
-        component: {
-            //someComponent
+        created() {
+            if (this.userType == 3) {
+                this.stateList = ['已申请', '已回复', '已取消']
+            }
+
         },
         methods: {
             // 是否展示更多信息
@@ -91,6 +98,12 @@
                     }
                 });
             },
+            /**
+             * 取消兑奖
+             */
+            cancelRedemption(id) {
+                this.$emit("cancelRedemption", id);
+            }
 
         },
 
@@ -180,7 +193,17 @@
         margin: 16px 0;
         ml(24)
     }
-
+    .cancel-btn {
+        c(#FF5638);
+        ft(28);
+        padding 12px 24px;
+        bg(#fff);
+        border: 2px solid #DDDDDD;
+        outline: none;
+        border-radius: 8px;
+        margin: 16px 0;
+        ml(24)
+    }
     .select-img {
         position absolute
         w(40)
@@ -220,6 +243,7 @@
 
     .tips {
         c(#666);
+        ft(26)
     }
 
     .triangle {

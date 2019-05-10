@@ -66,7 +66,7 @@
             <i @click="switchOption('display')" :class="{'open':productModal.displayState}"></i>
           </li>
         </ul>
-        <div class="reward-column">
+        <div class="reward-column" v-if="productModal.displayState">
           <span>陈列奖励：</span>
           <textarea v-model="productModal.displayAward" cols="30" rows="3" placeholder="请输入陈列奖励"></textarea>
         </div>
@@ -170,6 +170,10 @@
           return new Promise((resolve, reject)=>{
             compress(file, function(val) {
               //console.log('压缩后',val)
+              if( val.size/1024/1024 > 1 ){
+                this.$alert('图片过大，请重新选择');
+                return
+              }
               resolve(val)
             })
           })

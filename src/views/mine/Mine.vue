@@ -6,14 +6,17 @@
       </div>
       <div class="user-tel" @click="_jumpUserInfo">
         <h5>{{nickName || ''}}</h5>
-
-        <p>{{isVisitor?'未绑定':mobileNo}}</p>
+        <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
+        <p v-else>{{mobileNo}}</p>
       </div>
       <!-- <div class="user-code" v-if="userType==1" @click="mineSkip('/my/userInviteCode')">
-        <i></i>
-        <span>邀请码</span>
+              <i></i>
+              <span>邀请码</span>
       </div>-->
-      <a class="bind-tel" href="javascript:;" v-if="isVisitor" @click.stop="_bindPhone">绑定手机号</a>
+      <div class="user-code" @click="shareShop">
+        <i></i>
+        <span>分享</span>
+      </div>
     </div>
     <!-- 功能模块 -->
     <ul class="enter-list">
@@ -29,7 +32,10 @@
         </div>
         <div class="enter-item-txt">
           <span>{{item.title}}</span>
-          <em></em>
+          <div>
+            <span class="mr-12 c-theme" v-if="item.path=='/my/shopkeeper' && auditState==0">认证中</span>
+            <em></em>
+          </div>
         </div>
       </li>
     </ul>
@@ -37,13 +43,11 @@
 </template>
 
 <script>
-/** 公共页面 三种角色 + 游客模式。
- * isVisitor：展示差异 auth权限控制。
- * userType default 3  终端用户
- */
 import { initAccessModule } from "./mineCommon";
 import storage from "common/storage";
 import { findCustomerOwerInfo } from "api/fetch/endCustomer";
+import { queryShopInfo, synthesisroutineimg } from "api/fetch/mine";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -51,10 +55,13 @@ export default {
       mobileNo: storage.get("mobileNo", ""),
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
-      mineMenu: []
+      mineMenu: [],
+      auditState: 1
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["userInSwitching"])
+  },
   components: {},
   beforeCreate: function() {},
   created: function() {
@@ -65,9 +72,10 @@ export default {
   destoryed() {},
   mounted() {},
   activated() {
-    this.mineMenu = initAccessModule(this.userType);
     const refresh = storage.get("mineRefresh", false);
-    refresh && this._findCustomerOwerInfo();
+    if (refresh) {
+      this._findCustomerOwerInfo();
+    }
     storage.set("mineRefresh", false);
   },
   methods: {
@@ -84,35 +92,108 @@ export default {
           }
         });
       }
+      //数据统计 权限
+      if (path == "/my/statistical" && this.userType != 1) {
+        if (this.auditState == 2) {
+          const msg =
+            "您的店铺尚未认证，认证需要上传营业执照照片，是否立即认证？";
+          this.$confirm(msg)
+            .then(() => {
+              this.$router.push({ path: "/my/shopkeeper" });
+            })
+            .catch(() => {});
+        }
+        if (this.auditState == 0) {
+          this.$confirm("您的店铺正在认证中，查看详情？")
+            .then(() => {
+              this.$router.push({ path: "/my/authentication" });
+            })
+            .catch(() => {});
+        }
+        return false;
+      }
+      //认证控制
+      if (path == "/my/shopkeeper" && this.auditState == 0) {
+        path = "/my/authentication";
+      }
       this.$router.push(path);
     },
     _bindPhone() {
       this.navigateToLogin();
     },
-    //TODO 销售人员
     //分角色跳转个人信息
     _jumpUserInfo() {
       this.navigateToLogin();
-      if (this.userType == 3) {
+      if (this.userType == 3 && !this.userInSwitching) {
         this.mineSkip("/customerInfo");
-      }
-      if (this.userType == 1) {
+      } else {
         this.mineSkip("/my/userInfo");
       }
     },
-    //申请经销商后  刷新申请中的状态
     //TODO 区别角色
     _findCustomerOwerInfo() {
       if (this.isVisitor) return false;
-      findCustomerOwerInfo()
+      const { nickName, avatarUrl } = this;
+      //终端客户
+      if (this.userType == 3 && !this.userInSwitching) {
+        this.mineMenu = initAccessModule(this.userType);
+        if (nickName && avatarUrl) return false;
+        return findCustomerOwerInfo()
+          .then(res => {
+            this.mobileNo = res.data.phone;
+            this.nickName = res.data.wxNickName;
+            this.avatarUrl = res.data.iamgeUrl;
+          })
+          .catch(err => {});
+      }
+      //非终端客户
+      queryShopInfo({})
         .then(res => {
           this.mobileNo = res.data.phone;
-          this.nickName = res.data.wxNickName;
-          this.avatarUrl = res.data.iamgeUrl;
+          !nickName && (this.nickName = res.data.wxNickName);
+          !avatarUrl && (this.avatarUrl = res.data.iamgeUrl);
+          this.auditState = res.data.auditState; //经销商进行店主认证（0：认证中，1：已认证  2.未认证）
+          const originUserType = res.data.userType; //返回的是原始状态  userType是当前状态。
+          originUserType && storage.set("originUserType", originUserType);
+          this.mineMenu = initAccessModule(this.userType, this.auditState);
         })
         .catch(err => {});
+    },
+    //分享店铺
+    shareShop() {
+      const currentDealer = storage.get("currentDealer") || {};
+      const shopId = currentDealer.id || "";
+      let params = {
+        avatarImg: this.avatarUrl,
+        userText: `${this.nickName}邀请您访问`,
+        shopText: `${"「" + currentDealer.shopName + "」"}`
+      };
+      if (!this.lock) {
+        this.lock = true;
+        synthesisroutineimg(params)
+          .then(res => {
+            if (res.data) {
+              let resultData = res.data;
+              resultData.shopId = shopId;
+              resultData = JSON.stringify(resultData);
+              resultData = encodeURIComponent(resultData);
+              const jumpUrl = encodeURIComponent(`navi/mine`);
+              const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${resultData}`;
+              window.wx.miniProgram.navigateTo({
+                url: path
+              });
+            }
+          })
+          .catch(res => {
+            this.$toast("分享失败，请点击重试。");
+          });
+      }
+      setTimeout(() => {
+        this.lock = false;
+      }, 2000);
     }
   },
+
   watch: {}
 };
 </script>
@@ -218,6 +299,18 @@ export default {
   }
 }
 
+.manager {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/manager_icon.png');
+    }
+  }
+
+  .enter-item-txt {
+    border-top: 1PX solid #ededed !important;
+  }
+}
+
 .setting {
   mt(20);
 
@@ -272,9 +365,7 @@ export default {
 }
 
 .bind-tel {
-  pos(absolute);
-  top: 70px;
-  right: 24px;
+  mt(32);
   block();
   w(154);
   lh(48);
@@ -291,12 +382,14 @@ export default {
   flex-direction: column;
   align-items: center;
   mt(12);
+  c(#666);
+  ft(24);
 
   i {
-    inline;
+    inline();
     w(48);
     h(48);
-    background-image: url('../../assets/images/user_code_icon.png');
+    background-image: url('../../assets/images/ic_share_shop.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -308,4 +401,3 @@ export default {
   mt(20);
 }
 </style>
-

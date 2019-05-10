@@ -1,11 +1,13 @@
 <template>
-    <div class="display-wrap">
+    <div class="display-wrap pt90">
+        <m-header :isFixed="true"></m-header>
         <section class="header">
             <div class="top-bar">
                 <span v-for="(item,index) in stateList" :class="{'active': activeIdx == index}" @click="switchBar(index)">{{item.title}}</span>
             </div>
             <div class="h-search-bar" v-if="activeIdx==0">
                 <input v-model="searchKey" placeholder="请输入商品名称" @change="handleChange($event)">
+                <i></i>
             </div>
             <!--经销商店铺列表-->
             <div class="dealer-list-wrap" v-if="activeIdx!=0&&shopList.length">
@@ -53,7 +55,7 @@
                 申请陈列<span v-if="achieve">({{selectedProduct.length}})</span>
             </div>
         </section>
-        <empty v-if="isEmpty&&activeIdx==0" txt="暂无商品数据~" :iconUrl="avatarUrl"></empty>
+        <empty v-if="isEmpty" txt="暂无数据~" :iconUrl="avatarUrl"></empty>
     </div>
 </template>
 
@@ -115,7 +117,11 @@
             },
             isEmpty(){
                 if(this.requestDone){
-                    return !this.productList.length
+                    if(this.activeIdx==0){
+                        return !this.productList.length
+                    }else{
+                        return !this.displayList.length
+                    }
                 }
             }
         },
@@ -220,6 +226,7 @@
             },
             //申请陈列
             apply(){
+                if(!this.selectedProduct.length) return
                 storage.set("selectedProduct", this.selectedProduct);
                 this.$router.push({ path: "/displayApply" });
             },
@@ -229,8 +236,13 @@
                     .then(res => {
                         if (res.result === "success") {
                             this.shopList = res.data
-                            this.activeShopId = this.shopList[0].shopId || ''
-                            if(this.shopList.length) this.queryShopDisplays()
+                            this.activeShopId = this.shopList.length ? this.shopList[0].shopId : ''
+                            if(this.shopList.length){
+                                this.queryShopDisplays()
+                            }else{
+                                this.displayList = []
+                                this.requestDone = true;
+                            }
                         }
                     })
                     .catch(err => {
@@ -243,14 +255,17 @@
                     state: this.param.state,
                     dealerId: this.activeShopId
                 }
+                this.requestDone = false;
                 queryDisplays(param)
                     .then(res => {
                         if (res.result === "success") {
                             this.displayList = res.data
+                            this.requestDone = true;
                         }
                     })
                     .catch(err => {
                         this.$toast(err.message);
+                        this.requestDone = true;
                     });
             },
             //切换经销商店铺

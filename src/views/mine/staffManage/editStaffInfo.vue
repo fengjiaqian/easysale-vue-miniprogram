@@ -9,7 +9,7 @@
       </li>
       <li class="special-li">
         <span>联系电话：</span>
-        <input @input="limitPhone" v-model="staffInfo.phone" type="number" placeholder="请输入手机号码">
+        <input @input="limitPhone" :readonly="userPhone==staffInfo.phone" v-model="staffInfo.phone" type="number" placeholder="请输入手机号码">
       </li>
       <div class="h20"></div>
       <li>
@@ -17,29 +17,29 @@
         <input @input="limitCardId" v-model="staffInfo.cardId" type="number" placeholder="请输入身份证号">
       </li>
       <li class="special-li">
-        <span>详细地址：</span>
+        <span>家庭地址：</span>
         <div>
           <input v-model="staffInfo.address" type="text" maxlength="50" placeholder="请输入员工地址">
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
       <div class="h20"></div>
-      <li>
-        <span>雇佣日期：</span>
+      <li class="special-li">
+        <span>入职日期：</span>
         <el-date-picker
           class="date-pick-wrap"
           v-model="staffInfo.hireDate"
           type="date"
-          placeholder="请选择雇佣日期"
+          placeholder="请选择入职日期"
         ></el-date-picker>
         <i class="extension"></i>
       </li>
-      <li>
+<!--      <li>
         <span>角色设置：</span>
         <div @click="rolePopToggle">{{activeRoleName}}</div>
         <i class="extension"></i>
-      </li>
-      <li class="special-li">
+      </li>-->
+<!--      <li class="special-li">
         <span>折扣权限：</span>
         <div>
           <input
@@ -50,11 +50,11 @@
           >
           <span>折</span>
         </div>
-      </li>
+      </li>-->
     </ul>
     <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
     <!--角色设置弹出层-->
-    <div class="popup-wrap" v-if="rolePopShow">
+    <!--<div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
         <h5 class="header">
           <span>角色设置</span>
@@ -71,7 +71,7 @@
         <div class="btn" @click="rolePopShow=false">确定</div>
       </div>
       <div class="pop-mask"></div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -79,6 +79,7 @@
 import { editStaff, queryRole } from "api/fetch/mine";
 import { verifyPhone, verifyIdCard } from "common/validate";
 import { evokeWxLocation } from "common/location";
+import storage from "common/storage";
 export default {
   data() {
     return {
@@ -95,7 +96,9 @@ export default {
       rolePopShow: false,
       roleList: [],
       activeRoleName: "",
-      achieve: false
+      achieve: false,
+      canSave: true,
+      userPhone: '',
     };
   },
   components: {},
@@ -111,10 +114,11 @@ export default {
     });
   },
   created() {
+    this.userPhone = storage.get('mobileNo', '')
     let staffInfo = JSON.parse(localStorage.getItem("staffInfo"));
     Object.assign(this.staffInfo, staffInfo);
     this.activeRoleName = staffInfo.roleName;
-    this._queryRole();
+    //this._queryRole();
   },
   methods: {
     limitName(e) {
@@ -148,15 +152,22 @@ export default {
         this.$alert(`请选择雇佣日期！`);
         return;
       }
-      this.saveAdd();
+      if(this.canSave){
+          this.saveAdd();
+      }
     },
     saveAdd() {
+      this.canSave = false
       editStaff(this.staffInfo).then(res => {
         if (res.result === "success") {
           //商品添加成功后回到商品管理列表页
           this.$toast("修改成功！");
+          this.canSave = true
           this.$router.go(-1);
         }
+      }).catch((err)=>{
+        this.canSave = true
+        this.$toast(err.message);
       });
     },
     //查询所有角色
