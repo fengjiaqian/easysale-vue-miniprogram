@@ -10,6 +10,7 @@
           ref="upload"
           v-model="files"
           :action="uploadImgUrl"
+          :process-file="processFile"
           @files-added="addedHandler"
           @file-error="errHandler"
         >
@@ -58,6 +59,20 @@ export default {
     // onFileRemoved(file) {
     //   this.fieldList = this.fieldList.filter(item => item.name != file.name);
     // },
+    processFile(file, next) {
+      compress(
+        file,
+        {
+          compress: {
+            width: 1024,
+            height: 1024 * 2,
+            quality: 0.5
+          },
+          type: "file"
+        },
+        next
+      );
+    },
     _submit() {
       let logoIamgeUrls = this.files.map(file => {
         const response = file.response;

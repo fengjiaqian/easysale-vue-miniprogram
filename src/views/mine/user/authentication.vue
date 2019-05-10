@@ -2,12 +2,12 @@
 <template>
   <div class="shop-keeper pt90">
     <m-header :isFixed="true"></m-header>
-    <div class="upload-viewer">
+    <div class="upload-viewer" v-if="fieldList.length">
       <h5>
         营业执照
         <span class="frt c-theme">认证中</span>
       </h5>
-      <div class="upload-area" v-for="file in fieldList" v-if="fieldList.length">
+      <div class="upload-area" v-for="file in fieldList">
         <img :src="file" class="license-pic" alt>
       </div>
     </div>
@@ -74,9 +74,10 @@ export default {
     width: 100%;
     h(335);
     background: rgba(250, 250, 250, 1);
-    img{
-      block()
-      margin 0 auto;
+
+    img {
+      block();
+      margin: 0 auto;
     }
   }
 }
