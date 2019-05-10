@@ -20,8 +20,8 @@
     </div>
     <div class="address-column">
       <span>收货地址 :</span>
-      <div>
-        <input v-model="consigneeInfo.address" type="text" maxlength="50" placeholder="请输入店铺地址">
+      <div class="locate-address">
+        <textarea v-model="consigneeInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入店铺地址"></textarea>
       </div>
       <i @click="obtainAddress" class="position"></i>
     </div>
