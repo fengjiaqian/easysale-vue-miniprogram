@@ -67,7 +67,8 @@ export function changeShop(id) {
         url: '/shop/changeShop',
         data: {
             id
-        }
+        },
+        loading: true
     }).then((res) => {
         return Promise.resolve(res.data)
     }).catch(res => {

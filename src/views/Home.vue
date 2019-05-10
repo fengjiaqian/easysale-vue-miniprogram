@@ -232,6 +232,7 @@ export default {
       this.showFixed = false;
       this._listDealerLogs();
       this._queryHomeProducts();
+      this.queryOwnerShop();
     } else {
       this.scrollProducts.forEach(item => {
         item.products = transformProductList(item.products);
@@ -355,11 +356,12 @@ export default {
           this.scrollMenu = menu;
           this.scrollProducts = brands;
           if (!this.scrollMenu.length) {
-            // const msg =
-            //   this.userType == 3
-            //     ? "当前经销商暂无商品,请重新选择经销商"
-            //     : "您的店铺暂无上架商品,请尽快添加";
-            return this.$toast("当前经销商暂无商品");
+            const originUserType = storage.get("originUserType", 3);
+            let msg = "当前店铺暂无商品,请重新选择店铺";
+            while (originUserType != 3 && this.userType != 3) {
+              msg = "您的店铺暂无上架商品,请尽快添加";
+            }
+            return this.$toast(msg);
           }
           this.$nextTick(() => {
             this.calculateScrollRect();
@@ -733,8 +735,8 @@ export default {
     background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
     background-size: 42px 42px;
     transition: all 0.2s;
-    border-radius 25px;
-    top:10px
+    border-radius: 25px;
+    top: 10px;
 
     &.active {
       transform: rotate(-180deg);
