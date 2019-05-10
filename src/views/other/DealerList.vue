@@ -284,6 +284,7 @@ export default {
       c($color-theme);
       b1($color-theme);
       radius(3);
+      vm();
     }
 
     p {
