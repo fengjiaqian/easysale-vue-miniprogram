@@ -7,8 +7,9 @@ import mine from './mine'//我的模块
 import manageInit from './manageInit'// 投诉、兑奖、退货管理相关
 import exhibit from './exhibit'//陈列模块
 import display from './display'//陈列模块-V2
+import attestation from './attestation'//引导认证
 const routes = [
-    ...main, ...mine, ...manageInit, ...exhibit, ...display
+    ...main, ...mine, ...manageInit, ...exhibit, ...display, ...attestation
 ];
 Vue.use(Router);
 

@@ -152,6 +152,9 @@ export default {
             this.$router.go(-1);
           }
           break;
+        case "attestationForm":
+          jumpPath = "/identity";
+          break;
         default:
           this.$router.go(-1);
           break;

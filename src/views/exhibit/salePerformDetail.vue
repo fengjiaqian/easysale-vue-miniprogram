@@ -273,11 +273,15 @@
       },
       //图片上传成功时
       fileSuccess(res, file) {
-        this.fileList.unshift(file)
-        if(this.fileList.length == this.limitUploadNum){
-          document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
+        if(res.data){
+          this.fileList.unshift(file)
+          if(this.fileList.length == this.limitUploadNum){
+            document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
+          }
+          this.productImageUrl = res.data
+        }else{
+          this.fileFaild()
         }
-        this.productImageUrl = res.data
       },
       fileFaild(){
         this.$alert('图片上传失败！')
