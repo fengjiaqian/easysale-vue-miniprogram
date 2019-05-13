@@ -166,11 +166,15 @@ export default {
     changeLoad(file, fileList) {},
     //图片上传成功时
     fileSuccess(res, file) {
-      this.stagImgList.push(res.data);
-      if (this.stagImgList.length == this.limitUploadNum) {
-        document
-          .querySelector(".el-upload--picture-card")
-          .setAttribute("style", "display:none;");
+      if(res.data){
+        this.stagImgList.push(res.data);
+        if (this.stagImgList.length == this.limitUploadNum) {
+          document
+                  .querySelector(".el-upload--picture-card")
+                  .setAttribute("style", "display:none;");
+        }
+      }else{
+        this.fileFaild()
       }
     },
     fileFaild() {
