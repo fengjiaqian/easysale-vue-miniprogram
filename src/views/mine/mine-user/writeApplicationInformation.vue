@@ -122,7 +122,7 @@ export default {
         phone,
         shopName,
         address,
-        logoIamgeUrls: this.stagImgList
+        logoIamgeUrls: this.stagImgList.filter(item=>!!item)
       };
       applyDealer(params)
         .then(res => {
