@@ -25,7 +25,9 @@
     <div class="mc-item-hr"></div>
     <div class="mc-item pre">
       <div class="left">店铺地址 :</div>
-      <input class="right" value v-model="applyInfo.address" type="text" placeholder="请输入店铺地址">
+      <div class="locate-address right">
+        <textarea v-model="applyInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入店铺地址"></textarea>
+      </div>
       <img
         class="location"
         @click.stop="obtainAddress"
@@ -244,7 +246,9 @@ export default {
   lh(90);
   ft(30);
   c-3();
-
+  .locate-address{
+    mr(50)
+  }
   .left {
     c-6();
     mr(12);
