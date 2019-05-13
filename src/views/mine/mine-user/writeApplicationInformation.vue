@@ -2,7 +2,7 @@
 <template>
   <div class="common pt90">
     <m-header :isFixed="true"></m-header>
-<!--    <div class="mc-item mt20">
+    <!--    <div class="mc-item mt20">
       <div class="left">您的姓名 :</div>
       <input class="right" v-model="applyInfo.name" value type="text" placeholder="请输入您的姓名">
     </div>-->
@@ -124,7 +124,7 @@ export default {
         phone,
         shopName,
         address,
-        logoIamgeUrls: this.stagImgList
+        logoIamgeUrls: this.stagImgList.filter(item => !!item)
       };
       applyDealer(params)
         .then(res => {
@@ -156,9 +156,9 @@ export default {
       if (isIMAGE && isLt1M) {
         return new Promise((resolve, reject) => {
           compress(file, function(val) {
-            if( val.size/1024/1024 > 1 ){
-              this.$alert('图片过大，请重新选择');
-              return
+            if (val.size / 1024 / 1024 > 1) {
+              this.$alert("图片过大，请重新选择");
+              return;
             }
             resolve(val);
           });
@@ -169,15 +169,15 @@ export default {
     },
     //图片上传成功时
     fileSuccess(res, file) {
-      if(res.data){
+      if (res.data) {
         this.stagImgList.push(res.data);
         if (this.stagImgList.length == this.limitUploadNum) {
           document
-                  .querySelector(".el-upload--picture-card")
-                  .setAttribute("style", "display:none;");
+            .querySelector(".el-upload--picture-card")
+            .setAttribute("style", "display:none;");
         }
-      }else{
-        this.fileFaild()
+      } else {
+        this.fileFaild();
       }
     },
     //图片上传失败
@@ -197,7 +197,7 @@ export default {
     },
     //去小程序定位地址
     obtainAddress() {
-      storage.set('ApplyToLocation', true);
+      storage.set("ApplyToLocation", true);
       let recordData = {
         path: this.$route.path,
         pageData: this.applyInfo

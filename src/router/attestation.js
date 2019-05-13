@@ -23,7 +23,7 @@ const attestation = [
             title: '认证'
         },
         component: Identity
-    },{
+    }, {
         path: '/attestationForm',
         name: 'attestationForm',
         meta: {

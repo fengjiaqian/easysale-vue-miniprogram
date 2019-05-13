@@ -3,8 +3,8 @@
     <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
     <!--  -->
-    <div class="home-search-area" v-if="currentDealer.shopName">
-      <div class="dealer-name" @click="_jumpDealerList">
+    <div class="home-search-area">
+      <div class="dealer-name" @click="_jumpDealerList" v-if="currentDealer.shopName">
         {{currentDealer.shopName}}
         <em></em>
       </div>
@@ -172,8 +172,8 @@ export default {
   name: "home",
   data() {
     return {
+      counter: 0,
       showFixed: false,
-      loop: true,
       appIcons: appIcons.slice(0, 4),
       showSqure: false,
       menuCanScroll: false,
@@ -199,7 +199,6 @@ export default {
     scroll,
     product,
     floatCart,
-
     back
   },
   beforeCreate() {},
@@ -219,6 +218,7 @@ export default {
     }
   },
   activated() {
+    return false;
     this.saveCartCount();
     if (this.userType == 3 && !this.userInSwitching) {
       this.appIcons = appIcons.slice();
@@ -226,6 +226,7 @@ export default {
       this.appIcons = appIcons.slice(0, 4);
     }
     if (storage.get("homeRefresh", false)) {
+      this.counter = 0;
       this.currentDealerId = storage.get("currentDealerId", "");
       this._ListCurrentDealer();
       this.$refs.scrollProduct && this.$refs.scrollProduct.scrollTo(0, 0);
@@ -277,7 +278,7 @@ export default {
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);
-        this.setUserType(shareUserType || userType);
+        this.setUserType({ type: shareUserType || userType, refresh: false });
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         return false;
       }
@@ -291,7 +292,7 @@ export default {
         storage.set("avatarUrl", decodeURIComponent(avatarUrl));
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         storage.set("originUserType", 3);
-        this.setUserType(3);
+        this.setUserType({ type: 3, refresh: false });
       }
     },
     clearStorage() {
@@ -314,6 +315,7 @@ export default {
       queryShopInfo({}).then(res => {
         const { shopName, shopId, phone } = res.data;
         const ownerShop = { shopName, shopId, phone, id: shopId, owner: true };
+        //todo 带入是否认证店主字段
         storage.set("ownerShop", ownerShop);
       });
     },
@@ -321,9 +323,11 @@ export default {
       ListDealerLogs()
         .then(res => {
           this.banners = res.data;
-          this.loop = this.banners.length > 1;
+          this.counter++;
         })
-        .catch(_ => {});
+        .catch(_ => {
+          this.counter++;
+        });
     },
     //
     _ListCurrentDealer() {
@@ -350,27 +354,27 @@ export default {
       });
     },
     _queryHomeProducts() {
-      queryHomeProducts().then(res => {
-        if (res.result === "success" && res.data) {
+      queryHomeProducts()
+        .then(res => {
           const { menu, brands } = this.calculateHomeDisplayData(res.data);
           this.scrollMenu = menu;
           this.scrollProducts = brands;
           if (!this.scrollMenu.length) {
             const originUserType = storage.get("originUserType", 3);
             let msg = "当前店铺暂无商品,请重新选择店铺";
-            while (originUserType != 3 && this.userType != 3) {
+            if (originUserType != 3 && this.userType != 3) {
               msg = "您的店铺暂无上架商品,请尽快添加";
             }
             return this.$toast(msg);
           }
           this.$nextTick(() => {
             this.calculateScrollRect();
-            setTimeout(() => {
-              this.calculateHeightList();
-            }, 1000);
+            this.counter++;
           });
-        }
-      });
+        })
+        .catch(_ => {
+          this.counter++;
+        });
     },
     //计算 scroll-menu 的scroll_menu_content 的宽度
     calculateScrollRect() {
@@ -453,6 +457,9 @@ export default {
       }
     },
     onPullingDown() {
+      if (this.scrollMenu.length) {
+        this.counter--;
+      }
       this._queryHomeProducts();
     },
     backTop() {
@@ -499,6 +506,17 @@ export default {
           break;
       }
       jumpPath && this.$router.push({ path: jumpPath, query });
+    }
+  },
+  watch: {
+    counter: {
+      handler(newVal, oldVal) {
+        if (newVal == 2) {
+          setTimeout(() => {
+            this.calculateHeightList();
+          }, 400);
+        }
+      }
     }
   }
 };
