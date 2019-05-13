@@ -218,7 +218,6 @@ export default {
     }
   },
   activated() {
-    return false;
     this.saveCartCount();
     if (this.userType == 3 && !this.userInSwitching) {
       this.appIcons = appIcons.slice();
