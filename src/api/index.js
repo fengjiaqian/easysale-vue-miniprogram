@@ -13,8 +13,8 @@ axios.interceptors.request.use(function (config) {
 	const currentDealerId = storage.get("currentDealerId", "") || "";
 	token && (config.headers.token = token);
 	currentDealerId && (config.headers.currentShopId = currentDealerId);
-	
-	config.timeout = 1000*60 // 超时时间1分钟
+
+	config.timeout = 1000 * 60 // 超时时间1分钟
 	config.data.dealerId = config.data.dealerId || currentDealerId;
 	config.data.shopId = config.data.dealerId || currentDealerId;
 	config.data.dealer_id = config.data.dealer_id || currentDealerId;
@@ -49,7 +49,6 @@ axios.interceptors.response.use(function (response) {
 	}
 	// if (response.data && (response.data.message === '100102009'
 	// 	|| response.data.desc == '登录已过期，请重新登录~')) {
-
 	// }
 	return response;
 }, function (error) {

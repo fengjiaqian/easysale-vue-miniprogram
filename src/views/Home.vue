@@ -218,6 +218,7 @@ export default {
     }
   },
   activated() {
+    return false;
     this.saveCartCount();
     if (this.userType == 3 && !this.userInSwitching) {
       this.appIcons = appIcons.slice();
@@ -361,7 +362,7 @@ export default {
           if (!this.scrollMenu.length) {
             const originUserType = storage.get("originUserType", 3);
             let msg = "当前店铺暂无商品,请重新选择店铺";
-            while (originUserType != 3 && this.userType != 3) {
+            if (originUserType != 3 && this.userType != 3) {
               msg = "您的店铺暂无上架商品,请尽快添加";
             }
             return this.$toast(msg);
