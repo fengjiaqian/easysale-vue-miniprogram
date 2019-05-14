@@ -144,7 +144,7 @@
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
           <li>
-            <span class="required">公司地址</span>
+            <span class="required mt-ads">公司地址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
