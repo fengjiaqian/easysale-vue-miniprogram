@@ -18,6 +18,7 @@
             <h5>{{list.name}}</h5>
             <span>{{list.phone}}</span>
           </div>
+          <div class="item-tag" v-if="list.auditState===0">待审核</div>
         </div>
       </div>
     </section>
@@ -199,6 +200,8 @@ export default {
   padding: 16px 24px;
   flex-center();
   bg(#fff)
+  position relative
+  border-bottom 1PX solid #ededed;
   .il-l {
     w(100);
     h(100);
@@ -224,6 +227,18 @@ export default {
       ft(26);
       c-9();
     }
+  }
+  .item-tag{
+    position absolute
+    right 60px
+    top 24px
+    bg(#FF5638)
+    ft(22)
+    c(#fff)
+    border-radius 4px
+    padding 0 8px
+    lh(34)
+    word-break keep-all
   }
 }
 

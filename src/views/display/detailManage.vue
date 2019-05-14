@@ -28,7 +28,10 @@
             <h5>客户信息</h5>
             <ul>
                 <li>客户姓名：{{displayInfo.customer.customerName}}</li>
-                <li>手机号码：{{displayInfo.customer.customerPhone}}</li>
+                <li class="info-tel">
+                    手机号码：{{displayInfo.customer.customerPhone}}
+                    <a class="tel" :href="'tel:'+displayInfo.customer.customerPhone"></a>
+                </li>
                 <li>申请时间：{{displayInfo.customer.createTime}}</li>
                 <li v-if="displayInfo.customer.saleName">销售负责人：{{displayInfo.customer.saleName}}</li>
             </ul>

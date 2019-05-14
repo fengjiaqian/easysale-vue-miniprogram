@@ -27,16 +27,23 @@
         <div>{{staffInfo.discount || '无'}}</div>
       </li>-->
     </ul>
-    <ul class="sd-oprate">
-      <!--<li class="sd-c-b">重置账号密码</li>-->
+<!--    <ul class="sd-oprate">
+      <li class="sd-c-b">重置账号密码</li>
       <li class="sd-c-b" @click="skipTo">编辑</li>
-      <!--<li class="sd-c-o" @click="freeze">删除</li>-->
-    </ul>
+      <li class="sd-c-o" @click="freeze">删除</li>
+    </ul>-->
+    <div class="b-oprate" v-if="staffInfo.auditState===0">
+      <span @click="audit(2)" class="refuse">审核拒绝</span>
+      <span @click="audit(1)">审核同意</span>
+    </div>
+    <div class="b-oprate" @click="skipTo" v-else>
+      <span>编辑</span>
+    </div>
   </div>
 </template>
 
 <script>
-import { queryStaffDetail, deleteStaff } from "api/fetch/mine";
+import { queryStaffDetail, deleteStaff, auditStaff } from "api/fetch/mine";
 export default {
   data() {
     return {
@@ -85,7 +92,22 @@ export default {
           });
         })
         .catch(() => {});
-    }
+    },
+    //审核员工
+    audit(type){
+      let param = {
+        id: this.staffInfo.id,
+        type
+      }
+      auditStaff(param).then(res => {
+        if (res.result === "success") {
+          this.$toast("审核成功！");
+          this.$router.push({
+            path: "/my/staffList"
+          });
+        }
+      });
+    },
   }
 };
 </script>
