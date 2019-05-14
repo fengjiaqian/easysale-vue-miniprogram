@@ -97,6 +97,7 @@ export default {
     audit(type){
       let param = {
         id: this.staffInfo.id,
+        userId: this.staffInfo.userId,
         type
       }
       auditStaff(param).then(res => {
