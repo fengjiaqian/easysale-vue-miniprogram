@@ -1,9 +1,9 @@
 <template>
   <div class="pt90">
-    <m-header :isFixed="true"></m-header>
+    <m-header :isFixed="true" :tit="myTitle"></m-header>
     <ul class="user-info-wrap">
       <li>
-        <div>店铺名称：</div>
+        <div>{{userType==3?`店铺名称：`:`公司名称：`}}</div>
         <div>{{shopInfo.shopName}}</div>
       </li>
       <li class="mb-20">
@@ -11,15 +11,15 @@
         <div>{{shopInfo.phone}}</div>
       </li>
       <li class="mb-20 uiw-info">
-        <div>店铺介绍：</div>
+        <div>{{userType==3?`店铺介绍：`:`公司介绍：`}}</div>
         <div>{{shopInfo.instruction}}</div>
       </li>
       <li class="mb-20 uiw-info">
-        <div>店铺地址：</div>
+        <div>{{userType==3?`店铺地址：`:`公司地址：`}}</div>
         <div>{{shopInfo.address}}</div>
       </li>
       <li class="uiw-pic">
-        <div>门头图片：</div>
+        <div>{{userType==3?`门头照片：`:`公司形象照：`}}</div>
         <ul class="img-list">
           <li v-for="item in shopInfo.logoIamgeUrls">
             <img v-lazy="item || ''">
@@ -42,6 +42,11 @@ export default {
     };
   },
   components: {},
+  computed: {
+    myTitle(){
+      return this.userType == 3 ? `店铺信息` : `公司信息`
+    },
+  },
   created() {
     this.initShopInfo();
   },
