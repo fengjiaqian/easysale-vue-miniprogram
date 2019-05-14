@@ -331,16 +331,18 @@
         lh(98);
         bg(#fff);
         ft(30);
-        c-6();
         flex-center();
 
         span {
             width: 50%;
             text-c();
+            c(#FF5638);
+            bg(#fff)
         }
 
         .edit {
-            c(#FF5638);
+            bg(#FF5638);
+            c(#fff)
         }
     }
 
