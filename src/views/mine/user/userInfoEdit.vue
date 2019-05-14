@@ -3,10 +3,13 @@
     <m-header :isFixed="true" :tit="myTitle"></m-header>
     <ul class="user-info-wrap">
       <li>
-        <div>{{userType==3?`店铺名称：`:`公司名称：`}}</div>
-        <input v-model="shopInfo.shopName"
-               type="text" maxlength="20"
-               :placeholder="userType==3?`请输入店铺名称`:`请输入公司名称`">
+        <div>{{showStore?`店铺名称：`:`公司名称：`}}</div>
+        <input
+          v-model="shopInfo.shopName"
+          type="text"
+          maxlength="20"
+          :placeholder="showStore?`请输入店铺名称`:`请输入公司名称`"
+        >
       </li>
       <li class="mb-20">
         <div>联系电话：</div>
@@ -19,24 +22,29 @@
         >
       </li>
       <li class="mb-20 uiw-info">
-        <div>{{userType==3?`店铺介绍：`:`公司介绍：`}}</div>
-        <textarea v-model="shopInfo.instruction"
-                  maxlength="180" rows="4"
-                  :placeholder="userType==3?`请输入店铺介绍`:`请输入公司介绍`"
+        <div>{{showStore?`店铺介绍：`:`公司介绍：`}}</div>
+        <textarea
+          v-model="shopInfo.instruction"
+          maxlength="180"
+          rows="4"
+          :placeholder="showStore?`请输入店铺介绍`:`请输入公司介绍`"
         ></textarea>
       </li>
       <li class="mb-20 uiw-info info-address">
-        <div class="ia-title">{{userType==3?`店铺地址：`:`公司地址：`}}</div>
+        <div class="ia-title">{{showStore?`店铺地址：`:`公司地址：`}}</div>
         <div class="ia-value locate-address">
-          <textarea v-model="shopInfo.address"
-                    maxlength="50" cols="30" rows="2"
-                    :placeholder="userType==3?`请输入店铺地址`:`请输入公司地址`"
+          <textarea
+            v-model="shopInfo.address"
+            maxlength="50"
+            cols="30"
+            rows="2"
+            :placeholder="showStore?`请输入店铺地址`:`请输入公司地址`"
           ></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
       <li class="uiw-pic">
-        <div>{{userType==3?`门头照片：`:`公司形象照：`}}</div>
+        <div>{{showStore?`门头照片：`:`公司形象照：`}}</div>
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
@@ -66,14 +74,17 @@ import storage from "common/storage";
 import { verifyPhone } from "common/validate";
 import { compress } from "common/util";
 import { evokeWxLocation } from "common/location";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      showStore: false,
+      myTitle: "",
       shopInfo: {
-        shopName: '',
-        phone: '',
-        instruction: '',
-        address: '',
+        shopName: "",
+        phone: "",
+        instruction: "",
+        address: ""
       },
       domShow: false,
       limitUploadNum: 5, //上传图片的限制张数
@@ -83,15 +94,13 @@ export default {
   },
   components: {},
   computed: {
+    ...mapGetters(["userInSwitching"]),
     headers() {
       const token = storage.get("token", "");
       return {
         token: token
       };
-    },
-    myTitle(){
-      return this.userType == 3 ? `店铺信息` : `公司信息`
-    },
+    }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -104,6 +113,8 @@ export default {
     });
   },
   created() {
+    this.showStore = this.userType == 3 && !this.userInSwitching;
+    this.myTitle = this.showStore ? `店铺信息` : `公司信息`;
     this.initShopInfo();
   },
   mounted() {},
@@ -115,9 +126,9 @@ export default {
       queryShopInfo({}).then(res => {
         if (res.result === "success" && res.data) {
           //如果定位的地址有值，则取定位后的地址
-          let posAddress = this.shopInfo.address || ''
+          let posAddress = this.shopInfo.address || "";
           Object.assign(this.shopInfo, res.data);
-          if(posAddress) this.shopInfo.address = posAddress
+          if (posAddress) this.shopInfo.address = posAddress;
           this.stagImgList = res.data.logoIamgeUrls;
           this.domShow = true;
         }
@@ -127,7 +138,7 @@ export default {
     verify() {
       if (!this.achieve) return;
       const { shopName, phone, instruction } = this.shopInfo;
-      let insTitle = this.userType == 3 ? `店铺` : `公司`
+      let insTitle = this.showStore ? `店铺` : `公司`;
       if (!shopName) {
         this.$alert(`请输入${insTitle}名称！`);
         return;
@@ -164,9 +175,9 @@ export default {
       if (isIMAGE && isLt1M) {
         return new Promise((resolve, reject) => {
           compress(file, function(val) {
-            if( val.size/1024/1024 > 1 ){
-              this.$alert('图片过大，请重新选择');
-              return
+            if (val.size / 1024 / 1024 > 1) {
+              this.$alert("图片过大，请重新选择");
+              return;
             }
             resolve(val);
           });
@@ -178,15 +189,15 @@ export default {
     changeLoad(file, fileList) {},
     //图片上传成功时
     fileSuccess(res, file) {
-      if(res.data){
+      if (res.data) {
         this.stagImgList.push(res.data);
         if (this.stagImgList.length == this.limitUploadNum) {
           document
-                  .querySelector(".el-upload--picture-card")
-                  .setAttribute("style", "display:none;");
+            .querySelector(".el-upload--picture-card")
+            .setAttribute("style", "display:none;");
         }
-      }else{
-        this.fileFaild()
+      } else {
+        this.fileFaild();
       }
     },
     fileFaild() {
@@ -202,13 +213,13 @@ export default {
           .removeAttribute("style");
       }
     },
-    obtainAddress(){
+    obtainAddress() {
       let recordData = {
         path: this.$route.path,
         pageData: this.shopInfo
-      }
-      evokeWxLocation(recordData)
-    },
+      };
+      evokeWxLocation(recordData);
+    }
   },
   watch: {
     shopInfo: {
