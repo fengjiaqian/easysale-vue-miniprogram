@@ -25,12 +25,12 @@
             <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入店铺名称">
           </li>
           <li>
-            <span class="required">店铺地址</span>
+            <span class="mt-ads required">店铺地址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
               cols="30"
-              rows="2"
+              rows="3"
               placeholder="请输入店铺地址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
@@ -60,12 +60,12 @@
             <input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">
           </li>
           <li>
-            <span class="required">家庭住址</span>
+            <span class="mt-ads required">家庭住址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
               cols="30"
-              rows="2"
+              rows="3"
               placeholder="请输入家庭住址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
@@ -148,12 +148,12 @@
             <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入店铺名称">
           </li>
           <li>
-            <span class="required">店铺地址</span>
+            <span class="mt-ads required">店铺地址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
               cols="30"
-              rows="2"
+              rows="3"
               placeholder="请输入店铺地址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
