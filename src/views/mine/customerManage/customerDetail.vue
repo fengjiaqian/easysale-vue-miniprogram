@@ -33,10 +33,10 @@
       </li>
       <div class="h20"></div>
     </ul>
-    <ul class="sd-oprate">
-      <li class="sd-c-b" @click="skipTo">编辑</li>
-      <li class="sd-c-o" @click="freeze">{{customerInfo.state==1?`停用`:`启用`}}</li>
-    </ul>
+    <div class="b-oprate">
+      <span @click="freeze" class="refuse">{{customerInfo.state==1?`停用`:`启用`}}</span>
+      <span @click="skipTo">编辑</span>
+    </div>
   </div>
 </template>
 
