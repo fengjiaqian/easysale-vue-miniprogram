@@ -33,10 +33,8 @@ export function queryHomeProducts() {
 		data: {},
 		loading: true,
 	}).then((res) => {
-		console.log('resolve', res.data)
 		return Promise.resolve(res.data)
 	}).catch(res => {
-		console.log('reject', res.data)
 		return Promise.reject(res.data)
 	});
 }

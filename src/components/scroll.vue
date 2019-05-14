@@ -141,7 +141,6 @@ export default {
             pos.y < this.scroll.maxScrollY + 500 &&
             pos.y > this.scroll.maxScrollY + 400
           ) {
-            console.log("autoLoad");
             this.$emit("autoLoad");
           }
         });

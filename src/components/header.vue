@@ -17,7 +17,7 @@
       <div class="title" v-else>{{tit || title || ''}}</div>
     </div>
     <!--  -->
-    <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut">
+    <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut" v-if="showShortcutList">
       <span></span>
     </div>
     <!--  -->
@@ -67,6 +67,10 @@ export default {
     tit: {
       type: String,
       default: ""
+    },
+    showShortcutList: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

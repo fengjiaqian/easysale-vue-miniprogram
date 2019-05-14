@@ -29,9 +29,9 @@ let Alert = (options) => {
     Object.assign(instance.$data, options);
 
     return new Promise((resolve, reject) => {
-		/*fix 弹窗出来之后依旧键盘没有回收*/
+        /*fix 弹窗出来之后依旧键盘没有回收*/
         let inputs = Array.prototype.slice.call(document.querySelectorAll('input'));
-        inputs.forEach((input)=>{
+        inputs.forEach((input) => {
             input.blur();
         });
         instance.show = true;
@@ -44,7 +44,7 @@ let Alert = (options) => {
 }
 
 export default {
-	install () {
-		Vue.prototype.$alert = Alert	
-	}
+    install() {
+        Vue.prototype.$alert = Alert
+    }
 }
