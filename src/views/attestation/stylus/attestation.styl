@@ -202,6 +202,17 @@
     c(#333);
     lh(90);
     border-bottom: 1PX solid #EDEDED;
+    &.required{
+       position relative
+       &:before{
+          content "*"
+          position absolute
+          left -24px
+          top 6px
+          c(#FF5638)
+          ft(46)
+        }
+    }
   }
 
   .upload-area {
@@ -221,7 +232,7 @@
 }
 
 .identity-wrap /deep/{
-  .icon-back,.icon-shortcut{
+  .icon-shortcut{
     display none
   }
 }

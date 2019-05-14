@@ -6,7 +6,7 @@ import storage from "common/storage";
 //paramsData: shopId, name,phone,  address,customerShopName
 const identityCustomer = function (formData) {
 
-    formData.customerShopName = paramsData.shopName;
+    formData.customerShopName = formData.shopName;
     saveAsOurCompanyCustomer(formData).then(res => {
         this.$toast('认证成功')
         this.$router.push({ path: "/navi/home" });
@@ -16,7 +16,7 @@ const identityCustomer = function (formData) {
 }
 
 //paramsData: shopId, name, phone, address
-const identityEmployee = function () {
+const identityEmployee = function (formData) {
 
     applyToOurCompanyEmployee(formData).then(res => {
         this.$alert('您的申请已提交，请耐心等待店主审核').then(res => {

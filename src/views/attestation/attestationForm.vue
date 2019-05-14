@@ -21,7 +21,7 @@
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
           <li>
-            <span class="required">店铺名称</span>
+            <span>店铺名称</span>
             <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入店铺名称">
           </li>
           <li>
@@ -48,11 +48,11 @@
         </div>
         <ul class="c-form">
           <li>
-            <span>您的姓名</span>
+            <span class="required">您的姓名</span>
             <input v-model="formParam.name" maxlength="20" type="text" placeholder="请输入姓名">
           </li>
           <li>
-            <span>手机号码</span>
+            <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
           <li>
@@ -60,7 +60,7 @@
             <input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">
           </li>
           <li>
-            <span>家庭住址</span>
+            <span class="required">家庭住址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
@@ -93,16 +93,16 @@
         </div>
         <ul class="c-form">
           <li>
-            <span>您的姓名</span>
+            <span class="required">您的姓名</span>
             <input v-model="formParam.name" maxlength="20" type="text" placeholder="请输入姓名">
           </li>
           <li>
-            <span>手机号码</span>
+            <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
         </ul>
         <div class="upload-viewer">
-          <h5>上传营业执照</h5>
+          <h5 class="required">上传营业执照</h5>
           <div class="upload-area upload-license">
             <cube-upload
               ref="upload"
@@ -136,19 +136,19 @@
         </div>
         <ul class="c-form">
           <li>
-            <span>您的姓名</span>
+            <span class="required">您的姓名</span>
             <input v-model="formParam.name" maxlength="20" type="text" placeholder="请输入姓名">
           </li>
           <li>
-            <span>手机号码</span>
+            <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
           <li>
-            <span>店铺名称</span>
+            <span class="required">店铺名称</span>
             <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入店铺名称">
           </li>
           <li>
-            <span>店铺地址</span>
+            <span class="required">店铺地址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
@@ -160,7 +160,7 @@
           </li>
         </ul>
         <div class="upload-viewer">
-          <h5>门头照片</h5>
+          <h5 class="required">门头照片</h5>
           <div class="upload-area">
             <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>
           </div>
@@ -230,6 +230,7 @@ export default {
       if (passData) {
         passData = JSON.parse(passData);
         Object.assign(vm.formParam, passData.pageData);
+        vm.type = passData.pageData.type || 0;
         vm.formParam.address = passData.addressData.address;
       }
     });
@@ -293,6 +294,7 @@ export default {
     },
     //去定位地址
     obtainAddress() {
+      this.formParam.type = this.type;
       let recordData = {
         path: this.$route.path,
         pageData: this.formParam

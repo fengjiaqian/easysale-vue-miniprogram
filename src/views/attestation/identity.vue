@@ -4,10 +4,10 @@
     <div class="att-content">
       <div class="c-title">
         <h4>您的身份是</h4>
-        <p>请完善您的身份信息</p>
+        <!-- <p>请完善您的身份信息</p> -->
       </div>
       <ul class="c-list">
-        <li v-for="(item,i) in identityList" :key="i" @click="skip(i)">
+        <li v-for="(item,i) in identityList" :key="i" @click="skip(item)">
           <span :class="item.class"></span>
           <h5>{{item.title}}</h5>
           <i></i>
@@ -36,11 +36,11 @@ export default {
   methods: {
     ...mapActions(["setUserType"]),
     //跳转到认证页面
-    skip(index) {
+    skip(item) {
       const mobileNo = storage.get("mobileNo", "");
       this.$router.push({
         name: "attestationForm",
-        query: { type: index, mobileNo }
+        query: { type: item.type, mobileNo }
       });
     },
     //初始化auth
@@ -84,20 +84,24 @@ export default {
     _identityList() {
       const menus = [
         {
-          title: "我是客户",
-          class: "customer"
+          title: "我是本公司客户",
+          class: "customer",
+          type: 0
         },
         {
-          title: "我是员工",
-          class: "staff"
+          title: "我是本公司员工",
+          class: "staff",
+          type: 1
         },
         {
-          title: "我是店主",
-          class: "owner"
+          title: "我是本公司老板",
+          class: "owner",
+          type: 2
         },
         {
-          title: "申请开店",
-          class: "apply"
+          title: "我想开通其他公司平台",
+          class: "apply",
+          type: 3
         }
       ];
       //该店铺的认证状态
