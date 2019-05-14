@@ -169,5 +169,22 @@ export function queryAddressList(keyword) {
 	});
 }
 
+/**
+ * 客户申请认证店主
+ * @param {*} params  Object {name, phone, shopId, LogoIamgeUrls}
+ */
+export function customershopkeeperCertification(params) {
 
+	const url = "/dealer/customershopkeeperCertification"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
 
