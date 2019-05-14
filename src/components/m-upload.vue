@@ -8,6 +8,7 @@
       @file-success="onFileSuccess"
       @file-removed="onFileRemoved"
       @file-error="onFileError"
+      @files-added="filesAdded"
     ></cube-upload>
   </div>
 </template>
@@ -45,6 +46,18 @@ export default {
     },
     onFileError(file) {
       this.$alert("图片上传失败，请重试");
+    },
+    filesAdded(files) {
+      let hasIgnore = false;
+      const maxSize = 1 * 1024 * 1024; // 1M
+      for (let k in files) {
+        const file = files[k];
+        if (file.size > maxSize) {
+          file.ignore = true;
+          hasIgnore = true;
+        }
+      }
+      hasIgnore && this.$toast("图片尺寸过大，请压缩后重试");
     }
   }
 };
