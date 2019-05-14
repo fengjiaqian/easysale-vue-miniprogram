@@ -43,7 +43,7 @@ const identityBoss = function (formData) {
 const applyStore = function (formData) {
 
     let paramsData = Object.assign({}, formData);
-    formData.logoIamgeUrls = formData.fieldList;
+    paramsData.logoIamgeUrls = formData.fieldList;
     applyDealer(paramsData).then(res => {
         this.$toast("恭喜，您已开通线上公司");
         const { mobileNo, token, userType, shopId = "" } = res.data;
