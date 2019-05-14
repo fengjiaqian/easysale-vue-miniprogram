@@ -19,7 +19,7 @@
     </div>
     <div class="mc-item">
       <div class="left">收货地址 :</div>
-      <textarea rows="2" cols="20" class="right" v-model="address" placeholder="请填写收货地址" readonly></textarea>
+      <div class="right">{{address}}</div>
     </div>
     <div class="edit" @click="_jump">编辑</div>
   </div>
@@ -107,11 +107,11 @@ export default {
 .edit {
   width: 100%;
   height: 98px;
-  background: rgba(255, 255, 255, 1);
+  color: rgba(255, 255, 255, 1);
   position: fixed;
   bottom: 0;
   font-size: 32px;
-  color: rgba(255, 86, 56, 1);
+  background: rgba(255, 86, 56, 1);
   line-height: 98px;
   text-align: center;
 }
