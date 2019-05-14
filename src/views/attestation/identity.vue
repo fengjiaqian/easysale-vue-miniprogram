@@ -1,5 +1,6 @@
 <template>
-  <div class="identity-wrap">
+  <div class="identity-wrap pt90">
+    <m-header :isFixed="true"></m-header>
     <div class="content">
       <div class="c-title">
         <h4>您的身份是</h4>
