@@ -125,9 +125,26 @@
                 }
             }
         },
+        beforeRouteEnter (to, from, next) {
+            next(vm=>{
+                if(from.name == 'displayDetail'){
+                    vm.activeIdx = storage.get("displayLeaveIdx", "")
+                    vm.param.state = vm.activeIdx
+                    vm.switchDisplay(vm.activeIdx)
+                }else{
+                    storage.remove("displayLeaveIdx");
+                }
+            })
+        },
+        beforeRouteLeave (to, from, next) {
+            storage.set("displayLeaveIdx", this.activeIdx);
+            next()
+        },
         created() {
             storage.remove("selectedProduct");
-            this.queryProducts()
+            if(this.activeIdx == 0){
+                this.queryProducts()
+            }
         },
         mounted() {
             bus.$off("selectProduct")

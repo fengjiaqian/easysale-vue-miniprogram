@@ -266,6 +266,20 @@ function editStaff(params) {
 	});
 }
 
+//我的模块-员工管理-审核员工
+function auditStaff(params) {
+	const url = "/dealer/auditEmployee"
+	return axios({
+		method: 'post',
+		url: url,
+		data: params
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 //我的模块-角色-查询所有角色
 function queryRole(params) {
 	const url = "/role/selectStaffRoleList"
@@ -370,7 +384,7 @@ export {
 	listShopCertificationFile, queryShopInfo, editShopInfo, queryStatisticalData, queryProductPerformance, queryCustomerPerformance,
 	queryProductList, queryProductBrand, oprateManageProduct,
 	addProduct, productDetail, editProduct, queryJyProduct,
-	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole,
+	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole, auditStaff,
 	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer,
 	uploadImg, synthesisroutineimg
 }

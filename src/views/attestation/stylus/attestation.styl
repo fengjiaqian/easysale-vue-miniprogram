@@ -115,8 +115,19 @@
         mb(24)
         span{
           ft(30)
-          margin 0 24px
+          margin 0 24px 0 36px
           word-break keep-all
+          &.required{
+            position relative
+            &:before{
+              content "*"
+              position absolute
+              left -24px
+              top 6px
+              c(#FF5638)
+              ft(46)
+            }
+          }
         }
         input{
           h(102)
@@ -209,3 +220,8 @@
   }
 }
 
+.identity-wrap /deep/{
+  .icon-back,.icon-shortcut{
+    display none
+  }
+}

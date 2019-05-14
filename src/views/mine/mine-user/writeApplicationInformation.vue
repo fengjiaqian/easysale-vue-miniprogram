@@ -8,6 +8,10 @@
     </div>-->
     <div class="mc-item-hr"></div>
     <div class="mc-item">
+      <div class="left">公司名称 :</div>
+      <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入公司名称">
+    </div>
+    <div class="mc-item mt20">
       <div class="left">联系电话 :</div>
       <input
         class="right"
@@ -17,10 +21,6 @@
         placeholder="请输入手机号码"
         readonly
       >
-    </div>
-    <div class="mc-item mt20">
-      <div class="left">公司名称 :</div>
-      <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入公司名称">
     </div>
     <div class="mc-item-hr"></div>
     <div class="mc-item pre">
@@ -36,7 +36,7 @@
       >
     </div>
     <div class="uiw-pic">
-      <div class="left" style="width: 80px">上传公司形象照 :</div>
+      <div class="left" style="width: 80px">公司形象照 :</div>
       <ul class="img-list">
         <li v-for="(item,index) in stagImgList">
           <img :src="item">

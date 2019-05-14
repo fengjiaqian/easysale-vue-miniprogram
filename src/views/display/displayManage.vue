@@ -23,6 +23,7 @@
     import displayManage from "components/display/display-manage";
     import bus from "common/Bus";
     import empty from "components/empty.vue";
+    import storage from "common/storage";
     export default {
         data() {
             return {
@@ -52,6 +53,20 @@
                     return !this.displayList.length
                 }
             }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(vm=>{
+                if(from.name == 'detailManage'){
+                    vm.activeIdx = storage.get("leaveIdx", "")
+                    vm.param.state = vm.activeIdx
+                }else{
+                    storage.remove("leaveIdx");
+                }
+            })
+        },
+        beforeRouteLeave (to, from, next) {
+            storage.set("leaveIdx", this.activeIdx);
+            next()
         },
         created() {
             this.queryList()
