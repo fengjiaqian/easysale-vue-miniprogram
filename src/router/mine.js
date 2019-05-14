@@ -363,7 +363,7 @@ const mine = [
                 path: '/writeApplicationInformation',
                 name: 'writeApplicationInformation',
                 meta: {
-                    title: '申请开店',
+                    title: '申请开通公司线上平台',
                     requireAuth: true
                 },
                 component: writeApplicationInformation,

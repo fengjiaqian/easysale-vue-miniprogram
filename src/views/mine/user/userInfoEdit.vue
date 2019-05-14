@@ -1,10 +1,12 @@
 <template>
   <div v-if="domShow" class="pt90">
-    <m-header :isFixed="true"></m-header>
+    <m-header :isFixed="true" :tit="myTitle"></m-header>
     <ul class="user-info-wrap">
       <li>
-        <div>店铺名称：</div>
-        <input v-model="shopInfo.shopName" type="text" maxlength="20" placeholder="请输入店铺名称">
+        <div>{{userType==3?`店铺名称：`:`公司名称：`}}</div>
+        <input v-model="shopInfo.shopName"
+               type="text" maxlength="20"
+               :placeholder="userType==3?`请输入店铺名称`:`请输入公司名称`">
       </li>
       <li class="mb-20">
         <div>联系电话：</div>
@@ -17,18 +19,24 @@
         >
       </li>
       <li class="mb-20 uiw-info">
-        <div>店铺介绍：</div>
-        <textarea v-model="shopInfo.instruction" maxlength="180" rows="4" placeholder="请输入店铺介绍"></textarea>
+        <div>{{userType==3?`店铺介绍：`:`公司介绍：`}}</div>
+        <textarea v-model="shopInfo.instruction"
+                  maxlength="180" rows="4"
+                  :placeholder="userType==3?`请输入店铺介绍`:`请输入公司介绍`"
+        ></textarea>
       </li>
       <li class="mb-20 uiw-info info-address">
-        <div class="ia-title">店铺地址：</div>
+        <div class="ia-title">{{userType==3?`店铺地址：`:`公司地址：`}}</div>
         <div class="ia-value locate-address">
-          <textarea v-model="shopInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入店铺地址"></textarea>
+          <textarea v-model="shopInfo.address"
+                    maxlength="50" cols="30" rows="2"
+                    :placeholder="userType==3?`请输入店铺地址`:`请输入公司地址`"
+          ></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
       <li class="uiw-pic">
-        <div>门头图片：</div>
+        <div>{{userType==3?`门头照片：`:`公司形象照：`}}</div>
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
@@ -80,7 +88,10 @@ export default {
       return {
         token: token
       };
-    }
+    },
+    myTitle(){
+      return this.userType == 3 ? `店铺信息` : `公司信息`
+    },
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -116,14 +127,15 @@ export default {
     verify() {
       if (!this.achieve) return;
       const { shopName, phone, instruction } = this.shopInfo;
+      let insTitle = this.userType == 3 ? `店铺` : `公司`
       if (!shopName) {
-        this.$alert(`请输入店铺名称！`);
+        this.$alert(`请输入${insTitle}名称！`);
         return;
       } else if (!verifyPhone(phone)) {
         this.$alert(`请输入正确的手机号！`);
         return;
       } else if (!instruction) {
-        this.$alert(`请输入店铺介绍！`);
+        this.$alert(`请输入${insTitle}介绍！`);
         return;
       }
       this.saveEdit();

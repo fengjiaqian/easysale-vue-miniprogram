@@ -19,14 +19,14 @@
       >
     </div>
     <div class="mc-item mt20">
-      <div class="left">店铺名称 :</div>
-      <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入店铺名称">
+      <div class="left">公司名称 :</div>
+      <input class="right" value v-model="applyInfo.shopName" type="text" placeholder="请输入公司名称">
     </div>
     <div class="mc-item-hr"></div>
     <div class="mc-item pre">
-      <div class="left">店铺地址 :</div>
+      <div class="left">公司地址 :</div>
       <div class="locate-address right">
-        <textarea v-model="applyInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入店铺地址"></textarea>
+        <textarea v-model="applyInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入公司地址"></textarea>
       </div>
       <img
         class="location"
@@ -36,7 +36,7 @@
       >
     </div>
     <div class="uiw-pic">
-      <div class="left" style="width: 80px">上传门头照 :</div>
+      <div class="left" style="width: 80px">上传公司形象照 :</div>
       <ul class="img-list">
         <li v-for="(item,index) in stagImgList">
           <img :src="item">
@@ -128,7 +128,7 @@ export default {
       };
       applyDealer(params)
         .then(res => {
-          this.$toast("恭喜，您的店铺已经开张");
+          this.$toast("恭喜，您公司的线上平台已经开通");
           const { mobileNo, token, userType, shopId = "" } = res.data;
           storage.set("mobileNo", mobileNo);
           storage.set("token", token);
