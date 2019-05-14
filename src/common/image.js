@@ -56,7 +56,7 @@ function detectVerticalSquash(img) {
  * dataURI to blob, ref to https://gist.github.com/fupslot/5015897
  * @param dataURI
  */
-function dataURItoBuffer(dataURI){
+function dataURItoBuffer(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
     var buffer = new ArrayBuffer(byteString.length);
     var view = new Uint8Array(buffer);
@@ -68,14 +68,14 @@ function dataURItoBuffer(dataURI){
 function dataURItoBlob(dataURI) {
     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
     var buffer = dataURItoBuffer(dataURI);
-    return new Blob([buffer], {type: mimeString});
+    return new Blob([buffer], { type: mimeString });
 }
 
 /**
  * 获取图片的orientation
  * ref to http://stackoverflow.com/questions/7584794/accessing-jpeg-exif-rotation-data-in-javascript-on-the-client-side
  */
-function getOrientation(buffer){
+function getOrientation(buffer) {
     var view = new DataView(buffer);
     if (view.getUint16(0, false) != 0xFFD8) return -2;
     var length = view.byteLength, offset = 2;
@@ -104,7 +104,7 @@ function getOrientation(buffer){
  */
 function orientationHelper(canvas, ctx, orientation) {
     const w = canvas.width, h = canvas.height;
-    if(orientation > 4){
+    if (orientation > 4) {
         canvas.width = h;
         canvas.height = w;
     }
@@ -147,7 +147,7 @@ function orientationHelper(canvas, ctx, orientation) {
 function compress(file, options, callback) {
     const reader = new FileReader();
     reader.onload = function (evt) {
-        if(options.compress === false){
+        if (options.compress === false) {
             // 不启用压缩 & base64上传 的分支，不做任何处理，直接返回文件的base64编码
             file.base64 = evt.target.result;
             callback(file);
@@ -168,10 +168,10 @@ function compress(file, options, callback) {
             let h = img.height;
             let dataURL;
 
-            if(w < h && h > maxH){
+            if (w < h && h > maxH) {
                 w = parseInt(maxH * img.width / img.height);
                 h = maxH;
-            }else if(w >= h && w > maxW){
+            } else if (w >= h && w > maxW) {
                 h = parseInt(maxW * img.height / img.width);
                 w = maxW;
             }
@@ -179,23 +179,23 @@ function compress(file, options, callback) {
             canvas.width = w;
             canvas.height = h;
 
-            if(orientation > 0){
+            if (orientation > 0) {
                 orientationHelper(canvas, ctx, orientation);
             }
             ctx.drawImage(img, 0, 0, w, h / ratio);
 
-            if(/image\/jpeg/.test(file.type) || /image\/jpg/.test(file.type)){
+            if (/image\/jpeg/.test(file.type) || /image\/jpg/.test(file.type)) {
                 dataURL = canvas.toDataURL('image/jpeg', options.compress.quality);
-            }else{
-                dataURL =  canvas.toDataURL(file.type);
+            } else {
+                dataURL = canvas.toDataURL(file.type);
             }
 
-            if(options.type == 'file'){
-                if(/;base64,null/.test(dataURL) || /;base64,$/.test(dataURL)){
+            if (options.type == 'file') {
+                if (/;base64,null/.test(dataURL) || /;base64,$/.test(dataURL)) {
                     // 压缩出错，以文件方式上传的，采用原文件上传
                     console.warn('Compress fail, dataURL is ' + dataURL + '. Next will use origin file to upload.');
                     callback(file);
-                }else{
+                } else {
                     let blob = dataURItoBlob(dataURL);
                     blob.id = file.id;
                     blob.name = file.name;
@@ -203,12 +203,12 @@ function compress(file, options, callback) {
                     blob.lastModifiedDate = file.lastModifiedDate;
                     callback(blob);
                 }
-            }else{
-                if(/;base64,null/.test(dataURL) || /;base64,$/.test(dataURL)){
+            } else {
+                if (/;base64,null/.test(dataURL) || /;base64,$/.test(dataURL)) {
                     // 压缩失败，以base64上传的，直接报错不上传
                     options.onError(file, new Error('Compress fail, dataURL is ' + dataURL + '.'));
                     callback();
-                }else{
+                } else {
                     file.base64 = dataURL;
                     callback(file);
                 }

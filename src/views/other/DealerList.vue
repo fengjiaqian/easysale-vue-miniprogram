@@ -115,7 +115,7 @@ export default {
       this.loading = true;
       ListAllDealer(params)
         .then(res => {
-          if (res.data) {
+          if (res.data) { //shopType 是否已认证店主。0:认证中 1：认证通过 3：未认证
             let { dataList, pager } = res.data;
             const { currentPage, totalPage } = pager;
             if (currentPage === 1) {

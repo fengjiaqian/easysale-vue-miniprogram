@@ -4,7 +4,7 @@
     <m-header :isFixed="true"></m-header>
     <div class="upload-viewer">
       <h5>上传营业执照</h5>
-      <div class="upload-area">
+      <div class="upload-area upload-license">
         <!-- <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/> -->
         <cube-upload
           ref="upload"
@@ -67,8 +67,7 @@ export default {
             width: 1024,
             height: 1024 * 2,
             quality: 0.5
-          },
-          type: "file"
+          }
         },
         next
       );
@@ -103,7 +102,7 @@ export default {
 </script>
 
 <style lang="stylus">
-.cube-upload {
+.upload-license .cube-upload {
   .cube-upload-file, .cube-upload-btn {
     margin: 0;
     h(335);

@@ -1,7 +1,7 @@
 <template>
   <div class="identity-wrap pt90">
     <m-header :isFixed="true"></m-header>
-    <div class="content">
+    <div class="att-content">
       <div class="c-title">
         <h4>您的身份是</h4>
         <p>请完善您的身份信息</p>
@@ -23,29 +23,13 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      identityList: [
-        {
-          title: "我是客户",
-          class: "customer"
-        },
-        {
-          title: "我是员工",
-          class: "staff"
-        },
-        {
-          title: "我是店主",
-          class: "owner"
-        },
-        {
-          title: "我要认证",
-          class: "apply"
-        }
-      ]
+      identityList: []
     };
   },
   components: {},
   computed: {},
   created() {
+    this._identityList();
     this._initAuth();
   },
   mounted() {},
@@ -89,7 +73,6 @@ export default {
         "homeRefresh",
         "mineRefresh",
         "orderRefresh",
-        "currentDealer",
         "fromOrder",
         "orderPrequeryParams",
         "orderExtraParams"
@@ -97,6 +80,34 @@ export default {
       for (let key of keys) {
         storage.remove(key);
       }
+    },
+    _identityList() {
+      const menus = [
+        {
+          title: "我是客户",
+          class: "customer"
+        },
+        {
+          title: "我是员工",
+          class: "staff"
+        },
+        {
+          title: "我是店主",
+          class: "owner"
+        },
+        {
+          title: "申请开店",
+          class: "apply"
+        }
+      ];
+      //该店铺的认证状态
+      const currentDealer = storage.get("currentDealer", {});
+      let alreadyAudit = true; //默认认证或者认证中
+      if (JSON.stringify(currentDealer) != "{}") {
+        alreadyAudit = currentDealer.shopType != 2;
+      }
+      alreadyAudit && menus.splice(2, 1);
+      this.identityList = menus;
     }
   }
 };

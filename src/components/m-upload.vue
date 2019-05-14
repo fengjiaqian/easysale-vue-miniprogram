@@ -22,9 +22,7 @@ export default {
   },
   computed: {},
   created() {},
-  mounted() {
-    // this.calculateShape();
-  },
+  mounted() {},
   methods: {
     processFile(file, next) {
       compress(
@@ -32,10 +30,9 @@ export default {
         {
           compress: {
             width: 1024,
-            height: 1024 * 2,
+            height: 1024,
             quality: 0.5
-          },
-          type: "file"
+          }
         },
         next
       );
@@ -48,13 +45,6 @@ export default {
     },
     onFileError(file) {
       this.$alert("图片上传失败，请重试");
-    },
-    calculateShape() {
-      const clientW =
-        document.body.clientWidth || document.documentElement.clientWidth;
-      const w = clientW - (80 * clientW) / 750;
-      this.$refs.inner.style.width = w + "px";
-      this.$refs.inner.style.height = w / 2 + "px";
     }
   }
 };

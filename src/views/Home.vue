@@ -312,9 +312,16 @@ export default {
     queryOwnerShop() {
       if (storage.get("originUserType", 3) == 3) return false;
       queryShopInfo({}).then(res => {
-        const { shopName, shopId, phone } = res.data;
-        const ownerShop = { shopName, shopId, phone, id: shopId, owner: true };
-        //todo 带入是否认证店主字段
+        const { shopName, shopId, phone, auditState } = res.data;
+        const ownerShop = {
+          shopName,
+          shopId,
+          phone,
+          id: shopId,
+          shopType: auditState, //属性跟选择经销商页面统一
+          owner: true
+        };
+        // 经销商进行店主认证 auditState （0：认证中，1：已认证 2|3：未认证）
         storage.set("ownerShop", ownerShop);
       });
     },
@@ -432,6 +439,7 @@ export default {
     // scroll-items
     calculateHeightList() {
       var target = this.$refs.scrollMenuWrap;
+      if (!target) return [];
       this.menuHeight = target.getBoundingClientRect().height;
       let h = target.offsetTop;
       let heightList = [h];

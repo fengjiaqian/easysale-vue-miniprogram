@@ -1,9 +1,9 @@
 <template>
   <div class="att-wrap pt90">
-    <m-header :isFixed="true" :tit="myTitle"></m-header>
+    <m-header :isFixed="true" :tit="myTitle" :showShortcutList="false"></m-header>
     <section>
       <!--客户-->
-      <div class="content" v-if="type==0">
+      <div class="att-content" v-if="type==0">
         <div class="c-header">
           <div>
             <h5>填写资料</h5>
@@ -38,7 +38,7 @@
         </ul>
       </div>
       <!--员工-->
-      <div class="content" v-if="type==1">
+      <div class="att-content" v-if="type==1">
         <div class="c-header">
           <div>
             <h5>填写资料</h5>
@@ -83,7 +83,7 @@
         </ul>
       </div>
       <!--店主-->
-      <div class="content" v-if="type==2">
+      <div class="att-content" v-if="type==2">
         <div class="c-header">
           <div>
             <h5>店主认证</h5>
@@ -103,18 +103,17 @@
         </ul>
         <div class="upload-viewer">
           <h5>上传营业执照</h5>
-          <div class="upload-area">
-            <!-- <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/> -->
-            <!-- <cube-upload
+          <div class="upload-area upload-license">
+            <cube-upload
               ref="upload"
-              v-model="files"
+              v-model="fileLicenses"
               :action="uploadImgUrl"
               :process-file="processFile"
-              @files-added="addedHandler"
+              @fileLicenses-added="addedHandler"
               @file-error="errHandler"
             >
               <div class="clear-fix">
-                <cube-upload-file v-for="(file, i) in files" :file="file" :key="i"></cube-upload-file>
+                <cube-upload-file v-for="(file, i) in fileLicenses" :file="file" :key="i"></cube-upload-file>
                 <cube-upload-btn :multiple="false">
                   <div>
                     <i></i>
@@ -122,12 +121,12 @@
                   </div>
                 </cube-upload-btn>
               </div>
-            </cube-upload>-->
+            </cube-upload>
           </div>
         </div>
       </div>
       <!--开店申请-->
-      <div class="content" v-if="type==3">
+      <div class="att-content" v-if="type==3">
         <div class="c-header">
           <div>
             <h5>店铺资料</h5>
@@ -169,20 +168,29 @@
         </div>
       </div>
       <!--提交按钮-->
-      <div class="bottom-btn" :class="{'achieve':achieve}" @click="_submit">提交</div>
+      <div class="att-bottom-btn" :class="{'achieve':achieve}" @click="_submit">提交</div>
     </section>
   </div>
 </template>
 
 <script>
+import storage from "common/storage";
 import { applyDealer } from "api/fetch/endCustomer";
+import {
+  saveAsOurCompanyCustomer,
+  applyToOurCompanyEmployee,
+  auditEmployee
+} from "api/fetch/dealer";
 import mUpload from "components/m-upload.vue";
 import compress from "common/image";
 import { evokeWxLocation } from "common/location";
+import identityFn from "./attestationCommon";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      files: [], //申请店铺门头照
+      fieldList: [], //门头照
+      fileLicenses: [], //认证图片
       type: 0, //认证类型：0:客户；1:员工；2:店主；3:开店申请；
       formParam: {
         name: "",
@@ -204,7 +212,14 @@ export default {
     },
     achieve() {
       const { name, phone, shopName, address } = this.formParam;
-      return name.trim() && phone && shopName && address.trim();
+      let required = name.trim() && phone && address.trim();
+      if (this.type == 2) {
+      }
+      if (this.type == 3) {
+        //開店
+        return required && shopName.trim();
+      }
+      return required;
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -218,15 +233,23 @@ export default {
     });
   },
   created() {
-    this.fieldList = []; //认证图片
     const { type = 0, mobileNo } = this.$route.query;
     this.type = type;
     mobileNo && (this.formParam.phone = mobileNo);
   },
   mounted() {},
   methods: {
+    ...mapActions(["setUserType"]),
     limitCardId(e) {
       this.formParam.cardId = e.target.value.slice(0, 18);
+    },
+    transformPic(files = []) {
+      return files.map(item => {
+        var response = item.response;
+        if (response && response.data) {
+          return response.data;
+        }
+      });
     },
     /**m-upload */
     onFileSuccess(file) {
@@ -245,93 +268,26 @@ export default {
             width: 1024,
             height: 1024 * 2,
             quality: 0.5
-          },
-          type: "file"
+          }
         },
         next
       );
     },
-    // _submit() {
-    //   let logoIamgeUrls = this.files.map(file => {
-    //     const response = file.response;
-    //     if (response && response.data) {
-    //       return response.data;
-    //     }
-    //   });
-    //   if (!logoIamgeUrls.length) {
-    //     return this.$toast("请上传营业执照");
-    //   }
-    //   shopkeeperCertification(logoIamgeUrls)
-    //     .then(res => {
-    //       refreshTabPages();
-    //       this.$toast("认证申请已提交，请等待审核结果");
-    //       this.$router.push({ path: "/navi/mine" });
-    //     })
-    //     .catch(_ => {});
-    // },
     addedHandler() {
-      const file = this.files[0];
+      const file = this.fileLicenses[0];
       file && this.$refs.upload.removeFile(file);
     },
     errHandler(file) {
       this.$alert("图片上传失败，请重试");
     },
     _submit() {
-      //判断为空
-
-      //认证类型：0:客户；1:员工；2:店主；3:开店申请；
-      const theType = Number(this.type);
-      switch (theType) {
-        case 0:
-          setTimeout(() => {
-            this.$router.push({ path: "/navi/home" });
-          }, 2000);
-          break;
-        case 1:
-          setTimeout(() => {
-            this.$router.push({ path: "/navi/home" });
-          }, 2000);
-          break;
-        case 2:
-          setTimeout(() => {
-            //如果当前店铺是自己店铺
-            this.$router.push({ path: "/navi/home" });
-          }, 2000);
-          break;
-        case 3:
-          const { name, phone, shopName, address } = this.formParam;
-          const fieldList = this.fieldList.map(item => {
-            if (item.response) {
-              return item.response.data;
-            }
-          });
-          const params = {
-            name,
-            phone,
-            shopName,
-            address,
-            fieldList
-          };
-          applyDealer(params)
-            .then(res => {
-              this.$toast("恭喜，您已开通线上公司");
-              const { mobileNo, token, userType, shopId = "" } = res.data;
-              storage.set("mobileNo", mobileNo);
-              storage.set("token", token);
-              storage.set("originUserType", userType);
-              this.setUserType(userType);
-              shopId && storage.set("currentDealerId", shopId);
-              //todo remove currentDealer
-              storage.remove("currentDealer");
-              this.$router.push({ path: "/navi/home" });
-            })
-            .catch(err => {
-              this.$toast(err.message);
-            });
-          break;
-        default:
-          break;
+      if (!this.achieve) {
+        return this.$toast("请完善信息后提交");
       }
+      this.formParam.fileLicenses = this.transformPic(this.fileLicenses);
+      this.formParam.fieldList = this.transformPic(this.fieldList);
+      const theType = String(this.type);
+      identityFn.call(this, theType, this.formParam);
     },
     //去定位地址
     obtainAddress() {
@@ -345,7 +301,72 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import './stylus/attestation.styl';
+
+.upload-license .cube-upload {
+  .cube-upload-file, .cube-upload-btn {
+    margin: 0;
+    h(335);
+  }
+
+  .cube-upload-file {
+    margin: 0;
+
+    + .cube-upload-btn {
+      margin-top: -200px;
+      opacity: 0;
+    }
+  }
+
+  .cube-upload-file-def {
+    width: 100%;
+    height: 100%;
+
+    .cubeic-wrong {
+      display: none;
+    }
+  }
+
+  .cube-upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > div {
+      text-align: center;
+    }
+
+    i {
+      display: inline-flex;
+      squ(80);
+      mb(20);
+      pos(relative);
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 72px;
+        height: 1PX;
+        transform: translate(-50%, -50%);
+        background-color: #BDBDBD;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 72px;
+        height: 1PX;
+        transform: translate(-50%, -50%);
+        background-color: #BDBDBD;
+      }
+    }
+  }
+}
 </style>
 

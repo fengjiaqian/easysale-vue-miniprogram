@@ -126,9 +126,11 @@ export default {
   },
   methods: {
     success() {
+      preventPageScroll.recover();
       this.show = false;
     },
     fail() {
+      preventPageScroll.recover();
       this.show = false;
     }
   }

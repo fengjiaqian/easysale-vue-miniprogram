@@ -124,7 +124,7 @@ export function applyToOurCompanyEmployee(params) {
 
 /**
  * 店主审核员工接口 
- * @param {*} params  Object {dealerId, type}  dealerId 员工id;   type 1：同意 2：拒绝
+ * @param {*} params  Object {dealerId, type}  dealerId 员工id;    type 1：同意 2：拒绝
  */
 export function auditEmployee(params) {
     return axios({
