@@ -53,6 +53,7 @@ const applyStore = function (formData) {
         this.setUserType(userType);
         shopId && storage.set("currentDealerId", shopId);
         storage.remove("currentDealer");
+        storage.remove("ownerShop");
         this.$router.push({ path: "/navi/home" });
     }).catch(err => {
         this.$toast(err.message);

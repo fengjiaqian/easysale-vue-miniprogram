@@ -30,7 +30,7 @@
               v-model="formParam.address"
               maxlength="50"
               cols="30"
-              rows="2"
+              rows="3"
               placeholder="请输入店铺地址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
@@ -65,7 +65,7 @@
               v-model="formParam.address"
               maxlength="50"
               cols="30"
-              rows="2"
+              rows="3"
               placeholder="请输入家庭住址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
@@ -129,38 +129,37 @@
       <div class="att-content" v-if="type==3">
         <div class="c-header">
           <div>
-            <h5>店铺资料</h5>
+            <h5>公司信息</h5>
             <p>请填写您公司的详细资料</p>
           </div>
           <i class="icon-apply"></i>
         </div>
         <ul class="c-form">
           <li>
-            <span class="required">您的姓名</span>
-            <input v-model="formParam.name" maxlength="20" type="text" placeholder="请输入姓名">
+            <span class="required">公司名称</span>
+            <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入公司名称">
           </li>
           <li>
             <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
           <li>
-            <span class="required">店铺名称</span>
-            <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入店铺名称">
-          </li>
-          <li>
-            <span class="required">店铺地址</span>
+            <span class="required">公司地址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
               cols="30"
-              rows="2"
-              placeholder="请输入店铺地址"
+              rows="3"
+              placeholder="请输入公司地址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
           </li>
         </ul>
         <div class="upload-viewer">
-          <h5 class="required">门头照片</h5>
+          <h5 class="required">
+            公司形象照
+            <span>(公司标志/背景形象墙/前台照片)</span>
+          </h5>
           <div class="upload-area">
             <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>
           </div>
@@ -207,7 +206,12 @@ export default {
   },
   computed: {
     myTitle() {
-      const titleArray = ["我是客户", "我是员工", "我是店主", "申请开店"];
+      const titleArray = [
+        "我是客户",
+        "我是员工",
+        "我是店主",
+        "申请开通线上平台"
+      ];
       return titleArray[this.type] || "";
     },
     achieve() {
@@ -219,7 +223,9 @@ export default {
       }
       if (this.type == 3) {
         //openStore
-        return required && shopName.trim();
+        return (
+          phone && address.trim() && shopName.trim() && this.fieldList.length
+        );
       }
       return required;
     }

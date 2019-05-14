@@ -1,6 +1,8 @@
 <template>
   <div class="identity-wrap pt90">
     <m-header :isFixed="true"></m-header>
+    <!-- 欢迎访问茅台商贸公司 -->
+    <div class="att-shopname" v-if="shopName">欢迎访问{{shopName}}</div>
     <div class="att-content">
       <div class="c-title">
         <h4>您的身份是</h4>
@@ -23,6 +25,7 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
+      shopName: storage.get("currentDealer", {}).shopName || "",
       identityList: []
     };
   },
@@ -52,7 +55,8 @@ export default {
         token,
         userType,
         shareDealerId,
-        shareUserType = ""
+        shareUserType = "",
+        userState = 1
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
@@ -62,6 +66,7 @@ export default {
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);
+        storage.set("userState", userState);
         this.setUserType({ type: shareUserType || userType, refresh: false });
         //TODO 此时有可能在首页切换了店铺 并不是一定是分享的店铺  认证店主判断 。
         shareDealerId && storage.set("currentDealerId", shareDealerId);
@@ -75,7 +80,9 @@ export default {
         "orderRefresh",
         "fromOrder",
         "orderPrequeryParams",
-        "orderExtraParams"
+        "orderExtraParams",
+        "ownerShop",
+        "userState"
       ];
       for (let key of keys) {
         storage.remove(key);

@@ -43,6 +43,11 @@ export function initAccessModule(userType, auditState = '') {
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {
         if (userType == originUserType) {
+            //员工或店主审核中
+            const userState = storage.get("userState", 1);
+            if (!Number(userState)) {
+                return customerAccessModule.slice(0, 1);
+            }
             return customerAccessModule;
         }
         return customerAccessModule.slice(0, 1);

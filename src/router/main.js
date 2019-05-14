@@ -105,7 +105,8 @@ const main = [{
 		name: 'mine',
 		meta: {
 			title: '我的',
-			keepAlive: true
+			keepAlive: true,
+			requireAuth: true
 		},
 		component: Mine
 	}]

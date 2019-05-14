@@ -224,6 +224,11 @@ export default {
     } else {
       this.appIcons = appIcons.slice(0, 4);
     }
+    const userState = storage.get("userState", 1);
+    //员工或店主审核中
+    if (!Number(userState)) {
+      this.appIcons = appIcons.slice(0, 4);
+    }
     if (storage.get("homeRefresh", false)) {
       this.counter = 0;
       this.currentDealerId = storage.get("currentDealerId", "");
@@ -267,7 +272,8 @@ export default {
         token,
         userType,
         shareDealerId,
-        shareUserType = ""
+        shareUserType = "",
+        userState = 1
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
@@ -277,6 +283,7 @@ export default {
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);
+        storage.set("userState", userState);
         this.setUserType({ type: shareUserType || userType, refresh: false });
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         return false;
@@ -302,7 +309,9 @@ export default {
         "currentDealer",
         "fromOrder",
         "orderPrequeryParams",
-        "orderExtraParams"
+        "orderExtraParams",
+        "ownerShop",
+        "userState"
       ];
       for (let key of keys) {
         storage.remove(key);
@@ -321,7 +330,7 @@ export default {
           shopType: auditState, //属性跟选择经销商页面统一
           owner: true
         };
-        // 经销商进行店主认证 auditState （0：认证中，1：已认证 2|3：未认证）
+        // 经销商进行店主认证 auditState （0：认证中，1：已认证 2：未认证）
         storage.set("ownerShop", ownerShop);
       });
     },

@@ -3,7 +3,7 @@
     <m-header :isFixed="true" :tit="myTitle"></m-header>
     <ul class="user-info-wrap">
       <li>
-        <div>{{userType==3?`店铺名称：`:`公司名称：`}}</div>
+        <div>{{showStore?`店铺名称：`:`公司名称：`}}</div>
         <div>{{shopInfo.shopName}}</div>
       </li>
       <li class="mb-20">
@@ -11,15 +11,15 @@
         <div>{{shopInfo.phone}}</div>
       </li>
       <li class="mb-20 uiw-info">
-        <div>{{userType==3?`店铺介绍：`:`公司介绍：`}}</div>
+        <div>{{showStore?`店铺介绍：`:`公司介绍：`}}</div>
         <div>{{shopInfo.instruction}}</div>
       </li>
       <li class="mb-20 uiw-info">
-        <div>{{userType==3?`店铺地址：`:`公司地址：`}}</div>
+        <div>{{showStore?`店铺地址：`:`公司地址：`}}</div>
         <div>{{shopInfo.address}}</div>
       </li>
       <li class="uiw-pic">
-        <div>{{userType==3?`门头照片：`:`公司形象照：`}}</div>
+        <div>{{showStore ?`门头照片：`:`公司形象照：`}}</div>
         <ul class="img-list">
           <li v-for="item in shopInfo.logoIamgeUrls">
             <img v-lazy="item || ''">
@@ -35,19 +35,22 @@
 
 <script>
 import { queryShopInfo } from "api/fetch/mine";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      shopInfo: {}
+      myTitle: "",
+      shopInfo: {},
+      showStore: false
     };
   },
   components: {},
   computed: {
-    myTitle(){
-      return this.userType == 3 ? `店铺信息` : `公司信息`
-    },
+    ...mapGetters(["userInSwitching"])
   },
   created() {
+    this.showStore = this.userType == 3 && !this.userInSwitching;
+    this.myTitle = this.showStore ? `店铺信息` : `公司信息`;
     this.initShopInfo();
   },
   mounted() {},
