@@ -154,10 +154,11 @@ export default {
         this.$alert("上传文件大小不能超过 10MB!");
       }
       if (isIMAGE && isLt1M) {
+        let that = this
         return new Promise((resolve, reject) => {
           compress(file, function(val) {
             if (val.size / 1024 / 1024 > 1) {
-              this.$alert("图片过大，请重新选择");
+              that.$alert("图片过大，请重新选择");
               return;
             }
             resolve(val);
