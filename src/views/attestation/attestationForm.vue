@@ -214,9 +214,11 @@ export default {
       const { name, phone, shopName, address } = this.formParam;
       let required = name.trim() && phone && address.trim();
       if (this.type == 2) {
+        //identityBoss
+        return name.trim() && phone && this.fileLicenses.length;
       }
       if (this.type == 3) {
-        //開店
+        //openStore
         return required && shopName.trim();
       }
       return required;

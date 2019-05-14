@@ -1,19 +1,13 @@
-import {
-    saveAsOurCompanyCustomer,
-    applyToOurCompanyEmployee,
-    shopkeeperCertification
-} from "api/fetch/dealer";
-import { applyDealer } from "api/fetch/endCustomer";
+import { saveAsOurCompanyCustomer, applyToOurCompanyEmployee } from "api/fetch/dealer";
+import { applyDealer, customershopkeeperCertification } from "api/fetch/endCustomer";
 import storage from "common/storage";
 
 // 0:客户；1:员工；2:店主；3:开店申请；
 //paramsData: shopId, name,phone,  address,customerShopName
 const identityCustomer = function (formData) {
 
-    //请求params  && 参数检验
-    let paramsData = Object.assign({}, formData);
-    paramsData.customerShopName = paramsData.shopName;
-    saveAsOurCompanyCustomer(paramsData).then(res => {
+    formData.customerShopName = paramsData.shopName;
+    saveAsOurCompanyCustomer(formData).then(res => {
         this.$toast('认证成功')
         this.$router.push({ path: "/navi/home" });
     }).catch(err => {
@@ -22,10 +16,9 @@ const identityCustomer = function (formData) {
 }
 
 //paramsData: shopId, name, phone, address
-const identityEmployee = function (formData) {
+const identityEmployee = function () {
 
-    let paramsData = Object.assign({}, formData);
-    applyToOurCompanyEmployee(paramsData).then(res => {
+    applyToOurCompanyEmployee(formData).then(res => {
         this.$alert('您的申请已提交，请耐心等待店主审核').then(res => {
             this.$router.push({ path: "/navi/home" });
         });
@@ -34,11 +27,10 @@ const identityEmployee = function (formData) {
     })
 }
 
-//paramsData: fieldList
 const identityBoss = function (formData) {
 
-    const logoIamgeUrls = formData.fileLicenses;
-    shopkeeperCertification(logoIamgeUrls).then(res => {
+    formData.logoIamgeUrls = formData.fileLicenses;
+    customershopkeeperCertification(formData).then(res => {
         this.$alert('您的申请已提交，请耐心等待审核').then(res => {
             this.$router.push({ path: "/navi/home" });
         });
