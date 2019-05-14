@@ -33,8 +33,8 @@
       <li class="sd-c-o" @click="freeze">删除</li>
     </ul>-->
     <div class="b-oprate" v-if="staffInfo.auditState===0">
-      <span @click="audit(2)" class="refuse">审核拒绝</span>
-      <span @click="audit(1)">审核同意</span>
+      <span @click="audit('2')" class="refuse">审核拒绝</span>
+      <span @click="audit('1')">审核同意</span>
     </div>
     <div class="b-oprate" @click="skipTo" v-else>
       <span>编辑</span>
