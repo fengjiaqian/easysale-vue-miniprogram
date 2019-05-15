@@ -49,7 +49,7 @@ export function initAccessModule(userType, auditState = '') {
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {
         if (userType == originUserType) {
-            //员工或店主审核中
+            //员工或店主审核中      员工认证状态（0：认证中 1：已认证 2：未认证）
             const userState = storage.get("userState", 1);
             if (!Number(userState)) {
                 return customerAccessModule.slice(0, 1);

@@ -386,7 +386,12 @@ export default {
             const originUserType = storage.get("originUserType", 3);
             let msg = "当前店铺暂无商品,请重新选择店铺";
             if (originUserType != 3 && this.userType != 3) {
-              msg = "您的店铺暂无上架商品,请尽快添加";
+              msg = "您的店铺暂无上架商品,立即添加商品？";
+              return this.$confirm(msg)
+                .then(() => {
+                  this.$router.push({ path: "/my/productList" });
+                })
+                .catch(() => {});
             }
             return this.$toast(msg);
           }
