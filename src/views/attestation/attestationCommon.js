@@ -8,8 +8,9 @@ const identityCustomer = function (formData) {
 
     formData.customerShopName = formData.shopName;
     saveAsOurCompanyCustomer(formData).then(res => {
-        this.$toast('认证成功')
-        this.$router.push({ path: "/navi/home" });
+        this.$alert('认证成功').then(res => {
+            this.$router.push({ path: "/navi/home" });
+        });
     }).catch(err => {
         this.$toast(err.message);
     })
@@ -45,7 +46,6 @@ const applyStore = function (formData) {
     let paramsData = Object.assign({}, formData);
     paramsData.logoIamgeUrls = formData.fieldList;
     applyDealer(paramsData).then(res => {
-        this.$toast("恭喜，您已开通线上公司");
         const { mobileNo, token, userType, shopId = "" } = res.data;
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
@@ -54,7 +54,9 @@ const applyStore = function (formData) {
         shopId && storage.set("currentDealerId", shopId);
         storage.remove("currentDealer");
         storage.remove("ownerShop");
-        this.$router.push({ path: "/navi/home" });
+        this.$alert('恭喜，您已开通线上公司').then(res => {
+            this.$router.push({ path: "/navi/home" });
+        });
     }).catch(err => {
         this.$toast(err.message);
     })

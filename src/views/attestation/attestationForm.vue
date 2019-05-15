@@ -60,7 +60,7 @@
             <input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">
           </li>
           <li>
-            <span class="mt-ads required">家庭住址</span>
+            <span class="mt-ads">家庭住址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"
@@ -217,6 +217,10 @@ export default {
     achieve() {
       const { name, phone, shopName, address } = this.formParam;
       let required = name.trim() && phone && address.trim();
+      if (this.type == 1) {
+        //identityEmployee
+        return name.trim() && phone;
+      }
       if (this.type == 2) {
         //identityBoss
         return name.trim() && phone && this.fileLicenses.length;
