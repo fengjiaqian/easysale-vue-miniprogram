@@ -63,6 +63,6 @@ export function initAccessModule(userType, auditState = '') {
         dealerModule.push(companyInfo);
         return dealerModule;
     }
-    let dealerModule = dealerAccessModule.push(companyInfo)
-    return dealerModule;
+    dealerAccessModule.push(companyInfo)
+    return dealerAccessModule;
 }
