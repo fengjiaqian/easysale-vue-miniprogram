@@ -115,7 +115,8 @@ export default {
       this.loading = true;
       ListAllDealer(params)
         .then(res => {
-          if (res.data) { //shopType 是否已认证店主。0:认证中 1：认证通过 3：未认证
+          if (res.data) {
+            //shopType 是否已认证店主。0:认证中 1：认证通过 3：未认证
             let { dataList, pager } = res.data;
             const { currentPage, totalPage } = pager;
             if (currentPage === 1) {
@@ -161,6 +162,7 @@ export default {
             this.setUserType(res.data || 3);
             storage.set("currentDealerId", dealer.id);
             storage.set("currentDealer", dealer);
+            document.title = dealer.shopName;
             this.$router.push({
               path: "/navi/home"
             });
@@ -175,6 +177,7 @@ export default {
       }
       storage.set("currentDealerId", dealer.id);
       storage.set("currentDealer", dealer);
+      document.title = dealer.shopName;
       refreshTabPages();
       this.$router.push({
         path: "/navi/home"

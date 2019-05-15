@@ -349,6 +349,7 @@ export default {
       //第一次 切换  申请后 三种情况
       const storeDealer = storage.get("currentDealer", {});
       if (storeDealer.id == this.currentDealerId) {
+        document.title = storeDealer.shopName;
         return (this.currentDealer = storeDealer);
       }
       ListAllDealer({ id: this.currentDealerId }).then(res => {
@@ -357,9 +358,16 @@ export default {
           const matchItem = dataList.find(
             item => item.id == this.currentDealerId
           );
-          this.currentDealer = matchItem;
-          if (JSON.stringify(storeDealer) == "{}") {
-            storage.set("currentDealer", matchItem);
+          if (matchItem) {
+            this.currentDealer = matchItem;
+            document.title = matchItem.shopName;
+            if (JSON.stringify(storeDealer) == "{}") {
+              storage.set("currentDealer", matchItem);
+            }
+          } else {
+            this.$router.push({
+              path: "/dealerList"
+            });
           }
         } else {
           this.$router.push({
