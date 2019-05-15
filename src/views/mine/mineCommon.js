@@ -58,11 +58,10 @@ export function initAccessModule(userType, auditState = '') {
         }
         return customerAccessModule.slice(0, 1);
     }
-    if (auditState == 1) {  //已经认证了
+    if (auditState == 1) {   //已经认证了
         let dealerModule = dealerAccessModule.slice(0, 4);
         dealerModule.push(companyInfo);
         return dealerModule;
     }
-    dealerAccessModule.push(companyInfo)
-    return dealerAccessModule;
+    return [...dealerAccessModule, companyInfo];
 }
