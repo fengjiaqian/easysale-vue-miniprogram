@@ -5,11 +5,11 @@
       <ul class="add-column">
         <li>
           <span>商品名称：</span>
-          <input v-model="productModal.productName" :readonly="productType==0" type="text" maxlength="30" placeholder="请输入商品名称">
+          <input v-model="productModal.productName" type="text" maxlength="30" placeholder="请输入商品名称">
         </li>
         <li>
           <span>商品品牌：</span>
-          <input v-model="productModal.brandName" :readonly="productType==0"  unselectable="on" type="text" maxlength="30" placeholder="请输入商品品牌">
+          <input v-model="productModal.brandName" unselectable="on" type="text" maxlength="30" placeholder="请输入商品品牌">
         </li>
         <li>
           <span>商品价格：</span>
@@ -22,7 +22,7 @@
         <ul class="img-list">
           <li v-for="(item,index) in stagImgList">
             <img :src="item">
-            <i @click="deleteUploadImg(index)" v-if="productType==1"></i>
+            <i @click="deleteUploadImg(index)"></i>
           </li>
           <el-upload class="upload-wrap"
                      :action="uploadImgUrl"
@@ -38,7 +38,7 @@
       </div>
       <div class="product-introduce">
         <span>商品介绍：</span>
-        <textarea v-model="productModal.description" :readonly="productType==0" maxlength="180" rows="4" placeholder="请输入介绍文字"></textarea>
+        <textarea v-model="productModal.description" maxlength="180" rows="4" placeholder="请输入介绍文字"></textarea>
       </div>
       <div class="set-property">
         <h5>设置商品属性</h5>
@@ -89,7 +89,7 @@
           displayState: 0,//陈列
           displayAward: '',//陈列奖励（选填）
         },
-        productType: 0, //产品类型 0=酒批 1=经销商 ,酒批产品只能改价格
+        productType: 0, //产品类型 0=酒批 1=经销商
         limitUploadNum: 1,//上传图片的限制张数
         stagImgList: [],//暂存的图片数组
         achieve: false,//能否保存
@@ -117,7 +117,7 @@
       this.productType = productInfo.productType
       this.stagImgList = [productInfo.productImageUrl]
       //酒批产品只能修改价格
-      if(this.stagImgList.length == this.limitUploadNum || this.productType == 0){
+      if(this.stagImgList.length == this.limitUploadNum){
         this.$nextTick(() => {
           document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
         });
@@ -128,30 +128,23 @@
       verify(){
         if(!this.achieve) return;
         const { productName,brandName,price,description } = this.productModal
-        if(this.productType == 0){
-          if(!price){
-            this.$alert(`请输入商品价格！`)
-            return
-          }
-        }else{
-          if(!productName){
-            this.$alert(`请输入商品名称！`)
-            return
-          }else if(!brandName){
-            this.$alert(`请输入商品品牌！`)
-            return
-          }else if(!price){
-            this.$alert(`请输入商品价格！`)
-            return
-          }else if(!description){
-            this.$alert(`请输入商品介绍信息！`)
-            return
-          }
+        if(!productName){
+          this.$alert(`请输入商品名称！`)
+          return
+        }else if(!brandName){
+          this.$alert(`请输入商品品牌！`)
+          return
+        }else if(!price){
+          this.$alert(`请输入商品价格！`)
+          return
+        }else if(!description){
+          this.$alert(`请输入商品介绍信息！`)
+          return
         }
         this.saveAdd()
       },
       saveAdd(){
-        if(this.stagImgList.length&&this.productType==1){
+        if(this.stagImgList.length){
           this.productModal.productImageUrl = this.stagImgList[0]
         }
         if(this.productModal.displayState==0){
@@ -237,19 +230,10 @@
       productModal: {
         handler(newVal, oldVal) {
           const { productName,brandName,price,priceUnit,specification,description,productImageUrl } = newVal
-          //酒批productType=0 只能修改价格
-          if(this.productType == 0){
-            if(price){
-              this.achieve = true
-            }else{
-              this.achieve = false
-            }
+          if(productName && brandName && price && priceUnit && specification && description && productImageUrl){
+            this.achieve = true
           }else{
-            if(productName && brandName && price && priceUnit && specification && description && productImageUrl){
-              this.achieve = true
-            }else{
-              this.achieve = false
-            }
+            this.achieve = false
           }
         },
         deep: true

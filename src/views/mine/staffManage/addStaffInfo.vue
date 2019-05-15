@@ -130,21 +130,12 @@
       //验证添加商品所需字段
       verify(){
         if(!this.achieve) return;
-        const { name,phone,address,hireDate,cardId } = this.staffInfo
+        const { name,phone } = this.staffInfo
         if(!name){
           this.$alert(`请输入员工姓名！`)
           return
         }else if(!verifyPhone(phone)){
           this.$alert(`请输入正确的员工手机号！`)
-          return
-        }else if(!address){
-          this.$alert(`请选择员工的地址！`)
-          return
-        }else if(!verifyIdCard(cardId)){
-          this.$alert(`请输入正确的员工身份证号！`)
-          return
-        }else if(!hireDate){
-          this.$alert(`请选择入职日期！`)
           return
         }
         if(this.canSave){
@@ -196,8 +187,8 @@
     watch: {
       staffInfo: {
         handler(newVal, oldVal) {
-          const { name,phone,address,hireDate,cardId } = newVal
-          if(name && phone && hireDate && address && cardId){
+          const { name,phone } = newVal
+          if(name && phone){
             this.achieve = true
           }else{
             this.achieve = false
