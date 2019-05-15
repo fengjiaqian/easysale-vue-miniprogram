@@ -311,6 +311,19 @@ export default {
   }
 }
 
+
+.company {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/company_icon.png');
+    }
+  }
+
+  .enter-item-txt {
+    border-top: 1PX solid #ededed !important;
+  }
+}
+
 .setting {
   mt(20);
 

@@ -39,6 +39,12 @@ const customerAccessModule = [
     }
 ]
 
+const companyInfo = {
+    title: "公司信息",
+    class: "company",
+    path: "/my/userInfo"
+}
+
 export function initAccessModule(userType, auditState = '') {
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {
@@ -53,7 +59,9 @@ export function initAccessModule(userType, auditState = '') {
         return customerAccessModule.slice(0, 1);
     }
     if (auditState == 1) {  //已经认证了
-        return dealerAccessModule.slice(0, 4);
+        let dealerModule = dealerAccessModule.slice(0, 4);
+        dealerModule.push(companyInfo);
+        return dealerModule;
     }
-    return dealerAccessModule;
+    return dealerAccessModule.push(companyInfo);
 }
