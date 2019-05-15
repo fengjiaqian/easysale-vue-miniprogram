@@ -20,6 +20,7 @@ const identityCustomer = function (formData) {
 const identityEmployee = function (formData) {
 
     applyToOurCompanyEmployee(formData).then(res => {
+        storage.set("userState", 0);   //控制开店导航
         this.$alert('您的申请已提交，请耐心等待店主审核').then(res => {
             this.$router.push({ path: "/navi/home" });
         });
@@ -33,6 +34,7 @@ const identityBoss = function (formData) {
     formData.logoIamgeUrls = formData.fileLicenses;
     customershopkeeperCertification(formData).then(res => {
         this.$alert('您的申请已提交，请耐心等待审核').then(res => {
+            storage.set("userState", 0); //控制开店导航
             this.$router.push({ path: "/navi/home" });
         });
     }).catch(err => {
@@ -51,8 +53,7 @@ const applyStore = function (formData) {
         storage.set("token", token);
         storage.set("originUserType", userType);
         this.setUserType(userType);
-        shopId && storage.set("currentDealerId", shopId);
-        storage.remove("currentDealer");
+        shopId && storage.set("currentDealerId", shopId);//返回有问题
         storage.remove("ownerShop");
         this.$alert('恭喜，您已开通线上公司').then(res => {
             this.$router.push({ path: "/navi/home" });
