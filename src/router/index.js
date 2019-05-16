@@ -47,9 +47,15 @@ router.beforeEach((to, from, next) => {
 
     let $el = document.querySelector('.loading-message');
     $el && $el.parentNode.removeChild($el);
-
+    const token = storage.get('token', "");
+    const routeRequireGuidance = storage.get('routeRequireGuidance', 0);
+    //引导认证控制
+    if (routeRequireGuidance && to.meta.requireGuidence && token) {
+        Vue.prototype.title = '认证';
+        return next({ path: "/identity" });
+    }
     if (to.meta.requireAuth) {
-        if (storage.get('token', "")) {
+        if (token) {
             to.meta.title && (Vue.prototype.title = to.meta.title)
             return next();
         }
@@ -58,12 +64,11 @@ router.beforeEach((to, from, next) => {
                 url: `/pages/mobile/mobile`
             });
         }
-    } else {
-        isNeedRefreshHome.call(from);
-        isNeedRefreshOrder.call(from);
-        isNeedRefreshMine.call(from);
-        to.meta.title && (Vue.prototype.title = to.meta.title)
-        next()
     }
+    isNeedRefreshHome.call(from);
+    isNeedRefreshOrder.call(from);
+    isNeedRefreshMine.call(from);
+    to.meta.title && (Vue.prototype.title = to.meta.title)
+    next()
 })
 export default router
