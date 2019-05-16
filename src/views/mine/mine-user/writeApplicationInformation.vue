@@ -37,26 +37,10 @@
     </div>
     <div class="uiw-pic">
       <div class="left" style="width: 80px">公司形象照 :</div>
-      <ul class="img-list">
-        <li v-for="(item,index) in stagImgList">
-          <img :src="item">
-          <i @click="deleteUploadImg(index)"></i>
-        </li>
-        <el-upload
-          class="upload-wrap"
-          :action="uploadImgUrl"
-          list-type="picture-card"
-          :headers="headers"
-          :before-upload="onBeforeUpload"
-          :on-change="changeLoad"
-          :on-success="fileSuccess"
-          :on-error="fileFaild"
-          accept="image/*"
-        ></el-upload>
-      </ul>
+      <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
     </div>
     <div class="logos-desc">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
-    <div class="edit" @click="_applyDealer()" :class="{'can-operate': canOperate}">保存</div>
+    <div class="edit" @click="verify()" :class="{'can-operate': canOperate}">保存</div>
   </div>
 </template>
 
@@ -65,6 +49,8 @@ import { applyDealer, findCustomerOwerInfo } from "api/fetch/endCustomer";
 import storage from "common/storage";
 import { evokeWxLocation } from "common/location";
 import { compress } from "common/util";
+import uploadFile from "components/upload-file";
+import bus from "common/Bus";
 import { mapActions } from "vuex";
 export default {
   data() {
@@ -76,8 +62,12 @@ export default {
         address: ""
       },
       stagImgList: [], //暂存的图片数组
-      limitUploadNum: 3 //上传图片的限制张数
+      limitUploadNum: 3, //上传图片的限制张数
+      logoIamgeUrls: [],
     };
+  },
+  components: {
+    uploadFile
   },
   computed: {
     canOperate() {
@@ -107,12 +97,31 @@ export default {
   created() {
     this.applyInfo.phone = this.$route.query.mobileNo;
   },
+  mounted() {
+    bus.$off("uploadImgUrls")
+    bus.$on("uploadImgUrls", (data) => {
+      this.logoIamgeUrls = data || []
+      this._applyDealer()
+    });
+  },
   methods: {
     ...mapActions(["setUserType"]),
+    //验证添加商品所需字段
+    verify() {
+      if (!this.canOperate) return false;
+      const fileLength =  this.$refs.uploadFile.fileList.length
+      if(fileLength){
+        //上传图片
+        this.$refs.uploadFile.submitFile(fileLength)
+        return;
+      }else{
+        this._applyDealer()
+      }
+    },
+
     //TODO: 带入电话号码和姓名
     //TODO: 上传参数加入图片
     _applyDealer() {
-      if (!this.canOperate) return false;
       const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
       const regExp = new RegExp(partter);
       if (!regExp.test(this.applyInfo.phone)) {
@@ -124,7 +133,7 @@ export default {
         phone,
         shopName,
         address,
-        logoIamgeUrls: this.stagImgList.filter(item => !!item)
+        logoIamgeUrls: this.logoIamgeUrls
       };
       applyDealer(params)
         .then(res => {
@@ -143,59 +152,7 @@ export default {
           this.$toast(err.message);
         });
     },
-    //图片上传前验证
-    onBeforeUpload(file) {
-      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
-      const isLt1M = file.size / 1024 / 1024 < 10;
-      if (!isIMAGE) {
-        this.$alert("上传文件只能是图片格式!");
-      }
-      if (!isLt1M) {
-        this.$alert("上传文件大小不能超过 10MB!");
-      }
-      if (isIMAGE && isLt1M) {
-        let that = this
-        return new Promise((resolve, reject) => {
-          compress(file, function(val) {
-            if (val.size / 1024 / 1024 > 1) {
-              that.$alert("图片过大，请重新选择");
-              return;
-            }
-            resolve(val);
-          });
-        });
-      } else {
-        return false;
-      }
-    },
-    //图片上传成功时
-    fileSuccess(res, file) {
-      if (res.data) {
-        this.stagImgList.push(res.data);
-        if (this.stagImgList.length == this.limitUploadNum) {
-          document
-            .querySelector(".el-upload--picture-card")
-            .setAttribute("style", "display:none;");
-        }
-      } else {
-        this.fileFaild();
-      }
-    },
-    //图片上传失败
-    fileFaild() {
-      this.$alert("图片上传失败，请重试！");
-    },
-    //删除图片
-    deleteUploadImg(idx) {
-      this.stagImgList = this.stagImgList.filter((item, index) => {
-        return idx != index;
-      });
-      if (this.stagImgList.length < this.limitUploadNum) {
-        document
-          .querySelector(".el-upload--picture-card")
-          .removeAttribute("style");
-      }
-    },
+
     //去小程序定位地址
     obtainAddress() {
       storage.set("ApplyToLocation", true);
