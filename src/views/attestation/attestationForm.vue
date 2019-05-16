@@ -395,7 +395,21 @@ export default {
   }
 }
 .license-pic /deep/{
-
+  .upload-wrap{
+    width 100%
+  }
+  .el-upload--picture-card{
+    width: 100%;
+    height 335px !important
+    background-image: url('../../assets/images/shangchuanzhaopian.png') !important;
+  }
+  li{
+    width 100%
+    img{
+      width: 100% !important
+      height 335px !important
+    }
+  }
 }
 </style>
 
