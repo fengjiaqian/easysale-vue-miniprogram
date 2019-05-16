@@ -3,12 +3,13 @@ import { applyDealer, customershopkeeperCertification } from "api/fetch/endCusto
 import storage from "common/storage";
 
 // 0:客户；1:员工；2:店主；3:开店申请；
-//paramsData: shopId, name,phone,  address,customerShopName
+//paramsData: shopId, name,phone,  address, customerShopName
 const identityCustomer = function (formData) {
 
     formData.customerShopName = formData.shopName;
     saveAsOurCompanyCustomer(formData).then(res => {
         this.$alert('认证成功').then(res => {
+            storage.remove("routeRequireGuidance");
             this.$router.push({ path: "/navi/home" });
         });
     }).catch(err => {
@@ -21,6 +22,7 @@ const identityEmployee = function (formData) {
 
     applyToOurCompanyEmployee(formData).then(res => {
         storage.set("userState", 0);   //控制开店导航
+        storage.remove("routeRequireGuidance");
         this.$alert('您的申请已提交，请耐心等待店主审核').then(res => {
             this.$router.push({ path: "/navi/home" });
         });
@@ -33,8 +35,9 @@ const identityBoss = function (formData) {
 
     formData.logoIamgeUrls = formData.fileLicenses;
     customershopkeeperCertification(formData).then(res => {
+        storage.set("userState", 0); //控制开店导航
+        storage.remove("routeRequireGuidance");
         this.$alert('您的申请已提交，请耐心等待审核').then(res => {
-            storage.set("userState", 0); //控制开店导航
             this.$router.push({ path: "/navi/home" });
         });
     }).catch(err => {
@@ -49,6 +52,7 @@ const applyStore = function (formData) {
     paramsData.logoIamgeUrls = formData.fieldList;
     applyDealer(paramsData).then(res => {
         const { mobileNo, token, userType, shopId = "" } = res.data;
+        storage.set("routeRequireGuidance",0);
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);

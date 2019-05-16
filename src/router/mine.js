@@ -364,7 +364,8 @@ const mine = [
                 name: 'writeApplicationInformation',
                 meta: {
                     title: '申请开通公司线上平台',
-                    requireAuth: true
+                    requireAuth: true,
+                    requireGuidence: true
                 },
                 component: writeApplicationInformation,
             }

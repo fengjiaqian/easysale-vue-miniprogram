@@ -60,8 +60,7 @@ export function initAccessModule(userType, auditState = '') {
     }
     if (auditState == 1) {   //已经认证了
         let dealerModule = dealerAccessModule.slice(0, 4);
-        dealerModule.push(companyInfo);
-        return dealerModule;
+        return [...dealerModule, companyInfo];
     }
     return [...dealerAccessModule, companyInfo];
 }

@@ -254,11 +254,13 @@ export default {
         path: "/dealerList"
       });
     }
-    //页头显示经销商名称
-    this._ListCurrentDealer();
-    this._listDealerLogs();
-    this._queryHomeProducts();
-    this.queryOwnerShop();
+    //避免重复请求
+    if (!storage.get("homeRefresh", false)) {
+      this._ListCurrentDealer();
+      this._listDealerLogs();
+      this._queryHomeProducts();
+      this.queryOwnerShop();
+    }
   },
   mounted() {},
   methods: {
@@ -273,7 +275,8 @@ export default {
         userType,
         shareDealerId,
         shareUserType = "",
-        userState = 1
+        userState = 1,
+        routeRequireGuidance = 0
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
@@ -284,6 +287,7 @@ export default {
         storage.set("token", token);
         storage.set("originUserType", userType);
         storage.set("userState", userState);
+        storage.set("routeRequireGuidance", Number(routeRequireGuidance));
         this.setUserType({ type: shareUserType || userType, refresh: false });
         shareDealerId && storage.set("currentDealerId", shareDealerId);
         return false;
