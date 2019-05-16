@@ -5,7 +5,7 @@
       <ul class="add-column">
         <li>
           <span>商品名称：</span>
-          <input v-model="productModal.productName" type="text" maxlength="30" placeholder="请输入商品名称">
+          <input v-model="productModal.productName" type="text" maxlength="50" placeholder="请输入商品名称">
         </li>
         <li>
           <span>商品品牌：</span>
@@ -27,24 +27,7 @@
       </ul>
       <div class="upload-pic-wrap">
         <span>商品图片</span>
-        <ul class="img-list">
-          <li v-for="(item,index) in fileList">
-            <img :src="item.url">
-            <i @click="deleteUploadImg(index)"></i>
-          </li>
-          <el-upload class="upload-wrap"
-                     :action="uploadImgUrl"
-                     list-type="picture-card"
-                     :headers="headers"
-                     :before-upload="onBeforeUpload"
-                     :on-change="changeLoad"
-                     :on-progress="progressUpload"
-                     :on-success="fileSuccess"
-                     :on-error="fileFaild"
-                     accept="image/*"
-                     >
-          </el-upload>
-        </ul>
+        <upload-file :img-list="imgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
       </div>
       <div class="product-introduce">
         <span>商品介绍：</span>
@@ -77,9 +60,11 @@
 </template>
 
 <script>
-  import { addProduct,uploadImg } from "api/fetch/mine";
+  import { addProduct } from "api/fetch/mine";
   import storage from "common/storage";
   import { compress } from "common/util";
+  import uploadFile from "components/upload-file";
+  import bus from "common/Bus";
   export default {
     data() {
       return {
@@ -102,10 +87,11 @@
         limitUploadNum: 1,//上传图片的限制张数
         fileList: [],
         achieve: false,//能否保存
+        imgList: [],
       };
     },
     components: {
-
+      uploadFile
     },
     computed: {
       headers() {
@@ -115,6 +101,13 @@
       }
       }
     },
+    mounted() {
+      bus.$off("uploadImgUrls")
+      bus.$on("uploadImgUrls", (data) => {
+        this.productModal.productImageUrl = data[0] || ''
+        this.saveAdd()
+      });
+    },
     created() {
       const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
     },
@@ -122,27 +115,13 @@
       //验证添加商品所需字段
       verify(){
         if(!this.achieve) return;
-        const { productName,brandName,price,priceUnit,specification,description } = this.productModal
-        if(!productName){
-          this.$alert(`请输入商品名称！`)
-          return
-        }else if(!brandName){
-          this.$alert(`请输入商品品牌！`)
-          return
-        }else if(!price){
-          this.$alert(`请输入商品价格！`)
-          return
-        }else if(!priceUnit){
-          this.$alert(`请输入商品价格单位！`)
-          return
-        }else if(!specification){
-          this.$alert(`请输入商品规格！`)
-          return
-        }else if(!description){
-          this.$alert(`请输入商品介绍信息！`)
-          return
+        const fileLength =  this.$refs.uploadFile.fileList.length
+        if(!fileLength){
+          this.$toast("请添加图片");
+          return;
         }
-        this.saveAdd()
+        //上传图片
+        this.$refs.uploadFile.submitFile()
       },
       saveAdd(){
         let param = {
@@ -155,6 +134,7 @@
           }
         });
       },
+
       //图片上传前验证
       onBeforeUpload(file){
         const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
@@ -204,6 +184,7 @@
       fileFaild(){
         this.$alert('图片上传失败！')
       },
+      //删除选中图片
       deleteUploadImg(idx){
         this.fileList = this.fileList.filter((item,index)=>{
           return idx!=index
@@ -213,6 +194,7 @@
         }
         this.productModal.productImageUrl = ''
       },
+
       //切换商品设置
       switchOption(type){
         const {returnState,awardState,displayState} = this.productModal
@@ -234,8 +216,8 @@
     watch: {
       productModal: {
         handler(newVal, oldVal) {
-          const { productName,brandName,price,priceUnit,specification,description,productImageUrl } = newVal
-          if(productName && brandName && price && priceUnit && specification && description && productImageUrl){
+          const { productName,brandName,price,priceUnit,specification } = newVal
+          if(productName && brandName && price && priceUnit && specification){
             this.achieve = true
           }else{
             this.achieve = false

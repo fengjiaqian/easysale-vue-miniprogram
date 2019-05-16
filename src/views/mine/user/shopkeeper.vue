@@ -6,7 +6,7 @@
       <h5>上传营业执照</h5>
       <div class="upload-area upload-license">
         <!-- <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/> -->
-        <cube-upload
+        <!--<cube-upload
           ref="upload"
           v-model="files"
           :action="uploadImgUrl"
@@ -23,11 +23,12 @@
               </div>
             </cube-upload-btn>
           </div>
-        </cube-upload>
+        </cube-upload>-->
+        <upload-file :img-list="imgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
       </div>
     </div>
 
-    <a href="javascript:;" class="authenticate-btn" @click="_submit">立即认证</a>
+    <a href="javascript:;" class="authenticate-btn" @click="verify">立即认证</a>
   </div>
 </template>
 
@@ -37,19 +38,31 @@ import storage from "common/storage";
 import compress from "common/image";
 import { refreshTabPages } from "common/authStorage";
 import mUpload from "components/m-upload.vue";
+import uploadFile from "components/upload-file";
+import bus from "common/Bus";
 import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      files: []
+      files: [],
+      imgList: [],
+      limitUploadNum: 1,
+      logoIamgeUrls: []
     };
   },
   components: {
-    mUpload
+    mUpload,
+    uploadFile
   },
   computed: {},
   created() {},
-  mounted() {},
+  mounted() {
+    bus.$off("uploadImgUrls")
+    bus.$on("uploadImgUrls", (data) => {
+      this.logoIamgeUrls = data || []
+      this._submit()
+    });
+  },
   methods: {
     ...mapActions(["setUserType"]),
     // onFileSuccess(file) {
@@ -72,17 +85,15 @@ export default {
         next
       );
     },
-    _submit() {
-      let logoIamgeUrls = this.files.map(file => {
-        const response = file.response;
-        if (response && response.data) {
-          return response.data;
-        }
-      });
-      if (!logoIamgeUrls.length) {
+    verify() {
+      const fileLength =  this.$refs.uploadFile.fileList.length
+      if (!fileLength) {
         return this.$toast("请上传营业执照");
       }
-      shopkeeperCertification(logoIamgeUrls)
+      this.$refs.uploadFile.submitFile()
+    },
+    _submit() {
+      shopkeeperCertification(this.logoIamgeUrls)
         .then(res => {
           refreshTabPages();
           this.$toast("认证申请已提交，请等待审核结果");
