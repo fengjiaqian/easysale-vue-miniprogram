@@ -102,15 +102,15 @@ export default {
               this.$router.push({ path: "/my/shopkeeper" });
             })
             .catch(() => {});
-        }
-        if (this.auditState == 0) {
+        } else if (this.auditState == 0) {
           this.$confirm("您的店铺正在认证中，查看详情？")
             .then(() => {
               this.$router.push({ path: "/my/authentication" });
             })
             .catch(() => {});
+        } else {
+          path == "/my/statistical";
         }
-        return false;
       }
       //认证控制
       if (path == "/my/shopkeeper" && this.auditState == 0) {
@@ -310,7 +310,6 @@ export default {
     border-top: 1PX solid #ededed !important;
   }
 }
-
 
 .company {
   .enter-item-img {
