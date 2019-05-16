@@ -52,13 +52,13 @@ const applyStore = function (formData) {
     paramsData.logoIamgeUrls = formData.fieldList;
     applyDealer(paramsData).then(res => {
         const { mobileNo, token, userType, shopId = "" } = res.data;
+        storage.set("routeRequireGuidance",0);
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);
         this.setUserType(userType);
         shopId && storage.set("currentDealerId", shopId);//返回有问题
         storage.remove("ownerShop");
-        storage.remove("routeRequireGuidance");
         this.$alert('恭喜，您已开通线上公司').then(res => {
             this.$router.push({ path: "/navi/home" });
         });
