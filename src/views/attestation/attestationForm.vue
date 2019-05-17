@@ -104,11 +104,7 @@
         <div class="upload-viewer">
           <h5 class="required">上传营业执照</h5>
           <div class="upload-area upload-license">
-            <upload-file
-                    class="license-pic"
-                    :img-list="imgList"
-                    :limit-num="1"
-                    ref="uploadFile"></upload-file>
+            <upload-file class="license-pic" :img-list="imgList" :limit-num="1" ref="uploadFile"></upload-file>
           </div>
         </div>
       </div>
@@ -190,7 +186,7 @@ export default {
         cardId: ""
       }, //提交参数
       imgList: [],
-      limitUploadNum: 3,
+      limitUploadNum: 3
     };
   },
   components: {
@@ -220,9 +216,7 @@ export default {
       }
       if (this.type == 3) {
         //openStore
-        return (
-          phone && address.trim() && shopName.trim()
-        );
+        return phone && address.trim() && shopName.trim();
       }
       return required;
     }
@@ -244,14 +238,14 @@ export default {
     mobileNo && (this.formParam.phone = mobileNo);
   },
   mounted() {
-    bus.$off("uploadImgUrls")
-    bus.$on("uploadImgUrls", (data) => {
-      if(this.type==2){
-        this.formParam.fileLicenses = data || []
-      }else{
-        this.formParam.fieldList = data || []
+    bus.$off("uploadImgUrls");
+    bus.$on("uploadImgUrls", data => {
+      if (this.type == 2) {
+        this.formParam.fileLicenses = data || [];
+      } else {
+        this.formParam.fieldList = data || [];
       }
-      this._submit()
+      this._submit();
     });
   },
   methods: {
@@ -298,14 +292,17 @@ export default {
     },
     verify() {
       if (!this.achieve) return this.$toast("请完善信息后提交");
-      const fileLength =  this.$refs.uploadFile.fileList.length
-      if(fileLength){
-        //上传图片
-        this.$refs.uploadFile.submitFile(fileLength)
-        return;
-      }else{
-        this._submit()
+      if (this.type == 2 || this.type == 3) {
+        const fileLength = this.$refs.uploadFile.fileList.length;
+        if (fileLength) {
+          //上传图片
+          this.$refs.uploadFile.submitFile(fileLength);
+        } else {
+          this._submit();
+        }
+        return false;
       }
+      this._submit();
     },
     _submit() {
       //this.formParam.fileLicenses = this.transformPic(this.fileLicenses);
@@ -394,25 +391,30 @@ export default {
     }
   }
 }
-.upload-license{
-  background-color transparent !important;
-  border none !important;
+
+.upload-license {
+  background-color: transparent !important;
+  border: none !important;
 }
-.license-pic /deep/{
-  .upload-wrap{
-    width 100%
-  }
-  .el-upload--picture-card{
+
+.license-pic /deep/ {
+  .upload-wrap {
     width: 100%;
-    height 335px !important
-    background-image: url('../../assets/images/shangchuanzhaopian.png') !important;
-    background-color transparent;
   }
-  li{
-    width 100%
-    img{
-      width: 100% !important
-      height 335px !important
+
+  .el-upload--picture-card {
+    width: 100%;
+    height: 335px !important;
+    background-image: url('../../assets/images/shangchuanzhaopian.png') !important;
+    background-color: transparent;
+  }
+
+  li {
+    width: 100%;
+
+    img {
+      width: 100% !important;
+      height: 335px !important;
     }
   }
 }
