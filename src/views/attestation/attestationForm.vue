@@ -394,6 +394,10 @@ export default {
     }
   }
 }
+.upload-license{
+  background-color transparent !important;
+  border none !important;
+}
 .license-pic /deep/{
   .upload-wrap{
     width 100%
@@ -402,6 +406,7 @@ export default {
     width: 100%;
     height 335px !important
     background-image: url('../../assets/images/shangchuanzhaopian.png') !important;
+    background-color transparent;
   }
   li{
     width 100%

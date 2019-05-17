@@ -24,7 +24,11 @@
             </cube-upload-btn>
           </div>
         </cube-upload>-->
-        <upload-file :img-list="imgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
+        <upload-file
+                class="license-pic"
+                :img-list="imgList"
+                :limit-num="limitUploadNum"
+                ref="uploadFile"></upload-file>
       </div>
     </div>
 
@@ -209,5 +213,27 @@ export default {
   c(#fff);
   text-c();
   bg($color-theme);
+}
+.upload-license{
+  background-color transparent !important;
+  border none !important;
+}
+.license-pic /deep/{
+  .upload-wrap{
+    width 100%
+  }
+  .el-upload--picture-card{
+    width: 100%;
+    height 335px !important
+    background-image: url('../../../assets/images/shangchuanzhaopian.png') !important;
+    background-color transparent;
+  }
+  li{
+    width 100%
+    img{
+      width: 100% !important
+      height 335px !important
+    }
+  }
 }
 </style>
