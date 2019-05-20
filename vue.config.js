@@ -73,7 +73,7 @@ module.exports = {
     },
     css: {
         modules: false,
-        extract: false,
+        extract: IS_PROD,
         sourceMap: false,
         loaderOptions: {
             stylus: {
