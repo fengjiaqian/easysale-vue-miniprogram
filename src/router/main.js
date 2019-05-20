@@ -106,7 +106,8 @@ const main = [{
 		meta: {
 			title: '我的',
 			keepAlive: true,
-			requireAuth: true
+			requireAuth: true,
+			requireGuidence: true
 		},
 		component: Mine
 	}]
@@ -136,6 +137,7 @@ const main = [{
 	name: 'orderSubmit',
 	meta: {
 		title: '订单提交',
+		requireGuidence: true
 	},
 	component: OrderSubmit,
 }, {

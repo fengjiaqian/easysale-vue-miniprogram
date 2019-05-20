@@ -45,23 +45,7 @@
       </li>
       <li class="uiw-pic">
         <div>{{showStore?`门头照片：`:`公司形象照：`}}</div>
-        <ul class="img-list">
-          <li v-for="(item,index) in stagImgList">
-            <img :src="item">
-            <i @click="deleteUploadImg(index)"></i>
-          </li>
-          <el-upload
-            class="upload-wrap"
-            :action="uploadImgUrl"
-            list-type="picture-card"
-            :headers="headers"
-            :before-upload="onBeforeUpload"
-            :on-change="changeLoad"
-            :on-success="fileSuccess"
-            :on-error="fileFaild"
-            accept="image/*"
-          ></el-upload>
-        </ul>
+        <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
       </li>
     </ul>
     <div class="user-info-edit save" :class="[achieve ? 'save' : 'disable']" @click="verify">保存</div>
@@ -74,6 +58,8 @@ import storage from "common/storage";
 import { verifyPhone } from "common/validate";
 import { compress } from "common/util";
 import { evokeWxLocation } from "common/location";
+import uploadFile from "components/upload-file";
+import bus from "common/Bus";
 import { mapGetters } from "vuex";
 export default {
   data() {
@@ -92,7 +78,9 @@ export default {
       achieve: false
     };
   },
-  components: {},
+  components: {
+    uploadFile
+  },
   computed: {
     ...mapGetters(["userInSwitching"]),
     headers() {
@@ -117,7 +105,13 @@ export default {
     this.myTitle = this.showStore ? `店铺信息` : `公司信息`;
     this.initShopInfo();
   },
-  mounted() {},
+  mounted() {
+    bus.$off("uploadImgUrls")
+    bus.$on("uploadImgUrls", (data) => {
+      this.shopInfo.logoIamgeUrls = data || []
+      this.saveEdit()
+    });
+  },
   methods: {
     limitPhone(e) {
       this.shopInfo.phone = e.target.value.slice(0, 11);
@@ -149,11 +143,17 @@ export default {
         this.$alert(`请输入${insTitle}介绍！`);
         return;
       }
-      this.saveEdit();
+      const fileLength =  this.$refs.uploadFile.fileList.length
+      if(fileLength){
+        //上传图片
+        this.$refs.uploadFile.submitFile(fileLength)
+        return;
+      }else{
+        this.saveEdit()
+      }
     },
     //保存修改
     saveEdit() {
-      this.shopInfo.logoIamgeUrls = this.stagImgList;
       let param = this.shopInfo;
       editShopInfo(param).then(res => {
         if (res.result === "success") {
@@ -161,58 +161,6 @@ export default {
           this.$router.push({ path: "/my/userInfo" });
         }
       });
-    },
-    //图片上传前验证
-    onBeforeUpload(file) {
-      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
-      const isLt1M = file.size / 1024 / 1024 < 10;
-      if (!isIMAGE) {
-        this.$alert("上传文件只能是图片格式!");
-      }
-      if (!isLt1M) {
-        this.$alert("上传文件大小不能超过 10MB!");
-      }
-      if (isIMAGE && isLt1M) {
-        let that = this
-        return new Promise((resolve, reject) => {
-          compress(file, function(val) {
-            if (val.size / 1024 / 1024 > 1) {
-              that.$alert("图片过大，请重新选择");
-              return;
-            }
-            resolve(val);
-          });
-        });
-      } else {
-        return false;
-      }
-    },
-    changeLoad(file, fileList) {},
-    //图片上传成功时
-    fileSuccess(res, file) {
-      if (res.data) {
-        this.stagImgList.push(res.data);
-        if (this.stagImgList.length == this.limitUploadNum) {
-          document
-            .querySelector(".el-upload--picture-card")
-            .setAttribute("style", "display:none;");
-        }
-      } else {
-        this.fileFaild();
-      }
-    },
-    fileFaild() {
-      this.$alert("图片上传失败，请重试！");
-    },
-    deleteUploadImg(idx) {
-      this.stagImgList = this.stagImgList.filter((item, index) => {
-        return idx != index;
-      });
-      if (this.stagImgList.length < this.limitUploadNum) {
-        document
-          .querySelector(".el-upload--picture-card")
-          .removeAttribute("style");
-      }
     },
     obtainAddress() {
       let recordData = {

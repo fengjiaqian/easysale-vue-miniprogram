@@ -97,20 +97,20 @@ export default {
         if (this.auditState == 2) {
           const msg =
             "您的店铺尚未认证，认证需要上传营业执照照片，是否立即认证？";
-          this.$confirm(msg)
+          return this.$confirm(msg)
             .then(() => {
               this.$router.push({ path: "/my/shopkeeper" });
             })
             .catch(() => {});
-        }
-        if (this.auditState == 0) {
-          this.$confirm("您的店铺正在认证中，查看详情？")
+        } else if (this.auditState == 0) {
+          return this.$confirm("您的店铺正在认证中，查看详情？")
             .then(() => {
               this.$router.push({ path: "/my/authentication" });
             })
             .catch(() => {});
+        } else {
+          path == "/my/statistical";
         }
-        return false;
       }
       //认证控制
       if (path == "/my/shopkeeper" && this.auditState == 0) {
@@ -303,6 +303,18 @@ export default {
   .enter-item-img {
     span {
       background-image: url('../../assets/images/manager_icon.png');
+    }
+  }
+
+  .enter-item-txt {
+    border-top: 1PX solid #ededed !important;
+  }
+}
+
+.company {
+  .enter-item-img {
+    span {
+      background-image: url('../../assets/images/company_icon.png');
     }
   }
 

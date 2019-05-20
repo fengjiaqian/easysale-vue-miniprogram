@@ -5,40 +5,29 @@
       <ul class="add-column">
         <li>
           <span>商品名称：</span>
-          <input v-model="productModal.productName" :readonly="productType==0" type="text" maxlength="30" placeholder="请输入商品名称">
+          <input v-model="productModal.productName" type="text" maxlength="50" placeholder="请输入商品名称">
         </li>
         <li>
           <span>商品品牌：</span>
-          <input v-model="productModal.brandName" :readonly="productType==0"  unselectable="on" type="text" maxlength="30" placeholder="请输入商品品牌">
+          <input v-model="productModal.brandName" unselectable="on" type="text" maxlength="30" placeholder="请输入商品品牌">
         </li>
         <li>
           <span>商品价格：</span>
           <input v-model="productModal.price" type="number" class="price" placeholder="请输入商品价格">
           <i>元</i>
         </li>
+        <li>
+          <span>备注：</span>
+          <input v-model="productModal.remark" type="text" maxlength="20" placeholder="请输入备注">
+        </li>
       </ul>
       <div class="upload-pic-wrap">
         <span>商品图片</span>
-        <ul class="img-list">
-          <li v-for="(item,index) in stagImgList">
-            <img :src="item">
-            <i @click="deleteUploadImg(index)" v-if="productType==1"></i>
-          </li>
-          <el-upload class="upload-wrap"
-                     :action="uploadImgUrl"
-                     list-type="picture-card"
-                     :headers="headers"
-                     :before-upload="onBeforeUpload"
-                     :on-change="changeLoad"
-                     :on-success="fileSuccess"
-                     :on-error="fileFaild"
-                     accept="image/*">
-          </el-upload>
-        </ul>
+        <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
       </div>
       <div class="product-introduce">
         <span>商品介绍：</span>
-        <textarea v-model="productModal.description" :readonly="productType==0" maxlength="180" rows="4" placeholder="请输入介绍文字"></textarea>
+        <textarea v-model="productModal.description" maxlength="180" rows="4" placeholder="请输入介绍文字"></textarea>
       </div>
       <div class="set-property">
         <h5>设置商品属性</h5>
@@ -70,6 +59,8 @@
   import { editProduct } from "api/fetch/mine";
   import storage from "common/storage";
   import { compress } from "common/util";
+  import uploadFile from "components/upload-file";
+  import bus from "common/Bus";
   export default {
     data() {
       return {
@@ -83,13 +74,14 @@
           priceUnit: '',//价格单位
           productType: '',//商品类型
           specification: '',//产品规格
+          remark: '',//价格备注
           effectiveDate: null,//生效时间
           returnState: 0,//退换
           awardState: 0,//兑奖
           displayState: 0,//陈列
           displayAward: '',//陈列奖励（选填）
         },
-        productType: 0, //产品类型 0=酒批 1=经销商 ,酒批产品只能改价格
+        productType: 0, //产品类型 0=酒批 1=经销商
         limitUploadNum: 1,//上传图片的限制张数
         stagImgList: [],//暂存的图片数组
         achieve: false,//能否保存
@@ -101,15 +93,16 @@
       };
     },
     components: {
-
+      uploadFile
     },
     computed: {
-      headers() {
-        const token = storage.get("token", "");
-        return {
-          'token': token,
-        }
-      }
+    },
+    mounted() {
+      bus.$off("uploadImgUrls")
+      bus.$on("uploadImgUrls", (data) => {
+        this.productModal.productImageUrl = data[0] || ''
+        this.saveAdd()
+      });
     },
     created() {
       let productInfo = JSON.parse(localStorage.getItem('productInfo'))
@@ -117,7 +110,7 @@
       this.productType = productInfo.productType
       this.stagImgList = [productInfo.productImageUrl]
       //酒批产品只能修改价格
-      if(this.stagImgList.length == this.limitUploadNum || this.productType == 0){
+      if(this.stagImgList.length == this.limitUploadNum){
         this.$nextTick(() => {
           document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
         });
@@ -127,33 +120,16 @@
       //验证添加商品所需字段
       verify(){
         if(!this.achieve) return;
-        const { productName,brandName,price,description } = this.productModal
-        if(this.productType == 0){
-          if(!price){
-            this.$alert(`请输入商品价格！`)
-            return
-          }
+        const fileLength =  this.$refs.uploadFile.fileList.length
+        if(fileLength){
+          //上传图片
+          this.$refs.uploadFile.submitFile()
+          return;
         }else{
-          if(!productName){
-            this.$alert(`请输入商品名称！`)
-            return
-          }else if(!brandName){
-            this.$alert(`请输入商品品牌！`)
-            return
-          }else if(!price){
-            this.$alert(`请输入商品价格！`)
-            return
-          }else if(!description){
-            this.$alert(`请输入商品介绍信息！`)
-            return
-          }
+          this.saveAdd()
         }
-        this.saveAdd()
       },
       saveAdd(){
-        if(this.stagImgList.length&&this.productType==1){
-          this.productModal.productImageUrl = this.stagImgList[0]
-        }
         if(this.productModal.displayState==0){
           this.productModal.displayAward = ''
         }
@@ -163,57 +139,6 @@
             this.$router.go(-1)
           }
         });
-      },
-      //图片上传前验证
-      onBeforeUpload(file){
-        const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
-        const isLt1M = file.size / 1024 / 1024 < 10;
-        if (!isIMAGE) {
-          this.$alert('上传文件只能是图片格式!');
-        }
-        if (!isLt1M) {
-          this.$alert('上传文件大小不能超过 10MB!');
-        }
-        if(isIMAGE && isLt1M){
-          let that = this
-          return new Promise((resolve, reject)=>{
-            compress(file, function(val) {
-              if( val.size/1024/1024 > 1 ){
-                that.$alert('图片过大，请重新选择');
-                return
-              }
-              resolve(val)
-            })
-          })
-        }else{
-          return false
-        }
-      },
-      changeLoad(file, fileList){
-
-      },
-      //图片上传成功时
-      fileSuccess(res, file) {
-        if(res.data){
-          this.stagImgList.push(res.data)
-          if(this.stagImgList.length == this.limitUploadNum){
-            document.querySelector('.el-upload--picture-card').setAttribute('style', 'display:none;')
-          }
-        }else{
-          this.fileFaild()
-        }
-      },
-      fileFaild(){
-        this.$alert('图片上传失败，请重试！')
-      },
-      //删除图片
-      deleteUploadImg(idx){
-        this.stagImgList = this.stagImgList.filter((item,index)=>{
-          return idx!=index
-        })
-        if(this.stagImgList.length < this.limitUploadNum){
-          document.querySelector('.el-upload--picture-card').removeAttribute('style')
-        }
       },
       //切换商品设置
       switchOption(type){
@@ -236,20 +161,11 @@
     watch: {
       productModal: {
         handler(newVal, oldVal) {
-          const { productName,brandName,price,priceUnit,specification,description,productImageUrl } = newVal
-          //酒批productType=0 只能修改价格
-          if(this.productType == 0){
-            if(price){
-              this.achieve = true
-            }else{
-              this.achieve = false
-            }
+          const { productName,brandName,price,priceUnit,specification } = newVal
+          if(productName && brandName && price && priceUnit && specification){
+            this.achieve = true
           }else{
-            if(productName && brandName && price && priceUnit && specification && description && productImageUrl){
-              this.achieve = true
-            }else{
-              this.achieve = false
-            }
+            this.achieve = false
           }
         },
         deep: true

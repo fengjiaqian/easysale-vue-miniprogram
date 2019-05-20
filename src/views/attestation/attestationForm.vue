@@ -104,24 +104,7 @@
         <div class="upload-viewer">
           <h5 class="required">上传营业执照</h5>
           <div class="upload-area upload-license">
-            <cube-upload
-              ref="upload"
-              v-model="fileLicenses"
-              :action="uploadImgUrl"
-              :process-file="processFile"
-              @fileLicenses-added="addedHandler"
-              @file-error="errHandler"
-            >
-              <div class="clear-fix">
-                <cube-upload-file v-for="(file, i) in fileLicenses" :file="file" :key="i"></cube-upload-file>
-                <cube-upload-btn :multiple="false">
-                  <div>
-                    <i></i>
-                    <p style="color:#bdbdbd;font-size: 14px">添加营业执照</p>
-                  </div>
-                </cube-upload-btn>
-              </div>
-            </cube-upload>
+            <upload-file class="license-pic" :img-list="imgList" :limit-num="1" ref="uploadFile"></upload-file>
           </div>
         </div>
       </div>
@@ -161,13 +144,14 @@
             <span>(公司标志/背景形象墙/前台照片)</span>
           </h5>
           <div class="upload-area">
-            <m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>
+            <!--<m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>-->
+            <upload-file :img-list="imgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
           </div>
           <div class="logos-desc">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
         </div>
       </div>
       <!--提交按钮-->
-      <div class="att-bottom-btn" :class="{'achieve':achieve}" @click="_submit">提交</div>
+      <div class="att-bottom-btn" :class="{'achieve':achieve}" @click="verify">提交</div>
     </section>
   </div>
 </template>
@@ -185,6 +169,8 @@ import compress from "common/image";
 import { evokeWxLocation } from "common/location";
 import identityFn from "./attestationCommon";
 import { mapActions } from "vuex";
+import uploadFile from "components/upload-file";
+import bus from "common/Bus";
 export default {
   data() {
     return {
@@ -198,11 +184,14 @@ export default {
         address: "",
         hireDate: "",
         cardId: ""
-      } //提交参数
+      }, //提交参数
+      imgList: [],
+      limitUploadNum: 3
     };
   },
   components: {
-    mUpload
+    mUpload,
+    uploadFile
   },
   computed: {
     myTitle() {
@@ -217,15 +206,17 @@ export default {
     achieve() {
       const { name, phone, shopName, address } = this.formParam;
       let required = name.trim() && phone && address.trim();
+      if (this.type == 1) {
+        //identityEmployee
+        return name.trim() && phone;
+      }
       if (this.type == 2) {
         //identityBoss
-        return name.trim() && phone && this.fileLicenses.length;
+        return name.trim() && phone;
       }
       if (this.type == 3) {
         //openStore
-        return (
-          phone && address.trim() && shopName.trim() && this.fieldList.length
-        );
+        return phone && address.trim() && shopName.trim();
       }
       return required;
     }
@@ -246,7 +237,17 @@ export default {
     this.type = type;
     mobileNo && (this.formParam.phone = mobileNo);
   },
-  mounted() {},
+  mounted() {
+    bus.$off("uploadImgUrls");
+    bus.$on("uploadImgUrls", data => {
+      if (this.type == 2) {
+        this.formParam.fileLicenses = data || [];
+      } else {
+        this.formParam.fieldList = data || [];
+      }
+      this._submit();
+    });
+  },
   methods: {
     ...mapActions(["setUserType"]),
     limitCardId(e) {
@@ -289,12 +290,24 @@ export default {
     errHandler(file) {
       this.$alert("图片上传失败，请重试");
     },
-    _submit() {
-      if (!this.achieve) {
-        return this.$toast("请完善信息后提交");
+    verify() {
+      if (!this.achieve) return this.$toast("请完善信息后提交");
+      if (this.type == 2 || this.type == 3) {
+        const fileLength = this.$refs.uploadFile.fileList.length;
+        if (fileLength) {
+          //上传图片
+          this.$refs.uploadFile.submitFile(fileLength);
+        } else {
+          this._submit();
+        }
+        return false;
       }
-      this.formParam.fileLicenses = this.transformPic(this.fileLicenses);
-      this.formParam.fieldList = this.transformPic(this.fieldList);
+      this._submit();
+    },
+    _submit() {
+      //this.formParam.fileLicenses = this.transformPic(this.fileLicenses);
+      //this.formParam.fieldList = this.transformPic(this.fieldList);
+
       const theType = String(this.type);
       identityFn.call(this, theType, this.formParam);
     },
@@ -375,6 +388,33 @@ export default {
         transform: translate(-50%, -50%);
         background-color: #BDBDBD;
       }
+    }
+  }
+}
+
+.upload-license {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.license-pic /deep/ {
+  .upload-wrap {
+    width: 100%;
+  }
+
+  .el-upload--picture-card {
+    width: 100%;
+    height: 335px !important;
+    background-image: url('../../assets/images/shangchuanzhaopian.png') !important;
+    background-color: transparent;
+  }
+
+  li {
+    width: 100%;
+
+    img {
+      width: 100% !important;
+      height: 335px !important;
     }
   }
 }

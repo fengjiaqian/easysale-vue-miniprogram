@@ -15,6 +15,7 @@ import './assets/stylus/index.styl'
 import { Toast, Alert, Confirm } from './plugins/dialog/index.js'
 import mixin from 'common/rootMixin'
 import './plugins/element.js'
+import SparkMD5 from 'common/spark-md5-3.0.0.min'
 
 Vue.use(ElementUI);
 Vue.use(Toast)

@@ -16,6 +16,10 @@
             <div class="D-price">
                 <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
             </div>
+            <div class="D-price">
+                备注：
+                <span>{{product.remark}}</span>
+            </div>
             <!-- 退换，兑奖，陈列 标签 -->
             <div class="D-options" v-if="product.returnState || product.awardState || product.displayState">
                 <div class="tags" v-if="sourceType==''">

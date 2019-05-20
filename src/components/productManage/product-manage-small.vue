@@ -14,6 +14,7 @@
           <span>规格 {{product.specification}}</span>
           <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
         </div>
+        <div class="remark-wrap">备注：{{product.remark}}</div>
       </div>
     </div>
   </div>

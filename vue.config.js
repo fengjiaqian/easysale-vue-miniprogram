@@ -101,6 +101,11 @@ module.exports = {
         hotOnly: true,
         disableHostCheck: true,
         proxy: {
+            '/2019': {
+                target: 'http://easysale.cn-bj.ufileos.com/',
+                ws: false,
+                changeOrigin: true
+            },
             '/': {
                 //target: 'http://192.168.0.25:5201/', //lidengfeng
                 //target: 'http://192.168.0.221:5201/', //chenchuxiang
