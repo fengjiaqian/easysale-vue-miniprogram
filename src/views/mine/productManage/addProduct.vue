@@ -24,6 +24,10 @@
           <span>产品规格：</span>
           <input v-model="productModal.specification" type="text" maxlength="10" placeholder="请输入产品规格">
         </li>
+        <li>
+          <span>备注：</span>
+          <input v-model="productModal.remark" type="text" maxlength="20" placeholder="请输入备注">
+        </li>
       </ul>
       <div class="upload-pic-wrap">
         <span>商品图片</span>
@@ -75,6 +79,7 @@
           price: '',
           productImageUrl: '',
           description: '',
+          remark: '',
           priceUnit: '',
           productType: 1, //类型 0=酒批 1=经销商
           specification: '',
