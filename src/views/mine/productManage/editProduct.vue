@@ -16,6 +16,10 @@
           <input v-model="productModal.price" type="number" class="price" placeholder="请输入商品价格">
           <i>元</i>
         </li>
+        <li>
+          <span>备注：</span>
+          <input v-model="productModal.remark" type="text" maxlength="20" placeholder="请输入备注">
+        </li>
       </ul>
       <div class="upload-pic-wrap">
         <span>商品图片</span>
@@ -70,6 +74,7 @@
           priceUnit: '',//价格单位
           productType: '',//商品类型
           specification: '',//产品规格
+          remark: '',//价格备注
           effectiveDate: null,//生效时间
           returnState: 0,//退换
           awardState: 0,//兑奖

@@ -11,6 +11,7 @@
         <h5 class="name">{{product.productName}}</h5>
         <div style="flex:1;"></div>
         <div class="price">规格：{{product.specification}}</div>
+        <div class="price">备注：{{product.remark}}</div>
       </div>
     </div>
   </div>
