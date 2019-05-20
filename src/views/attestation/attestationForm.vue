@@ -55,31 +55,31 @@
             <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
-          <li>
-            <span>身份证号</span>
-            <input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">
-          </li>
-          <li>
-            <span class="mt-ads required">家庭住址</span>
-            <textarea
-              v-model="formParam.address"
-              maxlength="50"
-              cols="30"
-              rows="3"
-              placeholder="请输入家庭住址"
-            ></textarea>
-            <i @click="obtainAddress" class="position"></i>
-          </li>
-          <li>
-            <span>入职日期</span>
-            <el-date-picker
-              class="date-pick-wrap"
-              v-model="formParam.hireDate"
-              type="date"
-              placeholder="请选择入职日期"
-            ></el-date-picker>
-            <i class="extension"></i>
-          </li>
+          <!--<li>-->
+            <!--<span>身份证号</span>-->
+            <!--<input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">-->
+          <!--</li>-->
+          <!--<li>-->
+            <!--<span class="mt-ads required">家庭住址</span>-->
+            <!--<textarea-->
+              <!--v-model="formParam.address"-->
+              <!--maxlength="50"-->
+              <!--cols="30"-->
+              <!--rows="3"-->
+              <!--placeholder="请输入家庭住址"-->
+            <!--&gt;</textarea>-->
+            <!--<i @click="obtainAddress" class="position"></i>-->
+          <!--</li>-->
+          <!--<li>-->
+            <!--<span>入职日期</span>-->
+            <!--<el-date-picker-->
+              <!--class="date-pick-wrap"-->
+              <!--v-model="formParam.hireDate"-->
+              <!--type="date"-->
+              <!--placeholder="请选择入职日期"-->
+            <!--&gt;</el-date-picker>-->
+            <!--<i class="extension"></i>-->
+          <!--</li>-->
         </ul>
       </div>
       <!--店主-->
