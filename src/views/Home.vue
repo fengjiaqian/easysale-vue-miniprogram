@@ -961,7 +961,7 @@ export default {
   align-items: center;
   position: absolute;
   top:23px;
-  right:32px;
+  right:42px;
   i {
     inline();
     w(48);
@@ -972,7 +972,7 @@ export default {
     background-position: center;
   }
   span{
-    font-size:16px;top:-14px;position: relative;
+    font-size:30px;top:-14px;position: relative;
   }
 }
 .cube-pulldown-loaded span {
