@@ -172,6 +172,7 @@ import scroll from "components/scroll.vue";
 
 import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
 import { queryShopInfo ,synthesisroutineimg} from "api/fetch/mine";
+import { findCustomerOwerInfo } from "api/fetch/endCustomer";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -562,43 +563,63 @@ export default {
       if((currentDealer.shopName) && shopId){
         const avatarImg = this.avatarUrl;
         const nickName = this.nickName;
-        if(avatarImg.length >0 && nickName.length > 0){
-          let params = {
-            avatarImg: avatarImg,
-            userText: nickName+'邀请您访问',
-            shopText: `${"「" + currentDealer.shopName + "」"}`
-          };
-          if (!this.lock) {
-            this.lock = true;
-            synthesisroutineimg(params)
-                    .then(res => {
-                      if (res.data) {
-                        let resultData = res.data;
-                        resultData.shopId = shopId;
-                        resultData = JSON.stringify(resultData);
-                        resultData = encodeURIComponent(resultData);
-                        const jumpUrl = encodeURIComponent(`navi/mine`);
-                        const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${resultData}`;
-                        window.wx.miniProgram.navigateTo({
-                          url: path
-                        });
-                      }
-                      this.lock = false;
-                    })
-                    .catch(res => {
-                      this.lock = false;
-                      this.$toast("分享失败，请点击重试。");
-                    });
-          }
+        if(avatarImg && nickName){
+            this._share(avatarImg, nickName, currentDealer);
           // setTimeout(() => {
           //   this.lock = false;
           // }, 2000);
         }else{
-          this.$toast("分享失败,刷新重试。");
+          //查询用户头像信息
+          findCustomerOwerInfo().then(res => {
+            if (res.data) {
+              this.nickName = res.data.wxNickName;
+              this.avatarUrl = res.data.iamgeUrl;
+              this._share(this.avatarUrl, this.nickName, currentDealer);
+              this._storageUserInfo(this.nickName, this.avatarUrl);
+            } else {
+              this.$toast("获取头像失败,请稍后重试。");
+            }
+          }).catch(err => {
+            this.$toast("获取头像失败,请稍后重试。");
+          })
+
         }
 
       }else{
         this.$toast("请重新选择店铺进行分享。");
+      }
+    },
+    _storageUserInfo(nickName, avatarUrl) {
+      avatarUrl && storage.set("avatarUrl", decodeURIComponent(avatarUrl));
+      nickName && storage.set("nickName", decodeURIComponent(nickName));
+    },
+    _share(avatarImg, nickName,currentDealer) {
+      let params = {
+        avatarImg: avatarImg,
+        userText: nickName+'邀请您访问',
+        shopText: `${"「" + currentDealer.shopName + "」"}`
+      };
+      if (!this.lock) {
+        this.lock = true;
+        synthesisroutineimg(params)
+                .then(res => {
+                  if (res.data) {
+                    let resultData = res.data;
+                    resultData.shopId = currentDealer.id;
+                    resultData = JSON.stringify(resultData);
+                    resultData = encodeURIComponent(resultData);
+                    const jumpUrl = encodeURIComponent(`navi/mine`);
+                    const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${resultData}`;
+                    window.wx.miniProgram.navigateTo({
+                      url: path
+                    });
+                  }
+                  this.lock = false;
+                })
+                .catch(res => {
+                  this.lock = false;
+                  this.$toast("分享失败，请点击重试。");
+                });
       }
     }
   },
