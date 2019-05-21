@@ -55,7 +55,7 @@
             <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
-          <li>
+        <!--  <li>
             <span>身份证号</span>
             <input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">
           </li>
@@ -79,7 +79,7 @@
               placeholder="请选择入职日期"
             ></el-date-picker>
             <i class="extension"></i>
-          </li>
+          </li>-->
         </ul>
       </div>
       <!--店主-->
