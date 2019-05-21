@@ -1,4 +1,5 @@
 <template>
+
   <div id="home" ref="scrollDom">
     <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
@@ -9,7 +10,13 @@
         <em></em>
       </div>
       <search-bar :jump="true"></search-bar>
+
+      <div class="user-code" @click="sharexcx">
+        <i></i>&nbsp
+        <span>分享</span>
+      </div>
     </div>
+
     <div class="view-wrapper">
       <!-- 定位导航 -->
       <div class="fixed-nav" v-show="showFixed">
@@ -75,6 +82,8 @@
               </cube-slide>
             </div>
           </div>
+
+
           <!--  -->
           <ul class="home-icons clearfix">
             <li v-for="(item, index) in appIcons">
@@ -162,7 +171,7 @@ import product from "components/product.vue";
 import scroll from "components/scroll.vue";
 
 import { queryHomeProducts, ListProduct, ListAllDealer } from "api/fetch/home";
-import { queryShopInfo } from "api/fetch/mine";
+import { queryShopInfo ,synthesisroutineimg} from "api/fetch/mine";
 import { ListDealerLogs } from "api/fetch/dealer";
 import { addClass, removeClass } from "common/dom";
 import { transformProductList } from "common/productUtil";
@@ -172,6 +181,7 @@ export default {
   name: "home",
   data() {
     return {
+      lock:false,
       counter: 0,
       showFixed: false,
       appIcons: appIcons.slice(0, 4),
@@ -262,7 +272,9 @@ export default {
       this.queryOwnerShop();
     }
   },
-  mounted() {},
+  mounted() {
+    this.lock = false;
+  },
   methods: {
     ...mapActions(["saveCartCount", "setUserType"]),
     //初始化auth
@@ -539,6 +551,52 @@ export default {
           break;
       }
       jumpPath && this.$router.push({ path: jumpPath, query });
+    },
+    sharexcx(){
+      const currentDealer = storage.get("currentDealer") || {};
+      const shopId = currentDealer.id || "";
+      //不存在店铺数据的 时候不走分享 直接报错
+      if((currentDealer.shopName) && shopId){
+        let avatarImg = storage.get("avatarUrl", "");
+        let nickName = storage.get("nickName", "");
+        if(avatarImg.length >0 && nickName.length > 0){
+          let params = {
+            avatarImg: avatarImg,
+            userText: nickName+'邀请您访问',
+            shopText: `${"「" + currentDealer.shopName + "」"}`
+          };
+          if (!this.lock) {
+            this.lock = true;
+            synthesisroutineimg(params)
+                    .then(res => {
+                      if (res.data) {
+                        let resultData = res.data;
+                        resultData.shopId = shopId;
+                        resultData = JSON.stringify(resultData);
+                        resultData = encodeURIComponent(resultData);
+                        const jumpUrl = encodeURIComponent(`navi/mine`);
+                        const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${resultData}`;
+                        window.wx.miniProgram.navigateTo({
+                          url: path
+                        });
+                      }
+                      this.lock = false;
+                    })
+                    .catch(res => {
+                      this.lock = false;
+                      this.$toast("分享失败，请点击重试。");
+                    });
+          }
+          // setTimeout(() => {
+          //   this.lock = false;
+          // }, 2000);
+        }else{
+          this.$toast("请在我的,点击绑定授权登录在进行分享操作。");
+        }
+
+      }else{
+        this.$toast("网络异常,稍后再试。");
+      }
     }
   },
   watch: {
@@ -862,10 +920,12 @@ export default {
   top: 0;
   left: 0;
   z-index: 200;
-
+  display:flex;
+  align-items:center;
   .search-bar-wrap {
     pos(static);
     width: auto;
+    margin-left:18px;
   }
 
   .dealer-name {
@@ -893,8 +953,28 @@ export default {
       vm();
     }
   }
-}
 
+
+}
+.user-code {
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top:23px;
+  right:32px;
+  i {
+    inline();
+    w(48);
+    h(48);
+    background: url('./../assets/images/ic_fengxiang.png') no-repeat center center #FFF;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  span{
+    font-size:16px;top:-14px;position: relative;
+  }
+}
 .cube-pulldown-loaded span {
   ft(12);
 }
