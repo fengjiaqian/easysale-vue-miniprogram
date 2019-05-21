@@ -16,8 +16,7 @@
             <div class="D-price">
                 <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
             </div>
-            <div class="D-price">
-                备注：
+            <div class="p-remark">
                 <span>{{product.remark}}</span>
             </div>
             <!-- 退换，兑奖，陈列 标签 -->
@@ -356,6 +355,13 @@
 
     .s-fail {
         background: #BDBDBD !important;
+    }
+    .p-remark {
+        bg(#fff);
+        c(#FF5500);
+        ft(28);
+        pl(24);
+        lh(46);
     }
 
     .D-options {
