@@ -11,7 +11,7 @@
       </div>
       <search-bar :jump="true"></search-bar>
 
-      <div class="user-code" @click="sharexcx">
+      <div class="user-code" @click="shareShop">
         <i></i>&nbsp
         <span>分享</span>
       </div>
@@ -552,7 +552,8 @@ export default {
       }
       jumpPath && this.$router.push({ path: jumpPath, query });
     },
-    sharexcx(){
+    //分享店铺
+    shareShop(){
       const currentDealer = storage.get("currentDealer") || {};
       const shopId = currentDealer.id || "";
       //不存在店铺数据的 时候不走分享 直接报错
@@ -591,11 +592,11 @@ export default {
           //   this.lock = false;
           // }, 2000);
         }else{
-          this.$toast("请在我的,点击绑定授权登录在进行分享操作。");
+          this.$toast("分享失败,刷新重试。");
         }
 
       }else{
-        this.$toast("网络异常,稍后再试。");
+        this.$toast("请重新选择店铺进行分享。");
       }
     }
   },
