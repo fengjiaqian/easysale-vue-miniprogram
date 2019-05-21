@@ -605,7 +605,7 @@ export default {
                 .then(res => {
                   if (res.data) {
                     let resultData = res.data;
-                    resultData.shopId = shopId;
+                    resultData.shopId = currentDealer.id;
                     resultData = JSON.stringify(resultData);
                     resultData = encodeURIComponent(resultData);
                     const jumpUrl = encodeURIComponent(`navi/mine`);
