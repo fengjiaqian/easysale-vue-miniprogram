@@ -22,7 +22,10 @@
           </div>
           <div style="flex:1;"></div>
           <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
-            <div class="priceremark">{{product.remark}}</div>
+          <h5 class="name">
+            <i v-if="product.remark" :class="'s-success'">{{product.remark}}</i>
+          </h5>
+
 
         </div>
       </div>

@@ -16,9 +16,13 @@
             <div class="D-price">
                 <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
             </div>
-            <div class="p-remark">
-                <span>{{product.remark}}</span>
+            <div class="D-price">
+                <!--<span v-if="product.remark" :class="[product.remark!=null ? 'p-remark' : '']">{{product.remark}}</span>-->
+                <h5 class="name">
+                    <i v-if="product.remark" :class="'s-success'">{{product.remark}}</i>
+                </h5>
             </div>
+
             <!-- 退换，兑奖，陈列 标签 -->
             <div class="D-options" v-if="product.returnState || product.awardState || product.displayState">
                 <div class="tags" v-if="sourceType==''">
@@ -301,6 +305,26 @@
             }
         }
     }
+    .s-success {
+        font-size: 0.647059rem;
+        color: #fff;
+        -webkit-border-radius: 0.117647rem;
+        border-radius: 0.117647rem;
+        padding: 0 0.235294rem;
+        margin-right: 0.352941rem;
+        line-height: 1rem;
+        word-break: keep-all;
+        background: #ff5638 !important;
+        margin: 0;
+        border: 0;
+        font-weight: normal;
+        vertical-align: baseline;
+        font-style: normal;
+        box-sizing: border-box;
+
+
+
+    }
 
     .D-spec {
         bg(#fff);
@@ -357,11 +381,15 @@
         background: #BDBDBD !important;
     }
     .p-remark {
+        display:inline-block
         bg(#fff);
         c(#FF5500);
-        ft(30);
-        pl(24);
+        ft(20);
+        pl(6);
+        pr(6);
         lh(46);
+        b1(red);
+        radius(8);
     }
 
     .D-options {

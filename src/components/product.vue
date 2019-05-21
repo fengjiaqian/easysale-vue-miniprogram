@@ -12,7 +12,10 @@
         </div>
         <number-picker :product="product"></number-picker>
       </div>
-      <div class="priceremark">{{product.remark}}</div>
+      <!--<div v-if="product.remark" :class="[product.remark!=null ? 'priceremark' : '']">{{product.remark}}</div>-->
+      <h5 class="name">
+        <i v-if="product.remark" :class="'s-success'">{{product.remark}}</i>
+      </h5>
     </div>
   </div>
 </template>
@@ -43,10 +46,11 @@ export default {
     }
   }
 };
+
 </script>
 
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .H-product-item {
   padding: 24px 0 0 24px;
   bg(#fff);
@@ -74,11 +78,7 @@ export default {
     c(#333);
     line-height: 1.2;
   }
-  .priceremark{
-    ft(26)
-    c(#FF5638)
 
-  }
 
   .spec {
     mt(25);
@@ -95,5 +95,23 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+  .s-success {
+    font-size: 0.647059rem;
+    color: #fff;
+    -webkit-border-radius: 0.117647rem;
+    border-radius: 0.117647rem;
+    padding: 0.16rem 0.235294rem;
+    margin-right: 0.352941rem;
+    line-height: 1rem;
+    word-break: keep-all;
+    background: #ff5638 !important;
+    border: 0;
+    font-weight: normal;
+    vertical-align: baseline;
+    font-style: normal;
+    box-sizing: border-box;
+
+  }
+
 }
 </style>

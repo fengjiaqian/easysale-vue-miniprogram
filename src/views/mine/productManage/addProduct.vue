@@ -26,7 +26,7 @@
         </li>
         <li>
           <span>备注：</span>
-          <input v-model="productModal.remark" type="text" maxlength="20" placeholder="请输入备注">
+          <input v-model="productModal.remark" type="text" maxlength="16" placeholder="请输入备注">
         </li>
       </ul>
       <div class="upload-pic-wrap">
