@@ -11,7 +11,7 @@
       </div>
       <search-bar :jump="true"></search-bar>
 
-      <div class="user-code" @click="sharexcx">
+      <div class="user-code" @click="shareShop">
         <i></i>&nbsp
         <span>分享</span>
       </div>
@@ -274,26 +274,6 @@ export default {
   },
   mounted() {
     this.lock = false;
-    const currentDealer = storage.get("currentDealer") || {};
-    const shopId = currentDealer.id || "";
-    //不存在店铺数据的 时候不走分享 直接报错
-      let avatarImg = storage.get("avatarUrl", "");
-      let nickName = storage.get("nickName", "");
-
-     console.log(JSON.stringify(currentDealer));
-    console.log(JSON.stringify(shopId));
-    console.log(JSON.stringify(avatarImg));
-    console.log(JSON.stringify(nickName));
-    window.wx.miniProgram.getEnv(function (res) {
-      if (res.miniprogram) {
-        let info = {
-          wboid: '1234555555',//参数一
-          wid: '78945454545',//参数二
-        };
-        let json = JSON.stringify(info);
-        window.wx.miniProgram.postMessage({ data: json });
-      }
-    });
   },
   methods: {
     ...mapActions(["saveCartCount", "setUserType"]),
@@ -572,7 +552,8 @@ export default {
       }
       jumpPath && this.$router.push({ path: jumpPath, query });
     },
-    sharexcx(){
+    //分享店铺
+    shareShop(){
       const currentDealer = storage.get("currentDealer") || {};
       const shopId = currentDealer.id || "";
       //不存在店铺数据的 时候不走分享 直接报错
@@ -611,11 +592,11 @@ export default {
           //   this.lock = false;
           // }, 2000);
         }else{
-          this.$toast("请在我的,点击绑定授权登录在进行分享操作。");
+          this.$toast("分享失败,刷新重试。");
         }
 
       }else{
-        this.$toast("网络异常,稍后再试。");
+        this.$toast("请重新选择店铺进行分享。");
       }
     }
   },
