@@ -152,6 +152,7 @@ function productDetail(params) {
 
 //我的模块-商品管理-商品新增接口
 function addProduct(params) {
+	console.log(params);
 	const url = "/product/saveProductList"
 	return axios({
 		method: 'post',

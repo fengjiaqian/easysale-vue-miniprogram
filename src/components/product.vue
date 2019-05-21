@@ -12,6 +12,7 @@
         </div>
         <number-picker :product="product"></number-picker>
       </div>
+      <div class="priceremark">{{product.remark}}</div>
     </div>
   </div>
 </template>
@@ -73,6 +74,11 @@ export default {
     c(#333);
     line-height: 1.2;
   }
+  .priceremark{
+    ft(26)
+    c(#FF5638)
+
+  }
 
   .spec {
     mt(25);
@@ -84,7 +90,7 @@ export default {
 
   .price {
     h(48);
-    mt(40);
+    mt(20);
     display: flex;
     justify-content: space-between;
     align-items: center;

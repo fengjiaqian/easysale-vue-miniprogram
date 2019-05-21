@@ -22,9 +22,8 @@
           </div>
           <div style="flex:1;"></div>
           <div class="price" v-html="$options.filters.normalPrice(product.price, product.priceUnit)"></div>
-          <div class="da-remark">
-            <span class="remark-wrap">备注 {{product.remark}}</span>
-          </div>
+            <div class="priceremark">{{product.remark}}</div>
+
         </div>
       </div>
       <!--商品设置项-->

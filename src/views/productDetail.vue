@@ -13,7 +13,7 @@
       <div class="D-price">
         <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
       </div>
-      <div class="D-norm">备注 : {{product.remark}}</div>
+      <div class="p-remark">{{product.remark}}</div>
       <div class="fill"></div>
       <div class="D-number">
         <span class="c-3 fz30" style="font-weight:bold">数量</span>
@@ -246,6 +246,13 @@ export default {
   bg(#fff);
   pb(24);
   pl(24);
+}
+.p-remark {
+  bg(#fff);
+  c(#FF5500);
+  ft(30);
+  pl(24);
+  lh(46);
 }
 
 .D-number {
