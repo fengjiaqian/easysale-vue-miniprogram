@@ -12,7 +12,7 @@
         <input v-model="staffInfo.phone" @input="limitPhone" type="number" placeholder="请输入手机号码">
       </li>
       <div class="h20"></div>
-      <li>
+      <!--<li>
         <span>身份证号：</span>
         <input v-model="staffInfo.cardId" @input="limitCardId" type="number" placeholder="请输入身份证号">
       </li>
@@ -33,7 +33,7 @@
                 placeholder="请选择入职日期">
         </el-date-picker>
         <i class="extension"></i>
-      </li>
+      </li>-->
 <!--      <li>
         <span>角色设置：</span>
         <div @click="rolePopToggle">{{activeRoleName}}</div>
