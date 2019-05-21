@@ -181,6 +181,8 @@ export default {
   name: "home",
   data() {
     return {
+      avatarUrl: storage.get("avatarUrl", ""),
+      nickName: storage.get("nickName", ""),
       lock:false,
       counter: 0,
       showFixed: false,
@@ -558,8 +560,8 @@ export default {
       const shopId = currentDealer.id || "";
       //不存在店铺数据的 时候不走分享 直接报错
       if((currentDealer.shopName) && shopId){
-        let avatarImg = storage.get("avatarUrl", "");
-        let nickName = storage.get("nickName", "");
+        const avatarImg = this.avatarUrl;
+        const nickName = this.nickName;
         if(avatarImg.length >0 && nickName.length > 0){
           let params = {
             avatarImg: avatarImg,
