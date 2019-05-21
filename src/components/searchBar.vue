@@ -36,7 +36,7 @@
             },
             placeHolder: {
                 type:String,
-                default:'茅台 五粮液'
+                default:'搜索'
             }
         },
         mounted() {
