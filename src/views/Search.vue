@@ -1,6 +1,6 @@
 <template>
   <div id="search" class="pt90">
-    <m-header :isFixed="true" :isSearch="true" placeholder="茅台 五粮液" @emitEvt="_searchKeyChange"></m-header>
+    <m-header :isFixed="true" :isSearch="true" placeholder="搜索" @emitEvt="_searchKeyChange"></m-header>
     <empty v-if="empty"></empty>
     <float-cart></float-cart>
     <div class="product-list-wrap">
