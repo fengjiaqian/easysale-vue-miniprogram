@@ -274,7 +274,6 @@ export default {
   },
   mounted() {
     this.lock = false;
-    window.wx.miniProgram.postMessage({data: 'testmessagesend'})
   },
   methods: {
     ...mapActions(["saveCartCount", "setUserType"]),
