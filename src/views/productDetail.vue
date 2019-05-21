@@ -13,7 +13,10 @@
       <div class="D-price">
         <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
       </div>
-      <div class="p-remark">{{product.remark}}</div>
+      <!--<div v-if="product.remark" :class="[product.remark!=null ? 'p-remark' : '']">{{product.remark}}</div>-->
+      <h5 class="name">
+        <i v-if="product.remark" :class="'s-success'">{{product.remark}}</i>
+      </h5>
       <div class="fill"></div>
       <div class="D-number">
         <span class="c-3 fz30" style="font-weight:bold">数量</span>
@@ -250,9 +253,32 @@ export default {
 .p-remark {
   bg(#fff);
   c(#FF5500);
-  ft(30);
-  pl(24);
+  ft(20);
+  ml(24)
   lh(46);
+  pl(6);
+  pr(6);
+  display: inline-block;
+  b1(red);
+  radius(8);
+}
+.s-success {
+  font-size: 0.647059rem;
+  color: #fff;
+  -webkit-border-radius: 0.117647rem;
+  border-radius: 0.117647rem;
+  padding: 0.16rem 0.235294rem;
+  margin-left: 0.705882rem;
+  margin-right: 0.352941rem;
+  line-height: 1rem;
+  word-break: keep-all;
+  background: #ff5638 !important;
+  border: 0;
+  font-weight: normal;
+  vertical-align: baseline;
+  font-style: normal;
+  box-sizing: border-box;
+
 }
 
 .D-number {
