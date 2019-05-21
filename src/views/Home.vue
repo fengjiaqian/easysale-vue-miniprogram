@@ -274,26 +274,6 @@ export default {
   },
   mounted() {
     this.lock = false;
-    const currentDealer = storage.get("currentDealer") || {};
-    const shopId = currentDealer.id || "";
-    //不存在店铺数据的 时候不走分享 直接报错
-      let avatarImg = storage.get("avatarUrl", "");
-      let nickName = storage.get("nickName", "");
-
-     console.log(JSON.stringify(currentDealer));
-    console.log(JSON.stringify(shopId));
-    console.log(JSON.stringify(avatarImg));
-    console.log(JSON.stringify(nickName));
-    window.wx.miniProgram.getEnv(function (res) {
-      if (res.miniprogram) {
-        let info = {
-          wboid: '1234555555',//参数一
-          wid: '78945454545',//参数二
-        };
-        let json = JSON.stringify(info);
-        window.wx.miniProgram.postMessage({ data: json });
-      }
-    });
   },
   methods: {
     ...mapActions(["saveCartCount", "setUserType"]),
