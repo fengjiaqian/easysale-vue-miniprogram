@@ -608,7 +608,7 @@ export default {
                     resultData.shopId = currentDealer.id;
                     resultData = JSON.stringify(resultData);
                     resultData = encodeURIComponent(resultData);
-                    const jumpUrl = encodeURIComponent(`navi/mine`);
+                    const jumpUrl = encodeURIComponent(`navi/home`);
                     const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${resultData}`;
                     window.wx.miniProgram.navigateTo({
                       url: path
