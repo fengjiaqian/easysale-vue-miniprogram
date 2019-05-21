@@ -923,7 +923,7 @@ export default {
   display:flex;
   align-items:center;
   .search-bar-wrap {
-    flex-2();
+    //flex-2();
     pos(static);
     width: auto;
     margin-left:18px;
