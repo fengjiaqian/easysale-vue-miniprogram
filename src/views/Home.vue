@@ -924,7 +924,7 @@ export default {
   align-items:center;
   .search-bar-wrap {
     pos(static);
-    width: 60%;
+    width: 55%;
     margin-left:18px;
   }
 
@@ -961,7 +961,7 @@ export default {
   align-items: center;
   position: absolute;
   top:23px;
-  right:42px;
+  right:38px;
   i {
     inline();
     w(48);
