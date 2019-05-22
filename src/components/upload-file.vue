@@ -8,6 +8,7 @@
                    action=""
                    :auto-upload="false"
                    list-type="picture-card"
+                   :file-list="fileList"
                    :before-upload="beforeupload"
                    :on-change="fileChange"
                    accept="image/*"
@@ -19,6 +20,8 @@
 <script>
     import bus from "common/Bus";
     import * as upLoadService from "api/fetch/uploadFile";
+    import $Loading from '../plugins/dialog/loading'
+
     export default {
         props: {
             imgList: {
@@ -39,17 +42,20 @@
 
         },
         created() {
-            this.fileList = this.imgList
+            this.fileList = this.imgList.map(img => {
+                return {url:img}
+            })
         },
         mounted() {},
         methods: {
+
             //提交上传
             submitFile(fileLength=1){
                 this.uploading = true
                 this.currentNum = fileLength
                 this.fileList.forEach((item)=>{
                     if(!item.size){
-                        this.imgUrls.push(item)
+                        this.imgUrls.push(item.url)
                     }
                 })
                 let hasNew = false
@@ -120,21 +126,32 @@
                     method: 'PUT',
                     fileType: 0
                 }
+                $Loading.getInstance(30000);//初始化loading图标，loading最长30秒，到时自动关闭
                 upLoadService.getAuthorization(params).then(res => {
                     if(res.result == 'success') {
                         res.data = JSON.parse(JSON.stringify(res.data))
                         res.data.contentMd5 = md5File
                         res.data.file = file
-                        upLoadService.upLoadImg(res.data)
+                        upLoadService.upLoadImg(res.data, this._uploadSuccess)
                         //图片信息
                         console.log(this.imgUrls,this.currentNum)
                         this.imgUrls.push(res.data.fileUrl)
-                        if(this.imgUrls.length == this.currentNum){
-                            //发送图片地址
-                            bus.$emit("uploadImgUrls", this.imgUrls)
-                        }
+
                     }
+                }, err => {
+                    console.log(err)
+                    $Loading && $Loading.close()
+                }).catch(err => {
+                    console.log(err)
+                    $Loading && $Loading.close()
                 })
+            },
+            _uploadSuccess() {
+                if(this.imgUrls.length == this.currentNum){
+                    $Loading && $Loading.close()
+                    //发送图片地址
+                    bus.$emit("uploadImgUrls", this.imgUrls)
+                }
             },
             //删除已选图片
             deleteUploadImg(idx){
