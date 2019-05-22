@@ -16,7 +16,7 @@ export function getAuthorization(params) {
 }
 
 //上传文件
-export function upLoadImg(options) {
+export function upLoadImg(options, callback) {
 	let file = options.file
 	//this.createAjax = function(argument) {
 	var ajax = (function (argument) {
@@ -45,6 +45,11 @@ export function upLoadImg(options) {
 	if (!IS_PROD) {
 		url = options.folderName + '/' + options.fileName;
 	}
+	callback && (ajax.onreadystatechange = function(){
+	    if (ajax.readyState === 4 && ajax.status === 200) {
+	        callback();
+        }
+    })
 	ajax.open('PUT', url, true);
 	ajax.setRequestHeader("Content-MD5", options.contentMd5);
 	ajax.setRequestHeader("Authorization", options.authorization);

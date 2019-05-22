@@ -5,24 +5,31 @@ let loadingConstructor = Vue.extend(loadingComponent);
 
 var $Loading = (function () {
     var instance = null;
-    const init = () => {
+
+    const close = function () {
+        let $el = document.getElementsByClassName('loading-message')[0];
+        $el && $el.parentNode.removeChild($el);
+    }
+
+    const init = (timeout) => {
         instance = new loadingConstructor({
             el: document.createElement('div')
         });
         document.body.appendChild(instance.$el);
+        if (timeout) {
+            setTimeout(close, timeout)
+        }
         return instance;
     }
+
     return {
-        getInstance: function () {
+        getInstance: function (timeout) {
             if (!instance) {
-                init()
+                init(timeout)
             }
             document.body.appendChild(instance.$el);
         },
-        close: function () {
-            let $el = document.getElementsByClassName('loading-message')[0];
-            $el && $el.parentNode.removeChild($el);
-        }
+        close: close
     }
 })()
 
