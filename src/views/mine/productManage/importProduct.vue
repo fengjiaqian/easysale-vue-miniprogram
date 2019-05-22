@@ -2,16 +2,31 @@
   <div class="product-import-wrap">
     <!--头部-->
     <section class="pi-header">
-      <!-- <div class="search-bar">
+      <div class="search-bar">
+       	<div class="icon-back" @click.stop="goBack">
+		      <span></span>
+		    </div>
         <input v-model="searchKey"
-               placeholder="请输入商品名称"
-               @change="handleChange($event)">
-      </div>-->
-      <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange"></m-header>
+          placeholder="请输入商品名称"
+          @change="searchList">
+      </div>
+      <button class = "search_button" @click = "btnSearch">搜索</button>
+      <!--<m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="searchList" >
+      </m-header>-->
+      <div class = "search_list" v-if = "isSearchName">
+      	<template v-if = "searchProduct.length">
+      		<p v-for = "item in searchProduct"  class = "search_p" @click = "searchByproductName(item.productName)">{{item.productName}}</p>
+      	</template>
+      	<template v-else>
+      		<p class = "search_p">暂无数据</p>
+  			</template>
+      </div>
     </section>
-
     <!--内容-->
     <section class="pi-content">
+    	<div class = "noproductTemp" v-if = "!searchProduct.length">
+    		<p>请输入商品名称</p>
+    	</div>
       <scroll
         class="product-list-scroll"
         :data="productList"
@@ -66,9 +81,16 @@ export default {
         pageSize: 20
       }, //商品查询参数
       productList: [], //商品列表
+      searchProduct:[],//搜索列表
       totalPage: 0, //商品数据总页数(最多只展示10页，即前200条数据)
       searchKey: "",
-      allSelected: false //默认非全选
+      allSelected: false, //默认非全选
+      isSearchName:true,
+      searchParam:{
+      	productInfoName: "",
+        pageNum: 1,
+        pageSize: 10
+      },
     };
   },
   components: {
@@ -79,9 +101,76 @@ export default {
   beforeDestroy() {},
   computed: {},
   created() {
-    this.queryProducts();
+//  this.queryProducts();
   },
   methods: {
+		goBack() {
+      const { name } = this.$route;
+      /*
+       * TODO:
+       *  1.地图定位后，点击返回上一页，手动返回到改页面的上一页面
+       *  2.商品管理列表，客户管理列表，员工管理列表，返回我的页面
+       * */
+      let jumpPath = "";
+      switch (name) {
+        case "addCustomerInfo":
+        case "editCustomerInfo":
+          jumpPath = "/my/customerList";
+          break;
+        case "addStaffInfo":
+        case "editStaffInfo":
+          jumpPath = "/my/staffList";
+          break;
+        case "productList":
+        case "myConsignee":
+        case "staffList":
+          jumpPath = "/navi/mine";
+          break;
+        case "updateConsignee":
+          jumpPath = "/myConsignee";
+          break;
+        case "userInfoEdit":
+          jumpPath = "/my/userInfo";
+          break;
+        case "customerList":
+          //如果是从订单界面过来的  返回订单 带入信息
+          if (storage.get("fromOrder", false)) {
+            this.$router.go(-1);
+          } else {
+            jumpPath = "/navi/mine";
+          }
+          break;
+        case "userInfo":
+          jumpPath = "/navi/mine";
+          break;
+        case "writeApplicationInformation":
+          if (storage.get("ApplyToLocation", false)) {
+            jumpPath = "/navi/mine";
+            storage.set("ApplyToLocation", false);
+          } else {
+            this.$router.go(-1);
+          }
+          break;
+        case "dealerList":
+          const currentDealerId = storage.get("currentDealerId", "");
+          if (!currentDealerId) {
+            this.$toast("请选择店铺");
+          } else {
+            this.$router.go(-1);
+          }
+          break;
+        case "attestationForm":
+          jumpPath = "/identity";
+          break;
+        case "identity":
+          jumpPath = "/navi/home";
+          break;
+        default:
+          this.$router.go(-1);
+          break;
+      }
+      jumpPath && this.$router.push({ path: jumpPath });
+    },
     //查询产品列表
     queryProducts() {
       this.loading = true;
@@ -116,11 +205,45 @@ export default {
         });
     },
     //搜索关键字查询
+    btnSearch(){
+    	this.isSearchName = false;
+    	this.handleChange(this.searchKey)
+    },
     handleChange(searchKey) {
+    	if(this.filterParam.productInfoName == searchKey) return
       this.filterParam.productInfoName = searchKey;
       this.allSelected = false;
       this.filterParam.pageNum = 1;
       this.productList = [];
+    },
+    searchList(){
+    	this.isSearchName = true;
+    	this.searchParam.productInfoName = this.searchKey
+    	queryJyProduct(this.searchParam).then(res=>{
+    		if (res.result === "success" && res.data) {
+    			res.data.forEach(item => {
+	          item.select = false
+	          item.awardState = 0
+	          item.returnState = 0
+	          item.displayState = 0
+	        });
+	    		this.searchProduct = res.data
+        	this.loading = false;
+        	this.requestDone = true;
+    		}else if(res.result === "success" && !res.data){
+	        this.searchProduct = []
+	        this.loading = false;
+	        this.requestDone = true;
+      	}
+    	})
+    	.catch(err => {
+	      this.loading = false;
+	      this.requestDone = true;
+    	});
+    },
+    searchByproductName(val){
+      this.productList = this.searchProduct.filter(item => item.productName == val);
+      this.isSearchName = false;
     },
     //全选
     allSelect() {
@@ -161,6 +284,11 @@ export default {
       if (this.loading || this.filterParam.pageNum >= this.totalPage)
         return false;
       this.filterParam.pageNum += 1;
+    },
+    loadMoresearchByName(){
+    	if (this.loading || this.searchParam.pageNum >= this.searchPage)
+        return false;
+      this.searchParam.pageNum += 1;
     }
   },
   watch: {
