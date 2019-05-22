@@ -1,7 +1,7 @@
 <template>
   <div id="search" class="pt90">
-    <!--<m-header :isFixed="true" :isSearch="true" placeholder="搜索" @emitEvt="_searchKeyChange"></m-header>-->
-    <section class="search-header">
+    <m-header :isFixed="true" :isSearch="true" placeholder="搜索" @emitEvt="_searchKeyChange"></m-header>
+    <!--<section class="search-header">
 	    <div class="search-bar">
 	       	<div class="icon-back" @click.stop="goBack">
 			      <span></span>
@@ -11,7 +11,7 @@
 	        >
 	  	</div>
 	  	<button class = "search_button" @click = "_searchKeyChange">搜索</button>
-		</section>
+		</section>-->
     <empty v-if="empty"></empty>
     <float-cart></float-cart>
     <div class="product-list-wrap">
@@ -74,73 +74,6 @@ export default {
   },
   mounted() {},
   methods: {
-  	goBack() {
-      const { name } = this.$route;
-      /*
-       * TODO:
-       *  1.地图定位后，点击返回上一页，手动返回到改页面的上一页面
-       *  2.商品管理列表，客户管理列表，员工管理列表，返回我的页面
-       * */
-      let jumpPath = "";
-      switch (name) {
-        case "addCustomerInfo":
-        case "editCustomerInfo":
-          jumpPath = "/my/customerList";
-          break;
-        case "addStaffInfo":
-        case "editStaffInfo":
-          jumpPath = "/my/staffList";
-          break;
-        case "productList":
-        case "myConsignee":
-        case "staffList":
-          jumpPath = "/navi/mine";
-          break;
-        case "updateConsignee":
-          jumpPath = "/myConsignee";
-          break;
-        case "userInfoEdit":
-          jumpPath = "/my/userInfo";
-          break;
-        case "customerList":
-          //如果是从订单界面过来的  返回订单 带入信息
-          if (storage.get("fromOrder", false)) {
-            this.$router.go(-1);
-          } else {
-            jumpPath = "/navi/mine";
-          }
-          break;
-        case "userInfo":
-          jumpPath = "/navi/mine";
-          break;
-        case "writeApplicationInformation":
-          if (storage.get("ApplyToLocation", false)) {
-            jumpPath = "/navi/mine";
-            storage.set("ApplyToLocation", false);
-          } else {
-            this.$router.go(-1);
-          }
-          break;
-        case "dealerList":
-          const currentDealerId = storage.get("currentDealerId", "");
-          if (!currentDealerId) {
-            this.$toast("请选择店铺");
-          } else {
-            this.$router.go(-1);
-          }
-          break;
-        case "attestationForm":
-          jumpPath = "/identity";
-          break;
-        case "identity":
-          jumpPath = "/navi/home";
-          break;
-        default:
-          this.$router.go(-1);
-          break;
-      }
-      jumpPath && this.$router.push({ path: jumpPath });
-    },
     _listProduct(params) {
       this.loading = true;
       ListProduct(params)
@@ -172,9 +105,9 @@ export default {
       }
       this._listProduct(this.params);
     },
-    _searchKeyChange() {
-    	if(this.params.searchKey == this.searchKey) return
-      this.params.searchKey = this.searchKey;
+    _searchKeyChange(searchKey) {
+    	if(this.params.searchKey == searchKey) return
+      this.params.searchKey = searchKey;
       this.params.pageNum = 1;
       this._doSearch();
     },
@@ -203,33 +136,5 @@ export default {
     border: 0;
   }
 }
-.search-header{
-	border-bottom:1PX solid #EDEDED;
-	position:fixed;
-	left:0;
-	top:0;
-	width:100%;
-	background:#fff;
-	z-index:1;
-}
-.search-bar{
-	padding 14px 24px
-}
-.search-bar input{
-	text-align:left;
-	padding-left:10px;
-	margin-left:1rem;
-	flex-grow:0;
-	width:80%;
-	background: #f6f6f6;
-}
-.search_button{
-	border:none;
-	background:none;
-	position:fixed;
-	right:5%;
-	top:0.7rem;
-	padding:5px;
-	display:inline-block;
-}
+
 </style>

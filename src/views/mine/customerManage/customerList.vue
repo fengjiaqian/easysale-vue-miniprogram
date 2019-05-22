@@ -5,7 +5,7 @@
       <!-- <div class="search-bar">
         <input v-model="searchKey" placeholder="请输入姓名或手机号" @change="handleChange($event)">
       </div>-->
-      <div class="search-bar">
+      <!--<div class="search-bar">
        	<div class="icon-back" @click.stop="goBack">
 		      <span></span>
 		    </div>
@@ -13,8 +13,8 @@
           placeholder="请输入姓名或手机号"
         >
       </div>
-      <button class = "search_button" @click = "handleChange">搜索</button>
-      <!--<m-header :isSearch="true" placeholder="请输入姓名或手机号" @emitEvt="handleChange"></m-header>-->
+      <button class = "search_button" @click = "handleChange">搜索</button>-->
+      <m-header :isSearch="true" placeholder="请输入姓名或手机号" @emitEvt="handleChange"></m-header>
     </section>
     <!--内容-->
     <section class="sl-content">
@@ -59,73 +59,6 @@ export default {
     this.queryCustomer();
   },
   methods: {
-  	goBack() {
-      const { name } = this.$route;
-      /*
-       * TODO:
-       *  1.地图定位后，点击返回上一页，手动返回到改页面的上一页面
-       *  2.商品管理列表，客户管理列表，员工管理列表，返回我的页面
-       * */
-      let jumpPath = "";
-      switch (name) {
-        case "addCustomerInfo":
-        case "editCustomerInfo":
-          jumpPath = "/my/customerList";
-          break;
-        case "addStaffInfo":
-        case "editStaffInfo":
-          jumpPath = "/my/staffList";
-          break;
-        case "productList":
-        case "myConsignee":
-        case "staffList":
-          jumpPath = "/navi/mine";
-          break;
-        case "updateConsignee":
-          jumpPath = "/myConsignee";
-          break;
-        case "userInfoEdit":
-          jumpPath = "/my/userInfo";
-          break;
-        case "customerList":
-          //如果是从订单界面过来的  返回订单 带入信息
-          if (storage.get("fromOrder", false)) {
-            this.$router.go(-1);
-          } else {
-            jumpPath = "/navi/mine";
-          }
-          break;
-        case "userInfo":
-          jumpPath = "/navi/mine";
-          break;
-        case "writeApplicationInformation":
-          if (storage.get("ApplyToLocation", false)) {
-            jumpPath = "/navi/mine";
-            storage.set("ApplyToLocation", false);
-          } else {
-            this.$router.go(-1);
-          }
-          break;
-        case "dealerList":
-          const currentDealerId = storage.get("currentDealerId", "");
-          if (!currentDealerId) {
-            this.$toast("请选择店铺");
-          } else {
-            this.$router.go(-1);
-          }
-          break;
-        case "attestationForm":
-          jumpPath = "/identity";
-          break;
-        case "identity":
-          jumpPath = "/navi/home";
-          break;
-        default:
-          this.$router.go(-1);
-          break;
-      }
-      jumpPath && this.$router.push({ path: jumpPath });
-    },
     queryCustomer() {
       //如果是从订单界面过来的  返回订单 带入信息
       const fromOrder = storage.get("fromOrder", false);
