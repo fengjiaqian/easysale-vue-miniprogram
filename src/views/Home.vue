@@ -9,12 +9,14 @@
         {{currentDealer.shopName}}
         <em></em>
       </div>
-      <search-bar :jump="true"></search-bar>
-
       <div class="user-code" @click="shareShop">
         <i></i>&nbsp
-        <span>分享</span>
+        <span>本店分享</span>
       </div>
+    </div>
+
+    <div class="home-search-area_seach">
+      <search-bar :jump="true"></search-bar>
     </div>
 
     <div class="view-wrapper">
@@ -674,7 +676,7 @@ export default {
   width: 100%;
   height: 100%;
   pos(relative);
-  top: 0;
+  top: 2rem;
   left: 0;
 }
 
@@ -746,7 +748,6 @@ export default {
 .home-banner {
   bg(#fff);
   padding: 0 24px;
-
   .slider-body {
     position: relative;
     overflow: hidden;
@@ -936,7 +937,45 @@ export default {
     transition: all 0.2s;
   }
 }
+.home-search-area_seach{
+  width: 100%;
+  bg(#fff);
+  pos(fixed);
+  top:2rem;
+  left: 0;
+  z-index: 200;
+  align-items:center;
+  .search-bar-wrap {
+    pos(static);
+    width: 100%;
+    margin-left:4px;
+  }
+  .dealer-name {
+    pos(relative);
+    w(200);
+    lh(92);
+    mr(-24);
+    pl(24);
+    pr(32);
+    flt();
+    ft(26);
+    c(#333);
+    text-c();
+    omit();
+    em {
+      block();
+      pos(absolute);
+      top: 10px;
+      right: 0;
+      squ(32);
+      background: url('./../assets/images/ic_xiajiantou.png') no-repeat center center #FFF;
+      transform: rotateZ(-90deg);
+      background-size: contain;
+      vm();
+    }
+  }
 
+}
 .home-search-area {
   width: 100%;
   bg(#fff);
@@ -948,10 +987,9 @@ export default {
   align-items:center;
   .search-bar-wrap {
     pos(static);
-    width: 55%;
+    width: 60%;
     margin-left:18px;
   }
-
   .dealer-name {
     pos(relative);
     w(200);
