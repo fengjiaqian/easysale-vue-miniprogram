@@ -42,17 +42,20 @@
 
         },
         created() {
-            this.fileList = this.imgList
+            this.fileList = this.imgList.map(img => {
+                return {url:img}
+            })
         },
         mounted() {},
         methods: {
+
             //提交上传
             submitFile(fileLength=1){
                 this.uploading = true
                 this.currentNum = fileLength
                 this.fileList.forEach((item)=>{
                     if(!item.size){
-                        this.imgUrls.push(item)
+                        this.imgUrls.push(item.url)
                     }
                 })
                 let hasNew = false
