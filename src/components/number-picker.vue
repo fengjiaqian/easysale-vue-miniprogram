@@ -57,7 +57,7 @@ export default {
 .number-picker {
   span {
     inline();
-    squ(40);
+    squ(50);
     vm();
   }
 
