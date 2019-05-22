@@ -9,12 +9,14 @@
         <span class="s-b-l"></span>
         <input
           type="search"
-          :value="searchKey"
+          v-model="searchKey"
           :placeholder="placeholder"
           @change="handleChange($event)"
+          ref="searchInput"
         >
       </div>
       <div class="title" v-else>{{tit || title || ''}}</div>
+      <button class = "search_btn" @click.stop = "handleChange">搜索</button>
     </div>
     <!--  -->
     <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut" v-if="showShortcutList">
@@ -88,6 +90,11 @@ export default {
       searchKey: "",
       fixedStyleObj: fixedStyleObj
     };
+  },
+  watch:{
+  	searchKey(val) {
+  		this.$emit("valueChange", val);
+  	}
   },
   computed: {},
   created() {},
@@ -173,7 +180,7 @@ export default {
       this.show = !this.show;
     },
     handleChange($event) {
-      this.searchKey = $event.target.value;
+    	$event.preventDefault();  
       this.$emit("emitEvt", this.searchKey);
     }
   }
@@ -302,7 +309,7 @@ export default {
 }
 
 .search-bar {
-  flex-1();
+	width:85%;
   display: flex;
   align-items: center;
   border: 1PX solid #ededed;
@@ -329,4 +336,11 @@ export default {
     outline: none;
   }
 }
+.search_btn{
+    position: absolute;
+    right: 2.5rem;
+    top: 0.8rem;
+    border: none;
+    background: none;
+    }
 </style>
