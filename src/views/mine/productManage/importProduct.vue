@@ -8,7 +8,7 @@
 		    </div>
         <input v-model="searchKey"
           placeholder="请输入商品名称"
-          @change="searchList">
+          >
       </div>
       <button class = "search_button" @click = "btnSearch">搜索</button>
       <!--<m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="searchList" >
@@ -306,6 +306,9 @@ export default {
           this.isEmpty = false;
         }
       }
+    },
+    searchKey(val){
+    	setTimeout(this.searchList(),200)
     }
   }
 };
