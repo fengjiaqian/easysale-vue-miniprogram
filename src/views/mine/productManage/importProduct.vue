@@ -11,7 +11,7 @@
           >
       </div>
       <button class = "search_button" @click = "btnSearch">搜索</button>-->
-      <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange" @valueChange="changeSearchKey">
+      <m-header :isSearch="true" placeholder="请输入商品名称" @searchBtnClk="handleBtnClick" @emitEvt="handleChange"  @valueChange="changeSearchKey">
       </m-header>
       <div v-if = "isSearchName" class = "search_list">
       	<template v-if = "searchProduct.length">
@@ -134,6 +134,9 @@ export default {
     },
     changeSearchKey(key) {
     	this.searchKey = key;
+    },
+    handleBtnClick(bool) {
+    	this.isSearchName = false;
     },
     //搜索关键字查询
     handleChange(searchKey) {

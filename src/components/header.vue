@@ -16,7 +16,7 @@
         >
       </div>
       <div class="title" v-else>{{tit || title || ''}}</div>
-      <button class = "search_btn" @click.stop = "handleChange">搜索</button>
+      <button class = "search_btn" @click.stop = "emitClick">搜索</button>
     </div>
     <!--  -->
     <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut" v-if="showShortcutList">
@@ -179,8 +179,11 @@ export default {
       if (!storage.get("currentDealerId", "")) return false;
       this.show = !this.show;
     },
-    handleChange($event) {
-    	$event.preventDefault();  
+    emitClick(){
+    	this.$emit("searchBtnClk",true);
+    	this.handleChange();
+    },
+    handleChange() {    	 
       this.$emit("emitEvt", this.searchKey);
     }
   }

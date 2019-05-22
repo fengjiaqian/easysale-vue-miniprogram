@@ -79,9 +79,9 @@ export default {
           this.customerList = [];
         });
     },
-    handleChange() {
-    	if(this.filterParam.keyword == this.searchKey) return
-      this.filterParam.keyword = this.searchKey;
+    handleChange(key) {
+    	if(this.filterParam.keyword == key) return
+      this.filterParam.keyword = key;
     },
     skipTo() {
       this.$router.push({

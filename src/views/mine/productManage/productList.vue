@@ -323,9 +323,9 @@ export default {
       this.filterParam.pageNum = 1;
       this.queryProducts();
     },
-    handleChange() {
-    	if(this.filterParam.searchKey == this.searchKey) return
-      this.filterParam.searchKey = this.searchKey;
+    handleChange(key="") {
+    	if(this.filterParam.searchKey == key) return
+      this.filterParam.searchKey = key;
       this.allSelected = false;
       this.filterParam.pageNum = 1;
       this.productList = [];
