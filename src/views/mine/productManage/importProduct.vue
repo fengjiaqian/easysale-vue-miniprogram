@@ -147,6 +147,12 @@ export default {
       this.productList = [];
     },
     searchList(){
+        if (!this.searchKey)  {
+            if (this.isSearchName) {
+                this.isSearchName = false;
+            }
+            return;
+        }
     	this.isSearchName = true;
     	this.searchParam.productInfoName = this.searchKey
     	queryJyProduct(this.searchParam).then(res=>{
