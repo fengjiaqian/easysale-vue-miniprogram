@@ -47,7 +47,7 @@ export function upLoadImg(options, callback) {
 	}
 	callback && (ajax.onreadystatechange = function(){
 	    if (ajax.readyState === 4 && ajax.status === 200) {
-	        callback();
+	        callback(url);
         }
     })
 	ajax.open('PUT', url, true);

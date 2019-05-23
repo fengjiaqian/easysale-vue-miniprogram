@@ -19,7 +19,7 @@
                 </li>
                 <li>
                     <span>价格单位：</span>
-                    <template v-if="productModal.productType">
+                    <template v-if="!productModal.quantity">
                         <input v-model="productModal.priceUnit" type="text" maxlength="10" placeholder="请输入价格单位，如瓶、件">
                     </template>
                     <template v-else>
