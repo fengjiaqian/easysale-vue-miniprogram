@@ -133,10 +133,6 @@
                         res.data.contentMd5 = md5File
                         res.data.file = file
                         upLoadService.upLoadImg(res.data, this._uploadSuccess)
-                        //图片信息
-                        console.log(this.imgUrls,this.currentNum)
-                        this.imgUrls.push(res.data.fileUrl)
-
                     }
                 }, err => {
                     console.log(err)
@@ -146,7 +142,10 @@
                     $Loading && $Loading.close()
                 })
             },
-            _uploadSuccess() {
+            _uploadSuccess(url) {
+                this.imgUrls.push(url);
+                //图片信息
+                console.log(this.imgUrls,this.currentNum)
                 if(this.imgUrls.length == this.currentNum){
                     $Loading && $Loading.close()
                     //发送图片地址
