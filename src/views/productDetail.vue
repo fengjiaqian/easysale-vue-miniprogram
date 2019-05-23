@@ -2,7 +2,7 @@
   <div id="detail">
     <!--  -->
     <float-cart></float-cart>
-    <m-header :isFixed="true"></m-header>
+    <m-header :isFixed="true"  :isSearch = "false"></m-header>
     <div v-if="product.productName">
       <div class="D-img">
         <img v-lazy="product.productImageUrl || ''" :alt="product.productName">

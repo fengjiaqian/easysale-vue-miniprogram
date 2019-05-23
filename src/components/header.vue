@@ -16,7 +16,7 @@
         >
       </div>
       <div class="title" v-else>{{tit || title || ''}}</div>
-      <button class = "search_btn" @click.stop = "emitClick">搜索</button>
+      <button  v-if="isSearch" class = "search_btn" @click.stop = "emitClick">搜索</button>
     </div>
     <!--  -->
     <div class="icon-shortcut" @click.stop="showShortList" ref="shortcut" v-if="showShortcutList">

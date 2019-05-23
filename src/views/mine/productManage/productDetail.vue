@@ -1,6 +1,6 @@
 <template>
     <div id="detail" class="pt90" v-show="domShow">
-        <m-header :isFixed="true"></m-header>
+        <m-header :isFixed="true"  :isSearch = "false"></m-header>
         <div class="body">
             <div class="D-img">
                 <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
