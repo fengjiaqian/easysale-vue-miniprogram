@@ -302,7 +302,7 @@ export default {
         }
         return false;
       }
-      this._submit();
+      // this._submit();
     },
     _submit() {
       //this.formParam.fileLicenses = this.transformPic(this.fileLicenses);
