@@ -1,9 +1,10 @@
 <template>
 
+
   <div id="home" ref="scrollDom">
     <back v-show="posY>600" @bindClick="backTop"></back>
     <float-cart></float-cart>
-    <!--  -->
+    <!--  头部  -->
     <div class="home-search-area">
       <div class="dealer-name" @click="_jumpDealerList" v-if="currentDealer.shopName">
         {{currentDealer.shopName}}
@@ -15,6 +16,7 @@
       </div>
     </div>
 
+    <!-- 搜索框 -->
     <div class="home-search-area_seach">
       <search-bar :jump="true"></search-bar>
     </div>

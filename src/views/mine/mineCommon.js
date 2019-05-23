@@ -21,6 +21,11 @@ const dealerAccessModule = [
         path: "/my/staffList"
     },
     {
+        title: "申请开通线上平台",
+        class: "customer",
+        path: "/writeApplicationInformation"
+    },
+    {
         title: "认证店主",
         class: "manager",
         path: "/my/shopkeeper"
@@ -59,7 +64,7 @@ export function initAccessModule(userType, auditState = '') {
         return customerAccessModule.slice(0, 1);
     }
     if (auditState == 1) {   //已经认证了
-        let dealerModule = dealerAccessModule.slice(0, 4);
+        let dealerModule = dealerAccessModule.slice(0, 5);
         return [...dealerModule, companyInfo];
     }
     return [...dealerAccessModule, companyInfo];
