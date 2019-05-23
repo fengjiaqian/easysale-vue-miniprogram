@@ -5,6 +5,15 @@
       <!-- <div class="search-bar">
         <input v-model="searchKey" placeholder="请输入商品名称" @change="handleChange($event)">
       </div>-->
+      <!--<div class="search-bar">
+       	<div class="icon-back" @click.stop="goBack">
+		      <span></span>
+		    </div>
+        <input v-model="searchKey"
+          placeholder="请输入商品名称"
+        >
+      </div>
+      <button class = "search_button" @click = "handleChange">搜索</button>-->
       <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange"></m-header>
       <ul class="filter-bar">
         <li @click="unfoldFilterPop(0)">
@@ -314,8 +323,9 @@ export default {
       this.filterParam.pageNum = 1;
       this.queryProducts();
     },
-    handleChange(searchKey) {
-      this.filterParam.searchKey = searchKey;
+    handleChange(key="") {
+    	if(this.filterParam.searchKey == key) return
+      this.filterParam.searchKey = key;
       this.allSelected = false;
       this.filterParam.pageNum = 1;
       this.productList = [];

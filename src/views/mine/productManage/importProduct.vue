@@ -2,14 +2,23 @@
   <div class="product-import-wrap">
     <!--头部-->
     <section class="pi-header">
-      <!-- <div class="search-bar">
+      <!--<div class="search-bar">
+       	<div class="icon-back" @click.stop="goBack">
+		      <span></span>
+		    </div>
         <input v-model="searchKey"
-               placeholder="请输入商品名称"
-               @change="handleChange($event)">
-      </div>-->
-      <m-header :isSearch="true" placeholder="请输入商品名称" @emitEvt="handleChange"></m-header>
+          placeholder="请输入商品名称"
+          >
+      </div>
+      <button class = "search_button" @click = "btnSearch">搜索</button>-->
+      <m-header :isSearch="true" placeholder="请输入商品名称" @searchBtnClk="handleBtnClick" @emitEvt="handleChange"  @valueChange="changeSearchKey">
+      </m-header>
+      <div v-if = "isSearchName" class = "search_list">
+      	<template v-if = "searchProduct.length">
+      		<p v-for = "item in searchProduct"  class = "search_p" @click = "searchByproductName(item.productName)">{{item.productName}}</p>
+      	</template>
+      </div>
     </section>
-
     <!--内容-->
     <section class="pi-content">
       <scroll
@@ -66,9 +75,16 @@ export default {
         pageSize: 20
       }, //商品查询参数
       productList: [], //商品列表
+      searchProduct:[],//搜索列表
       totalPage: 0, //商品数据总页数(最多只展示10页，即前200条数据)
       searchKey: "",
-      allSelected: false //默认非全选
+      allSelected: false, //默认非全选
+      isSearchName:false,
+      searchParam:{
+      	productInfoName: "",
+        pageNum: 1,
+        pageSize: 10
+      },
     };
   },
   components: {
@@ -79,7 +95,7 @@ export default {
   beforeDestroy() {},
   computed: {},
   created() {
-    this.queryProducts();
+      
   },
   methods: {
     //查询产品列表
@@ -89,6 +105,7 @@ export default {
       queryJyProduct(this.filterParam)
         .then(res => {
           if (res.result === "success" && res.data) {
+    				this.isSearchName = false;
             this.domShow = true;
             this.totalPage =
               Math.ceil(res.totalCount / 20) > 10
@@ -115,12 +132,53 @@ export default {
           this.requestDone = true;
         });
     },
+    changeSearchKey(key) {
+    	this.searchKey = key;
+    },
+    handleBtnClick(bool) {
+    	this.isSearchName = false;
+    },
     //搜索关键字查询
     handleChange(searchKey) {
+    	if(this.isSearchName || this.filterParam.productInfoName == searchKey) return
       this.filterParam.productInfoName = searchKey;
       this.allSelected = false;
       this.filterParam.pageNum = 1;
       this.productList = [];
+    },
+    searchList(){
+    	this.isSearchName = true;
+    	this.searchParam.productInfoName = this.searchKey
+    	queryJyProduct(this.searchParam).then(res=>{
+    		if (res.result === "success" && res.data) {
+    			res.data.forEach(item => {
+	          item.select = false
+	          item.awardState = 0
+	          item.returnState = 0
+	          item.displayState = 0
+	        });
+	    		this.searchProduct = res.data
+        	this.loading = false;
+        	this.requestDone = true;
+    		}else if(res.result === "success" && !res.data){
+	        this.searchProduct = []
+	        this.loading = false;
+	        this.requestDone = true;
+      	}
+    	})
+    	.catch(err => {
+	      this.loading = false;
+	      this.requestDone = true;
+    	});
+    },
+    searchByproductName(val){
+    	const product = this.searchProduct.find(item => item.productName == val)
+    	if (product) {
+    		const len = this.productList.length;
+    		len && this.productList.splice(0,this.productList.length)
+    		this.productList.push(product);
+    	}      
+      this.isSearchName = false;
     },
     //全选
     allSelect() {
@@ -161,7 +219,7 @@ export default {
       if (this.loading || this.filterParam.pageNum >= this.totalPage)
         return false;
       this.filterParam.pageNum += 1;
-    }
+    },
   },
   watch: {
     filterParam: {
@@ -178,6 +236,9 @@ export default {
           this.isEmpty = false;
         }
       }
+    },
+    searchKey(val){
+    	setTimeout(this.searchList(),200)
     }
   }
 };

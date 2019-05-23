@@ -56,7 +56,6 @@
 
     },
     created() {
-
     },
     mounted() {},
     methods: {

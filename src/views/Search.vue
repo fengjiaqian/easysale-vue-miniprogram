@@ -1,6 +1,17 @@
 <template>
   <div id="search" class="pt90">
     <m-header :isFixed="true" :isSearch="true" placeholder="搜索" @emitEvt="_searchKeyChange"></m-header>
+    <!--<section class="search-header">
+	    <div class="search-bar">
+	       	<div class="icon-back" @click.stop="goBack">
+			      <span></span>
+			    </div>
+	        <input v-model="searchKey"
+	          placeholder="请输入"
+	        >
+	  	</div>
+	  	<button class = "search_button" @click = "_searchKeyChange">搜索</button>
+		</section>-->
     <empty v-if="empty"></empty>
     <float-cart></float-cart>
     <div class="product-list-wrap">
@@ -41,7 +52,8 @@ export default {
         pullUpLoad: {
           txt: { more: "加载更多", noMore: "~我是有底线的~" }
         }
-      }
+      },
+      searchKey:"",
     };
   },
   components: {
@@ -94,6 +106,7 @@ export default {
       this._listProduct(this.params);
     },
     _searchKeyChange(searchKey) {
+    	if(this.params.searchKey == searchKey) return
       this.params.searchKey = searchKey;
       this.params.pageNum = 1;
       this._doSearch();
@@ -123,4 +136,5 @@ export default {
     border: 0;
   }
 }
+
 </style>

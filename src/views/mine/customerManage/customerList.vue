@@ -5,6 +5,15 @@
       <!-- <div class="search-bar">
         <input v-model="searchKey" placeholder="请输入姓名或手机号" @change="handleChange($event)">
       </div>-->
+      <!--<div class="search-bar">
+       	<div class="icon-back" @click.stop="goBack">
+		      <span></span>
+		    </div>
+        <input v-model="searchKey"
+          placeholder="请输入姓名或手机号"
+        >
+      </div>
+      <button class = "search_button" @click = "handleChange">搜索</button>-->
       <m-header :isSearch="true" placeholder="请输入姓名或手机号" @emitEvt="handleChange"></m-header>
     </section>
     <!--内容-->
@@ -70,8 +79,9 @@ export default {
           this.customerList = [];
         });
     },
-    handleChange(keyword) {
-      this.filterParam.keyword = keyword;
+    handleChange(key) {
+    	if(this.filterParam.keyword == key) return
+      this.filterParam.keyword = key;
     },
     skipTo() {
       this.$router.push({
