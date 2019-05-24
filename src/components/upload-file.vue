@@ -21,6 +21,7 @@
     import bus from "common/Bus";
     import * as upLoadService from "api/fetch/uploadFile";
     import $Loading from '../plugins/dialog/loading'
+    import { compress } from "common/util";
 
     export default {
         props: {
@@ -85,34 +86,40 @@
                 //console.log('beforeupload')
                 // 如果file不是File对象的实例，则不需要处理Md5
                 if(file.size == undefined) {
-                    success("");
                     return;
                 }
-
                 var that = this;
-                that.sliceSize = file.size
                 that.slice = File.prototype.slice
-                var fileReader = new FileReader();
-                var spark = new SparkMD5.ArrayBuffer();
-                var currentChunk = 0;
 
-                // 每块文件读取完毕之后的处理
-                fileReader.onload = function(e) {
-                    // 每块交由sparkMD5进行计算
-                    spark.append(e.target.result);
-                    that.contentMd5 = spark.end();
-                    that._upLoadImg(that.contentMd5, file)
+                compress(file, function(newFile) {
+                    newFile.name = file.name;
+                    newFile.lastModified = file.lastModified
+                    var fileReader = new FileReader();
+                    var spark = new SparkMD5.ArrayBuffer();
+                    that.sliceSize = newFile.size
+                    var currentChunk = 0;
 
-                };
+                    // 每块文件读取完毕之后的处理
+                    fileReader.onload = function(e) {
+                        // 每块交由sparkMD5进行计算
+                        spark.append(e.target.result);
+                        that.contentMd5 = spark.end();
+                        that._upLoadImg(that.contentMd5, newFile)
 
-                // 处理单片文件的上传
-                function loadNext() {
-                    var start = currentChunk * that.sliceSize;
-                    var end = start + that.sliceSize >= file.size ? file.size : start + that.sliceSize;
+                    };
 
-                    fileReader.readAsArrayBuffer(that.slice.call(file, start, end));
-                }
-                loadNext();
+                    // 处理单片文件的上传
+                    function loadNext() {
+                        var start = currentChunk * that.sliceSize;
+                        var end = start + that.sliceSize >= newFile.size ? newFile.size : start + that.sliceSize;
+
+                        fileReader.readAsArrayBuffer(that.slice.call(newFile, start, end));
+                    }
+                    loadNext();
+                })
+
+
+
             },
             //上传文件
             _upLoadImg(md5File, file) {
