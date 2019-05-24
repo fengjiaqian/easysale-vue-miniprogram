@@ -47,6 +47,9 @@
         <div>{{showStore?`门头照片：`:`公司形象照：`}}</div>
         <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
       </li>
+        <li class="mb-20">
+            <div class="logos-desc">建议图片宽高比为2:1,如400*200,格式(jpg、png、gif)</div>
+        </li>
     </ul>
     <div class="user-info-edit save" :class="[achieve ? 'save' : 'disable']" @click="verify">保存</div>
   </div>
@@ -131,16 +134,13 @@ export default {
     //验证添加商品所需字段
     verify() {
       if (!this.achieve) return;
-      const { shopName, phone, instruction } = this.shopInfo;
+      const { shopName, phone } = this.shopInfo;
       let insTitle = this.showStore ? `店铺` : `公司`;
       if (!shopName) {
-        this.$alert(`请输入${insTitle}名称！`);
+        this.$alert(`请输入${insTitle}名称。`);
         return;
       } else if (!verifyPhone(phone)) {
-        this.$alert(`请输入正确的手机号！`);
-        return;
-      } else if (!instruction) {
-        this.$alert(`请输入${insTitle}介绍！`);
+        this.$alert(`手机号码格式不正确，请核对修改。`);
         return;
       }
       const fileLength =  this.$refs.uploadFile.fileList.length
@@ -174,7 +174,7 @@ export default {
     shopInfo: {
       handler(newVal, oldVal) {
         const { shopName, phone, instruction } = newVal;
-        if (shopName && phone && instruction) {
+        if (shopName && phone) {
           this.achieve = true;
         } else {
           this.achieve = false;

@@ -10,7 +10,7 @@ const mixin = {
             uploadUrl = "/easysaleapi/file/uploadProductImg"
         }
         return {
-            isVisitor: !storage.get("token", ''),
+            isVisitor: !storage.get("mobileNo", ''),
             uploadImgUrl: uploadUrl
         }
     },
@@ -23,7 +23,7 @@ const mixin = {
     methods: {
         //auth权限控制
         navigateToLogin() {
-            if (!storage.get("token", '')) {
+            if (!storage.get("mobileNo", '')) {
                 if (window.__wxjs_environment === "miniprogram") {
                     storage.set('homeRefresh', true);
                     wx.miniProgram.navigateTo({

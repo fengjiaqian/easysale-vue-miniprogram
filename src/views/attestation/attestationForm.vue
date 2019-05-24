@@ -147,7 +147,7 @@
             <!--<m-upload @file-success="onFileSuccess" @file-removed="onFileRemoved"/>-->
             <upload-file :img-list="imgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
           </div>
-          <div class="logos-desc">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
+          <div class="logos-desc">建议图片宽高比为2:1,如400*200,格式(jpg、png、gif)</div>
         </div>
       </div>
       <!--提交按钮-->
