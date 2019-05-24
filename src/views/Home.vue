@@ -382,7 +382,7 @@
                 const storeDealer = storage.get("currentDealer", {});
                 if (storeDealer.id == this.currentDealerId) {
                     document.title = storeDealer.shopName;
-                    this.shareShop();
+                    this.shareShop(storeDealer);
                     return (this.currentDealer = storeDealer);
                 }
                 ListAllDealer({id: this.currentDealerId}).then(res => {
@@ -396,7 +396,7 @@
                             document.title = matchItem.shopName;
                             if (JSON.stringify(storeDealer) == "{}") {
                                 storage.set("currentDealer", matchItem);
-                                this.shareShop();
+                                this.shareShop(matchItem);
                             }
                         } else {
                             this.$router.push({
@@ -572,15 +572,14 @@
                 jumpPath && this.$router.push({path: jumpPath, query});
             },
             //分享店铺
-            shareShop() {
-                const currentDealer = storage.get("currentDealer") || {};
-                const shopId = currentDealer.id || "";
+            shareShop(shop) {
+                const shopId = shop.id || "";
                 //不存在店铺数据的 时候不走分享 直接报错
-                if ((currentDealer.shopName) && shopId) {
+                if ((shop.shopName) && shopId) {
                     const avatarImg = this.avatarUrl || storage.get("avatarUrl");
                     const nickName = this.nickName || storage.get("nickName");
                     if (avatarImg && nickName) {
-                        this._share(avatarImg, nickName, currentDealer);
+                        this._share(avatarImg, nickName, shop);
                         // setTimeout(() => {
                         //   this.lock = false;
                         // }, 2000);
@@ -590,7 +589,7 @@
                             if (res.data) {
                                 this.nickName = res.data.wxNickName;
                                 this.avatarUrl = res.data.iamgeUrl;
-                                this._share(this.avatarUrl, this.nickName, currentDealer);
+                                this._share(this.avatarUrl, this.nickName, shop);
                                 this._storageUserInfo(this.nickName, this.avatarUrl);
                             }
                         }).catch(err => {
