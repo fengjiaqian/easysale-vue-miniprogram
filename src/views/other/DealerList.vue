@@ -21,7 +21,7 @@
     <empty
       class="dealer-scroll-list"
       :class="{'pt90-i':!currentDealer.phone}"
-      :txt="'当前没有可选经销商店铺'"
+      :txt="'没有可切换的经销商店铺'"
       v-if="empty"
     ></empty>
     <!--  -->

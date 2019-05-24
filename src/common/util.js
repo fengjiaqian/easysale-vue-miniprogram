@@ -1,4 +1,4 @@
-/** 图片压缩，默认同比例压缩
+/** 图片压缩，最大1M，超过1M按照1M压缩，小于1M不压缩
   *  @param {Object} fileObj
   *  图片对象
   *  回调函数有一个参数，base64的字符串数据
@@ -15,7 +15,12 @@ function compress(fileObj, callback) {
             const scale = w / h
             w = fileObj.width || w
             h = fileObj.height || (w / scale)
-            let quality = 0.4 // 默认图片质量为0.7
+            let quality = parseFloat((1 * 1024 * 1024) / fileObj.size) // 默认图片质量为0.7
+            if (quality >= 1) {
+                quality = 1
+            } else {
+                quality =  Math.round(quality*100)/100
+            }
             // 生成canvas
             const canvas = document.createElement('canvas')
             const ctx = canvas.getContext('2d')
@@ -32,7 +37,7 @@ function compress(fileObj, callback) {
                 quality = fileObj.quality
             }*/
             // quality值越小，所绘制出的图像越模糊
-            const data = canvas.toDataURL('image/jpeg', quality)
+            let data = canvas.toDataURL(fileObj.type, quality);
             // 压缩完成执行回调
             const newFile = convertBase64UrlToBlob(data)
             callback(newFile)
@@ -44,13 +49,14 @@ function compress(fileObj, callback) {
 
 function convertBase64UrlToBlob(urlData) {
     const bytes = window.atob(urlData.split(',')[1]) // 去掉url的头，并转换为byte
+    var mimeString = urlData.split(',')[0].split(':')[1].split(';')[0];
     // 处理异常,将ascii码小于0的转换为大于0
     const ab = new ArrayBuffer(bytes.length)
     const ia = new Uint8Array(ab)
     for (let i = 0; i < bytes.length; i++) {
         ia[i] = bytes.charCodeAt(i)
     }
-    return new Blob([ab], {type: 'image/png'})
+    return new Blob([ab], {type: mimeString})
 }
 
 export {
