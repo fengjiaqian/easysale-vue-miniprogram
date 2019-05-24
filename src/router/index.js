@@ -48,14 +48,15 @@ router.beforeEach((to, from, next) => {
     let $el = document.querySelector('.loading-message');
     $el && $el.parentNode.removeChild($el);
     const token = storage.get('token', "");
-    const routeRequireGuidance = storage.get('routeRequireGuidance', 0);
+    const routeRequireGuidance = storage.get('routeRequireGuidance', 1);
+    const mobileNo = storage.get('mobileNo', '');
     //引导认证控制
-    if (routeRequireGuidance && to.meta.requireGuidence && token) {
+    if (routeRequireGuidance && to.meta.requireGuidence && mobileNo) {
         Vue.prototype.title = '认证';
         return next({ path: "/identity" });
     }
     if (to.meta.requireAuth) {
-        if (token) {
+        if (mobileNo) {
             to.meta.title && (Vue.prototype.title = to.meta.title)
             return next();
         }
