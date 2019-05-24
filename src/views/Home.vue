@@ -180,7 +180,7 @@
     import {queryHomeProducts, ListProduct, ListAllDealer} from "api/fetch/home";
     import {queryShopInfo, synthesisroutineimg} from "api/fetch/mine";
     import {findCustomerOwerInfo} from "api/fetch/endCustomer";
-    import {ListDealerLogs} from "api/fetch/dealer";
+    import {addShopHistory,ListDealerLogs} from "api/fetch/dealer";
     import {addClass, removeClass} from "common/dom";
     import {transformProductList} from "common/productUtil";
     import storage from "common/storage";
@@ -283,6 +283,7 @@
                 this._listDealerLogs();
                 this._queryHomeProducts();
                 this.queryOwnerShop();
+
             }
         },
         mounted() {
@@ -382,6 +383,7 @@
                 const storeDealer = storage.get("currentDealer", {});
                 if (storeDealer.id == this.currentDealerId) {
                     document.title = storeDealer.shopName;
+                    addShopHistory(storeDealer.id).then(res => {});
                     this.shareShop(storeDealer);
                     return (this.currentDealer = storeDealer);
                 }
@@ -396,6 +398,7 @@
                             document.title = matchItem.shopName;
                             if (JSON.stringify(storeDealer) == "{}") {
                                 storage.set("currentDealer", matchItem);
+                                addShopHistory(matchItem.id).then(res => {});
                                 this.shareShop(matchItem);
                             }
                         } else {
