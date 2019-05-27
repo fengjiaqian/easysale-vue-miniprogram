@@ -21,7 +21,7 @@ const dealerAccessModule = [
         path: "/my/staffList"
     },
     {
-        title: "申请开通线上平台",
+        title: "开通其他线上平台",
         class: "customer",
         path: "/writeApplicationInformation"
     },
@@ -38,7 +38,7 @@ const customerAccessModule = [
         path: "/myConsignee"
     },
     {
-        title: "申请开通线上平台",
+        title: "开通公司线上平台",
         class: "customer",
         path: "/writeApplicationInformation"
     }
