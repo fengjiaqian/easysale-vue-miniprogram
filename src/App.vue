@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app"  style="padding-bottom: 50px;">
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -33,8 +33,5 @@ export default {
 
 <style lang="stylus">
 
-  body{
-    padding-bottom: 50px !important;
-  }
 
 </style>
