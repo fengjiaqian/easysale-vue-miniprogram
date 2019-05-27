@@ -155,6 +155,7 @@ export default {
     //保存修改
     saveEdit() {
       let param = this.shopInfo;
+      alert(JSON.stringify(param));
       editShopInfo(param).then(res => {
         if (res.result === "success") {
           storage.set("homeRefresh", true);
