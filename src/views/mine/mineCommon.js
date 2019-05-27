@@ -21,7 +21,7 @@ const dealerAccessModule = [
         path: "/my/staffList"
     },
     {
-        title: "开通其他线上平台",
+        title: "开通其它线上平台",
         class: "customer",
         path: "/writeApplicationInformation"
     },

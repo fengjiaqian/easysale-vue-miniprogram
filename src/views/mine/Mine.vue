@@ -319,7 +319,7 @@ export default {
   }
 
   .enter-item-txt {
-    border-top: 1PX solid #ededed !important;
+   /* border-top: 1PX solid #ededed !important;*/
   }
 }
 
