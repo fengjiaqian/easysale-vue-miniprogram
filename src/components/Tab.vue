@@ -57,6 +57,10 @@ export default {
   }
 }
 
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  padding-bottom: 34px !important;
+}
+
 .tab-item {
   flex-1();
   padding: 3px 0;
