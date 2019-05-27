@@ -1,5 +1,5 @@
 <template>
-  <div id="app"  style="padding-bottom: 50px;">
+  <div id="app">
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -31,7 +31,4 @@ export default {
 };
 </script>
 
-<style lang="stylus">
-
-
-</style>
+<style lang="stylus"></style>
