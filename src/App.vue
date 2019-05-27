@@ -31,4 +31,10 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+
+  body{
+    padding-bottom: 50px !important;
+  }
+
+</style>
