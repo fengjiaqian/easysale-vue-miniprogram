@@ -34,13 +34,18 @@ export default {
 </script>
 
 <style lang='stylus'>
+
+/* .body{
+   padding-bottom: 50px !important;
+ }*/
+
 .ios-scroll-smooth {
   width: 100%;
   height: 100%;
   -webkit-overflow-scrolling: touch;
 }
 
-.tab-container {
+/*.tab-container {
   position: fixed;
   left: 0;
   bottom: 0;
@@ -50,8 +55,8 @@ export default {
   background-color: #FFFFFF;
   display: flex;
   border-top: 1PX solid rgba(0, 0, 0, 0.1);
-}
-@supports (bottom: env(safe-area-inset-bottom)) {
+}*/
+/*@supports (bottom: env(safe-area-inset-bottom)) {
   .tab-container{
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -59,7 +64,7 @@ export default {
 
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
   padding-bottom: 50px !important;
-}
+}*/
 
 .tab-item {
   flex-1();
