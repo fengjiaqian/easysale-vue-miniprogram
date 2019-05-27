@@ -164,6 +164,12 @@
                 this.fileList = this.fileList.filter((item,index)=>{
                     return idx!=index
                 })
+
+                if(this.fileList.length == 0){
+                    alert(JSON.stringify(this.fileList));
+                    this.fileList = [];
+                }
+
                 if(this.fileList.length < this.limitNum){
                     document.querySelector('.el-upload--picture-card').removeAttribute('style')
                 }
