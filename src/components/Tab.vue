@@ -51,6 +51,11 @@ export default {
   display: flex;
   border-top: 1PX solid rgba(0, 0, 0, 0.1);
 }
+@supports (bottom: env(safe-area-inset-bottom)) {
+  .tab-container{
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
 
 .tab-item {
   flex-1();

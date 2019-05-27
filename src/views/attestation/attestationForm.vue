@@ -199,7 +199,7 @@ export default {
         "我是客户",
         "我是员工",
         "我是店主",
-        "申请开通线上平台"
+        "开通我公司线上平台"
       ];
       return titleArray[this.type] || "";
     },
