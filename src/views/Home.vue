@@ -787,11 +787,10 @@
                 padding: 0 1PX;
                 bg(#fff);
                 width: 100%;
-                h(250);
-
+                min-height 250px;
                 img {
                     width: 100%;
-                    height: 100%;
+                    height auto;
                 }
             }
         }

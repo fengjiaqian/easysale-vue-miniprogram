@@ -138,7 +138,7 @@
             <i @click="obtainAddress" class="position"></i>
           </li>
         </ul>
-        <div class="upload-viewer">
+        <div class="upload-viewer" style="display: none;">
           <h5 class="required">
             公司形象照
             <span>(公司标志/背景形象墙/前台照片)</span>
