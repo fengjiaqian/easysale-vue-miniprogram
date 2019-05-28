@@ -30,7 +30,7 @@
           :placeholder="showStore?`请输入店铺介绍`:`请输入公司介绍`"
         ></textarea>
       </li>
-      <li class="mb-20 uiw-info info-address">
+      <li class="mb-20 uiw-info info-address" style="display: none;">
         <div class="ia-title">{{showStore?`店铺地址：`:`公司地址：`}}</div>
         <div class="ia-value locate-address">
           <textarea

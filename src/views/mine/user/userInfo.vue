@@ -18,7 +18,7 @@
         <div>{{showStore?`店铺地址：`:`公司地址：`}}</div>
         <div>{{shopInfo.address}}</div>
       </li>
-      <li class="uiw-pic">
+      <li class="uiw-pic" style="display: none;">
         <div>{{showStore ?`门头照片：`:`公司形象照：`}}</div>
         <ul class="img-list">
           <li v-for="item in shopInfo.logoIamgeUrls">

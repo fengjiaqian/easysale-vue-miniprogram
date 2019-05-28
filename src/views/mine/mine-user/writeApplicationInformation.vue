@@ -35,7 +35,7 @@
         alt
       >
     </div>
-    <div class="uiw-pic">
+    <div class="uiw-pic" style="display: none;">
       <div class="left" style="width: 80px">公司形象照 :</div>
       <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
     </div>
