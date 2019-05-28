@@ -38,9 +38,9 @@
                 var u = navigator.userAgent;
                 var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
                 if (isIOS) {
-                    if (screen.height == 812 && screen.width == 375) {
-                        //是iphoneX
-                        // this.isIphoneX=true;
+                    if ((screen.height == 812 && screen.width == 375)||(screen.height == 896 && screen.width == 414)) {
+                        //是iphoneX以上型号
+
                         Vue.prototype.isIphoneX = true;
                     }
                 }
