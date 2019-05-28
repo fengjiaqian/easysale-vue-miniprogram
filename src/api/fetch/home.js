@@ -60,3 +60,17 @@ export function ListAllDealer(params = {}) {
 		return Promise.reject(res.data)
 	});
 }
+
+export function queryCurrentShopInfo(params) {
+    const url = "/shop/shopInfo";
+    return axios({
+        method: 'post',
+        url,
+        data: params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}

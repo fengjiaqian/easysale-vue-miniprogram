@@ -78,15 +78,16 @@
             >
                 <main>
                     <!--  -->
-                    <div class="home-banner" v-if="banners.length">
-                        <div class="slider-body">
-                            <cube-slide ref="slide" :data="banners">
-                                <cube-slide-item class="banner-item" v-for="(item, index) in banners" :key="index">
-                                    <img :src="item.cloudSrc">
-                                </cube-slide-item>
-                            </cube-slide>
-                        </div>
-                    </div>
+                    <shop-logo :shopInfo="currentDealer" :width="screenWidth"></shop-logo>
+                    <!--<div class="home-banner" v-if="banners.length">-->
+                        <!--<div class="slider-body">-->
+                            <!--<cube-slide ref="slide" :data="banners">-->
+                                <!--<cube-slide-item class="banner-item" v-for="(item, index) in banners" :key="index">-->
+                                    <!--<img :src="item.cloudSrc">-->
+                                <!--</cube-slide-item>-->
+                            <!--</cube-slide>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
 
                     <!--  -->
@@ -176,8 +177,9 @@
     import searchBar from "components/searchBar.vue";
     import product from "components/product.vue";
     import scroll from "components/scroll.vue";
+    import shopLogo from "components/shop-logo.vue"
 
-    import {queryHomeProducts, ListProduct, ListAllDealer} from "api/fetch/home";
+    import {queryHomeProducts, ListProduct, ListAllDealer, queryCurrentShopInfo} from "api/fetch/home";
     import {queryShopInfo, synthesisroutineimg} from "api/fetch/mine";
     import {findCustomerOwerInfo} from "api/fetch/endCustomer";
     import {addShopHistory,ListDealerLogs} from "api/fetch/dealer";
@@ -204,6 +206,7 @@
                 banners: [],
                 posY: 0,
                 currentDealer: {},
+                screenWidth: screen.width,
                 options: {
                     click: true,
                     probeType: 1,
@@ -221,7 +224,8 @@
             scroll,
             product,
             floatCart,
-            back
+            back,
+            'shop-logo':shopLogo
         },
         beforeCreate() {
         },
@@ -261,6 +265,7 @@
                 this._listDealerLogs();
                 this._queryHomeProducts();
                 this.queryOwnerShop();
+                this.queryCurrentShop();
             } else {
                 this.scrollProducts.forEach(item => {
                     item.products = transformProductList(item.products);
@@ -283,7 +288,7 @@
                 this._listDealerLogs();
                 this._queryHomeProducts();
                 this.queryOwnerShop();
-
+                this.queryCurrentShop();
             }
         },
         mounted() {
@@ -348,6 +353,19 @@
                 ];
                 for (let key of keys) {
                     storage.remove(key);
+                }
+            },
+            queryCurrentShop() {
+                if (this.currentDealerId) {
+                    queryCurrentShopInfo({id: this.currentDealerId})
+                        .then(res => {
+                            if (res.data) {
+                                this.currentDealer = res.data
+                                storage.set("currentDealer", res.data)
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                    })
                 }
             },
             //请求自己的店铺
