@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div class="confirm" :class="{'achieve':achieve}" @click="verify">确认</div>
+    <div class="confirm" :class="{'achieve':achieve,'isIphoneX':isIphoneX}" @click="verify">确认</div>
   </div>
 </template>
 
@@ -72,6 +72,7 @@
   export default {
     data() {
       return {
+        isIphoneX:this.isIphoneX,
         productModal: {
           productSpecificationId: null,
           brandName: '',
