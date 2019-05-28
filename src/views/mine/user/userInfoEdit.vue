@@ -30,7 +30,7 @@
           :placeholder="showStore?`请输入店铺介绍`:`请输入公司介绍`"
         ></textarea>
       </li>
-      <li class="mb-20 uiw-info info-address" style="display: none;">
+      <li class="mb-20 uiw-info info-address" >
         <div class="ia-title">{{showStore?`店铺地址：`:`公司地址：`}}</div>
         <div class="ia-value locate-address">
           <textarea
@@ -43,11 +43,11 @@
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
-      <li class="uiw-pic">
+      <li class="uiw-pic" style="display: none;">
         <div>{{showStore?`门头照片：`:`公司形象照：`}}</div>
         <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
       </li>
-        <li class="mb-20">
+        <li class="mb-20" style="display: none;">
             <div class="logos-desc">建议图片宽高比为2:1,如400*200,格式(jpg、png、gif)</div>
         </li>
     </ul>
