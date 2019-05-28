@@ -196,7 +196,7 @@
                 counter: 0,
                 shareCounter:5,
                 showFixed: false,
-                appIcons: appIcons.slice(0, 4),
+                appIcons: appIcons.slice(0,5),
                 showSqure: false,
                 menuCanScroll: false,
                 scrollMenu: [],
@@ -245,12 +245,12 @@
             if (this.userType == 3 && !this.userInSwitching) {
                 this.appIcons = appIcons.slice();
             } else {
-                this.appIcons = appIcons.slice(0, 4);
+                this.appIcons = appIcons.slice(0, 5);
             }
             const userState = storage.get("userState", 1);
             //员工或店主审核中
             if (!Number(userState)) {
-                this.appIcons = appIcons.slice(0, 4);
+                this.appIcons = appIcons.slice(0, 5);
             }
             if (storage.get("homeRefresh", false)) {
                 this.counter = 0;
