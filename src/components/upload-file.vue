@@ -27,7 +27,7 @@
         props: {
             imgList: {
                 type: Array,
-                default: []
+                default: () => []
             },
             limitNum: Number
         },
