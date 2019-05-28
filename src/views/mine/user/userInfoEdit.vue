@@ -149,6 +149,7 @@ export default {
         this.$refs.uploadFile.submitFile(fileLength)
         return;
       }else{
+          this.shopInfo.logoIamgeUrls = [];
         this.saveEdit()
       }
     },
