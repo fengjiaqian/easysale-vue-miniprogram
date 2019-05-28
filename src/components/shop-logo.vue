@@ -59,18 +59,18 @@
                 img.src = this.logoImg;
                 img.onload = function(){
                     ctx.drawImage(img,0,0,that.width - 24,that.height);
-                    ctx.font = "24px '字体','字体','微软雅黑','宋体'"
+                    ctx.font = "bold 24px '字体','字体','微软雅黑','宋体'"
                     ctx.textBaseline = 'middle';
                     shopName && ctx.fillText(shopName,12,30)
-                    ctx.font = "12px '字体','宋体'"
+                    ctx.font = "bold 12px '字体','宋体'"
                     ctx.fillStyle='#666666'
                     address && ctx.fillText(address,37,58)
-                    ctx.font = "12px '字体','Verdana'"
+                    ctx.font = "bold 12px '字体','Verdana'"
                     if (phone) {
                         const formatPhone = phone.substr(0,3) + " " + phone.substr(3,4) + " " + phone.substr(7)
                         ctx.fillText(formatPhone,37,80)
                     }
-                    ctx.font = "13px '字体','字体','微软雅黑','宋体'"
+                    ctx.font = "bold 13px '字体','字体','微软雅黑','宋体'"
                     if (description) {
                         if (description.length > 20) {
                             const des1 = description.substr(0, 20);
