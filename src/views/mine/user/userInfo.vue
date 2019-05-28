@@ -28,7 +28,7 @@
       </li>
     </ul>
     <router-link to="/my/userInfoEdit">
-      <div class="user-info-edit">编辑</div>
+      <div class="user-info-edit"  :class="{'isIphoneX':isIphoneX}">编辑</div>
     </router-link>
   </div>
 </template>
@@ -41,7 +41,8 @@ export default {
     return {
       myTitle: "",
       shopInfo: {},
-      showStore: false
+      showStore: false,
+      isIphoneX:this.isIphoneX
     };
   },
   components: {},

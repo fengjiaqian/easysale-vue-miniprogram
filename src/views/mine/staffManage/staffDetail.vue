@@ -36,7 +36,7 @@
       <span @click="audit('2')" class="refuse">审核拒绝</span>
       <span @click="audit('1')">审核同意</span>
     </div>
-    <div class="b-oprate" @click="skipTo" v-else>
+    <div class="b-oprate" :class="{'isIphoneX':isIphoneX}" @click="skipTo" v-else>
       <span>编辑</span>
     </div>
   </div>
@@ -49,7 +49,8 @@ export default {
     return {
       userId: "", //员工id
       staffInfo: {}, //员工详细信息
-      domShow: false
+      domShow: false,
+      isIphoneX:this.isIphoneX
     };
   },
   components: {},

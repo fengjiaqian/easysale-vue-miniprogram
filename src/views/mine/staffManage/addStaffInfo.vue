@@ -44,7 +44,7 @@
         <div><input class="discount-int" v-model="staffInfo.discount" type="number" placeholder="请输入折扣"><span>折</span></div>
       </li>-->
     </ul>
-    <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
+    <div class="staff-info-btn" :class="{'achieve':achieve,'isIphoneX':isIphoneX}" @click="verify">保存</div>
 
     <!--角色设置弹出层-->
     <!--<div class="popup-wrap" v-if="rolePopShow">
@@ -72,6 +72,7 @@
   export default {
     data() {
       return {
+        isIphoneX:this.isIphoneX,
         staffInfo: {
           name: '',
           phone: '',

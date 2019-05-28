@@ -66,7 +66,7 @@
     </section>
 
     <!--底部-->
-    <section class="footer">
+    <section class="footer" :class="{'isIphoneX':isIphoneX}">
       <div class="f-select" @click="allSelect">
         <i :class="{'selected':allSelected}"></i>
         <span>全选</span>
@@ -109,6 +109,7 @@ import scroll from "components/scroll.vue";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       popAddShow: false,
       brandFilterShow: false,
       stateFilterShow: false,

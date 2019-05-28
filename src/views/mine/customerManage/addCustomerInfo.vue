@@ -41,7 +41,7 @@
         <i class="extension"></i>
       </li>
     </ul>
-    <div class="staff-info-btn" :class="{'achieve':achieve}" @click="verify">保存</div>
+    <div class="staff-info-btn" :class="{'achieve':achieve,'isIphoneX':isIphoneX}" @click="verify">保存</div>
     <!--角色设置弹出层-->
     <div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
@@ -72,6 +72,7 @@ import storage from "common/storage";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       customerInfo: {
         name: "",
         phone: "",

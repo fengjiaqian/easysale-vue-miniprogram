@@ -48,7 +48,7 @@
         <div class="bottom-btn" v-if="sourceType=='display'" @click="apply">申请陈列</div>
         <div class="bottom-btn" v-if="sourceType=='redemption'" @click="redemption">申请兑奖</div>
         <div class="bottom-btn" v-if="sourceType=='return'" @click="returnGoods">申请退货</div>
-        <div class="D-bottom" v-else>
+        <div class="D-bottom"  :class="{'isIphoneX':isIphoneX}" v-else>
             <span @click="deleteProduct">删除</span>
             <span class="edit" @click="editProduct">编辑</span>
         </div>
@@ -66,6 +66,7 @@
     export default {
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 domShow: false,
                 id: "", //商品id
                 product: {}, //商品对象
@@ -371,6 +372,10 @@
             bg(#FF5638);
             c(#fff)
         }
+    }
+
+    .D-bottom.isIphoneX{
+        padding-bottom 34px;
     }
 
     .s-success {

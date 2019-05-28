@@ -40,7 +40,7 @@
       <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
     </div>
     <div class="logos-desc" style="display: none;">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
-    <div class="edit" @click="verify()" :class="{'can-operate': canOperate}">保存</div>
+    <div class="edit" @click="verify()" :class="{'can-operate': canOperate, 'isIphoneX':isIphoneX}">保存</div>
   </div>
 </template>
 
@@ -55,6 +55,7 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       applyInfo: {
         name: "",
         phone: "",
@@ -232,7 +233,7 @@ export default {
 
 .edit {
   width: 100%;
-  height: 98px;
+  /*height: 98px;*/
   background: #BDBDBD;
   position: fixed;
   bottom: 0;
@@ -240,6 +241,10 @@ export default {
   color: #fff;
   line-height: 98px;
   text-align: center;
+}
+
+.edit.isIphoneX{
+  padding-bottom 34px;
 }
 
 .can-operate {

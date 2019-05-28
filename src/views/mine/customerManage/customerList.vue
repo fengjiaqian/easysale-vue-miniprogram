@@ -26,7 +26,7 @@
       <span>暂无客户，快去添加吧！</span>
     </section>
     <!--底部-->
-    <section class="cl-footer" @click="skipTo">新增客户</section>
+    <section class="cl-footer"  :class="{'isIphoneX':isIphoneX}" @click="skipTo">新增客户</section>
   </div>
 </template>
 
@@ -40,6 +40,7 @@ import storage from "common/storage";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       bookMenuData: {},
       bookMenuType: 2,
       filterParam: {

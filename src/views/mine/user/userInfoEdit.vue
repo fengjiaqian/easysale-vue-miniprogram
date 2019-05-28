@@ -51,7 +51,7 @@
             <div class="logos-desc">建议图片宽高比为2:1,如400*200,格式(jpg、png、gif)</div>
         </li>
     </ul>
-    <div class="user-info-edit save" :class="[achieve ? 'save' : 'disable']" @click="verify">保存</div>
+    <div class="user-info-edit save" :class="[achieve ? 'save' : 'disable',isIphoneX ? 'isIphoneX':none]"  @click="verify">保存</div>
   </div>
 </template>
 
@@ -67,6 +67,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       showStore: false,
       myTitle: "",
       shopInfo: {

@@ -26,7 +26,7 @@
       <span>暂无员工，快去添加吧！</span>
     </section>
     <!--底部-->
-    <section class="sl-footer" @click="skipTo">新增员工</section>
+    <section class="sl-footer"  :class="{'isIphoneX':isIphoneX}" @click="skipTo">新增员工</section>
   </div>
 </template>
 
@@ -39,6 +39,7 @@ import empty from "components/empty.vue";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       bookMenuData: {},
       bookMenuType: 1,
       filterParam: {
