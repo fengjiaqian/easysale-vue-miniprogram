@@ -81,7 +81,7 @@
     </div>
     <!--  -->
     <div class="bottom"  :class="{'isIphoneX':isIphoneX}" ref="bottomDom">
-      <a href="javascript:;" @click="_OrderSubmit" :class="{'active':currentCustomer.phone}">提交订单</a>
+      <a href="javascript:;" @click="_OrderSubmit" :class="{'active':currentCustomer.phone, 'isIphoneX':isIphoneX}">提交订单</a>
       &yen;{{actualAmount | priceToFixed}}
     </div>
   </div>
@@ -105,11 +105,11 @@ export default {
   name: "order-submit",
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       reduce: 0,
       products: [],
       currentCustomer: {},
-      remark: "",
-      isIphoneX:this.isIphoneX
+      remark: ""
     };
   },
   computed: {
@@ -329,14 +329,12 @@ export default {
   bottom: 0;
   left: 0;
   bg(#fff);
-  h(98);
   lh(98);
   ft(48);
   c($color-theme);
 
   a {
     w(224);
-    h(98);
     frt();
     bg(#BDBDBD);
     c(#fff);
@@ -349,7 +347,13 @@ export default {
   }
 }
 
+/*
 .bottom.isIphoneX{
+  padding-bottom 34px;
+}*!
+*/
+
+.bottom .isIphoneX {
   padding-bottom 34px;
 }
 

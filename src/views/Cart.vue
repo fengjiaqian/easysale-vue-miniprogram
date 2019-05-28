@@ -190,7 +190,7 @@ export default {
 .C-bottom {
   bg(#fff);
   width: 100%;
-  h(98);
+  line-height 98px;
   pl(88);
   pos(fixed);
   left: 0;
@@ -202,9 +202,7 @@ export default {
   }
 }
 
-.C-bottom.isIphoneX{
-  padding-bottom 34px;
-}
+
 
 .C-bottom-left {
   mr(224);
@@ -216,7 +214,6 @@ export default {
 }
 
 .C-bottom-right {
-  height: 100%;
   w(224);
   lh(98);
   frt();
@@ -224,6 +221,10 @@ export default {
   ft(32);
   c(#fff);
   text-c();
+}
+
+.isIphoneX .C-bottom-right{
+  padding-bottom 34px;
 }
 </style>
 
