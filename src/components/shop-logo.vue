@@ -1,6 +1,6 @@
 <template>
     <div id="shop-logo">
-        <canvas id="sLogo" width="414" height="151" style="clear:both;margin-left:12px;"></canvas>
+        <canvas id="sLogo" :width="realWidth" height="334" style="clear:both;margin-left:12px;height:168px;"></canvas>
     </div>
 </template>
 
@@ -26,11 +26,16 @@
             },
             height: {
                 type:Number,
-                default:151
+                default:168
             }
         },
         created() {
             this.config = this.shopInfo;
+        },
+        computed:{
+            realWidth: function () {
+                return (this.width - 24) * 2
+            }
         },
 
         watch: {
@@ -58,30 +63,30 @@
 
                 img.src = this.logoImg;
                 img.onload = function(){
-                    ctx.drawImage(img,0,0,that.width - 24,that.height);
-                    ctx.font = "bold 24px '字体','字体','微软雅黑','宋体'"
+                    ctx.drawImage(img,0,0,(that.width - 24) * 2,that.height * 2);
+                    ctx.font = "48px '字体','字体','微软雅黑','宋体'"
                     ctx.textBaseline = 'middle';
-                    shopName && ctx.fillText(shopName,12,30)
-                    ctx.font = "bold 12px '字体','宋体'"
+                    shopName && ctx.fillText(shopName,24,60)
+                    ctx.font = "24px '字体','宋体'"
                     ctx.fillStyle='#666666'
-                    address && ctx.fillText(address,37,58)
-                    ctx.font = "bold 12px '字体','Verdana'"
+                    address && ctx.fillText(address,74,130)
+                    ctx.font = "24px '字体','Verdana'"
                     if (phone) {
                         const formatPhone = phone.substr(0,3) + " " + phone.substr(3,4) + " " + phone.substr(7)
-                        ctx.fillText(formatPhone,37,80)
+                        ctx.fillText(formatPhone,74,176)
                     }
-                    ctx.font = "bold 13px '字体','字体','微软雅黑','宋体'"
+                    ctx.font = "26px '字体','字体','微软雅黑','宋体'"
                     if (description) {
                         if (description.length > 20) {
                             const des1 = description.substr(0, 20);
-                            ctx.fillText(des1, 62,115);
+                            ctx.fillText(des1, 128,256);
                             let des2 = description.substr(20,40);
                             if (description.length > 40) {
                                 des2 = description.substr(20, 38) + "..."
                             }
-                            ctx.fillText(des2, 62, 135);
+                            ctx.fillText(des2, 128, 296);
                         } else {
-                            ctx.fillText(description, 62,125);
+                            ctx.fillText(description, 124,270);
                         }
 
                     }
