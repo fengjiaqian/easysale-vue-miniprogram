@@ -39,7 +39,7 @@
       <div class="left" style="width: 80px">公司形象照 :</div>
       <upload-file :img-list="stagImgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
     </div>
-    <div class="logos-desc">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
+    <div class="logos-desc" style="display: none;">尺寸大小2:1,如400*200,格式(jpg、png、gif)</div>
     <div class="edit" @click="verify()" :class="{'can-operate': canOperate}">保存</div>
   </div>
 </template>
