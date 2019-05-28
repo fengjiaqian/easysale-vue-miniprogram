@@ -15,7 +15,7 @@
       @deleteOne="_delete"
     ></product-cart>
     <!--  -->
-    <div class="C-bottom" v-if="products.length">
+    <div class="C-bottom"  :class="{'isIphoneX':isIphoneX}" v-if="products.length">
       <span class="C-check-icon" :class="{'checked': isAllSelected}" @click="_allSelect()"></span>
       <!--  -->
       <a href="javascript:;" class="C-bottom-right" @click="_submitOrder">
@@ -49,7 +49,8 @@ export default {
     return {
       isAllSelected: false, //商品全选
       products: [],
-      avatar
+      avatar,
+      isIphoneX:this.isIphoneX
     };
   },
   components: {
@@ -199,6 +200,10 @@ export default {
   .C-check-icon {
     top: 29px;
   }
+}
+
+.C-bottom.isIphoneX{
+  padding-bottom 34px;
 }
 
 .C-bottom-left {

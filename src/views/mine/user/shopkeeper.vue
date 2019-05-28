@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <a href="javascript:;" class="authenticate-btn" @click="verify">立即认证</a>
+    <a href="javascript:;" class="authenticate-btn"  :class="{'isIphoneX':isIphoneX}" @click="verify">立即认证</a>
   </div>
 </template>
 
@@ -51,7 +51,8 @@ export default {
       files: [],
       imgList: [],
       limitUploadNum: 1,
-      logoIamgeUrls: []
+      logoIamgeUrls: [],
+      isIphoneX: this.isIphoneX
     };
   },
   components: {
@@ -213,6 +214,10 @@ export default {
   c(#fff);
   text-c();
   bg($color-theme);
+}
+
+.authenticate-btn.isIphoneX{
+  padding-bottom 34px;
 }
 .upload-license{
   background-color transparent !important;

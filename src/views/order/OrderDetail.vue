@@ -73,11 +73,11 @@
             </div>
         </div>
         <!--  -->
-        <div class="bottom-wrap" v-if="order.canRefuse">
+        <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="order.canRefuse">
             <a href="javascript:;" class="btn" @click="_operate(3,order.id)">拒绝</a>
             <a href="javascript:;" class="btn" @click="_operate(2,order.id)">同意</a>
         </div>
-        <div class="bottom-wrap" v-if="order.canCancel">
+        <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="order.canCancel">
             <a href="javascript:;" class="btn" @click="_operate(5,order.id)" style="width:100%">取消申请</a>
         </div>
     </div>
@@ -102,7 +102,8 @@
             return {
                 order: {},
                 products: [],
-                reason: ""
+                reason: "",
+                isIphoneX:this.isIphoneX
             };
         },
         components: {
@@ -165,6 +166,10 @@
         border-top: 1PX solid #EDEDED;
         bg(#fff);
         z-index: 100;
+    }
+
+    .bottom-wrap.isIphoneX{
+        padding-bottom 34px;
     }
 
     .btn {

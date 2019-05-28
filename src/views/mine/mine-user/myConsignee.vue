@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="edit" @click="_addAddress()">新增收货人</div>
+    <div class="edit"  :class="{'isIphoneX':isIphoneX}" @click="_addAddress()">新增收货人</div>
   </div>
 </template>
 
@@ -42,7 +42,8 @@ export default {
       showOperation: true,
       empty: false,
       avatarUrl,
-      userPhone: "" //用户手机号
+      userPhone: "", //用户手机号
+      isIphoneX: this.isIphoneX
     };
   },
   components: {
@@ -184,7 +185,7 @@ export default {
 
 .my-consignee .edit {
   width: 100%;
-  height: 98px;
+  /*height: 98px;*/
   color: rgba(255, 255, 255, 1);
   position: fixed;
   bottom: 0;
@@ -193,5 +194,9 @@ export default {
   line-height: 98px;
   text-align: center;
   border-top: 1PX solid #ededed;
+}
+
+.my-consignee.edit.isIphoneX{
+  padding-bottom 34px;
 }
 </style>

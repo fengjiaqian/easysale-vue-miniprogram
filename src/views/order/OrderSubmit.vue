@@ -80,7 +80,7 @@
       </div>
     </div>
     <!--  -->
-    <div class="bottom" ref="bottomDom">
+    <div class="bottom"  :class="{'isIphoneX':isIphoneX}" ref="bottomDom">
       <a href="javascript:;" @click="_OrderSubmit" :class="{'active':currentCustomer.phone}">提交订单</a>
       &yen;{{actualAmount | priceToFixed}}
     </div>
@@ -108,7 +108,8 @@ export default {
       reduce: 0,
       products: [],
       currentCustomer: {},
-      remark: ""
+      remark: "",
+      isIphoneX:this.isIphoneX
     };
   },
   computed: {
@@ -346,6 +347,10 @@ export default {
       bg($color-theme);
     }
   }
+}
+
+.bottom.isIphoneX{
+  padding-bottom 34px;
 }
 
 .select-customer {

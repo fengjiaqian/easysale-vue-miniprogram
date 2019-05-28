@@ -63,7 +63,8 @@ export default {
   name: "detail",
   data() {
     return {
-      product: {}
+      product: {},
+      // isIphoneX:this.isIphoneX
     };
   },
   components: {
@@ -166,6 +167,9 @@ export default {
   bg(#fff);
   display: none;
 }
+/*.D-bottom.isIphoneX{
+  padding-bottom 34px;
+}*/
 
 .D-bottom-left {
   width: 40%;
