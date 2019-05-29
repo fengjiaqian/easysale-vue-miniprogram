@@ -25,7 +25,7 @@
       </div>
       <i @click="obtainAddress" class="position"></i>
     </div>
-    <div class="edit" @click="_operate" :class="{'can-operate': canOperate}">保存</div>
+    <div class="edit" @click="_operate" :class="{'can-operate': canOperate,'isIphoneX':isIphoneX}">保存</div>
   </div>
 </template>
 
@@ -35,6 +35,7 @@ import { evokeWxLocation } from "common/location";
 export default {
   data() {
     return {
+      isIphoneX:this.isIphoneX,
       code: 1, //新增1  编辑2
       myTitle: "",
       consigneeInfo: {
@@ -146,7 +147,6 @@ export default {
 
 .edit {
   width: 100%;
-  height: 98px;
   background: #BDBDBD;
   position: fixed;
   bottom: 0;
@@ -154,6 +154,10 @@ export default {
   color: #fff;
   line-height: 98px;
   text-align: center;
+}
+
+.edit.isIphoneX{
+  padding-bottom 34px;
 }
 
 .can-operate {
