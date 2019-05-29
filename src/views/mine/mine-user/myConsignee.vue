@@ -196,7 +196,7 @@ export default {
   border-top: 1PX solid #ededed;
 }
 
-.my-consignee.edit.isIphoneX{
+.edit.isIphoneX{
   padding-bottom 34px;
 }
 </style>
