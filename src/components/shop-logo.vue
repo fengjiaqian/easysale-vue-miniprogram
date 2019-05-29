@@ -56,7 +56,7 @@
                     return;
                 }
                 const that = this;
-                const {shopName, phone, description,address} = config
+                const {shopName, phone, instruction,address} = config
                 const _canvas = document.getElementById("sLogo");
                 const ctx = _canvas.getContext("2d");
                 var img=new Image();
@@ -75,18 +75,19 @@
                         const formatPhone = phone.substr(0,3) + " " + phone.substr(3,4) + " " + phone.substr(7)
                         ctx.fillText(formatPhone,74,176)
                     }
+
                     ctx.font = "26px '字体','字体','微软雅黑','宋体'"
-                    if (description) {
-                        if (description.length > 20) {
-                            const des1 = description.substr(0, 20);
+                    if (instruction) {
+                        if (instruction.length > 20) {
+                            const des1 = instruction.substr(0, 20);
                             ctx.fillText(des1, 128,256);
-                            let des2 = description.substr(20,40);
-                            if (description.length > 40) {
-                                des2 = description.substr(20, 38) + "..."
+                            let des2 = instruction.substr(20,40);
+                            if (instruction.length > 40) {
+                                des2 = instruction.substr(20, 38) + "..."
                             }
                             ctx.fillText(des2, 128, 296);
                         } else {
-                            ctx.fillText(description, 124,270);
+                            ctx.fillText(instruction, 124,270);
                         }
 
                     }
