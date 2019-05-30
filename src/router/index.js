@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
     let $el = document.querySelector('.loading-message');
     $el && $el.parentNode.removeChild($el);
     const token = storage.get('token', "");
-    const routeRequireGuidance = storage.get('routeRequireGuidance', 1);
+    const routeRequireGuidance = storage.get('routeRequireGuidance', 0);
     const mobileNo = storage.get('mobileNo', '');
     //引导认证控制
     if (routeRequireGuidance && to.meta.requireGuidence && mobileNo) {
