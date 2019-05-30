@@ -966,6 +966,7 @@ export default {
       font-size: 30px;
       color: #666;
       border-radius: 10px;
+      background-color:#f6f6f6;
     //border: 1PX solid rgba(189, 189, 189, 1);
       text-align: center;
       overflow: hidden;
