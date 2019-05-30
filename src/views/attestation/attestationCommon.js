@@ -24,7 +24,7 @@ const identityEmployee = function (formData) {
         storage.set("userState", 0);   //控制开店导航
         storage.remove("routeRequireGuidance");
         this.$alert('您的申请已提交，请耐心等待店主审核').then(res => {
-            storage.set("routeRequireGuidance",0);
+            // storage.set("routeRequireGuidance",0);
             this.$router.push({ path: "/navi/home" });
         });
     }).catch(err => {
@@ -39,7 +39,7 @@ const identityBoss = function (formData) {
         storage.set("userState", 0); //控制开店导航
         storage.remove("routeRequireGuidance");
         this.$alert('您的申请已提交，请耐心等待审核').then(res => {
-            storage.set("routeRequireGuidance",0);
+            // storage.set("routeRequireGuidance",0);
             this.$router.push({ path: "/navi/home" });
         });
     }).catch(err => {
