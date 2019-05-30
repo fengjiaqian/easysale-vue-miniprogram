@@ -29,7 +29,7 @@
                 <textarea id="remark" cols="30" rows="6" placeholder="请输入内容"
                           v-model="remark"></textarea>
       </div>-->
-      <div class="upload-viewer">
+      <!-- <div class="upload-viewer">
         <p class="title">
           上传相关图片
         </p>
@@ -40,7 +40,7 @@
             ref="uploadFile"
           ></upload-file>
         </div>
-      </div>
+      </div> -->
     </div>
     <button
       class="submit"
