@@ -26,7 +26,7 @@
 
             </scroll>
         </div>
-        <button class="footer-btn" @click="addComplaints()" v-if="userType == 3">我要投诉</button>
+        <button class="footer-btn" :class="{'isIphoneX':isIphoneX}" @click="addComplaints()" v-if="userType == 3">我要投诉</button>
     </div>
 </template>
 <script>
@@ -43,6 +43,7 @@
         components: {listItem, empty, mHeader, scroll},
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 stateList: [{
                     title: `待处理`,
                     idx: 0
@@ -314,7 +315,6 @@
             border: 0;
             outline: none;
             width: 100%;
-            h(98);
             lh(98);
             bg(#FF5638)
             font-size: 32px;
@@ -322,6 +322,8 @@
             text-align: center;
             z-index 44
         }
+        .footer-btn.isIphoneX{
+            padding-bottom 34px;}
         .dealer-list-wrap {
             position fixed
             top 185px

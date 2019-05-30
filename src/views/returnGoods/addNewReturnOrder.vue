@@ -35,14 +35,14 @@
                 <p class="title"><i>*</i>退货原因</p>
                 <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
-            <div class="remark-box">
+            <!-- <div class="remark-box">
                 <p class="title ">备注</p>
                 <textarea class="remark-input" id="remark" cols="30" rows="6" placeholder="请输入内容"
                           v-model="remark"></textarea>
-            </div>
+            </div> -->
         </div>
 
-        <button class="submit-btn" :class="{'achieve':canOperate}" @click="submitReturnOrder">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate,'isIphoneX':isIphoneX}" @click="submitReturnOrder">提交</button>
     </div>
 </template>
 
@@ -56,6 +56,7 @@
         name: 'addNewReturnOrder',
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 returnGoods: [],
                 remark: '',
                 returnContent: ''
@@ -180,7 +181,6 @@
         }
 
         .submit-btn {
-            h(98)
             position: fixed;
             width: 100%;
             bottom: 0;
@@ -193,6 +193,8 @@
             border: 0;
             outline: none;
         }
+        .submit-btn.isIphoneX{
+            padding-bottom:34px;}
         .achieve {
             bg(#FF5638)
 

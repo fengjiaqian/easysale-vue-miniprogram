@@ -45,7 +45,7 @@
                        @cancelReturn="cancelReturn"></list-item>
         </div>
         <!--底部按钮-->
-        <div class="footer" v-if="userType == 3&&tabState==2&&!empty">
+        <div class="footer" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&tabState==2&&!empty">
             <div class="footer-left">
                 <img :src="isAllSelected?selectImg[1]:selectImg[0]" class="select-img" @click.stop="selectAll">
                 <span>{{isAllSelected?'取消全选':'全选'}}</span>
@@ -78,6 +78,7 @@
         components: {scroll, empty, mHeader, listItem, searchBar, productNormal},
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 stateList: [{
                     title: `待处理`,
                     idx: 0
@@ -399,7 +400,6 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            h(98);
             lh(98);
             bg(#fff);
             z-index 44;
@@ -416,6 +416,10 @@
                 ml(24)
             }
         }
+
+        .footer.isIphoneX{
+            padding-bottom 34px;}
+
         .footer-left {
             display flex;
             align-items center

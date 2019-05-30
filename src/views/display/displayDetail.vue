@@ -35,7 +35,7 @@
                 <li>商贸公司：{{displayInfo.dealer.shopName}}</li>
             </ul>
         </div>
-        <div class="bottom-btn" @click="cancelApply" v-if="displayInfo.customerDisplay.state==0">取消陈列</div>
+        <div class="bottom-btn" :class="{'isIphoneX':isIphoneX}" @click="cancelApply" v-if="displayInfo.customerDisplay.state==0">取消陈列</div>
     </div>
 </template>
 
@@ -45,6 +45,7 @@
     export default {
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 displayInfo: {},//陈列详情
                 id: '',//陈列id
                 domShow: false,

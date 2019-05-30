@@ -37,7 +37,7 @@
                           v-model="remark"></textarea>
             </div>
         </div>
-        <button class="submit-btn" :class="{'achieve':canOperate}" @click="submitRedemption">提交</button>
+        <button class="submit-btn" :class="{'achieve':canOperate,'isIphoneX':isIphoneX}" @click="submitRedemption">提交</button>
     </div>
 </template>
 
@@ -51,6 +51,7 @@
         name: 'addNewRedemption',
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 redemptionGoods: [],
                 remark: '',
             }
@@ -164,7 +165,6 @@
         }
 
         .submit-btn {
-            h(98)
             position: fixed;
             width: 100%;
             bottom: 0;
@@ -177,6 +177,8 @@
             border: 0;
             outline: none;
         }
+        .submit-btn.isIphoneX{
+            padding-bottom 34px;}
         .achieve {
             bg(#FF5638)
 

@@ -47,11 +47,11 @@
         </section>
 
         <section class="footer" v-if="activeIdx==0">
-            <div class="f-all" @click="selectAll">
+            <div class="f-all" :class="{'isIphoneX':isIphoneX}" @click="selectAll">
                 <i :class="{'selected':allSelected}"></i>
                 <span>全选</span>
             </div>
-            <div class="f-apply" :class="{'achieve':achieve}" @click="apply">
+            <div class="f-apply" :class="{'achieve':achieve,'isIphoneX':isIphoneX}" @click="apply">
                 申请陈列<span v-if="achieve">({{selectedProduct.length}})</span>
             </div>
         </section>
@@ -71,6 +71,7 @@
     export default {
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 activeIdx: 0,//选中的状态
                 stateList: [{
                     title: `可申请`,

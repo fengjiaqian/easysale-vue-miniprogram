@@ -44,17 +44,17 @@
                 <span class="title">投诉时间</span>
                 <span class="font-30-666 company-name">{{customerComplaint.createTime}}</span>
             </div>
-            <div class="title-box">
+            <!-- <div class="title-box">
                 <span class="title ">备注</span>
                 <span class="font-30-666 company-name">{{customerComplaint.remark}}</span>
-            </div>
+            </div> -->
             <div class="title-box" v-if="userType != 3&&customerComplaint.state==0">
                 <p class="title">回复</p>
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
         </div>
-        <button class="cancel-btn" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
+        <button class="cancel-btn" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
         </button>
         <div v-if="userType !=3&&customerComplaint.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
@@ -71,6 +71,7 @@
         name: 'complaintDetail',
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 state: ['待处理', '已处理', '已取消'],
                 judgeCode: 2,
                 replay: '',
@@ -231,7 +232,6 @@
             mt(24)
         }
         .cancel-btn {
-            h(98)
             position: fixed;
             width: 100%;
             bottom: 0;
@@ -244,6 +244,9 @@
             border: 0;
             outline: none;
         }
+
+        .cancel-btn.isIphoneX{
+            padding-bottom 34px;}
 
         .triangle {
             width: 0;

@@ -18,7 +18,7 @@
             <h5>备注</h5>
             <textarea v-model="param.remark" cols="30" rows="6" placeholder="请输入内容"></textarea>
         </div>
-        <div class="da-confirm" @click="confirm">提交</div>
+        <div class="da-confirm" :class="{'isIphoneX':isIphoneX}" @click="confirm">提交</div>
     </div>
 </template>
 
@@ -28,6 +28,7 @@
     export default {
         data() {
             return {
+                isIphoneX:this.isIphoneX,
                 productList: [],
                 param: {
                     remark: '',

@@ -45,9 +45,9 @@
                 <input type="text" placeholder="请输入退货原因" v-model="returnContent">
             </div>
         </div>
-        <div class="bottom-btn" v-if="sourceType=='display'" @click="apply">申请陈列</div>
-        <div class="bottom-btn" v-if="sourceType=='redemption'" @click="redemption">申请兑奖</div>
-        <div class="bottom-btn" v-if="sourceType=='return'" @click="returnGoods">申请退货</div>
+        <div class="bottom-btn" :class="{'isIphoneX':isIphoneX}" v-if="sourceType=='display'" @click="apply">申请陈列</div>
+        <div class="bottom-btn" :class="{'isIphoneX':isIphoneX}" v-if="sourceType=='redemption'" @click="redemption">申请兑奖</div>
+        <div class="bottom-btn" :class="{'isIphoneX':isIphoneX}" v-if="sourceType=='return'" @click="returnGoods">申请退货</div>
         <div class="D-bottom"  :class="{'isIphoneX':isIphoneX}" v-else>
             <span @click="deleteProduct">删除</span>
             <span class="edit" @click="editProduct">编辑</span>
@@ -434,6 +434,10 @@
         c(#fff)
         text-c()
     }
+
+    .bottom-btn.isIphoneX{
+        padding-bottom:34px;
+        }
 
     input::-webkit-input-placeholder {
         color: #BDBDBD !important;
