@@ -53,6 +53,7 @@
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
+            
         </div>
         <button class="cancel-btn" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
         </button>
