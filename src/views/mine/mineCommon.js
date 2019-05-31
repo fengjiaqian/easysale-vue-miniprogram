@@ -63,12 +63,13 @@ export function initAccessModule(userType, auditState = '') {
         }
         return customerAccessModule.slice(0, 1);
     }else if(userType == 2){
+        //验证店铺  是否认证店主了
         let shopState = storage.get('shopState');
-        if(shopState == 2){
-            return [...dealerAccessModule, companyInfo];
-        }else{
+        if(shopState == "1"){
             let dealerModule = dealerAccessModule.slice(0, 5);
             return [...dealerModule, companyInfo];
+        }else{
+            return [...dealerAccessModule, companyInfo];
         }
     }
     if (auditState == 1) {   //已经认证了

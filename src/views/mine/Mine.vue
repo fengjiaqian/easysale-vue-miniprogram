@@ -112,7 +112,8 @@ export default {
       } else if (this.auditState == 1 && this.userType == 2) {
           //验证一下 当前店铺是否有老板  有老板直接进去  没老板提示需要认证
           let shopState = storage.get('shopState');
-          if (shopState == 1) {
+          alert(shopState);
+          if (shopState == "1") {
             path == "/my/statistical";
           }else{
               const msg =
