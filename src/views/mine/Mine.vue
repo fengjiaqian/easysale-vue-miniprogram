@@ -108,7 +108,14 @@ export default {
               this.$router.push({ path: "/my/authentication" });
             })
             .catch(() => {});
-        } else {
+
+      } else if (this.auditState == 1 && this.userType == 2) {
+         this.$confirm("您是员工")
+               /* .then(() => {
+                  this.$router.push({ path: "/my/authentication" });
+                })
+                .catch(() => {});*/
+      }else {
           path == "/my/statistical";
         }
       }
