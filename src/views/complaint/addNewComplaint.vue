@@ -45,7 +45,7 @@
     <button
       class="submit"
       :class="{'achieve':canOperate,'isIphoneX':isIphoneX}"
-      @click="verify"
+      @click="addNewComplaint"
     >提交</button>
     <select-dialog
       :roleList="typeList"
