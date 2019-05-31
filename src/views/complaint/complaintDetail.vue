@@ -53,7 +53,13 @@
                 <textarea class="company-name" id="replay" cols="30" rows="6" placeholder="请输入内容"
                           v-model="replay"></textarea>
             </div>
-            
+            <div class="title-box" v-if="customerComplaint.imageList && customerComplaint.imageList.length>0">
+                <p class="title">相关图片</p>
+                <span v-for="(item,index) in customerComplaint.imageList" :key="item.id">
+                    <img class="complaint_img" :src="item" alt="">
+                </span>
+                <img src="" alt="">
+            </div>
         </div>
         <button class="cancel-btn" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
         </button>
@@ -345,6 +351,12 @@
             squ(40);
             background: url('../../assets/images/icon-tel.png') no-repeat center;
             background-size: contain;
+        }
+
+        .complaint_img{
+            width :100%;
+            mt(20)
+            height :auto;
         }
 
     }

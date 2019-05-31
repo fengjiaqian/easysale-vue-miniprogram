@@ -1,160 +1,191 @@
-//用户店铺信息
-.user-info-wrap{
-  ft(30)
-  >li{
-    padding 24px
-    flex-center()
-    bg(#fff)
-    >div:first-child{
-      c-6()
-      word-break keep-all
+// 用户店铺信息
+.user-info-wrap {
+  ft(30);
+
+  >li {
+    padding: 24px;
+    flex-center();
+    bg(#fff);
+
+    >div:first-child {
+      c-6();
+      word-break: keep-all;
     }
-    >div:last-child{
-      c-3()
-      flex-1()
-      ml(10)
+
+    >div:last-child {
+      c-3();
+      flex-1();
+      ml(10);
     }
-    input{
-      c-3()
-      flex-1()
-      ml(10)
-      outline none
-      &::-webkit-input-placeholder{
-        c(#999)
+
+    input {
+      c-3();
+      flex-1();
+      ml(10);
+      outline: none;
+
+      &::-webkit-input-placeholder {
+        c(#999);
       }
     }
-    textarea{
-      c-3()
-      flex-1()
-      ml(10)
-      outline none
-      border none
-      &::-webkit-textarea-placeholder{
-        c(#999)
+
+    textarea {
+      c-3();
+      flex-1();
+      ml(10);
+      outline: none;
+      border: none;
+
+      &::-webkit-textarea-placeholder {
+        c(#999);
       }
     }
   }
-  .uiw-info,.uiw-pic{
-    flex()
-    justify-content flex-start
-    align-items flex-start
+
+  .uiw-info {
+    word-break: break-all;
   }
-  .uiw-pic{
-    .img-list{
-      flex-1()
-      flex()
-      flex-wrap wrap
-      justify-content flex-start
-      >li{
-        position relative
-        img{
-          w(160)
-          h(160)
-          mr(20)
-          border-radius 6px
-          border 1PX solid #ededed
-          box-sizing border-box
+
+  .uiw-info, .uiw-pic {
+    flex();
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .uiw-pic {
+    .img-list {
+      flex-1();
+      flex();
+      flex-wrap: wrap;
+      justify-content: flex-start;
+
+      >li {
+        position: relative;
+
+        img {
+          w(160);
+          h(160);
+          mr(20);
+          border-radius: 6px;
+          border: 1PX solid #ededed;
+          box-sizing: border-box;
         }
-        i{
-          position absolute
-          right 8px
-          top -20px
-          w(40)
-          h(40)
-          background-image url(../../../assets/images/close_icon1.png)
-          background-size contain
-          background-repeat no-repeat
-          background-position center
+
+        i {
+          position: absolute;
+          right: 8px;
+          top: -20px;
+          w(40);
+          h(40);
+          background-image: url('../../../assets/images/close_icon1.png');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
         }
       }
     }
   }
 }
-.user-info-edit{
-  width 100%
-  lh(98)
-  position fixed
-  left 0
-  bottom 0
-  bg(#FF5638)
-  ft(32)
-  c(#fff)
-  text-c()
-  &.save{
-    bg(#FF5638)
-    c(#fff)
+
+.user-info-edit {
+  width: 100%;
+  lh(98);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  bg(#FF5638);
+  ft(32);
+  c(#fff);
+  text-c();
+
+  &.save {
+    bg(#FF5638);
+    c(#fff);
   }
-  &.disable{
-    bg(#BDBDBD)
-    c(#fff)
+
+  &.disable {
+    bg(#BDBDBD);
+    c(#fff);
   }
 }
 
-.user-info-edit.isIphoneX{
-  padding-bottom 34px;
+.user-info-edit.isIphoneX {
+  padding-bottom: 34px;
 }
-.mb-20{
-  mb(20)
+
+.mb-20 {
+  mb(20);
 }
-.info-address{
-  flex()
-  align-items center
-  justify-content flex-start
-  ft(30)
-  c-3()
-  .ia-title{
-    c-6()
-    mr(12)
-    min-width 150px
+
+.info-address {
+  flex();
+  align-items: center;
+  justify-content: flex-start;
+  ft(30);
+  c-3();
+
+  .ia-title {
+    c-6();
+    mr(12);
+    min-width: 150px;
   }
-  .ia-value{
-    flex-1()
-    input{
-      width 100%
-      flex-1()
-      &::-webkit-input-placeholder{
-        c(#bdbdbd)
+
+  .ia-value {
+    flex-1();
+
+    input {
+      width: 100%;
+      flex-1();
+
+      &::-webkit-input-placeholder {
+        c(#bdbdbd);
       }
     }
   }
-  i{
-    background-size contain
-    background-repeat no-repeat
-    background-position center
+
+  i {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .position{
-    w(48)
-    h(48)
-    background-image url(../../../assets/images/address_position_icon.png)
+
+  .position {
+    w(48);
+    h(48);
+    background-image: url('../../../assets/images/address_position_icon.png');
   }
 }
 
+// 用户邀请码页面
+.invite-code-wrap {
+  margin: 24px;
+  bg(#fff);
 
-//用户邀请码页面
-.invite-code-wrap{
-  margin 24px
-  bg(#fff)
-  .profile-photo{
-    flex()
-    align-items center
-    img{
-      w(120)
-      h(120)
-      border-radius 10px
-      margin 60px 30px 60px 60px
+  .profile-photo {
+    flex();
+    align-items: center;
+
+    img {
+      w(120);
+      h(120);
+      border-radius: 10px;
+      margin: 60px 30px 60px 60px;
     }
-    span{
-      ft(36)
-      c-3()
+
+    span {
+      ft(36);
+      c-3();
     }
   }
-  .profile-code{
-    w(500)
-    h(500)
-    margin 0 auto
-    img{
-      width 100%
-      height 100%
+
+  .profile-code {
+    w(500);
+    h(500);
+    margin: 0 auto;
+
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 }

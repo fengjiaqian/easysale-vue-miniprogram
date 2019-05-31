@@ -25,7 +25,7 @@
         <div>{{showStore?`店铺介绍：`:`公司介绍：`}}</div>
         <textarea
           v-model="shopInfo.instruction"
-          maxlength="180"
+          maxlength="100"
           rows="4"
           :placeholder="showStore?`请输入店铺介绍`:`请输入公司介绍`"
         ></textarea>

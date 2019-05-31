@@ -29,24 +29,14 @@
                 <textarea id="remark" cols="30" rows="6" placeholder="请输入内容"
                           v-model="remark"></textarea>
       </div>-->
-      <!-- <div class="upload-viewer">
-        <p class="title">
-          上传相关图片
-        </p>
+      <div class="upload-viewer">
+        <p class="title">上传相关图片</p>
         <div class="upload-area upload-license">
-          <upload-file
-            :img-list="imgList"
-            :limit-num="limitUploadNum"
-            ref="uploadFile"
-          ></upload-file>
+          <upload-file :img-list="imgList" :limit-num="limitUploadNum" ref="uploadFile"></upload-file>
         </div>
-      </div> -->
+      </div>
     </div>
-    <button
-      class="submit"
-      :class="{'achieve':canOperate,'isIphoneX':isIphoneX}"
-      @click="addNewComplaint"
-    >提交</button>
+    <button class="submit" :class="{'achieve':canOperate,'isIphoneX':isIphoneX}" @click="verify">提交</button>
     <select-dialog
       :roleList="typeList"
       :rolePopShow="rolePopShow"
@@ -66,7 +56,6 @@ import selectDialog from "components/select-dialog.vue";
 import bus from "common/Bus";
 import uploadFile from "components/upload-file";
 import { compress } from "common/util";
-
 
 const arrowUrl = arrow;
 export default {
@@ -128,9 +117,18 @@ export default {
     });
   },
   methods: {
-
     verify() {
-      this.$refs.uploadFile.submitFile()
+      const fileLength = this.$refs.uploadFile.fileList.length;
+      if (fileLength) {
+        //上传图片
+        this.$refs.uploadFile.submitFile(fileLength);
+        return;
+      } else {
+        this.logoIamgeUrls = [];
+        this.addNewComplaint();
+      }
+
+      // this.$refs.uploadFile.submitFile()
     },
 
     openDialog() {
@@ -173,7 +171,7 @@ export default {
         complaintHeadLine: this.complaintHeadLine,
         remark: this.remark,
         complaintType: this.complaintType,
-        imageList:this.logoIamgeUrls
+        imageList: this.logoIamgeUrls
       };
       saveComplain(params)
         .then(res => {
@@ -344,7 +342,7 @@ export default {
       mt(24);
       border: 1PX dashed #ededed;
       width: 100%;
-      height auto;
+      height: auto;
       background: rgba(250, 250, 250, 1);
     }
   }
