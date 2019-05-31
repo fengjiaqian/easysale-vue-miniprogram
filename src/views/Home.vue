@@ -372,6 +372,7 @@ export default {
     queryOwnerShop() {
       if (storage.get("originUserType", 3) == 3) return false;
       queryShopInfo({}).then(res => {
+        console.log("請求店鋪返回数据:"+JSON.stringify(res.data));
         const { shopName, shopId, phone, auditState } = res.data;
         const ownerShop = {
           shopName,
