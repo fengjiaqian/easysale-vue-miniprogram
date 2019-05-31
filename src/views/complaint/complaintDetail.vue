@@ -55,9 +55,12 @@
             </div>
             <div class="title-box" v-if="customerComplaint.imageList && customerComplaint.imageList.length>0">
                 <p class="title">相关图片</p>
-                <span  class="complaint_img_box" v-for="(item,index) in customerComplaint.imageList" :key="item.id">
+                <div  class="complaint_img_div">
+                    <span  class="complaint_img_box" v-for="(item,index) in customerComplaint.imageList" :key="item.id">
                     <img class="complaint_img" v-preview="item" :src="item" alt="">
                 </span>
+                </div>
+                
             </div>
         </div>
         <button class="cancel-btn" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
@@ -352,15 +355,26 @@
             background-size: contain;
         }
 
+        .complaint_img_div{
+            mt(20)
+            display:flex;
+            justify-content :space-around;
+            border-top: 1PX solid #f6f6f6;
+            }
+
         .complaint_img_box{
             mt(20)
-            width:250px;
+            ml(20)
+            width:190px;
+            height :190px;
             }
 
         .complaint_img{
-            height :auto;           
-            width :250px;
+            height :190px;           
+            width :190px;
         }
+        .complaint_img_box:first-of-type{
+            margin-left :0}
 
     }
 
