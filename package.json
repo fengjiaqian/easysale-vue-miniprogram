@@ -14,12 +14,13 @@
     "element-ui": "^2.7.2",
     "fastclick": "^1.0.6",
     "style-resources-loader": "^1.2.1",
+    "transfer-webpack-plugin": "^0.1.4",
     "vconsole": "^3.3.0",
     "vue": "^2.6.6",
     "vue-lazyload": "^1.2.6",
+    "vue-picture-preview": "^1.2.1",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "transfer-webpack-plugin": "^0.1.4"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
