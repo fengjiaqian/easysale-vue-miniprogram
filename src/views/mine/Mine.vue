@@ -108,13 +108,21 @@ export default {
               this.$router.push({ path: "/my/authentication" });
             })
             .catch(() => {});
-
+      // 当前是认证过的 员工
       } else if (this.auditState == 1 && this.userType == 2) {
-         this.$confirm("您是员工")
-               /* .then(() => {
-                  this.$router.push({ path: "/my/authentication" });
-                })
-                .catch(() => {});*/
+          //验证一下 当前店铺是否有老板  有老板直接进去  没老板提示需要认证
+          let shopState = storage.get('shopState');
+          if (shopState == 1) {
+            path == "/my/statistical";
+          }else{
+              const msg =
+                      "您的店铺尚未认证，认证需要上传营业执照照片，是否立即认证？";
+              return this.$confirm(msg)
+                      .then(() => {
+                        this.$router.push({ path: "/my/shopkeeper" });
+                      })
+                      .catch(() => {});
+          }
       }else {
           path == "/my/statistical";
         }
