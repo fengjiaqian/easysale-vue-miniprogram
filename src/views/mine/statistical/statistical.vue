@@ -1,6 +1,7 @@
 <template>
   <div class="pt90">
-     <m-header :isFixed="true"></m-header>
+    <div class="eb_mask" v-show="showEmailBox" @click="closeEmailBox" @touchmove.prevent></div>
+    <m-header :isFixed="true"></m-header>
     <section class="top-bar">
       <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">今日</span>
       <span :class="{'active': activeIdx == 1}" @click="switchBar(1)">7天</span>
@@ -24,101 +25,188 @@
         <ul class="classes-column">
           <li @click="skipTo('product')">
             <span>下单商品数量</span>
-            <span>{{statisticalData.productSum}}<i></i></span>
+            <span>
+              {{statisticalData.productSum}}
+              <i></i>
+            </span>
           </li>
           <li @click="skipTo('customer')">
             <span>下单客户数量</span>
-            <span>{{statisticalData.customerSum}}<i></i></span>
+            <span>
+              {{statisticalData.customerSum}}
+              <i></i>
+            </span>
           </li>
         </ul>
       </div>
-
     </section>
 
+    <div class="email_box" :class="[showEmailBox ? 'visible':'invisible']" @touchmove.prevent>
+      <div class="eb_header">
+        <div class="text">发送至邮箱</div>
+        <div class="i" @click="closeEmailBox"></div>
+      </div>
+      <div class="email_input">
+        <input type="text" placeholder="请输入您的邮箱" v-model="userEmail">
+      </div>
+    </div>
+    <section
+      class="sp-footer"
+      :class="{'isIphoneX':isIphoneX}"
+      v-show="!empty"
+      @click="openEmailBox"
+    >{{footerText}}</section>
   </div>
 </template>
 
 <script>
-  import { queryStatisticalData } from "api/fetch/mine";
-  import storage from 'common/storage'
-  export default {
-    data() {
+import { queryStatisticalData, sendReportFormEmail } from "api/fetch/mine";
+import storage from "common/storage";
+import { validateEmail } from "common/validate";
 
-      return {
-        activeIdx: 0,   //选中的区间
-        activeTitle: '今日', //选中的区间名称
-        dayNum: 1,
-        statisticalData: {},
+export default {
+  data() {
+    return {
+      activeIdx: 0, //选中的区间
+      activeTitle: "今日", //选中的区间名称
+      dayNum: 1,
+      statisticalData: {},
+      idx: 0,
+      showEmailBox: false,
+      footerText: "发送至邮箱",
+      userEmail: "",
+      localUserEmail: "",
+      empty: false,
+      idx: 0,
+      showEmailBox: false,
+      footerText: "发送至邮箱",
+      userEmail: "",
+      localUserEmail: "",
+      requestDone: true
+    };
+  },
+  computed: {},
+  components: {},
+
+  created() {
+    this.initStatistical();
+    this.getlocalUserEmail();
+  },
+  beforeDestory() {},
+  destoryed() {},
+  mounted() {},
+  methods: {
+    switchBar(idx) {
+      if (this.activeIdx == idx) return;
+      this.activeIdx = idx;
+      switch (idx) {
+        case 0:
+          this.dayNum = 1;
+          this.activeTitle = "今日";
+          break;
+        case 1:
+          this.dayNum = 7;
+          this.activeTitle = "7天";
+          break;
+        case 2:
+          this.dayNum = 30;
+          this.activeTitle = "30天";
+          break;
+        case 3:
+          this.dayNum = "";
+          this.activeTitle = "总共";
+          break;
+        default:
+          break;
+      }
+      this.initStatistical();
+    },
+
+    initStatistical() {
+      let param = {
+        dayNum: this.dayNum
+      };
+      queryStatisticalData(param).then(res => {
+        if (res.result === "success" && res.data) {
+          this.statisticalData = res.data;
+          if (res.data.productSum == 0) {
+            this.empty = true;
+          }
+        }
+      });
+    },
+
+    //从缓存中取email
+    getlocalUserEmail() {
+      const localUserEmail = storage.get("userEmail", false);
+      this.localUserEmail = localUserEmail;
+      this.userEmail = localUserEmail;
+    },
+
+    //关闭邮箱弹出
+    closeEmailBox() {
+      this.footerText = "发送至邮箱";
+      this.showEmailBox = false;
+    },
+
+    //打开邮箱弹出
+    openEmailBox() {
+      // if (this.localUserEmail) {
+
+      // }
+
+      if (!this.showEmailBox) {
+        this.showEmailBox = true;
+        this.footerText = "发送";
+      } else {
+        this.sendEmail();
       }
     },
-    computed: {
 
-    },
-    components: {
+    //发送报表邮件
+    sendEmail() {
+      if (!validateEmail(this.userEmail)) {
+        this.$alert(`请输入正确的邮箱！`);
+        return;
+      }
+      if (this.localUserEmail !== this.userEmail) {
+        storage.set("userEmail", this.userEmail);
+        this.getlocalUserEmail();
+      }
 
-    },
-
-    created() {
-      this.initStatistical()
-    },
-    beforeDestory(){
-    },
-    destoryed(){
-    },
-    mounted() {
-
-    },
-    methods: {
-      switchBar(idx) {
-        if(this.activeIdx == idx) return
-        this.activeIdx = idx
-        switch (idx) {
-          case 0:
-            this.dayNum = 1
-            this.activeTitle = '今日'
-            break;
-          case 1:
-            this.dayNum = 7
-            this.activeTitle = '7天'
-            break;
-          case 2:
-            this.dayNum = 30
-            this.activeTitle = '30天'
-            break;
-          case 3:
-            this.dayNum = ''
-            this.activeTitle = '总共'
-            break;
-          default:
-            break;
-        }
-        this.initStatistical()
-      },
-      initStatistical(){
-        let param = {
-          dayNum: this.dayNum,
-        }
-        queryStatisticalData(param).then(res => {
-          if (res.result === "success" && res.data) {
-            this.statisticalData = res.data
+      let data = {};
+      data.dayNum = this.dayNum;
+      data.email = this.userEmail;
+      // data.shopId=storage.get("currentDealerId", "") || "";
+      sendReportFormEmail(data)
+        .then(res => {
+          if (res.result === "success") {
+            this.showEmailBox = false;
+            this.$toast(`发送成功！`);
+            this.requestDone = true;
           }
+        })
+        .catch(err => {
+          this.requestDone = true;
+          this.$toast(err.message);
         });
-      },
-      skipTo(type){
-        let path = type == 'product' ? '/my/statisProductList' : '/my/statisCustomerList'
-        storage.set("recordIdx",this.activeIdx)
-        this.$router.push({
-          path,
-          query: {idx:this.activeIdx}
-        });
-      },
     },
-    watch: {
+
+    skipTo(type) {
+      let path =
+        type == "product" ? "/my/statisProductList" : "/my/statisCustomerList";
+      storage.set("recordIdx", this.activeIdx);
+      this.$router.push({
+        path,
+        query: { idx: this.activeIdx }
+      });
     }
-  }
+  },
+  watch: {}
+};
 </script>
 
 <style lang="stylus" scoped>
-  @import "./stylus/statistical.styl"
+@import './stylus/statistical.styl';
 </style>
 

@@ -35,9 +35,14 @@ function checkNumber(val) {
 function validateEmail(value, callback) {
     if (value === '') {
         return false
-    } else {
+    } 
+    if (value.length>25){ 
+        return false
+   }
+    
+    else {
         if (value !== '') {
-            let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            let reg = /^\w+([-\.]\w+)*@\w+([\.-]\w+)*\.\w{2,4}$/;
             return reg.test(value)
         }
     }

@@ -1,6 +1,5 @@
 <template>
   <div class="list-wrap pt90">
-    <div class="eb_mask" v-show="showEmailBox" @click="closeEmailBox" @touchmove.prevent></div>
     <m-header :isFixed="true"></m-header>
     <section class="list-head-wrap">
       <div class="list-top-bar">
@@ -50,24 +49,14 @@
       <i></i>
       <span>暂无数据~</span>
     </section>
-        <div class="email_box" :class="[showEmailBox ? 'visible':'invisible']" @touchmove.prevent>
-      <div class="eb_header">
-        <div class="text">发送至邮箱</div>
-        <div class="i" @click="closeEmailBox"></div>
-      </div>
-      <div class="email_input">
-        <input type="text" placeholder="请输入您的邮箱" v-model="userEmail">
-      </div>
-    </div>
-    <section class="sp-footer" :class="{'isIphoneX':isIphoneX}" v-show="!empty" @click="openEmailBox">{{footerText}}</section>
+
   </div>
 </template>
 
 <script>
-import { queryCustomerPerformance , sendReportFormEmail} from "api/fetch/mine";
+import { queryCustomerPerformance } from "api/fetch/mine";
 import scroll from "components/scroll.vue";
 import storage from "common/storage";
-import { validateEmail } from "common/validate";
 
 
 export default {
@@ -90,10 +79,6 @@ export default {
       domShow: false,
       empty: false,
       idx: 0,
-      showEmailBox: false,
-      footerText: "发送至邮箱",
-      userEmail: "",
-      localUserEmail: ""
     };
   },
   computed: {},
@@ -104,7 +89,6 @@ export default {
   created() {
     let idx = this.$route.query.idx;
     this.switchBar(idx);
-    this.getlocalUserEmail();
   },
   beforeCreate() {},
   beforeDestroy() {},
@@ -185,60 +169,6 @@ export default {
       this.recordList = [];
     },
 
-    //从缓存中取email
-    getlocalUserEmail() {
-      const localUserEmail = storage.get("userEmail", false);
-      this.localUserEmail = localUserEmail;
-      this.userEmail = localUserEmail;
-    },
-
-    //关闭邮箱弹出
-    closeEmailBox() {
-      this.footerText = "发送至邮箱";
-      this.showEmailBox = false;
-    },
-
-    //打开邮箱弹出
-    openEmailBox() {
-      // if (this.localUserEmail) {
-
-      // }
-
-      if (!this.showEmailBox) {
-        this.showEmailBox = true;
-        this.footerText = "发送";
-      } else {
-        this.sendEmail();
-      }
-    },
-
-    //发送报表邮件
-    sendEmail() {
-      if (!validateEmail(this.userEmail)) {
-        this.$alert(`请输入正确的邮箱！`);
-        return;
-      }
-      if (this.localUserEmail !== this.userEmail) {
-        storage.set("userEmail", this.userEmail);
-        this.getlocalUserEmail();
-      }
-
-      var data = {};
-      data.dayNum = this.filterParam.dayNum;
-      data.email = this.userEmail;
-      // data.shopId=storage.get("currentDealerId", "") || "";
-      sendReportFormEmail(data)
-        .then(res => {
-          if (res.result === "success") {
-            this.showEmailBox = false;
-            this.$toast(`发送成功！`);
-          }
-        })
-        .catch(err => {
-          this.requestDone = true;
-          this.$toast(err.message);
-        });
-    },
 
     //加载更多
     loadMoreProducts() {
