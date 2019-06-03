@@ -59,7 +59,7 @@
         <input type="text" placeholder="请输入您的邮箱" v-model="userEmail">
       </div>
     </div>
-    <section class="sp-footer" :class="{'isIphoneX':isIphoneX}" v-show="showEmailBox" @click="openEmailBox">{{footerText}}</section>
+    <section class="sp-footer" :class="{'isIphoneX':isIphoneX}" v-show="!empty" @click="openEmailBox">{{footerText}}</section>
   </div>
 </template>
 
