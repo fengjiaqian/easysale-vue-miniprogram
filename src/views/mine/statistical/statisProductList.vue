@@ -1,5 +1,6 @@
 <template>
   <div class="list-wrap pt90">
+    <div class="eb_mask" v-show="showEmailBox" @click="closeEmailBox" @touchmove.prevent></div>
     <m-header :isFixed="true"></m-header>
     <section class="list-head-wrap">
       <div class="list-top-bar">
@@ -49,15 +50,31 @@
       <i></i>
       <span>暂无数据~</span>
     </section>
+
+    
+    <div class="email_box" :class="[showEmailBox ? 'visible':'invisible']" @touchmove.prevent>
+      <div class="eb_header">
+        <div class="text">发送至邮箱</div>
+        <div class="i" @click="closeEmailBox"></div>
+      </div>
+      <div class="email_input">
+        <input type="text" placeholder="请输入您的邮箱" v-model="userEmail">
+      </div>
+    </div>
+    <section class="sp-footer" :class="{'isIphoneX':isIphoneX}" v-show="showEmailBox" @click="openEmailBox">{{footerText}}</section>
   </div>
 </template>
 
 <script>
-import { queryProductPerformance } from "api/fetch/mine";
+import { queryProductPerformance, sendReportFormEmail } from "api/fetch/mine";
 import scroll from "components/scroll.vue";
+import storage from "common/storage";
+import { validateEmail } from "common/validate";
+
 export default {
   data() {
     return {
+      isIphoneX: this.isIphoneX,
       activeIdx: 0, //选中的区间
       filterParam: {
         dayNum: null,
@@ -72,7 +89,12 @@ export default {
       totalPage: 0, //总页数
       requestDone: true,
       domShow: false,
-      empty: false
+      empty: false,
+      idx: 0,
+      showEmailBox: false,
+      footerText: "发送至邮箱",
+      userEmail: "",
+      localUserEmail: ""
     };
   },
   computed: {},
@@ -82,7 +104,10 @@ export default {
 
   created() {
     let idx = this.$route.query.idx;
-    this.switchBar(idx)
+    this.idx = idx;
+    this.shopId = this.$route.query.shopId;
+    this.switchBar(idx);
+    this.getlocalUserEmail();
   },
   beforeCreate() {},
   beforeDestroy() {},
@@ -162,6 +187,63 @@ export default {
       this.filterParam.pageNum = 1;
       this.recordList = [];
     },
+
+    //从缓存中取email
+    getlocalUserEmail() {
+      const localUserEmail = storage.get("userEmail", false);
+      this.localUserEmail = localUserEmail;
+      this.userEmail = localUserEmail;
+    },
+
+
+    //关闭邮箱弹出
+    closeEmailBox() {
+      this.footerText = "发送至邮箱";
+      this.showEmailBox = false;
+    },
+
+    //打开邮箱弹出
+    openEmailBox() {
+      // if (this.localUserEmail) {
+
+      // }
+
+      if (!this.showEmailBox) {
+        this.showEmailBox = true;
+        this.footerText = "发送";
+      } else {
+        this.sendEmail();
+      }
+    },
+
+    //发送报表邮件
+    sendEmail() {
+      if (!validateEmail(this.userEmail)) {
+        this.$alert(`请输入正确的邮箱！`);
+        return;
+      }
+      if (this.localUserEmail !== this.userEmail) {
+        storage.set("userEmail", this.userEmail);
+        this.getlocalUserEmail();
+      }
+
+      var data = {};
+      data.dayNum = this.filterParam.dayNum;
+      data.email = this.userEmail;
+      // data.shopId=storage.get("currentDealerId", "") || "";
+      sendReportFormEmail(data)
+        .then(res => {
+          if (res.result === "success") {
+            this.showEmailBox = false;
+            this.$toast(`发送成功！`);
+          }
+        })
+        .catch(err => {
+          this.requestDone = true;
+          this.$toast(err.message);
+        });
+    },
+
     //加载更多
     loadMoreProducts() {
       if (this.loading || this.filterParam.pageNum >= this.totalPage)
@@ -182,5 +264,19 @@ export default {
 
 <style lang="stylus" scoped>
 @import './stylus/statistical.styl';
+
+.send_btn {
+  position: fixed;
+  width: 180px;
+  height: 70px;
+  lh(80);
+  text-c();
+  ft(28);
+  color: white;
+  border-radius: 20px;
+  left: 50px;
+  bottom: 300px;
+  background-color: blue;
+}
 </style>
 

@@ -1,5 +1,21 @@
 import axios from 'axios'
 
+
+// 导出Excel报表发送邮件
+function sendReportFormEmail(params) {
+
+	return axios({
+		method: 'post',
+		url: "excel/email",
+		data: params,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 // 查看店主认证详情
 function listShopCertificationFile() {
 
@@ -386,5 +402,5 @@ export {
 	addProduct, productDetail, editProduct, queryJyProduct,
 	queryStaffList, queryStaffDetail, deleteStaff, addStaff, editStaff, queryRole, auditStaff,
 	queryCustomerList, queryCustomerDetail, addCustomer, editCustomer,
-	uploadImg, synthesisroutineimg
+	uploadImg, synthesisroutineimg,sendReportFormEmail
 }

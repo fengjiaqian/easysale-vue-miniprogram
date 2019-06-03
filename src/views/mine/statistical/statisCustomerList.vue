@@ -1,6 +1,7 @@
 <template>
   <div class="list-wrap pt90">
-      <m-header :isFixed="true"></m-header>
+    <div class="eb_mask" v-show="showEmailBox" @click="closeEmailBox" @touchmove.prevent></div>
+    <m-header :isFixed="true"></m-header>
     <section class="list-head-wrap">
       <div class="list-top-bar">
         <span :class="{'active': activeIdx == 0}" @click="switchBar(0)">今日</span>
@@ -12,11 +13,15 @@
         <div class="ab-l">客户名称</div>
         <div class="ab-m" @click="sortList('num')">
           下单件数
-          <span :class="{'drop':filterParam.numOrderType=='desc','litre':filterParam.numOrderType=='asc'}"></span>
+          <span
+            :class="{'drop':filterParam.numOrderType=='desc','litre':filterParam.numOrderType=='asc'}"
+          ></span>
         </div>
         <div class="ab-r" @click="sortList('amount')">
           下单金额
-          <span :class="{'drop':filterParam.amountOrderType=='desc','litre':filterParam.amountOrderType=='asc'}"></span>
+          <span
+            :class="{'drop':filterParam.amountOrderType=='desc','litre':filterParam.amountOrderType=='asc'}"
+          ></span>
         </div>
       </div>
     </section>
@@ -24,12 +29,13 @@
     <section class="list-content-wrap">
       <!--累计下单用户数据-->
       <scroll
-              class="product-list-scroll"
-              :data="recordList"
-              :probeType="3"
-              :pullup="true"
-              @scrollToEnd="loadMoreProducts"
-              ref="productScrollDom">
+        class="product-list-scroll"
+        :data="recordList"
+        :probeType="3"
+        :pullup="true"
+        @scrollToEnd="loadMoreProducts"
+        ref="productScrollDom"
+      >
         <ul class="list">
           <li v-for="(item,index) in recordList" :key="index">
             <div>{{item.customerName}}</div>
@@ -44,143 +50,215 @@
       <i></i>
       <span>暂无数据~</span>
     </section>
-
+        <div class="email_box" :class="[showEmailBox ? 'visible':'invisible']" @touchmove.prevent>
+      <div class="eb_header">
+        <div class="text">发送至邮箱</div>
+        <div class="i" @click="closeEmailBox"></div>
+      </div>
+      <div class="email_input">
+        <input type="text" placeholder="请输入您的邮箱" v-model="userEmail">
+      </div>
+    </div>
+    <section class="sp-footer" :class="{'isIphoneX':isIphoneX}" v-show="showEmailBox" @click="openEmailBox">{{footerText}}</section>
   </div>
 </template>
 
 <script>
-  import { queryCustomerPerformance } from "api/fetch/mine";
-  import scroll from "components/scroll.vue";
-  export default {
-    data() {
-      return {
-        activeIdx: 0,   //选中的区间
-        filterParam: {
-          dayNum: null,
-          pageNum: 1,
-          pageSize: 20,
-          orderByNum: 0,//1=数量排序，0=不按数量排序
-          numOrderType: null,//"desc"降序 " asc"升序
-          orderByAmount: 0,//1=金额排序，0=不按金额排序
-          amountOrderType: null,//"desc"降序 " asc"升序
-        },
-        recordList: [],
-        totalPage: 0,//总页数
-        requestDone: true,
-        autoMoreData: false,
-        domShow: false,
-        empty: false,
-      }
-    },
-    computed: {
+import { queryCustomerPerformance , sendReportFormEmail} from "api/fetch/mine";
+import scroll from "components/scroll.vue";
+import storage from "common/storage";
+import { validateEmail } from "common/validate";
 
-    },
-    components: {
-      scroll
-    },
 
-    created() {
-      let idx = this.$route.query.idx;
-      this.switchBar(idx)
-    },
-    beforeCreate () {
-    },
-    beforeDestroy () {
-    },
-    mounted() {
-
-    },
-    methods: {
-      //切换时间区间
-      switchBar(idx) {
-        this.activeIdx = idx
-        switch (idx) {
-          case 0:
-            this.filterParam.dayNum = 1
-            break;
-          case 1:
-            this.filterParam.dayNum = 7
-            break;
-          case 2:
-            this.filterParam.dayNum = 30
-            break;
-          case 3:
-            this.filterParam.dayNum = ''
-            break;
-          default:
-            break;
-        }
-        this.filterParam.pageNum = 1
-        this.recordList = []
+export default {
+  data() {
+    return {
+      activeIdx: 0, //选中的区间
+      filterParam: {
+        dayNum: null,
+        pageNum: 1,
+        pageSize: 20,
+        orderByNum: 0, //1=数量排序，0=不按数量排序
+        numOrderType: null, //"desc"降序 " asc"升序
+        orderByAmount: 0, //1=金额排序，0=不按金额排序
+        amountOrderType: null //"desc"降序 " asc"升序
       },
-      //获取记录列表
-      queryRecordList(){
-        queryCustomerPerformance(this.filterParam).then(res => {
+      recordList: [],
+      totalPage: 0, //总页数
+      requestDone: true,
+      autoMoreData: false,
+      domShow: false,
+      empty: false,
+      idx: 0,
+      showEmailBox: false,
+      footerText: "发送至邮箱",
+      userEmail: "",
+      localUserEmail: ""
+    };
+  },
+  computed: {},
+  components: {
+    scroll
+  },
+
+  created() {
+    let idx = this.$route.query.idx;
+    this.switchBar(idx);
+    this.getlocalUserEmail();
+  },
+  beforeCreate() {},
+  beforeDestroy() {},
+  mounted() {},
+  methods: {
+    //切换时间区间
+    switchBar(idx) {
+      this.activeIdx = idx;
+      switch (idx) {
+        case 0:
+          this.filterParam.dayNum = 1;
+          break;
+        case 1:
+          this.filterParam.dayNum = 7;
+          break;
+        case 2:
+          this.filterParam.dayNum = 30;
+          break;
+        case 3:
+          this.filterParam.dayNum = "";
+          break;
+        default:
+          break;
+      }
+      this.filterParam.pageNum = 1;
+      this.recordList = [];
+    },
+    //获取记录列表
+    queryRecordList() {
+      queryCustomerPerformance(this.filterParam)
+        .then(res => {
           if (res.result === "success") {
-            this.domShow = true
+            this.domShow = true;
             const { dataList = [], pager } = res.data;
             const { currentPage, totalPage } = pager;
-            if(currentPage==1){
-              this.totalPage = totalPage
+            if (currentPage == 1) {
+              this.totalPage = totalPage;
             }
-            dataList.forEach((item)=>{
-              item.totalAmount = Number(item.totalAmount).toFixed(2)
-            })
-            this.recordList = this.recordList.concat(dataList)
-            this.empty = !this.recordList.length
-            this.requestDone = true
+            dataList.forEach(item => {
+              item.totalAmount = Number(item.totalAmount).toFixed(2);
+            });
+            this.recordList = this.recordList.concat(dataList);
+            this.empty = !this.recordList.length;
+            this.requestDone = true;
           }
-        }).catch(err => {
-          this.requestDone = true
+        })
+        .catch(err => {
+          this.requestDone = true;
         });
-      },
-      //列表排序
-      sortList(type){
-        let { numOrderType,amountOrderType } = this.filterParam
-        if(type == 'num'){
-          this.filterParam.orderByNum = 1
-          if(!numOrderType){
-            numOrderType = 'desc'
-          }else if(numOrderType == 'desc'){
-            numOrderType = 'asc'
-          }else if(numOrderType == 'asc'){
-            numOrderType = null
-            this.filterParam.orderByNum = 0
-          }
-          this.filterParam.numOrderType = numOrderType
-        }else if(type == 'amount'){
-          this.filterParam.orderByAmount = 1
-          if(!amountOrderType){
-            amountOrderType = 'desc'
-          }else if(amountOrderType == 'desc'){
-            amountOrderType = 'asc'
-          }else if(amountOrderType == 'asc'){
-            amountOrderType = null
-            this.filterParam.orderByAmount = 0
-          }
-          this.filterParam.amountOrderType = amountOrderType
-        }
-        this.filterParam.pageNum = 1
-        this.recordList = []
-      },
-      //加载更多
-      loadMoreProducts() {
-        if (this.loading || this.filterParam.pageNum >= this.totalPage) return false;
-        this.filterParam.pageNum += 1
-      },
     },
-    watch: {
-      filterParam: {
-        handler(newVal, oldVal) {
-          this.queryRecordList()
-        },
-        deep: true
+    //列表排序
+    sortList(type) {
+      let { numOrderType, amountOrderType } = this.filterParam;
+      if (type == "num") {
+        this.filterParam.orderByNum = 1;
+        if (!numOrderType) {
+          numOrderType = "desc";
+        } else if (numOrderType == "desc") {
+          numOrderType = "asc";
+        } else if (numOrderType == "asc") {
+          numOrderType = null;
+          this.filterParam.orderByNum = 0;
+        }
+        this.filterParam.numOrderType = numOrderType;
+      } else if (type == "amount") {
+        this.filterParam.orderByAmount = 1;
+        if (!amountOrderType) {
+          amountOrderType = "desc";
+        } else if (amountOrderType == "desc") {
+          amountOrderType = "asc";
+        } else if (amountOrderType == "asc") {
+          amountOrderType = null;
+          this.filterParam.orderByAmount = 0;
+        }
+        this.filterParam.amountOrderType = amountOrderType;
+      }
+      this.filterParam.pageNum = 1;
+      this.recordList = [];
+    },
+
+    //从缓存中取email
+    getlocalUserEmail() {
+      const localUserEmail = storage.get("userEmail", false);
+      this.localUserEmail = localUserEmail;
+      this.userEmail = localUserEmail;
+    },
+
+    //关闭邮箱弹出
+    closeEmailBox() {
+      this.footerText = "发送至邮箱";
+      this.showEmailBox = false;
+    },
+
+    //打开邮箱弹出
+    openEmailBox() {
+      // if (this.localUserEmail) {
+
+      // }
+
+      if (!this.showEmailBox) {
+        this.showEmailBox = true;
+        this.footerText = "发送";
+      } else {
+        this.sendEmail();
+      }
+    },
+
+    //发送报表邮件
+    sendEmail() {
+      if (!validateEmail(this.userEmail)) {
+        this.$alert(`请输入正确的邮箱！`);
+        return;
+      }
+      if (this.localUserEmail !== this.userEmail) {
+        storage.set("userEmail", this.userEmail);
+        this.getlocalUserEmail();
+      }
+
+      var data = {};
+      data.dayNum = this.filterParam.dayNum;
+      data.email = this.userEmail;
+      // data.shopId=storage.get("currentDealerId", "") || "";
+      sendReportFormEmail(data)
+        .then(res => {
+          if (res.result === "success") {
+            this.showEmailBox = false;
+            this.$toast(`发送成功！`);
+          }
+        })
+        .catch(err => {
+          this.requestDone = true;
+          this.$toast(err.message);
+        });
+    },
+
+    //加载更多
+    loadMoreProducts() {
+      if (this.loading || this.filterParam.pageNum >= this.totalPage)
+        return false;
+      this.filterParam.pageNum += 1;
+    }
+  },
+  watch: {
+    filterParam: {
+      handler(newVal, oldVal) {
+        this.queryRecordList();
       },
+      deep: true
     }
   }
+};
 </script>
 
 <style lang="stylus" scoped>
-  @import "./stylus/statistical.styl"
+@import './stylus/statistical.styl';
 </style>
 
