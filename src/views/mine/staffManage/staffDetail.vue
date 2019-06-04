@@ -22,12 +22,16 @@
         <span>入职日期</span>
         <div>{{staffInfo.hireDateStr}}</div>
       </li>
-<!--      <li class="special-li">
+      <li>
+        <span>是否为管理员</span>
+        <div>{{staffInfo.permissionState==1?"管理员":"非管理员"}}</div>
+      </li>
+      <!--      <li class="special-li">
         <span>折扣权限</span>
         <div>{{staffInfo.discount || '无'}}</div>
       </li>-->
     </ul>
-<!--    <ul class="sd-oprate">
+    <!--    <ul class="sd-oprate">
       <li class="sd-c-b">重置账号密码</li>
       <li class="sd-c-b" @click="skipTo">编辑</li>
       <li class="sd-c-o" @click="freeze">删除</li>
@@ -50,7 +54,7 @@ export default {
       userId: "", //员工id
       staffInfo: {}, //员工详细信息
       domShow: false,
-      isIphoneX:this.isIphoneX
+      isIphoneX: this.isIphoneX
     };
   },
   components: {},
@@ -95,12 +99,12 @@ export default {
         .catch(() => {});
     },
     //审核员工
-    audit(type){
+    audit(type) {
       let param = {
         id: this.staffInfo.id,
         userId: this.staffInfo.userId,
         type
-      }
+      };
       auditStaff(param).then(res => {
         if (res.result === "success") {
           this.$toast("审核成功！");
@@ -109,7 +113,7 @@ export default {
           });
         }
       });
-    },
+    }
   }
 };
 </script>
