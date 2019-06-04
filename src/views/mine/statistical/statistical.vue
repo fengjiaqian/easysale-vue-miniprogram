@@ -67,6 +67,7 @@ import { validateEmail } from "common/validate";
 export default {
   data() {
     return {
+      isIphoneX: this.isIphoneX,
       activeIdx: 0, //选中的区间
       activeTitle: "今日", //选中的区间名称
       dayNum: 1,
@@ -186,10 +187,12 @@ export default {
       sendReportFormEmail(data)
         .then(res => {
           if (res.result === "success") {
-            this.showEmailBox = false;
-            this.loading = false;
-            this.$toast(`发送成功！`);
-            this.requestDone = true;
+            setTimeout(() => {
+              this.closeEmailBox();
+              this.loading = false;
+              this.$toast(`发送成功！`);
+              this.requestDone = true;
+            }, 1200);
           }
         })
         .catch(err => {
