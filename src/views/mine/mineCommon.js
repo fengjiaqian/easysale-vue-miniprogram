@@ -51,6 +51,7 @@ const companyInfo = {
 }
 
 export function initAccessModule(userType, auditState = '') {
+    let permissionState = storage.get('permissionState', 0);
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {
         if (userType == originUserType) {
@@ -63,10 +64,10 @@ export function initAccessModule(userType, auditState = '') {
         }
         return customerAccessModule.slice(0, 1);
     }
+    //已经认证了
     if (auditState == 1) {
-        //已经认证了 并且是员工的时候  需要验证下  员工级别
+       // 并且是员工的时候  需要验证下 员工级别 显示不同的菜单
         if(userType == 2){
-            let permissionState = storage.get('permissionState', 0);
             if(permissionState == 1){
                 let dealerModule = dealerAccessModule.slice(0, 5);
                 return [...dealerModule, companyInfo];
@@ -80,7 +81,14 @@ export function initAccessModule(userType, auditState = '') {
         return [...dealerModule, companyInfo];
 
     }
+    //未认证
     if(auditState == 2){
+        //但是可能会存在  当前人员的员工级别是管理员  因为申请开店的人默认 设置成管理员
+        if(permissionState == 1){
+            // let dealerModule = dealerAccessModule.slice(0, 5);
+            return [...dealerAccessModule, companyInfo];
+        }
+        //其它的 不显示员工菜单
         let dealerModule = dealerAccessModule.slice(0, 3);
         let wdealerModule_ = dealerAccessModule.slice(4, 6);
         dealerModule.push(wdealerModule_[0]);
