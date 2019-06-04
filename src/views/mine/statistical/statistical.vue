@@ -43,7 +43,7 @@
 
     <div class="email_box" :class="[showEmailBox ? 'visible':'invisible']" @touchmove.prevent>
       <div class="eb_header">
-        <div class="text">请填写您的邮箱</div>
+        <div class="text">请填写您的邮箱：</div>
         <div class="i" @click="closeEmailBox"></div>
       </div>
       <div class="email_input">
@@ -77,10 +77,6 @@ export default {
       userEmail: "",
       localUserEmail: "",
       empty: true,
-      idx: 0,
-      showEmailBox: false,
-      userEmail: "",
-      localUserEmail: "",
       requestDone: true
     };
   },
@@ -130,7 +126,7 @@ export default {
           this.statisticalData = res.data;
           if (res.data.productSum == 0) {
             this.empty = true;
-          }else{
+          } else {
             // 重置状态  因为第一次进页面已经初始化数据  下次在当前页面操作 永远不会触发 上面的empty = false
             this.empty = false;
           }
@@ -140,7 +136,7 @@ export default {
 
     //从缓存中取email
     getlocalUserEmail() {
-      const localUserEmail = storage.get("userEmail", '');
+      const localUserEmail = storage.get("userEmail", "");
       this.localUserEmail = localUserEmail;
       this.userEmail = localUserEmail;
     },
@@ -169,6 +165,10 @@ export default {
     sendEmail() {
       if (!validateEmail(this.userEmail)) {
         this.$alert(`请输入正确的邮箱！`);
+        return;
+      }
+
+      if (this.loading) {
         return;
       }
 

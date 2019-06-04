@@ -9,7 +9,13 @@
       </li>
       <li class="special-li">
         <span>联系电话：</span>
-        <input @input="limitPhone" :readonly="userPhone==staffInfo.phone" v-model="staffInfo.phone" type="number" placeholder="请输入手机号码">
+        <input
+          @input="limitPhone"
+          :readonly="userPhone==staffInfo.phone"
+          v-model="staffInfo.phone"
+          type="number"
+          placeholder="请输入手机号码"
+        >
       </li>
       <div class="h20"></div>
       <li>
@@ -19,7 +25,13 @@
       <li class="special-li">
         <span>家庭地址：</span>
         <div class="locate-address">
-          <textarea v-model="staffInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入员工地址"></textarea>
+          <textarea
+            v-model="staffInfo.address"
+            maxlength="50"
+            cols="30"
+            rows="2"
+            placeholder="请输入员工地址"
+          ></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>
       </li>
@@ -34,12 +46,14 @@
         ></el-date-picker>
         <i class="extension"></i>
       </li>
-<!--      <li>
+      <div class="h20"></div>
+
+      <!--      <li>
         <span>角色设置：</span>
         <div @click="rolePopToggle">{{activeRoleName}}</div>
         <i class="extension"></i>
       </li>-->
-<!--      <li class="special-li">
+      <!--      <li class="special-li">
         <span>折扣权限：</span>
         <div>
           <input
@@ -52,7 +66,19 @@
         </div>
       </li>-->
     </ul>
-    <div class="staff-info-btn" :class="{'achieve':achieve,'isIphoneX':isIphoneX}" @click="verify">保存</div>
+    <div class="set-property">
+        <ul class="option-list">
+          <li>
+            <span>管理员设置开关</span>
+            <i @click="switchOption()" :class="{'open':staffInfo.permissionState}"></i>
+          </li>
+          </ul>  
+      </div>
+    <div
+      class="staff-info-btn"
+      :class="{'achieve':achieve,'isIphoneX':isIphoneX}"
+      @click="verify"
+    >保存</div>
     <!--角色设置弹出层-->
     <!--<div class="popup-wrap" v-if="rolePopShow">
       <div class="pw-content">
@@ -83,7 +109,7 @@ import storage from "common/storage";
 export default {
   data() {
     return {
-      isIphoneX:this.isIphoneX,
+      isIphoneX: this.isIphoneX,
       staffInfo: {
         name: "",
         phone: "",
@@ -92,14 +118,15 @@ export default {
         hireDate: "",
         roleId: "", //选中的员工角色id
         discount: "",
-        type: 2 //用户类型（1：经销商 2：员工）
+        type: 2, //用户类型（1：经销商 2：员工）
+        permissionState:-1//是否是管理员
       },
       rolePopShow: false,
       roleList: [],
       activeRoleName: "",
       achieve: false,
       canSave: true,
-      userPhone: '',
+      userPhone: ""
     };
   },
   components: {},
@@ -115,7 +142,7 @@ export default {
     });
   },
   created() {
-    this.userPhone = storage.get('mobileNo', '')
+    this.userPhone = storage.get("mobileNo", "");
     let staffInfo = JSON.parse(localStorage.getItem("staffInfo"));
     Object.assign(this.staffInfo, staffInfo);
     this.activeRoleName = staffInfo.roleName;
@@ -144,23 +171,25 @@ export default {
         this.$alert(`请输入正确的员工手机号！`);
         return;
       }
-      if(this.canSave){
-          this.saveAdd();
+      if (this.canSave) {
+        this.saveAdd();
       }
     },
     saveAdd() {
-      this.canSave = false
-      editStaff(this.staffInfo).then(res => {
-        if (res.result === "success") {
-          //商品添加成功后回到商品管理列表页
-          this.$toast("修改成功！");
-          this.canSave = true
-          this.$router.go(-1);
-        }
-      }).catch((err)=>{
-        this.canSave = true
-        this.$toast(err.message);
-      });
+      this.canSave = false;
+      editStaff(this.staffInfo)
+        .then(res => {
+          if (res.result === "success") {
+            //商品添加成功后回到商品管理列表页
+            this.$toast("修改成功！");
+            this.canSave = true;
+            this.$router.go(-1);
+          }
+        })
+        .catch(err => {
+          this.canSave = true;
+          this.$toast(err.message);
+        });
     },
     //查询所有角色
     _queryRole() {
@@ -186,6 +215,15 @@ export default {
         pageData: this.staffInfo
       };
       evokeWxLocation(recordData);
+    },
+
+    //切换管理员按钮
+    switchOption(){
+      if(this.staffInfo.permissionState==0){
+        this.staffInfo.permissionState=1
+      }else{
+        this.staffInfo.permissionState=0
+      }
     }
   },
   watch: {

@@ -13,7 +13,7 @@ export default {};
   position: fixed;
   left: 50%;
   top: 50%;
-  z-index 100
+  z-index 2999
   transform: translate(-50%, -50%);
   width: 106px;
   height: 106px;
