@@ -128,9 +128,13 @@ export default {
       };
       queryStatisticalData(param).then(res => {
         if (res.result === "success" && res.data) {
+          console.log(JSON.stringify(res));
           this.statisticalData = res.data;
           if (res.data.productSum == 0) {
             this.empty = true;
+          }else{
+            // 重置状态  因为第一次进页面已经初始化数据  下次在当前页面操作 永远不会触发 上面的empty = false
+            this.empty = false;
           }
         }
       });
@@ -138,7 +142,7 @@ export default {
 
     //从缓存中取email
     getlocalUserEmail() {
-      const localUserEmail = storage.get("userEmail", false);
+      const localUserEmail = storage.get("userEmail", '');
       this.localUserEmail = localUserEmail;
       this.userEmail = localUserEmail;
     },
