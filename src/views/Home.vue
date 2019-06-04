@@ -376,14 +376,15 @@ export default {
       queryShopInfo({}).then(res => {
         //重新设置当前店铺 员工级别状态
         storage.set("permissionState",res.data.permissionState);
-        const { shopName, shopId, phone, auditState } = res.data;
+        const { shopName, shopId, phone, auditState,permissionState } = res.data;
         const ownerShop = {
           shopName,
           shopId,
           phone,
           id: shopId,
           shopType: auditState, //属性跟选择经销商页面统一
-          owner: true
+          owner: true,
+          permissionState
         };
         // 经销商进行店主认证 auditState （0：认证中，1：已认证 2：未认证）
         storage.set("ownerShop", ownerShop);
