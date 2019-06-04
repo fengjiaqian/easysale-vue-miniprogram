@@ -56,13 +56,15 @@ export default {
         userType,
         shareDealerId,
         shareUserType = "",
-        userState = 1
+        userState = 1,
+        permissionState,
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
       // 以登录身份访问
       if (mobileNo && token && userType) {
         this.clearStorage(); //清楚部分缓存
+        storage.set("permissionState", permissionState);
         storage.set("mobileNo", mobileNo);
         storage.set("token", token);
         storage.set("originUserType", userType);

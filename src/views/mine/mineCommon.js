@@ -63,8 +63,28 @@ export function initAccessModule(userType, auditState = '') {
         }
         return customerAccessModule.slice(0, 1);
     }
-    if (auditState == 1) {   //已经认证了
+    if (auditState == 1) {
+        //已经认证了 并且是员工的时候  需要验证下  员工级别
+        if(userType == 2){
+            let permissionState = storage.get('permissionState', 0);
+            if(permissionState == 1){
+                let dealerModule = dealerAccessModule.slice(0, 5);
+                return [...dealerModule, companyInfo];
+            }
+            let dealerModule = dealerAccessModule.slice(0, 3);
+            let wdealerModule_ = dealerAccessModule.slice(4, 5);
+            dealerModule.push(wdealerModule_[0]);
+            return [...dealerModule, companyInfo];
+        }
         let dealerModule = dealerAccessModule.slice(0, 5);
+        return [...dealerModule, companyInfo];
+
+    }
+    if(auditState == 2){
+        let dealerModule = dealerAccessModule.slice(0, 3);
+        let wdealerModule_ = dealerAccessModule.slice(4, 6);
+        dealerModule.push(wdealerModule_[0]);
+        dealerModule.push(wdealerModule_[1]);
         return [...dealerModule, companyInfo];
     }
     return [...dealerAccessModule, companyInfo];

@@ -306,7 +306,8 @@ export default {
         shareDealerId,
         shareUserType = "",
         userState = 1,
-        routeRequireGuidance = 0
+        routeRequireGuidance = 0,
+        permissionState,
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
@@ -314,6 +315,7 @@ export default {
       if (mobileNo && token && userType) {
         this.clearStorage(); //清楚部分缓存
         storage.set("mobileNo", mobileNo);
+        storage.set("permissionState", permissionState);
         storage.set("token", token);
         storage.set("originUserType", userType);
         storage.set("userState", userState);
@@ -372,7 +374,8 @@ export default {
     queryOwnerShop() {
       if (storage.get("originUserType", 3) == 3) return false;
       queryShopInfo({}).then(res => {
-        console.log("請求店鋪返回数据:"+JSON.stringify(res.data));
+        //重新设置当前店铺 员工级别状态
+        storage.set("permissionState",res.data.permissionState);
         const { shopName, shopId, phone, auditState } = res.data;
         const ownerShop = {
           shopName,
@@ -406,7 +409,11 @@ export default {
         this.shareShop(storeDealer);
         return (this.currentDealer = storeDealer);
       }
+      console.log("_ListCurrentDealer:"+JSON.stringify(storeDealer));
       ListAllDealer({ id: this.currentDealerId }).then(res => {
+
+        console.log("ListAllDealer:"+JSON.stringify(res));
+
         const dataList = res.data.dataList || [];
         if (dataList.length) {
           const matchItem = dataList.find(
