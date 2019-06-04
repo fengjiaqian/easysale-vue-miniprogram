@@ -43,7 +43,7 @@
 
     <div class="email_box" :class="[showEmailBox ? 'visible':'invisible']" @touchmove.prevent>
       <div class="eb_header">
-        <div class="text">发送至邮箱</div>
+        <div class="text">请填写您的邮箱</div>
         <div class="i" @click="closeEmailBox"></div>
       </div>
       <div class="email_input">
@@ -76,10 +76,9 @@ export default {
       footerText: "发送至邮箱",
       userEmail: "",
       localUserEmail: "",
-      empty: false,
+      empty: true,
       idx: 0,
       showEmailBox: false,
-      footerText: "发送至邮箱",
       userEmail: "",
       localUserEmail: "",
       requestDone: true
@@ -128,7 +127,6 @@ export default {
       };
       queryStatisticalData(param).then(res => {
         if (res.result === "success" && res.data) {
-          console.log(JSON.stringify(res));
           this.statisticalData = res.data;
           if (res.data.productSum == 0) {
             this.empty = true;
@@ -173,6 +171,9 @@ export default {
         this.$alert(`请输入正确的邮箱！`);
         return;
       }
+
+      this.loading = true;
+
       if (this.localUserEmail !== this.userEmail) {
         storage.set("userEmail", this.userEmail);
         this.getlocalUserEmail();
@@ -186,11 +187,13 @@ export default {
         .then(res => {
           if (res.result === "success") {
             this.showEmailBox = false;
+            this.loading = false;
             this.$toast(`发送成功！`);
             this.requestDone = true;
           }
         })
         .catch(err => {
+          this.loading = false;
           this.requestDone = true;
           this.$toast(err.message);
         });
