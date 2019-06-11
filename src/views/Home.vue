@@ -381,7 +381,10 @@ export default {
       if (storage.get("originUserType", 3) == 3) return false;
       queryShopInfo({})
         .then(res => {
-          if (res.data.state == 0) return;
+          if (res.data.state == 0) {
+            storage.remove("ownerShop");
+            return
+          }
 
           //重新设置当前店铺 员工级别状态
           storage.set("permissionState", res.data.permissionState);
