@@ -307,7 +307,7 @@ export default {
         shareUserType = "",
         userState = 1,
         routeRequireGuidance = 0,
-        permissionState,
+        permissionState
       } = this.$route.query;
       shareDealerId = shareDealerId == "undefined" ? 0 : shareDealerId;
       //shareDealerId currentDealerId 即 shopId
@@ -362,7 +362,13 @@ export default {
           .then(res => {
             if (res.data) {
               this.currentDealer = res.data;
-              storage.set("currentDealer", res.data);
+              if (res.data.state == 0) {
+                storage.remove("currentDealer");
+                this.$router.push({ path: "/dealerList" });
+              } else {
+                storage.set("currentDealer", res.data);
+              }
+              // storage.set("currentDealer", res.data);
             }
           })
           .catch(err => {
@@ -373,22 +379,34 @@ export default {
     //请求自己的店铺
     queryOwnerShop() {
       if (storage.get("originUserType", 3) == 3) return false;
-      queryShopInfo({}).then(res => {
-        //重新设置当前店铺 员工级别状态
-        storage.set("permissionState",res.data.permissionState);
-        const { shopName, shopId, phone, auditState,permissionState } = res.data;
-        const ownerShop = {
-          shopName,
-          shopId,
-          phone,
-          id: shopId,
-          shopType: auditState, //属性跟选择经销商页面统一
-          owner: true,
-          permissionState
-        };
-        // 经销商进行店主认证 auditState （0：认证中，1：已认证 2：未认证）
-        storage.set("ownerShop", ownerShop);
-      });
+      queryShopInfo({})
+        .then(res => {
+          if (res.data.state == 0) return;
+
+          //重新设置当前店铺 员工级别状态
+          storage.set("permissionState", res.data.permissionState);
+          const {
+            shopName,
+            shopId,
+            phone,
+            auditState,
+            permissionState
+          } = res.data;
+          const ownerShop = {
+            shopName,
+            shopId,
+            phone,
+            id: shopId,
+            shopType: auditState, //属性跟选择经销商页面统一
+            owner: true,
+            permissionState
+          };
+          // 经销商进行店主认证 auditState （0：认证中，1：已认证 2：未认证）
+          storage.set("ownerShop", ownerShop);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     _listDealerLogs() {
       ListDealerLogs()
@@ -410,10 +428,9 @@ export default {
         this.shareShop(storeDealer);
         return (this.currentDealer = storeDealer);
       }
-      console.log("_ListCurrentDealer:"+JSON.stringify(storeDealer));
+      console.log("_ListCurrentDealer:" + JSON.stringify(storeDealer));
       ListAllDealer({ id: this.currentDealerId }).then(res => {
-
-        console.log("ListAllDealer:"+JSON.stringify(res));
+        console.log("ListAllDealer:" + JSON.stringify(res));
 
         const dataList = res.data.dataList || [];
         if (dataList.length) {
@@ -975,8 +992,7 @@ export default {
       font-size: 30px;
       color: #666;
       border-radius: 10px;
-      background-color:#f6f6f6;
-    //border: 1PX solid rgba(189, 189, 189, 1);
+      background-color: #f6f6f6;
       text-align: center;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -991,7 +1007,7 @@ export default {
     .squre-item-active {
       color: #FF5638;
       background-color: #FFEEEB;
-      //border: 1PX solid #E53935;
+      // border: 1PX solid #E53935;
     }
   }
 
