@@ -101,7 +101,7 @@ module.exports = {
         hotOnly: true,
         disableHostCheck: true,
         proxy: {
-            '/getAuth': {
+            '/authTalkingData/getAuth': {
                 target: 'http://apitrackauth.yijiupi.com/',
       //    target: 'http://mall.pre.yijiupi.com/v29/',
               ws: false,
