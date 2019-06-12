@@ -69,8 +69,8 @@ function getAuthorizationThenUpload(md5File, file) {
 		method: 'PUT',
 		fileType: 1
 	}
-    const url = '/authTalkingData/getAuth';
-	// const url = 'https://apitrackauth.yijiupi.com/authTalkingData/getAuth'
+    // const url = '/authTalkingData/getAuth';
+	const url = 'http://apitrackauth.yijiupi.com/authTalkingData/getAuth'
 	return axios({
 		method: 'post',
 		url: url,
@@ -117,8 +117,8 @@ function upLoadImg(options) {
 		if (ajax.readyState==4){
 		  if (ajax.status==200){
 			localStorage.setItem("sessionID", (new Date()).getTime());
-              let url = 'http://yjp-trackdata.cn-bj.ufileos.com';
-            //   let url = options.fileUrl;
+            //   let url = 'http://yjp-trackdata.cn-bj.ufileos.com';
+              let url = options.fileUrl;
 		  	let geturl = options.callback+'/uploaded?filename=' + url + '&appcode=ShoppingMallWeChat&apptype=mall&appversion=4.0.0'
 		  	let xmlhttp = createAjax();
 		  	xmlhttp.open('GET', geturl, true);
@@ -127,8 +127,8 @@ function upLoadImg(options) {
 		}
 	}
 	
-    var url = 'http://yjp-trackdata.cn-bj.ufileos.com';
-    // let url = options.fileUrl;
+    // var url = 'http://yjp-trackdata.cn-bj.ufileos.com';
+    let url = options.fileUrl;
 	if(!IS_PROD){
 		url = options.folderName + '/' + options.fileName;
 	}
