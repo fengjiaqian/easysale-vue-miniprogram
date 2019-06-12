@@ -289,6 +289,20 @@ export default {
       this.queryOwnerShop();
       this.queryCurrentShop();
     }
+    this.$createTalkingData("indexpage", "indexpage", {}, 3);
+    let that = this;
+    setTimeout(() => {
+      that.$submitTalkingData();
+    }, 1000);
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.$createTalkingData("indexpage", "", {}, 1);
+    });
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$createTalkingData("indexpage", "", {}, 2);
+    next();
   },
   mounted() {
     this.lock = false;
@@ -383,7 +397,7 @@ export default {
         .then(res => {
           if (res.data.state == 0) {
             storage.remove("ownerShop");
-            return
+            return;
           }
 
           //重新设置当前店铺 员工级别状态

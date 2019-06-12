@@ -101,6 +101,12 @@ module.exports = {
         hotOnly: true,
         disableHostCheck: true,
         proxy: {
+            '/getAuth': {
+                target: 'http://apitrackauth.release.yijiupidev.com/',
+      //    target: 'http://mall.pre.yijiupi.com/v29/',
+              ws: false,
+              changeOrigin: true
+            },
             '/2019': {
                 target: 'http://easysale.cn-bj.ufileos.com/',
                 ws: false,
