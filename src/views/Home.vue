@@ -294,11 +294,11 @@ export default {
       this.queryOwnerShop();
       this.queryCurrentShop();
     }
-    // this.$createTalkingData("indexpage", "indexpage", {}, 3);
-    // let that = this;
-    // setTimeout(() => {
-    //   that.$submitTalkingData();
-    // }, 1000);
+    this.$createTalkingData("indexpage", "indexpage", {}, 3);
+    let that = this;
+    setTimeout(() => {
+      that.$submitTalkingData();
+    }, 1000);
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
