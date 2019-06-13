@@ -69,7 +69,7 @@ function getAuthorizationThenUpload(md5File, file) {
 		method: 'PUT',
 		fileType: 1
 	}
-    const url = '/getAuth'
+    const url = '/authTalkingData/getAuth'
 	// const url = 'http://apitrackauth.yijiupi.com/authTalkingData/getAuth'
 	return axios({
 		method: 'post',
