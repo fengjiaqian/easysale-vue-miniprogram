@@ -274,11 +274,11 @@ export default {
   },
   created() {
     this._initAuth(); //该步骤有判断有没有带入shareDealerId, 有则缓存currentDealerId
-        this.$createTalkingData("indexpage", "indexpage", {}, 3);
-    let that = this;
-    setTimeout(() => {
-      that.$submitTalkingData();
-    }, 1000);
+        // this.$createTalkingData("indexpage", "indexpage", {}, 3);
+    // let that = this;
+    // setTimeout(() => {
+    //   that.$submitTalkingData();
+    // }, 1000);
     this.currentDealerId = storage.get("currentDealerId", "");
     if (!this.currentDealerId) {
       //如果没有currentDealerId的话，跳转选择经销商。
