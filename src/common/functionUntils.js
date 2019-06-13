@@ -66,7 +66,7 @@ function getAuthorizationThenUpload(md5File, file) {
 		key: name,
 		date: '',
 		putPolicy: '',
-		method: 'PUT',
+		method: 'POST',
 		fileType: 1
 	}
     const url = '/authTalkingData/getAuth'
