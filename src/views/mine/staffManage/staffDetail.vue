@@ -105,14 +105,18 @@ export default {
         userId: this.staffInfo.userId,
         type
       };
-      auditStaff(param).then(res => {
-        if (res.result === "success") {
-          this.$toast("审核成功！");
-          this.$router.push({
-            path: "/my/staffList"
-          });
-        }
-      });
+      auditStaff(param)
+        .then(res => {
+          if (res.result === "success") {
+            this.$toast("审核成功！");
+            this.$router.push({
+              path: "/my/staffList"
+            });
+          }
+        })
+        .catch(res => {
+          this.$toast(res.message);
+        });
     }
   }
 };
