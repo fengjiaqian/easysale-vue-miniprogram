@@ -98,7 +98,7 @@ function upLoadImg(options) {
 		}
 		
 		// xmlhttp.withCredentials = true;
-		xmlhttp.setRequestHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
+		// xmlhttp.setRequestHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
 
 		// 发送二进制数据
 		if(!XMLHttpRequest.prototype.sendAsBinary) {
