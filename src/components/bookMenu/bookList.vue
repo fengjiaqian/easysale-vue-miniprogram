@@ -18,7 +18,7 @@
             <h5>{{list.name}}</h5>
             <span>{{list.phone}}</span>
           </div>
-          <div class="item-tag" v-if="list.auditState===0">待审核</div>
+          <div class="item-tag" v-if="list.auditState===0&&list.permissionState==0">待审核</div>
           <div class="item-tag"  style="top:34px;" v-if="list.permissionState===1">管理员</div>
         </div>
       </div>
