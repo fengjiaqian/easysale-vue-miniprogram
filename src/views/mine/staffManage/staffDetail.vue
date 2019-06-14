@@ -36,7 +36,7 @@
       <li class="sd-c-b" @click="skipTo">编辑</li>
       <li class="sd-c-o" @click="freeze">删除</li>
     </ul>-->
-    <div class="b-oprate" v-if="staffInfo.userState===0">
+    <div class="b-oprate" v-if="staffInfo.userState===0&&staffInfo.permissionState==0">
       <span @click="audit('2')" class="refuse">审核拒绝</span>
       <span @click="audit('1')">审核同意</span>
     </div>
