@@ -97,7 +97,8 @@ function upLoadImg(options) {
 			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		
-		xmlhttp.withCredentials = true;
+		// xmlhttp.withCredentials = true;
+		xmlhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
 
 		// 发送二进制数据
 		if(!XMLHttpRequest.prototype.sendAsBinary) {
