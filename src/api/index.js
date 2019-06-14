@@ -44,7 +44,7 @@ axios.interceptors.response.use(function (response) {
 	if (response.config.loading) {
 		$Loading && $Loading.close()
 	}
-	if (response.data.result != 'success') {
+	if (response.data.result != 'success'&&!response.data.success) {
 		return Promise.reject(response);
 	}
 	// if (response.data && (response.data.message === '100102009'

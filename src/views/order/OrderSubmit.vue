@@ -80,8 +80,12 @@
       </div>
     </div>
     <!--  -->
-    <div class="bottom"  :class="{'isIphoneX':isIphoneX}" ref="bottomDom">
-      <a href="javascript:;" @click="_OrderSubmit" :class="{'active':currentCustomer.phone, 'isIphoneX':isIphoneX}">提交订单</a>
+    <div class="bottom" :class="{'isIphoneX':isIphoneX}" ref="bottomDom">
+      <a
+        href="javascript:;"
+        @click="_OrderSubmit"
+        :class="{'active':currentCustomer.phone, 'isIphoneX':isIphoneX}"
+      >提交订单</a>
       &yen;{{actualAmount | priceToFixed}}
     </div>
   </div>
@@ -105,7 +109,7 @@ export default {
   name: "order-submit",
   data() {
     return {
-      isIphoneX:this.isIphoneX,
+      isIphoneX: this.isIphoneX,
       reduce: 0,
       products: [],
       currentCustomer: {},
@@ -125,13 +129,17 @@ export default {
     }
   },
   beforeCreate() {},
+
   created() {
     this._initOrderInfo();
   },
+
   mounted() {
     this.hanlderBottomDom();
   },
+
   destroyed() {},
+
   methods: {
     _initOrderInfo() {
       /**
@@ -167,11 +175,13 @@ export default {
       };
       OrderSubmit(params)
         .then(res => {
+          this.$createTalkingData("Order", "SubmitOrder", {}, 3);
           //批量删除购物车中商品
           batchRemoveItem(this.products);
           this.$router.push({ path: "/orderResult" });
         })
         .catch(err => {
+          this.$createTalkingData("Order", "SubmitOrder", {}, 3);
           this.$router.push({
             path: "/orderResult",
             query: {
@@ -352,9 +362,8 @@ export default {
   padding-bottom 34px;
 }*!
 */
-
 .bottom .isIphoneX {
-  padding-bottom 34px;
+  padding-bottom: 34px;
 }
 
 .select-customer {

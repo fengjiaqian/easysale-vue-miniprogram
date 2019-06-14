@@ -31,7 +31,23 @@ export default {
       this.imgSrc = failImg;
       this.text = "订单提交失败";
     }
+
+    let that = this;
+    setTimeout(() => {
+      that.$submitTalkingData();
+    }, 1000);
   },
+
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //     vm.$createTalkingData("Order", "", {}, 1);
+  //   });
+  // },
+  // beforeRouteLeave(to, from, next) {
+  //   this.$createTalkingData("Order", "", {}, 2);
+  //   next();
+  // },
+
   mounted() {},
   methods: {
     _jump(code) {
