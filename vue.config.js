@@ -108,7 +108,7 @@ module.exports = {
               changeOrigin: true
             },
             '/2019': {
-                target: 'http://easysale.cn-bj.ufileos.com/',
+                target: 'http://yjp-trackdata.cn-bj.ufileos.com/',
                 ws: false,
                 changeOrigin: true
             },
