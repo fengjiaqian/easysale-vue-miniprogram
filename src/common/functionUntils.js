@@ -30,14 +30,14 @@ var HeadRuntimeMoudle = (function () {
 
 	}
 	function initUserInfoPrivate() {
-		const token = localStorage.getItem("token") || (new Date()).getTime();
-		localStorage.setItem("token", token);
+		const sessionID = localStorage.getItem("sessionID") || (new Date()).getTime();
+		localStorage.setItem("sessionID", sessionID);
 		let cityID = localStorage.getItem("CITY_ID") || 0;
 		cityID = parseInt(cityID)
 		const userDetail = storage.get('USER_DETAIL', {});
 		const userId = userDetail.userId || (new Date()).getTime();
 		userInfo = {
-			token, cityID, userId
+			sessionID, cityID, userId
 		}
 		return userInfo;
 	}
@@ -96,9 +96,6 @@ function upLoadImg(options) {
 		} else {
 			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 		}
-		
-		// xmlhttp.withCredentials = true;
-		// xmlhttp.setRequestHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
 
 		// 发送二进制数据
 		if(!XMLHttpRequest.prototype.sendAsBinary) {
@@ -119,10 +116,10 @@ function upLoadImg(options) {
 	let callBackFile = function(){
 		if (ajax.readyState==4){
 		  if (ajax.status==200){
-			localStorage.setItem("token", (new Date()).getTime());
+			localStorage.setItem("sessionID", (new Date()).getTime());
             //   let url = 'http://yjp-trackdata.cn-bj.ufileos.com';
               let url = options.fileUrl;
-		  	let geturl = options.callback+'/uploaded?filename=' + url + '&appcode=ShoppingMallWeChat&apptype=web&appversion=3.0'
+		  	let geturl = options.callback+'/uploaded?filename=' + url + '&appcode=ShoppingMallWeChat&apptype=mall&appversion=4.0.0'
 		  	let xmlhttp = createAjax();
 		  	xmlhttp.open('GET', geturl, true);
 		  	xmlhttp.send();
@@ -137,7 +134,7 @@ function upLoadImg(options) {
 	}
 	//生产环境只能https
 	url = url.replace('http://','https://')
-	ajax.open('PUT', url, true);
+	ajax.open('POST', url, true);
 	ajax.setRequestHeader("Content-MD5", options.contentMd5);
 	ajax.setRequestHeader("Authorization", options.authorization);
 	ajax.setRequestHeader("Content-Type", file.type);
@@ -194,7 +191,7 @@ function createTalkingData(pageID, eventID, businessData, logType = 3, firstRequ
 //通过pageID和eventID判断是页面还是事件
 function getBodyData(pageID, eventID, businessData, logType, firstRequestFlag, lastRequestFlag) {
 	//会话Id
-	const {token, cityID, userId} = HeadRuntimeMoudle.initUserInfo();
+	const {sessionID, cityID, userId} = HeadRuntimeMoudle.initUserInfo();
 	let bodyData = {
 		"business": businessData,
 		"meta": {
@@ -206,7 +203,7 @@ function getBodyData(pageID, eventID, businessData, logType, firstRequestFlag, l
 			"firstRequestFlag": firstRequestFlag, //该页面是否是本次会话的首次请求页面（是否着陆页）
 			"lastRequestFlag": lastRequestFlag, //该页面是否是本次会话的最后请求页面（是否退出页）
 			"eventTime": eventID ? new Date().getTime() + '' : '', //客户端事件发生时间
-			"token": token+'',
+			"sessionID": sessionID+'',
 			"logType": logType, //TODO:1:进入页面 2：离开页面 3: 点击事件
 			"refPageID": "1000", //来源页页面ID
 			"requestTime": new Date().getTime() + '', //请求时间
