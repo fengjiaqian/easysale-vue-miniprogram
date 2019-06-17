@@ -22,7 +22,7 @@ var HeadRuntimeMoudle = (function () {
 				"appVer": "3.0", //客户端版本号
 				"os": osVer, //操作系统
 				"osVer": osVer, //操作系统版本
-				"deviceID": deviceID, //设备唯一ID
+				"deviceID": (new Date()).getTime()+ '', //设备唯一ID
 				"browserType": browserType //浏览器类型
 			}
 		}
@@ -35,7 +35,7 @@ var HeadRuntimeMoudle = (function () {
 		let cityID = localStorage.getItem("CITY_ID") || 0;
 		cityID = parseInt(cityID)
 		const userDetail = storage.get('USER_DETAIL', {});
-		const userId = userDetail.userId || (new Date()).getTime();
+		const userId = userDetail.userId || (new Date()).getTime()+'';
 		userInfo = {
 			sessionID, cityID, userId
 		}
@@ -69,7 +69,7 @@ function getAuthorizationThenUpload(md5File, file) {
 		method: 'POST',
 		fileType: 1
 	}
-    const url = '/authTalkingData/getAuth'
+    const url = '/getAuth'
 	// const url = 'http://apitrackauth.yijiupi.com/authTalkingData/getAuth'
 	return axios({
 		method: 'post',
@@ -127,14 +127,22 @@ function upLoadImg(options) {
 		}
 	}
 	
-    // var url = 'http://yjp-trackdata.cn-bj.ufileos.com';
-    var url  = "https://yjp-trackdata.cn-bj.ufileos.com/"+options.folderName + '/' + options.fileName;
-    /*let url = options.fileUrl;*/
+  // var url  = "https://yjp-trackdata.cn-bj.ufileos.com/"+options.folderName + '/' + options.fileName;
+
+	// var url = options.fileUrl;
 	// if(!IS_PROD){
-    //     url = url.replace('https://','http://')
+	//     url = options.folderName + '/' + options.fileName;
 	// }
-	//生产环境只能https
+	// // 生产环境只能https
 	// url = url.replace('http://','https://')
+
+
+	var url  = "https://yjp-trackdata.cn-bj.ufileos.com/"+options.folderName + '/' + options.fileName;
+	if(!IS_PROD){
+		url = options.folderName + '/' + options.fileName;
+	}
+
+
 	ajax.open('POST', url, true);
 	ajax.setRequestHeader("Content-MD5", options.contentMd5);
 	ajax.setRequestHeader("Authorization", options.authorization);
@@ -208,8 +216,8 @@ function getBodyData(pageID, eventID, businessData, logType, firstRequestFlag, l
 			"logType": logType, //TODO:1:进入页面 2：离开页面 3: 点击事件
 			"refPageID": "1000", //来源页页面ID
 			"requestTime": new Date().getTime() + '', //请求时间
-			"uid": userId, //酒批注册用户id
-			"uuid": userId //全局唯一用户id
+			"uid": userId+ '', //酒批注册用户id
+			"uuid": userId + ''//全局唯一用户id
 		}
 	}
 	return bodyData
