@@ -64,13 +64,26 @@ export default {
   },
   components: {},
   beforeCreate: function() {},
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      let passData = to.query.passData ? to.query.passData : null;
+      //console.log(passData)
+      if (passData) {
+        passData = JSON.parse(passData);
+        if(passData.orderprintingData.uuid){
+            alert(passData.orderprintingData.uuid);
+        }
+      }
+    });
+  },
   created: function() {
     this.mineMenu = initAccessModule(this.userType);
     this._findCustomerOwerInfo();
   },
   beforeDestory() {},
   destoryed() {},
-  mounted() {},
+  mounted() {
+  },
   activated() {
     const refresh = storage.get("mineRefresh", false);
     if (refresh) {
@@ -80,6 +93,17 @@ export default {
   },
   methods: {
     mineSkip(path) {
+
+      if (path == "/orderprintingclick") {
+        let recordData = {
+          path: this.$route.path
+        };
+        let passData = decodeURIComponent(JSON.stringify(recordData))
+        let path = `/pages/orderprinting/orderprinting?passData=${passData}`
+        window.wx.miniProgram.redirectTo({
+          url: path,
+        })
+      }
       if (this.navigateToLogin()) {
         return false;
       }

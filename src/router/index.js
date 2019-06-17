@@ -8,8 +8,10 @@ import manageInit from './manageInit'// 投诉、兑奖、退货管理相关
 import exhibit from './exhibit'//陈列模块
 import display from './display'//陈列模块-V2
 import attestation from './attestation'//引导认证
+import orderprinting from './orderprinting'//引导认证
+
 const routes = [
-    ...main, ...mine, ...manageInit, ...exhibit, ...display, ...attestation
+    ...main, ...mine, ...manageInit, ...exhibit, ...display, ...attestation, ...orderprinting
 ];
 Vue.use(Router);
 
@@ -44,6 +46,14 @@ const isNeedRefreshMine = function () {
 };
 
 router.beforeEach((to, from, next) => {
+
+    if(to.path === "/orderprinting"){
+        next();
+        return ;
+    }else if(to.path === "/orderlist"){
+        next();
+        return ;
+    }
 
     let $el = document.querySelector('.loading-message');
     $el && $el.parentNode.removeChild($el);
