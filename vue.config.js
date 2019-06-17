@@ -103,12 +103,12 @@ module.exports = {
         proxy: {
             '/getAuth': {
                 target: 'http://apitrackauth.yijiupi.com/',
-         // target: 'http://mall.pre.yijiupi.com/v29/',
-              ws: false,
-              changeOrigin: true
+                // target: 'http://mall.pre.yijiupi.com/v29/',
+                ws: false,
+                changeOrigin: true
             },
             '/2019': {
-                target: 'https://yjp-trackdata.cn-bj.ufileos.com/',
+                target: 'http://yjp-trackdata.cn-bj.ufileos.com/',
                 ws: false,
                 changeOrigin: true
             },

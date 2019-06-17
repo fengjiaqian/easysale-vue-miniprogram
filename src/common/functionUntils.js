@@ -128,12 +128,13 @@ function upLoadImg(options) {
 	}
 	
     // var url = 'http://yjp-trackdata.cn-bj.ufileos.com';
-    let url = options.fileUrl;
-	if(!IS_PROD){
-		url = options.folderName + '/' + options.fileName;
-	}
+    var url  = "https://yjp-trackdata.cn-bj.ufileos.com/"+options.folderName + '/' + options.fileName;
+    /*let url = options.fileUrl;*/
+	// if(!IS_PROD){
+    //     url = url.replace('https://','http://')
+	// }
 	//生产环境只能https
-	url = url.replace('http://','https://')
+	// url = url.replace('http://','https://')
 	ajax.open('POST', url, true);
 	ajax.setRequestHeader("Content-MD5", options.contentMd5);
 	ajax.setRequestHeader("Authorization", options.authorization);
