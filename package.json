@@ -13,6 +13,7 @@
     "cube-ui": "~1.12.15",
     "element-ui": "^2.7.2",
     "fastclick": "^1.0.6",
+    "qrcodejs2": "^0.0.2",
     "style-resources-loader": "^1.2.1",
     "transfer-webpack-plugin": "^0.1.4",
     "vconsole": "^3.3.0",
