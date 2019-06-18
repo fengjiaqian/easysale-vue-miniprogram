@@ -61,6 +61,7 @@ export default {
               type: 'info',
               message: '授权成功'
             });
+            //TODO 需要把后台websocket 传递过来的参数解析出来 传递到以下跳转的页面，该页面调用后台接口 所需参数 在 objs里面
             this.$router.push({name:`orderlist`})
           }else{
             alert("授权失败");
