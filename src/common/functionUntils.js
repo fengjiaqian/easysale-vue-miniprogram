@@ -18,8 +18,8 @@ var HeadRuntimeMoudle = (function () {
 				"applicationId": "YJP-ES-WS001" //运行酒批应用的一个应用ID
 			},
 			"runtime": {
-				"appType": "web", //iOS,android,web
-				"appVer": "3.0", //客户端版本号
+				"appType": "微信小程序", //iOS,android,web
+				"appVer": "3.0.0", //客户端版本号
 				"os": osVer, //操作系统
 				"osVer": osVer, //操作系统版本
 				"deviceID": (new Date()).getTime()+ '', //设备唯一ID
@@ -119,7 +119,7 @@ function upLoadImg(options) {
 			localStorage.setItem("sessionID", (new Date()).getTime());
             //   let url = 'http://yjp-trackdata.cn-bj.ufileos.com';
               let url = options.fileUrl;
-		  	let geturl = options.callback+'/uploaded?filename=' + url + '&appcode=ShoppingMallWeChat&apptype=mall&appversion=4.0.0'
+		  	let geturl = options.callback+'/uploaded?filename=' + url + '&appcode=ShoppingMallWeChat&apptype=微信小程序&appversion=3.0.0'
 		  	let xmlhttp = createAjax();
 		  	xmlhttp.open('GET', geturl, true);
 		  	xmlhttp.send();
