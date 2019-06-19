@@ -71,7 +71,8 @@ export default {
       if (passData) {
         passData = JSON.parse(passData);
         if(passData.orderprintingData.uuid){
-            alert(passData.orderprintingData.uuid);
+            //TODO 弹出是否授权小程序登录PC端订单打印页面  如果用户点击同意授权，则需要调用后台 提供的接口传递 uuid以及shopId验证授权登录
+            // passData.orderprintingData.uuid   当这个没有值的时候   判断一下 passData.orderprintingData.code    = "-1" 扫描失败   = "-2" 非法二维码
         }
       }
     });
