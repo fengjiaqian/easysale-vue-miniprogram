@@ -64,11 +64,11 @@ export function initAccessModule(userType, auditState = '') {
         }
         return customerAccessModule.slice(0, 1);
     }
-    let sm =  {
+ /*   let sm =  {
         title: "扫描打印订单",
         class: "customer",
         path: "/orderprintingclick"
-    }
+    }*/
     //已经认证了
     if (auditState == 1) {
 
@@ -81,10 +81,10 @@ export function initAccessModule(userType, auditState = '') {
             let dealerModule = dealerAccessModule.slice(0, 3);
             let wdealerModule_ = dealerAccessModule.slice(4, 5);
             dealerModule.push(wdealerModule_[0]);
-            return [...dealerModule, companyInfo,sm];
+            return [...dealerModule, companyInfo];
         }
         let dealerModule = dealerAccessModule.slice(0, 5);
-        return [...dealerModule, companyInfo,sm];
+        return [...dealerModule, companyInfo];
 
     }
     //未认证
@@ -92,14 +92,14 @@ export function initAccessModule(userType, auditState = '') {
         //但是可能会存在  当前人员的员工级别是管理员  因为申请开店的人默认 设置成管理员
         if(permissionState == 1){
             // let dealerModule = dealerAccessModule.slice(0, 5);
-            return [...dealerAccessModule, companyInfo,sm];
+            return [...dealerAccessModule, companyInfo];
         }
         //其它的 不显示员工菜单
         let dealerModule = dealerAccessModule.slice(0, 3);
         let wdealerModule_ = dealerAccessModule.slice(4, 6);
         dealerModule.push(wdealerModule_[0]);
         dealerModule.push(wdealerModule_[1]);
-        return [...dealerModule, companyInfo,sm];
+        return [...dealerModule, companyInfo];
     }
-    return [...dealerAccessModule, companyInfo,sm];
+    return [...dealerAccessModule, companyInfo];
 }

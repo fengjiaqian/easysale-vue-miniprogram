@@ -18,7 +18,6 @@ Vue.use(Router);
 const router = new Router({
     routes
 });
-
 /**
  * from 经销商商品管理后 返回首页刷新
  */
@@ -47,13 +46,13 @@ const isNeedRefreshMine = function () {
 
 router.beforeEach((to, from, next) => {
 
-    if(to.path === "/orderprinting"){
+   /* if(to.path === "/orderprinting"){
         next();
         return ;
     }else if(to.path === "/orderlist"){
         next();
         return ;
-    }
+    }*/
 
     let $el = document.querySelector('.loading-message');
     $el && $el.parentNode.removeChild($el);
