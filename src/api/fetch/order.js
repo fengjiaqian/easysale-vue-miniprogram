@@ -1,6 +1,23 @@
 import axios from 'axios'
 
 //订单列表
+export function Authvali(params = {}) {
+
+    const url = "/ewmauth/authvali";
+    return axios({
+        method: 'post',
+        url,
+        data: params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
+
+
+//订单列表
 export function QueryOrders(params = {}) {
 
     var paramsData = Object.assign({
