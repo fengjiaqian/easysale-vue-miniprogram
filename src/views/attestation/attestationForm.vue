@@ -55,7 +55,7 @@
             <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
-        <!--  <li>
+          <!--  <li>
             <span>身份证号</span>
             <input v-model="formParam.cardId" type="tel" placeholder="请输入身份证号">
           </li>
@@ -86,8 +86,10 @@
       <div class="att-content" v-if="type==2">
         <div class="c-header">
           <div>
-            <h5>店主认证</h5>
-            <p>店主认证需要上传您的营业执照</p>
+            <h5>认证提示</h5>
+            <p @click="toOpenNew" style="color:red;margin-top:5px;" class="_required">您将要申请店主的店铺是[{{shopName}}]，如需开通自己的线上店铺请点击此处</p>
+            <!-- <p style="margin-top:5px;font-size: 0.823529rem;
+    color: #999;">店主认证需要上传您的营业执照</p> -->
           </div>
           <i class="icon-owner"></i>
         </div>
@@ -103,6 +105,8 @@
         </ul>
         <div class="upload-viewer">
           <h5 class="required">上传营业执照</h5>
+          <p style="margin-top:5px;font-size: 0.823529rem;
+    color: #999;">店主认证需要上传您的营业执照</p>
           <div class="upload-area upload-license">
             <upload-file class="license-pic" :img-list="imgList" :limit-num="1" ref="uploadFile"></upload-file>
           </div>
@@ -186,7 +190,9 @@ export default {
         cardId: ""
       }, //提交参数
       imgList: [],
-      limitUploadNum: 3
+      limitUploadNum: 3,
+      mobileNo:-1,
+      shopName:""
     };
   },
   components: {
@@ -198,7 +204,7 @@ export default {
       const titleArray = [
         "我是客户",
         "我是员工",
-        "我是店主",
+        "店主认证",
         "开通我公司线上平台"
       ];
       return titleArray[this.type] || "";
@@ -233,8 +239,10 @@ export default {
     });
   },
   created() {
-    const { type = 0, mobileNo } = this.$route.query;
+    const { type = 0, mobileNo, shopName } = this.$route.query;
     this.type = type;
+    this.mobileNo=mobileNo;
+    this.shopName=shopName;
     mobileNo && (this.formParam.phone = mobileNo);
   },
   mounted() {
@@ -301,7 +309,7 @@ export default {
           this._submit();
         }
       } else {
-          this._submit();
+        this._submit();
       }
     },
     _submit() {
@@ -319,6 +327,9 @@ export default {
         pageData: this.formParam
       };
       evokeWxLocation(recordData);
+    },
+    toOpenNew() {
+    this.type=3;
     }
   }
 };

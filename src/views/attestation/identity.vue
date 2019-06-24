@@ -43,7 +43,7 @@ export default {
       const mobileNo = storage.get("mobileNo", "");
       this.$router.push({
         name: "attestationForm",
-        query: { type: item.type, mobileNo }
+        query: { type: item.type, mobileNo,shopName:this.shopName }
       });
     },
     //初始化auth
