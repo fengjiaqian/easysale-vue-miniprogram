@@ -124,7 +124,7 @@
         <strong class="weui-dialog__title">{{"提示"}}</strong>
       </div>
       <div class="weui-dialog__bd">
-        <p style="text-align: center;">{{content}}</p>
+        <p style="text-align: center;" v-html="content"></p>
       </div>
       <div class="weui-dialog__ft">
         <a
