@@ -2,7 +2,7 @@
   <div id="orders">
     <div
       class="print_order_list"
-      v-if="empty&&(userType==1||userType==2)&&!showPrintBox"
+      v-if="!empty&&(userType==1||userType==2)&&!showPrintBox"
       @click="_toPrintPage"
     >打印</div>
     <empty v-if="empty&&!showPrintBox" txt="暂无此类订单" :iconUrl="avatarUrl"></empty>
