@@ -43,6 +43,7 @@
                         //是iphoneX以上型号
 
                         Vue.prototype.isIphoneX = true;
+                        Vue.prototype.isIOS = true;
                     }
                 }
             }

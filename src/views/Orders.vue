@@ -177,8 +177,12 @@ export default {
       //       this.$router.push({ path: "/navi/home" });
       //   });
 
-
-
+      // var str="";
+      // if(this.isIOS){
+      //   str="请在PC端访问jxs.release.yijiupidev.com获取二维码"
+      // }else{
+      //   str="点击确认后扫描二维码打印订单"
+      // }
       // 点击确认后扫描二维码打印订单
       this.$confirm("请在PC端访问jxs.release.yijiupidev.com获取二维码")
         .then(() => {
