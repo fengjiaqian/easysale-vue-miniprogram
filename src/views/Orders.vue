@@ -184,7 +184,7 @@ export default {
       //   str="点击确认后扫描二维码打印订单"
       // }
       // 点击确认后扫描二维码打印订单
-      this.$confirm("请在PC端访问jxs.release.yijiupidev.com获取二维码")
+      this.$confirm("请在电脑端访问jxs.release.yijiupidev.com获取二维码")
         .then(() => {
           let recordData = {
             path: this.$route.path
