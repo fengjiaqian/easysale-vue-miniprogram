@@ -13,6 +13,11 @@
                            placeholder="请输入商品品牌">
                 </li>
                 <li>
+                    <span>商品规格：</span>
+                    <input v-model="productModal.specification" unselectable="on" type="text" maxlength="30"
+                           placeholder="请输入商品规格">
+                </li>
+                <li>
                     <span>商品价格：</span>
                     <input v-model="productModal.price" type="number" class="price" placeholder="请输入商品价格">
                     <i>元</i>

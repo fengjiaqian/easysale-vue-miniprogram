@@ -172,7 +172,15 @@ export default {
     },
 
     _toPrintPage() {
-      this.$confirm("点击确认后扫描二维码打印订单")
+
+      // this.$alert('恭喜，您已开通线上公司').then(res => {
+      //       this.$router.push({ path: "/navi/home" });
+      //   });
+
+
+
+      // 点击确认后扫描二维码打印订单
+      this.$confirm("请在PC端访问jxs.release.yijiupidev.com获取二维码")
         .then(() => {
           let recordData = {
             path: this.$route.path
