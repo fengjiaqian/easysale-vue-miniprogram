@@ -26,13 +26,17 @@
         <order-item v-for="item in orderList" :order="item" @operate="operateItem" :key="item.id"></order-item>
       </div>
     </scroll>
-
-    <div class="authorityPrint" v-show="showPrintBox">
+    <!-- <div class="mask_px" v-show="showPrintBox"></div> -->
+    <div class="log_div" v-show="showPrintBox">
+      <div class="authorityPrint" >
+      <div><img class="log_px" :src="logUrl" alt=""> </div>
       <div class="authorityPrint_title">授权小程序登录PC端订单打印</div>
       <!-- <div class="authorityPrint_btn" @click="closePrintBox">取消授权</div> -->
       <div class="authorityPrint_btn" @click="authorityPrint">确认授权</div>
       <!-- <div></div> -->
     </div>
+    </div>
+    
     <div class="pr_mask" v-show="showPrintBox" @click="closePrintBox" @touchmove.prevent></div>
   </div>
 </template>
@@ -61,10 +65,15 @@ import empty from "components/empty.vue";
 import scroll from "components/scroll.vue";
 import * as orderApi from "api/fetch/order";
 import { transformOrderList, orderOperate } from "./order/orderOperate";
+
+import log from "@/assets/images/ic-log.png";
+const logUrl = log;
+
 export default {
   name: "orders",
   data() {
     return {
+      logUrl:logUrl,
       orderTab: orderTab,
       currentState: 1,
       orderList: [],
@@ -215,7 +224,7 @@ export default {
         .Authvali(obj)
         .then(res => {
           if (res.result === "success" && res.data) {
-            this.$toast("成功");
+            this.$toast("授权成功");
             this.showPrintBox = false;
             this.loading = false;
           }
@@ -267,10 +276,10 @@ export default {
 .pr_mask {
   position: fixed;
   z-index: 1200;
-  width: 100%;
-  height: 100%;
-  bottom: 0rpx;
-  left: 0rpx;
+  width: 100vw;
+  height: 100vh;
+  bottom: 0;
+  left: 0;
   background-color: #000;
   opacity: 0.4;
 }
@@ -278,37 +287,65 @@ export default {
 .authorityPrint {
   width: 520px;
   height: 300px;
-  position: fixed;
-  z-index: 1202;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
+  // position: fixed;
+  // z-index: 1202;
+  // left: 50%;
+  // top: 40%;
+  // transform: translate(-50%, -50%);
+  position absolute;
+  top:46%;
   box-sizing: border-box;
   padding: 24px;
   background: #fff;
+  border-radius :10px;
 }
 
 .authorityPrint_title {
   width: 100%;
   height: 90px;
-  margin-top: 20px;
+  margin-top: 60px;
   // background: rgba(255, 86, 56, 1);
   font-size: 32px;
   line-height: 90px;
   color: rgba(255, 86, 56, 1);
+  // color: #FFEEEB;
   text-align: center;
   font-weight: bold;
 }
 
 .authorityPrint_btn {
   // width: 100%;
-  height: 90px;
+  height: 80px;
   margin-top: 20px;
   background: rgba(255, 86, 56, 1);
+  // background-color #FFEEEB
   font-size: 30px;
   line-height: 90px;
   color: #fff;
   text-align: center;
+  border-radius :8px;
 }
+
+.log_px{
+  width :160px;
+  height:160px;
+  position absolute;
+  top:-30%;
+  left :50%;
+  transform translateX(-50%);
+}
+
+.log_div{
+  width: 520px;
+  height: 550px;
+  background-color #FFEEEB
+  position: fixed;
+  z-index: 1202;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  border-radius :10px;
+}
+
 </style>
 
