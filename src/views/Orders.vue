@@ -4,6 +4,9 @@
       class="print_order_list"
       v-if="!empty&&(userType==1||userType==2)&&!showPrintBox"
       @click="_toPrintPage"
+      @touchstart="down($event)"
+      @touchmove.prevent="move($event)"
+      @touchend="end"
     >打印</div>
     <empty v-if="empty&&!showPrintBox" txt="暂无此类订单" :iconUrl="avatarUrl"></empty>
     <ui-table :orderTab="orderTab" :initialState="currentState " @swithTab="_switchOrderType"></ui-table>
@@ -56,6 +59,7 @@ const params = {
   pageNum: 1,
   pageSize: 6
 };
+import mixin from "common/floatMixin";
 import avatarUrl from "@/assets/images/icon-product-empty.png";
 import orderItem from "components/order-item.vue";
 import uiTable from "components/ui-table.vue";
@@ -70,6 +74,7 @@ import log from "@/assets/images/ic-log.png";
 const logUrl = log;
 
 export default {
+  mixins: [mixin],
   name: "orders",
   data() {
     return {
