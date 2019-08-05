@@ -40,14 +40,21 @@
       <span @click="audit('2')" class="refuse">审核拒绝</span>
       <span @click="audit('1')">审核同意</span>
     </div>
-    <div class="b-oprate" :class="{'isIphoneX':isIphoneX}" @click="skipTo" v-else>
-      <span>编辑</span>
+
+    <div class="b-oprate" :class="{'isIphoneX':isIphoneX}" v-else>
+      <div class="b-oprate" v-if="staffInfo.permissionState==0">
+        <span @click="stopStaff(staffInfo.id)" class="refuse">停用</span>
+        <span  @click="skipTo">编辑</span>
+      </div>
+      <div v-else>
+      <span  @click="skipTo">编辑</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { queryStaffDetail, deleteStaff, auditStaff } from "api/fetch/mine";
+import { queryStaffDetail, deleteStaff, auditStaff ,editStaff} from "api/fetch/mine";
 export default {
   data() {
     return {
@@ -65,6 +72,34 @@ export default {
     this._queryStaffDetail();
   },
   methods: {
+    stopStaff(did){
+      if(did){
+        this.$confirm("确定要停用该员工吗？")
+                .then(() => {
+                  let param = {
+                    id: did,
+                    state:3
+                  };
+                  editStaff(param).then(res => {
+                    if (res.result === "success") {
+                      //删除成功返回员工列表页
+                      this.$toast("操作成功！");
+                      this.$router.push({
+                        path: "/my/staffList"
+                      });
+                    }else{
+                      this.$toast("停用失败！");
+                    }
+                  }).catch(() => {
+                    this.$toast("停用失败！");
+                  });
+                })
+                .catch(() => {
+                });
+      }else{
+        this.$toast("数据异常！");
+      }
+    },
     _queryStaffDetail() {
       let param = { userId: this.userId };
       queryStaffDetail(param).then(res => {

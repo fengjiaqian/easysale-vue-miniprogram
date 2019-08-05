@@ -58,6 +58,22 @@ export function modifyConsignee(param) {
 		return Promise.reject(res.data)
 	});
 }
+// 修改收货人
+export function dealerStatus(param) {
+
+	const url = "/user/dealerstatus"
+	return axios({
+		method: 'post',
+		url: url,
+		data: param,
+		loading: true,
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(res => {
+		return Promise.reject(res.data)
+	});
+}
+
 
 // 新增收货人
 export function addConsigneer(param) {

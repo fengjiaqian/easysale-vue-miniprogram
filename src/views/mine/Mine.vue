@@ -45,10 +45,10 @@
 <script>
 import { initAccessModule } from "./mineCommon";
 import storage from "common/storage";
-import { findCustomerOwerInfo } from "api/fetch/endCustomer";
+import { findCustomerOwerInfo} from "api/fetch/endCustomer";
+import { changeShop} from "api/fetch/dealer";
 import { queryShopInfo, synthesisroutineimg } from "api/fetch/mine";
-import { mapGetters } from "vuex";
-
+import { mapGetters,mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -56,7 +56,7 @@ export default {
       avatarUrl: storage.get("avatarUrl", ""),
       nickName: storage.get("nickName", ""),
       mineMenu: [],
-      auditState: 1
+      auditState: 1,
     };
   },
   computed: {
@@ -78,16 +78,13 @@ export default {
     });
   },
   created: function() {
-
-    alert(this.userType);
-    console.log(storage.get("originUserType"))
-
     this.mineMenu = initAccessModule(this.userType);
     this._findCustomerOwerInfo();
   },
   beforeDestory() {},
   destoryed() {},
   mounted() {
+    this._changShop();
   },
   activated() {
     const refresh = storage.get("mineRefresh", false);
@@ -97,8 +94,23 @@ export default {
     storage.set("mineRefresh", false);
   },
   methods: {
+    ...mapActions(["setUserType"]),
+    _changShop(){
+      console.log("init:"+storage.get("currentDealerId"));
+      changeShop(storage.get("currentDealerId"))
+              .then(res => {
+                this.setUserType(res.data || 3);
+                storage.set("currentDealerId", dealer.id);
+                storage.set("currentDealer", dealer);
+                document.title = dealer.shopName;
+                this.$router.push({
+                  path: "/navi/home"
+                });
+              })
+              .catch(_ => {
+              });
+    },
     mineSkip(path) {
-
       if (path == "/orderprintingclick") {
         let recordData = {
           path: this.$route.path

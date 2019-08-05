@@ -50,7 +50,7 @@ const companyInfo = {
     path: "/my/userInfo"
 }
 
-export function initAccessModule(userType, auditState = '') {
+export function initAccessModule(userType,auditState = '') {
     let permissionState = storage.get('permissionState', 0);
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {
@@ -64,15 +64,15 @@ export function initAccessModule(userType, auditState = '') {
         }
         return customerAccessModule.slice(0, 1);
     }
- /*   let sm =  {
-        title: "扫描打印订单",
-        class: "customer",
-        path: "/orderprintingclick"
-    }*/
+    /*   let sm =  {
+           title: "扫描打印订单",
+           class: "customer",
+           path: "/orderprintingclick"
+       }*/
     //已经认证了
     if (auditState == 1) {
 
-       // 并且是员工的时候  需要验证下 员工级别 显示不同的菜单
+        // 并且是员工的时候  需要验证下 员工级别 显示不同的菜单
         if(userType == 2){
             if(permissionState == 1){
                 let dealerModule = dealerAccessModule.slice(0, 5);
