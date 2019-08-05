@@ -78,6 +78,10 @@ export default {
     });
   },
   created: function() {
+
+    alert(this.userType);
+    console.log(storage.get("originUserType"))
+
     this.mineMenu = initAccessModule(this.userType);
     this._findCustomerOwerInfo();
   },
