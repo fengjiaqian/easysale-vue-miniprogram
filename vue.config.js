@@ -24,7 +24,11 @@ module.exports = {
     lintOnSave: false,
     runtimeCompiler: true, // 是否使用包含运行时编译器的 Vue 构建版本
     productionSourceMap: false, // 生产环境的 source map
-
+    transpileDependencies:[ {
+        test: /\.js$/,
+        loader: 'babel-loader',//注意elementUI的源码使用ES6需要解析
+        include: [resolve('src'), resolve('test'),resolve('/node_modules/element-ui/src'),resolve('/node_modules/element-ui/packages')]
+    }],
     configureWebpack: config => {
         // config.externals = {
         //   'vue': 'Vue',
@@ -88,7 +92,16 @@ module.exports = {
         'cube-ui': {
             postCompile: true,
             theme: true
-        }
+        },
+        // module: {
+        //     rules: [
+        //         {
+        //             test: /\.js$/,
+        //             loader: 'babel-loader',//注意elementUI的源码使用ES6需要解析
+        //             include: [resolve('src'), resolve('test'),resolve('/node_modules/element-ui/src'),resolve('/node_modules/element-ui/packages')]
+        //         }
+        //     ]
+        // },
     },
     parallel: require('os').cpus().length > 1,
     pwa: {},
@@ -126,15 +139,6 @@ module.exports = {
             },
 
         }
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',//注意elementUI的源码使用ES6需要解析
-                include: [resolve('src'), resolve('test'),resolve('/node_modules/element-ui/src'),resolve('/node_modules/element-ui/packages')]
-            }
-        ]
     },
 
 };
