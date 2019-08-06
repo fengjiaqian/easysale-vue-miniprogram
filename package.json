@@ -1,9 +1,4 @@
 {
-
-
-
-
-
   "name": "easysale-vue-new",
   "version": "0.1.0",
   "private": true,
@@ -21,6 +16,7 @@
     "qrcodejs2": "^0.0.2",
     "style-resources-loader": "^1.2.1",
     "transfer-webpack-plugin": "^0.1.4",
+    "uglify-es-webpack-plugin": "^0.10.0",
     "vconsole": "^3.3.0",
     "vue": "^2.6.6",
     "vue-lazyload": "^1.2.6",
