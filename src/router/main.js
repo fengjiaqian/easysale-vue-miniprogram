@@ -97,7 +97,7 @@ const main = [{
 		name: 'orders',
 		meta: {
 			title: '订单',
-			keepAlive: true
+			// keepAlive: true
 		},
 		component: Orders
 	}, {
@@ -105,7 +105,7 @@ const main = [{
 		name: 'mine',
 		meta: {
 			title: '我的',
-			keepAlive: true,
+			// keepAlive: true
 			requireAuth: true,
 			requireGuidence: true
 		},

@@ -51,6 +51,9 @@ const companyInfo = {
 }
 
 export function initAccessModule(userType,auditState = '') {
+
+    console.log("--------------------------------");
+
     let permissionState = storage.get('permissionState', 0);
     const originUserType = storage.get('originUserType', '')
     if (userType == 3) {

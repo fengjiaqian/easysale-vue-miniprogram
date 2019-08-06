@@ -96,6 +96,7 @@ export default {
   methods: {
     ...mapActions(["setUserType"]),
     _changShop(){
+      console.log("--------------------------------");
       console.log("init:"+storage.get("currentDealerId"));
       changeShop(storage.get("currentDealerId"))
               .then(res => {
