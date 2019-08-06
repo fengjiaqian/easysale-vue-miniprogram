@@ -31,20 +31,15 @@ module.exports = {
         //   'vuex': 'Vuex',
         //   'axios': 'axios'
         // }
-        const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+        const UglifyEsPlugin = require('uglify-es-webpack-plugin');
         if (IS_PROD) {
             const plugins = [];
             plugins.push(
-                new UglifyJsPlugin({
-                    uglifyOptions: {
-                        compress: {
-                            warnings: false,
-                            drop_console: true, //console
-                            drop_debugger: true,
-                            pure_funcs: ['console.log'] //移除console
+            		new UglifyEsPlugin({
+                        compress:{
+                            drop_console: true
                         }
-                    }
-                }),
+                    }),
                 //微信域名效验文件
                 new TransferWebpackPlugin([{
                     from: 'weChatCheck',
