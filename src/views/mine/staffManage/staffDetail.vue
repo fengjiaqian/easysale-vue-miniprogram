@@ -46,7 +46,7 @@
         <span @click="stopStaff(staffInfo.id)" class="refuse">停用</span>
         <span  @click="skipTo">编辑</span>
       </div>
-      <div v-else>
+      <div class="b-oprate" v-else>
       <span  @click="skipTo">编辑</span>
       </div>
     </div>
