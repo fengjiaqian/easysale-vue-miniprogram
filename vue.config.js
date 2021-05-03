@@ -107,11 +107,11 @@ module.exports = {
                 changeOrigin: true
             },
             '/': {
-                //target: 'http://192.168.0.25:5201/', //lidengfeng
+                target: 'http://192.168.1.10:5201/',
                 //target: 'http://192.168.0.221:5201/', //chenchuxiang
                 //target: 'http://192.168.0.133:5201/', //dev
                 //  target: 'http://197.168.13.157cnpm:5201/', //lilijuan
-                target: 'http://easysalemini.release.yijiupidev.com/easysaleapi/',
+                //target: 'http://easysalemini.release.yijiupidev.com/easysaleapi/',
                 ws: false,
                 changeOrigin: true,
                 pathRewrite: {
