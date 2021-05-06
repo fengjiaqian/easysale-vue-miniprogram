@@ -37,7 +37,7 @@ export default {
         this.uuid = that.get_uuid();
       }
       // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
-      this.websock = new WebSocket("ws://197.168.14.224:5201/websocket/"+this.uuid);
+      this.websock = new WebSocket("ws://192.168.1.6:5201/websocket/"+this.uuid);
       this.websock.onopen = this.websocketonopen;
       this.websock.onerror = this.websocketonerror;
       this.websock.onmessage = this.websocketonmessage;

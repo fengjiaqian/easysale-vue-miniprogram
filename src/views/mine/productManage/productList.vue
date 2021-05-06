@@ -83,7 +83,7 @@
       <div class="fixed-add" :class="{'trans-rotate': popAddShow}" @click="togglePopShow"></div>
       <div class="pop-up-layer" v-if="popAddShow">
         <span @click="skipTo('add')">添加自有商品</span>
-        <span @click="skipTo('import')">从产品库导入商品</span>
+        <span>-</span>
       </div>
     </section>
     <!--遮罩层-->

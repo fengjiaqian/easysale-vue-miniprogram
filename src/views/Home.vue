@@ -646,7 +646,7 @@ export default {
         const avatarImg = this.avatarUrl || storage.get("avatarUrl");
         const nickName = this.nickName || storage.get("nickName");
         if (avatarImg && nickName) {
-          this._share(avatarImg, nickName, shop);
+          //this._share(avatarImg, nickName, shop);
           // setTimeout(() => {
           //   this.lock = false;
           // }, 2000);
@@ -657,7 +657,7 @@ export default {
               if (res.data) {
                 this.nickName = res.data.wxNickName;
                 this.avatarUrl = res.data.iamgeUrl;
-                this._share(this.avatarUrl, this.nickName, shop);
+                //this._share(this.avatarUrl, this.nickName, shop);
                 this._storageUserInfo(this.nickName, this.avatarUrl);
               }
             })
