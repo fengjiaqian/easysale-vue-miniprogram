@@ -139,8 +139,7 @@
                         res.data = JSON.parse(JSON.stringify(res.data))
                         res.data.contentMd5 = md5File
                         res.data.file = file
-                        upLoadService.uploadImageNew(res.data);
-                        //upLoadService.upLoadImg(res.data, this._uploadSuccess)
+                        upLoadService.upLoadImg(res.data, this._uploadSuccess)
                     }
                 }, err => {
                     console.log(err)
