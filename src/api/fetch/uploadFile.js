@@ -14,6 +14,21 @@ export function getAuthorization(params) {
 
 	});
 }
+//获取文件上传权限
+export function uploadImageNew(file) {
+	const url = '/file/uploadImage'
+	var data = new FormData();
+	data.append("file",file, file.name)
+	return axios({
+		method: 'post',
+		url: url,
+		data: data
+	}).then((res) => {
+		return Promise.resolve(res.data)
+	}).catch(function (error) {
+
+	});
+}
 
 //上传文件
 export function upLoadImg(options, callback) {

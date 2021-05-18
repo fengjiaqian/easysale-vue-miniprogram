@@ -83,7 +83,6 @@
             },
             //图片上传前
             beforeupload(file) {
-                //console.log('beforeupload')
                 // 如果file不是File对象的实例，则不需要处理Md5
                 if(file.size == undefined) {
                     return;
@@ -128,18 +127,12 @@
                     contentMd5: md5File,
                     contentType: file.type,
                     key: name,
-                    date: '',
-                    putPolicy: '',
-                    method: 'PUT',
-                    fileType: 0
+                    file: file
                 }
                 $Loading.getInstance(30000);//初始化loading图标，loading最长30秒，到时自动关闭
-                upLoadService.getAuthorization(params).then(res => {
+                upLoadService.uploadImageNew(file).then(res => {
                     if(res.result == 'success') {
-                        res.data = JSON.parse(JSON.stringify(res.data))
-                        res.data.contentMd5 = md5File
-                        res.data.file = file
-                        upLoadService.upLoadImg(res.data, this._uploadSuccess)
+                      this._uploadSuccess(res.data);
                     }
                 }, err => {
                     console.log(err)
