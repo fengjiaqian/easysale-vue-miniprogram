@@ -78,7 +78,7 @@
             <a href="javascript:;" class="btn" @click="_operate(2,order.id)">同意</a>
         </div>
         <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="order.canCancel">
-            <a href="javascript:;" class="btn" @click="_operate(5,order.id)" style="width:100%">取消申请</a>
+            <a href="javascript:;" class="btn" @click="_operate(5,order.id)" style="width:100%">取消订单</a>
         </div>
     </div>
 </template>

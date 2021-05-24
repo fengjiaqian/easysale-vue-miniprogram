@@ -14,6 +14,7 @@
         <p class="name">{{product.productName}}</p>
         <div class="spec">规格 {{product.specification}}</div>
         <div class="price">
+          <span class="c-yellow" style="font-size: medium">押金:&nbsp;</span>
           <span class="c-yellow" v-html="$options.filters.price(product.price, product.priceUnit)"></span>
           <span class="fz28 c-6">X{{product.buyCount}}</span>
         </div>
