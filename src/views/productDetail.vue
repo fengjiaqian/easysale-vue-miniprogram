@@ -7,7 +7,7 @@
       <div class="D-img">
         <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
       </div>
-      <div class="D-name">{{product.productName}}</div>
+      <div class="D-name">{{product.productName}}<i v-if="product.remark" :class="'s-success'">{{product.remark}}</i></div>
       <!-- wx 新增加的div  描述规格 -->
       <div class="D-norm">规格 : {{product.specification}}</div>
       <div class="D-price">
@@ -15,9 +15,6 @@
         <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
       </div>
       <!--<div v-if="product.remark" :class="[product.remark!=null ? 'p-remark' : '']">{{product.remark}}</div>-->
-      <h5 class="name">
-        <i v-if="product.remark" :class="'s-success'">{{product.remark}}</i>
-      </h5>
       <div class="fill"></div>
       <div class="D-number">
         <span class="c-3 fz30" style="font-weight:bold">数量</span>
@@ -268,7 +265,7 @@ export default {
   radius(8);
 }
 .s-success {
-  font-size: 0.647059rem;
+  font-size: 0.947059rem;
   color: #fff;
   -webkit-border-radius: 0.117647rem;
   border-radius: 0.117647rem;

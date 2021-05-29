@@ -307,7 +307,7 @@
         }
     }
     .s-success {
-        font-size: 0.647059rem;
+        font-size: 0.847059rem;
         color: #fff;
         -webkit-border-radius: 0.117647rem;
         border-radius: 0.117647rem;

@@ -1,13 +1,14 @@
 <template>
   <div class="order-products-wrap">
-    <div class="O-item-skus" v-if="products.length<=3">
+    <div class="O-item-skus" v-if="products.length<=10">
       <!-- 单个产品 -->
       <div class="single-sku clearfix" v-for="product in products" :key="product.id">
         <div class="s-s-img">
           <img v-lazy="product.productImageUrl" alt>
         </div>
         <div class="s-s-main">
-          <p class="name">{{product.productName}}</p>
+          <p class="name">{{product.productName}}&nbsp;<i v-if="product.remark" :class="'s-success'">{{product.remark}}</i></p>
+
           <div class="price">{{product.price}}元/{{product.priceUnit}}</div>
           <div class="price">
             <span>规格：{{product.specification}}</span>
@@ -149,6 +150,23 @@ export default {
       }
     }
   }
+}
+.s-success {
+  font-size: 0.847059rem;
+  color: #fff;
+  -webkit-border-radius: 0.117647rem;
+  border-radius: 0.117647rem;
+  padding: 0.16rem 0.235294rem;
+  margin-right: 0.352941rem;
+  line-height: 1rem;
+  word-break: keep-all;
+  background: #ff5638 !important;
+  border: 0;
+  font-weight: normal;
+  vertical-align: baseline;
+  font-style: normal;
+  box-sizing: border-box;
+
 }
 </style>
 

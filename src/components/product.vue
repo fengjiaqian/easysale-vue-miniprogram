@@ -4,7 +4,7 @@
       <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
     <div class="H-product-content">
-      <p class="name">{{product.productName}}</p>
+      <p class="name">{{product.productName}}&nbsp;<i v-if="product.remark" :class="'s-success'">{{product.remark}}</i></p>
       <div class="spec">规格 {{product.specification}}</div>
       <div class="price">
         <div>
@@ -14,9 +14,6 @@
         <number-picker :product="product"></number-picker>
       </div>
       <!--<div v-if="product.remark" :class="[product.remark!=null ? 'priceremark' : '']">{{product.remark}}</div>-->
-      <h5 class="name">
-        <i v-if="product.remark" :class="'s-success'">{{product.remark}}</i>
-      </h5>
     </div>
   </div>
 </template>
@@ -97,7 +94,7 @@ export default {
     align-items: center;
   }
   .s-success {
-    font-size: 0.647059rem;
+    font-size: 0.847059rem;
     color: #fff;
     -webkit-border-radius: 0.117647rem;
     border-radius: 0.117647rem;
