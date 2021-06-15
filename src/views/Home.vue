@@ -161,7 +161,7 @@ import ic4 from "../assets/images/ic-chenglie.png";
 import ic5 from "../assets/images/ic-kaidian.png";
 
 const appIcons = [
-  { imgUrl: ic1, value: "投诉" },
+  { imgUrl: ic1, value: "意见" },
   //{ imgUrl: ic2, value: "兑奖" },
   //{ imgUrl: ic3, value: "退货" },
   //{ imgUrl: ic4, value: "陈列" },

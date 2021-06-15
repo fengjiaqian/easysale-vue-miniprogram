@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 //订单列表
 export function Authvali(params = {}) {
 
@@ -51,7 +50,19 @@ export function OrderSubmit(params = {}) {
         return Promise.reject(res.data)
     });
 }
-
+export  function  createPayOrder(params = {}) {
+    const url = "/pay/createOrder";
+    return axios({
+        method: 'post',
+        url,
+        data: params,
+        loading: true,
+    }).then((res) => {
+        return Promise.resolve(res.data)
+    }).catch(res => {
+        return Promise.reject(res.data)
+    });
+}
 
 /**
  * 订单或订单明细更新

@@ -101,10 +101,8 @@ function isValueNumber(value) {
  */
 import storage from "common/storage";
 import { batchRemoveItem } from "common/goodsStorage";
-import { OrderSubmit } from "api/fetch/order";
+import { OrderSubmit,createPayOrder} from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
-import { queryAddressList } from "api/fetch/endCustomer";
-import { findCustomerList } from "api/fetch/dealer";
 export default {
   name: "order-submit",
   data() {
@@ -175,13 +173,37 @@ export default {
       };
       OrderSubmit(params)
         .then(res => {
-          this.$createTalkingData("Order", "SubmitOrder", {}, 3);
-          //批量删除购物车中商品
-          batchRemoveItem(this.products);
-          this.$router.push({ path: "/orderResult" });
+          params.id=res.data;
+          createPayOrder(params).then(res => {
+            res.data.package=res.data.packageValue;
+            const that = this;
+            batchRemoveItem(this.products);
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest', res.data,
+                function(res){
+                  if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                    that.$router.push({ path: "/orderResult" });
+                  } else {
+                    alert(JSON.stringify(res));
+                    alert(res.err_msg);
+                    that.$router.push({
+                      path: "/orderResult",
+                      query: {
+                        err: "支付失败"
+                      }
+                    });
+                  }
+                });
+          }).catch(err => {
+            this.$router.push({
+              path: "/orderResult",
+              query: {
+                err: err.message
+              }
+            });
+          });
         })
         .catch(err => {
-          this.$createTalkingData("Order", "SubmitOrder", {}, 3);
           this.$router.push({
             path: "/orderResult",
             query: {

@@ -171,7 +171,7 @@ function submitTalkingData() {
 		// 每块交由sparkMD5进行计算
 		spark.append(e.target.result); 
 		let contentMd5 = spark.end();
-		getAuthorizationThenUpload(contentMd5, file)
+		//getAuthorizationThenUpload(contentMd5, file)
 	};
 	let start = currentChunk * sliceSize;
 	let end = start + sliceSize >= file.size ? file.size : start + sliceSize;

@@ -32,10 +32,10 @@ export default {
       this.text = "订单提交失败";
     }
 
-    let that = this;
+    /*let that = this;
     setTimeout(() => {
       that.$submitTalkingData();
-    }, 1000);
+    }, 1000);*/
   },
 
   // beforeRouteEnter(to, from, next) {

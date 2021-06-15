@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "better-scroll": "^1.15.1",
     "core-js": "^2.6.5",
     "cube-ui": "~1.12.15",
@@ -22,7 +22,8 @@
     "vue-lazyload": "^1.2.6",
     "vue-picture-preview": "^1.2.1",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
