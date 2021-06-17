@@ -103,6 +103,7 @@ import storage from "common/storage";
 import { batchRemoveItem } from "common/goodsStorage";
 import { OrderSubmit,createPayOrder} from "api/fetch/order";
 import { transformOrderItems } from "common/productUtil";
+import { evokeWxorderpay } from "common/orderpay";
 export default {
   name: "order-submit",
   data() {
@@ -175,25 +176,8 @@ export default {
         .then(res => {
           params.id=res.data;
           createPayOrder(params).then(res => {
-            res.data.package=res.data.packageValue;
-            const that = this;
             batchRemoveItem(this.products);
-            WeixinJSBridge.invoke(
-                'getBrandWCPayRequest', res.data,
-                function(res){
-                  if(res.err_msg == "get_brand_wcpay_request:ok" ){
-                    that.$router.push({ path: "/orderResult" });
-                  } else {
-                    alert(JSON.stringify(res));
-                    alert(res.err_msg);
-                    that.$router.push({
-                      path: "/orderResult",
-                      query: {
-                        err: "支付失败"
-                      }
-                    });
-                  }
-                });
+            evokeWxorderpay(res.data);
           }).catch(err => {
             this.$router.push({
               path: "/orderResult",

@@ -6,7 +6,7 @@
       <p class="fail-reason" v-if="failReason">{{failReason}}</p>
       <div class="actions">
         <a href="javascript:;" class="btn" @click="_jump(1)">返回首页</a>
-        <a href="javascript:;" class="btn" @click="_jump(3)" v-if="failReason">重新提交</a>
+        <a href="javascript:;" class="btn" @click="_jump(3)" v-if="failReason!='ok'">重新提交</a>
         <a href="javascript:;" class="btn" @click="_jump(2)" v-else>查看订单</a>
       </div>
     </div>
@@ -22,14 +22,14 @@ export default {
     return {
       failReason: "",
       imgSrc: successImg,
-      text: "订单提交成功"
+      text: "支付成功"
     };
   },
   created() {
-    this.failReason = this.$route.query.err || "";
-    if (this.failReason) {
+    this.failReason = this.$route.query.passData || "";
+    if (this.failReason !== "ok") {
       this.imgSrc = failImg;
-      this.text = "订单提交失败";
+      this.text = "支付失败";
     }
 
     /*let that = this;
@@ -65,7 +65,13 @@ export default {
           });
           break;
         case 3:
-          this.$router.go(-1);
+         const state0 = this.userType == 3 ? 1 : 2;
+          this.$router.push({
+            path: "/navi/orders",
+            query: {
+              state0
+            }
+          });
           break;
         default:
           break;
