@@ -22,7 +22,7 @@ export function transformProductList(list) {
 export function transformOrderItems(list) {
     return list.map(product => {
         const { id, buyCount, price } = product;
-        return { productId: id, quantity: buyCount, salePrice: price }
+        return { productId: id, quantity: buyCount, salePrice: price , product:product}
     })
 }
 
