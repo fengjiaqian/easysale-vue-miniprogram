@@ -186,7 +186,8 @@ export default {
     },
 
     _toPrintPage() {
-
+      alert("功能暂未开放");
+      return false;
       // this.$alert('恭喜，您已开通线上公司').then(res => {
       //       this.$router.push({ path: "/navi/home" });
       //   });

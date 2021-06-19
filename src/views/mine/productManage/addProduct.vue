@@ -131,26 +131,13 @@ export default {
   },
   created() {
     const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
-    // this.$createTalkingData(
-    //   "addProduct",
-    //   "addProduct_formUser",
-    //   { IsSuccess: true, OrderNos: this.orderNOs },
-    //   3
-    // );
-    // let that = this;
-    // setTimeout(() => {
-    //   that.$submitTalkingData();
-    // }, 1000);
   },
 
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.$createTalkingData("UserProduct ", "", {}, 1);
-    });
+    next();
   },
 
   beforeRouteLeave(to, from, next) {
-    this.$createTalkingData("UserProduct ", "", {}, 2);
     next();
   },
 
@@ -172,11 +159,6 @@ export default {
       };
       addProduct(param).then(res => {
         if (res.result === "success") {
-          this.$createTalkingData("UserProduct", "UserProductAddButton", {}, 3);
-          let that = this;
-          setTimeout(() => {
-            that.$submitTalkingData();
-          }, 1000);
           //商品添加成功后回到商品管理列表页
           this.$router.push({ path: "/my/productList" });
         }

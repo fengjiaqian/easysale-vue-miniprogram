@@ -34,13 +34,20 @@
         <!--  -->
         <div class="order-detail-area">
             <h5>收货人信息</h5>
-            <div class="info-display pre">
-                <p>客户姓名：{{order.customer.name}}</p>
+          <div class="info-display pre">
+            <ul class="option-list">
+              <li>
+                <span>自取</span>
+                <i :class="{'open':order.isHave}"></i>
+              </li>
+            </ul>
+            <p v-if="order.isHave==1">自取时间：{{order.haveTime}}</p>
+            <p v-if="order.isHave==0">送货时间：{{order.haveTime}}</p>
+          </div>
+            <div class="info-display pre" v-if="order.customer">
+                <p>收货姓名：{{order.customer.name}}</p>
                 <p>手机号码：{{order.customer.phone}}</p>
                 <a class="tel" :href="'tel:'+order.customer.phone"></a>
-            </div>
-            <div class="info-display">
-                <p>店铺名称：{{order.customer.customerShopName}}</p>
                 <p>收货地址：{{order.customer.address}}</p>
             </div>
         </div>
@@ -145,6 +152,33 @@
 
 <style lang='stylus' scoped>
 
+.option-list {
+  padding: 0 0px;
+  li {
+    border-bottom: 1PX solid #FFFFFF;
+    ft(30);
+    c-3();
+    padding: 0px 0;
+    flex();
+    align-content: center;
+    justify-content: space-between;
+    span {
+      lh(56);
+      color: #666;
+    }
+    i {
+      w(102);
+      h(56);
+      background-image: url('../../assets/images/set_close_icon.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      &.open {
+        background-image: url('../../assets/images/set_open_icon.png');
+      }
+    }
+  }
+}
     #orderDetail {
         pt(90);
         pb(98);

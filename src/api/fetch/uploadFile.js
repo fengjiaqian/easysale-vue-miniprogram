@@ -2,19 +2,6 @@ import axios from 'axios'
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 
 //获取文件上传权限
-export function getAuthorization(params) {
-	const url = '/file/Authorization'
-	return axios({
-		method: 'post',
-		url: url,
-		data: params
-	}).then((res) => {
-		return Promise.resolve(res.data)
-	}).catch(function (error) {
-
-	});
-}
-//获取文件上传权限
 export function uploadImageNew(file) {
 	const url = '/file/uploadImage'
 	var data = new FormData();

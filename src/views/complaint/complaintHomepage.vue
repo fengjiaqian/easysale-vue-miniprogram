@@ -115,7 +115,9 @@
             _QueryComplaintList() {
                 let params = {
                     state: this.tabState,
-                    dealerId: this.shopId
+                    dealerId: this.shopId,
+                    pageNum: 1,
+                    pageSize: 10
                 };
                 complaintList(params).then(res => {
                     if (res.data) {

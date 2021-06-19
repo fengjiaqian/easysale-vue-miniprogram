@@ -104,21 +104,13 @@ export default {
   beforeDestroy() {},
   computed: {},
   created() {
-    this.$createTalkingData("UserProduct", "UserProductImpButton", {}, 3);
-    let that = this;
-    setTimeout(() => {
-      that.$submitTalkingData();
-    }, 1000);
   },
 
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.$createTalkingData("UserProduct ", "", {}, 1);
-    });
+    next();
   },
 
   beforeRouteLeave(to, from, next) {
-    this.$createTalkingData("UserProduct ", "", {}, 2);
     next();
   },
 

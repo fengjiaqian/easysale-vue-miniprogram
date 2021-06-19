@@ -1,6 +1,4 @@
 import Vue from 'vue'
-import { createTalkingData,submitTalkingData } from './functionUntils'
-
 Vue.filter('price', function (val, unit = "") {
 	if (!val) {
 		return `<em class="fz28">&yen;</em><span class="fz38">?<span><span class="fz28">元/${unit}</span>`
@@ -55,22 +53,6 @@ Vue.directive('img-aspect-fit', {
 		}, false)
 	}
 })
-
-Vue.prototype.$createTalkingData = function(){
-	if(!this.isVisitor){
-		try {
-		   createTalkingData.call(null, ...arguments);
-		} catch (error) {
-		   console.log(error)
-		}
-	}
-};
-Vue.prototype.$submitTalkingData = function(){
-	if(!this.isVisitor){
-		submitTalkingData.call(null, ...arguments);
-	}
-}
-
 
 /**
  * route query 转义

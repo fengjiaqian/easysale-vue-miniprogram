@@ -36,20 +36,36 @@
     <!--  -->
     <div class="order-detail-area">
       <h5>
-        收货人信息
-        <a
-          href="javascript:;"
-          class="frt c-theme fz28"
-          @click="_selectCustomer"
-        >{{userType==3?'选择收货人':'选择客户'}}</a>
+        收货方式
+        <a v-if="isHave==0"
+           href="javascript:;"
+           class="frt c-theme fz28"
+           @click="_selectCustomer"
+        >选择收货人</a>
       </h5>
-      <div class="info-display pre" v-if="currentCustomer.name">
-        <p>客户姓名：{{currentCustomer.name}}</p>
-        <p>手机号码：{{currentCustomer.phone}}</p>
+      <div class="info-display pre">
+        <ul class="option-list">
+          <li>
+            <span>自取</span>
+            <i @click="switchHave()" :class="{'open':isHave}"></i>
+          </li>
+        </ul>
+        <div class="h20"></div>
+        <li class="special-li">
+          <p><label v-if="isHave==0">送货时间：</label><label v-if="isHave==1">自取时间：</label>
+            <el-date-picker
+                class="date-pick-wrap"
+                v-model="haveTime"
+                type="date"
+                placeholder="请选择日期"
+            ></el-date-picker>
+          </p>
+        </li>
       </div>
-      <div class="info-display" v-if="currentCustomer.name">
-        <p>店铺名称：{{currentCustomer.customerShopName}}</p>
-        <p>收货地址：{{currentCustomer.address}}</p>
+      <div class="info-display pre">
+        <p v-if="currentCustomer.name">客户姓名：{{currentCustomer.name}}</p>
+        <p v-if="currentCustomer.name">手机号码：{{currentCustomer.phone}}</p>
+        <p v-if="currentCustomer.name">收货地址：{{currentCustomer.address}}</p>
       </div>
     </div>
     <!--  -->
@@ -84,7 +100,7 @@
       <a
         href="javascript:;"
         @click="_OrderSubmit"
-        :class="{'active':currentCustomer.phone, 'isIphoneX':isIphoneX}"
+        :class="{'active':isHave==0&&currentCustomer.phone||isHave==1, 'isIphoneX':isIphoneX}"
       >提交订单</a>
       &yen;{{actualAmount | priceToFixed}}
     </div>
@@ -112,7 +128,9 @@ export default {
       reduce: 0,
       products: [],
       currentCustomer: {},
-      remark: ""
+      remark: "",
+      isHave: 0,
+      haveTime: ""
     };
   },
   computed: {
@@ -159,8 +177,12 @@ export default {
     },
     _OrderSubmit() {
       const customerId = this.currentCustomer.id;
-      if (!customerId) {
+      if (!customerId && this.isHave==0) {
         const msg = this.userType == 3 ? "请选择收货人" : "请选择客户";
+        return this.$toast(msg);
+      }
+      if (!this.haveTime) {
+        const msg = this.isHave == 1? "请选择自取时间" : "请选择送货时间";
         return this.$toast(msg);
       }
       const orderItem = transformOrderItems(this.products);
@@ -170,7 +192,9 @@ export default {
         orderAmount: this.actualAmount,
         reduceAmount: this.reduce || 0,
         payableAmount: this.payableAmount,
-        orderRemark: this.remark
+        orderRemark: this.remark,
+        isHave:this.isHave,
+        haveTime:this.haveTime
       };
       OrderSubmit(params)
         .then(res => {
@@ -248,12 +272,54 @@ export default {
       } else {
         event.target.value = product.price;
       }
+    },
+    //是否自提
+    switchHave() {
+      this.isHave = this.isHave == 1 ? 0 : 1
+      if (this.isHave == 1) {
+        this.currentCustomer.name="";
+        this.currentCustomer.phone="";
+        this.currentCustomer.address="";
+      }
     }
   }
 };
 </script>
 
 <style lang="stylus" scoped>
+.el-date-picker{
+  width 100% !important
+  .el-picker-panel__content{
+    width auto !important
+  }
+}
+.option-list {
+  padding: 0 0px;
+  li {
+    border-bottom: 1PX solid #FFFFFF;
+    ft(30);
+    c-3();
+    padding: 0px 0;
+    flex();
+    align-content: center;
+    justify-content: space-between;
+    span {
+      lh(56);
+      color: #666;
+    }
+    i {
+      w(102);
+      h(56);
+      background-image: url('../../assets/images/set_close_icon.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      &.open {
+        background-image: url('../../assets/images/set_open_icon.png');
+      }
+    }
+  }
+}
 .submit-skus {
   pt(24);
 }

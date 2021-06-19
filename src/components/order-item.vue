@@ -5,7 +5,7 @@
     <!--  -->
     <div class="O-item-header">
       <div class="state">{{order.orderState | orderState}}</div>
-      <div class="title">{{userType==3? order.dealerName: order.customer.name}}</div>
+      <div class="title">{{userType==3? order.dealerName: order.isHave==0?order.customer.name:""}}</div>
       <p class="time">{{order.createTime}}</p>
     </div>
     <!--  -->
