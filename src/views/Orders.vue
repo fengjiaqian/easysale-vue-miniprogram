@@ -46,13 +46,13 @@
 
 <script>
 /**
- *订单状态 1=待处理，2=已处理，3=已拒绝，4=已完成 5=已取消
- 查列表的时候1=待处理，2=已处理+已拒绝，5=已取消
+ *订单状态 0=待付款，1=待处理，2=已处理，3=已拒绝，4=已完成 5=已取消
+ 查列表的时候1=待处理+待付款，2=已处理+已拒绝，5=已取消+已完成
  */
 const orderTab = [
   { text: "待处理", state: 1 },
   { text: "已处理", state: 2 },
-  { text: "已取消", state: 5 }
+  { text: "已完成", state: 5 }
 ];
 const params = {
   orderState: 1,
@@ -120,6 +120,7 @@ export default {
   },
   created() {
     this.params = params;
+    this.params.pageNum = 1;
     const state = this.$route.query.state || "";
     if (state) {
       this.currentState = state;

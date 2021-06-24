@@ -13,9 +13,11 @@ Vue.filter('price', function (val, unit = "") {
 
 Vue.filter('orderState', function (state) {
 	const orderTab = [
+		{ text: "待付款", state: 0 },
 		{ text: "待处理", state: 1 },
 		{ text: "已处理", state: 2 },
 		{ text: "已拒绝", state: 3 },
+		{ text: "已退款", state: 4 },
 		{ text: "已取消", state: 5 }
 	];
 	const matchItem = orderTab.find(item => item.state === state);

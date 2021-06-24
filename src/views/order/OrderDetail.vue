@@ -1,5 +1,5 @@
 <template>
-    <div id="orderDetail" v-if="order.orderState">
+    <div id="orderDetail">
         <m-header :isFixed="true"></m-header>
         <div class="state">
             订单状态：
@@ -42,7 +42,7 @@
               </li>
             </ul>
             <p v-if="order.isHave==1">自取时间：{{order.haveTime}}</p>
-            <p v-if="order.isHave==0">送货时间：{{order.haveTime}}</p>
+            <p v-else>送货时间：{{order.haveTime}}</p>
           </div>
             <div class="info-display pre" v-if="order.customer">
                 <p>收货姓名：{{order.customer.name}}</p>
@@ -79,6 +79,16 @@
         ></textarea>
             </div>
         </div>
+        <div class="order-detail-area" v-if="userType!=3 && order.orderState==2">
+          <h5>
+            退还金额：
+            <input
+                v-model="order.refundFee"
+              type="number"
+              placeholder="请输入金额"
+              :class="{'c-theme':true}">元
+          </h5>
+        </div>
         <!--  -->
         <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="order.canRefuse">
             <a href="javascript:;" class="btn" @click="_operate(3,order.id)">拒绝</a>
@@ -87,6 +97,9 @@
         <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="order.canCancel">
             <a href="javascript:;" class="btn" @click="_operate(5,order.id)" style="width:100%">取消订单</a>
         </div>
+      <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="userType!=3 && order.orderState==2">
+        <a href="javascript:;" class="btn" @click="_refund()" style="width:100%">退租</a>
+      </div>
     </div>
 </template>
 
@@ -95,7 +108,7 @@
      * 1.标题不同
      * 2.操作项不同
      */
-    import {UpdateOrder, QueryOrders} from "api/fetch/order";
+    import {QueryOrders, refund} from "api/fetch/order";
     import {
         orderOperate,
         pullProductsFromOrder,
@@ -126,15 +139,39 @@
                 const {orderId} = this.$route.params;
                 QueryOrders({
                     id: orderId
-                })
-                    .then(res => {
+                }).then(res => {
                         const orders = transformOrderList(res.data.dataList);
                         orders.length && (this.order = orders[0]);
+                        this.order.refundFee=0;
                         this.products = pullProductsFromOrder(this.order);
                     })
                     .catch(err => {
                         this.$toast(err.message);
                     });
+            },
+            //退款
+            _refund() {
+                if (!this.order.refundFee) {
+                  return this.$toast("请输入退款金额！");
+                }
+                if (this.order.refundFee > this.order.orderAmount) {
+                  return this.$toast("退租金额不能大于实付金额！");
+                }
+                refund({
+                  outTradeNo: this.order.id,
+                  totalFee: parseInt((this.order.orderAmount * 100).toPrecision(12)),
+                  refundFee: parseInt((this.order.refundFee * 100).toPrecision(12))
+                }).then(res => {
+                  const state = 2;
+                  this.$router.push({
+                    path: "/navi/orders",
+                    query: {
+                      state
+                    }
+                  });
+                }).catch(err => {
+                  this.$toast(err.message);
+                });
             },
             //封装到operate
             _operate(state, orderId) {

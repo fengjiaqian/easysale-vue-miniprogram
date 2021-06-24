@@ -189,9 +189,9 @@ export default {
       const params = {
         receiverId: customerId,
         orderItem,
-        orderAmount: this.actualAmount,
+        orderAmount: parseFloat(this.actualAmount.toPrecision(12)),
         reduceAmount: this.reduce || 0,
-        payableAmount: this.payableAmount,
+        payableAmount: parseFloat(this.payableAmount.toPrecision(12)),
         orderRemark: this.remark,
         isHave:this.isHave,
         haveTime:this.haveTime

@@ -34,6 +34,7 @@ export default {
   created() {
     this._identityList();
     this._initAuth();
+    this.skip(this.identityList[0]);
   },
   mounted() {},
   methods: {

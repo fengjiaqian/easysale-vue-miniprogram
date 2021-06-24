@@ -53,6 +53,9 @@
       <a href="javascript:;" class="btn" @click.stop="_operate(3)">拒绝</a>
       <a href="javascript:;" class="btn yes-btn" @click.stop="_operate(2)">同意</a>
     </div>
+    <div class="O-item-btns" v-if="order.orderState==0">
+      <a href="javascript:;" class="btn" @click.stop="_operate(5)">取消</a>
+    </div>
   </div>
 </template>
 
