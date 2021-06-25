@@ -596,10 +596,6 @@ export default {
       });
     },
     jumpSecondsort(Index) {
-      if (Index != 0) {
-        alert("功能暂未开放");
-        return false;
-      }
       var jumpPath = "",
         query = {};
       if (this.navigateToLogin()) {

@@ -46,7 +46,7 @@
       <div class="info-display pre">
         <ul class="option-list">
           <li>
-            <span>自取</span>
+            <span>到店自取</span>
             <i @click="switchHave()" :class="{'open':isHave}"></i>
           </li>
         </ul>
@@ -68,7 +68,7 @@
         <p v-if="currentCustomer.name">收货地址：{{currentCustomer.address}}</p>
       </div>
     </div>
-    <!--  -->
+    <!--
     <div class="select-customer" v-if="userType!=3">
       <strong class="fz30 fb">优惠</strong>
       <input
@@ -79,7 +79,7 @@
         @change="handleChange"
         :class="{'c-theme':!!reduce}"
       >
-    </div>
+    </div>-->
     <!-- 备注 -->
     <div class="order-detail-area">
       <h5>备注</h5>
@@ -178,10 +178,9 @@ export default {
     _OrderSubmit() {
       const customerId = this.currentCustomer.id;
       if (!customerId && this.isHave==0) {
-        const msg = this.userType == 3 ? "请选择收货人" : "请选择客户";
-        return this.$toast(msg);
+        return this.$toast("请选择收货人");
       }
-      if (!this.haveTime) {
+      if (this.haveTime==null || this.haveTime=="" || this.haveTime == undefined) {
         const msg = this.isHave == 1? "请选择自取时间" : "请选择送货时间";
         return this.$toast(msg);
       }

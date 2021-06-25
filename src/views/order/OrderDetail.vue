@@ -25,13 +25,19 @@
                     <span>原价：&yen;{{order.payableAmount | priceToFixed}}</span>
                     <span>优惠：&yen;{{order.reduceAmount | priceToFixed}}</span>
                 </div>
-                <div class="fz30">
+                <div class="fz30" v-if="userType==3">
                     押金：
                     <span class="c-theme">&yen;{{order.orderAmount | priceToFixed}}</span>
                     已退：
                     <span class="c-theme">&yen;{{totalRefundFee | priceToFixed}}</span>
-                    剩余：
-                    <span class="c-theme">&yen;{{leaveRefundFee | priceToFixed}}</span>
+                </div>
+                <div class="fz30" v-else>
+                  押金：
+                  <span class="c-theme">&yen;{{order.orderAmount | priceToFixed}}</span>
+                  已退：
+                  <span class="c-theme">&yen;{{totalRefundFee | priceToFixed}}</span>
+                  剩余：
+                  <span class="c-theme">&yen;{{leaveRefundFee | priceToFixed}}</span>
                 </div>
             </div>
         </div>
@@ -60,6 +66,7 @@
             <h5>订单信息</h5>
             <div class="info-display">
                 <p v-if="userType!=3">下单人：{{order.createUserName}}</p>
+                <p v-if="userType!=3">下单人电话：{{order.createUserPhone}}</p>
                 <p v-if="userType==3">下单店铺：{{order.dealerName}}</p>
                 <p>下单时间：{{order.createTime}}</p>
                 <p v-if="order.orderRemark">备注：{{order.orderRemark}}</p>
@@ -164,13 +171,14 @@ function isValueNumber(value) {
                 if (this.order.refundFee > this.leaveRefundFee) {
                   return this.$toast("退款金额不能大于剩余押金！");
                 }
-              this.$confirm("确定退租金"+this.order.refundFee+"元？")
+              this.$confirm("确定退押金"+this.order.refundFee+"元？")
                   .then(() => {
                       refund({
                         outTradeNo: this.order.id,
                         totalFee: parseInt((this.order.orderAmount * 100).toPrecision(12)),
                         refundFee: parseInt((this.order.refundFee * 100).toPrecision(12))
                       }).then(res => {
+                        this.$toast("押金退还成功！", {duration:1000});
                         this._QueryOrders();
                       }).catch(err => {
                         this.$toast(err.message);

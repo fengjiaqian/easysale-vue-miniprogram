@@ -20,12 +20,12 @@
             <span class="required">手机号码</span>
             <input v-model="formParam.phone" type="tel" placeholder="请输入手机号码" readonly>
           </li>
-          <li>
+          <!--li>
             <span>店铺名称</span>
             <input v-model="formParam.shopName" maxlength="20" type="text" placeholder="请输入店铺名称">
-          </li>
+          </li-->
           <li>
-            <span class="mt-ads required">店铺地址</span>
+            <span class="mt-ads required">地址</span>
             <textarea
               v-model="formParam.address"
               maxlength="50"

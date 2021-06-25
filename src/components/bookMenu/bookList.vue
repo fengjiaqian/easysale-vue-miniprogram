@@ -44,7 +44,7 @@
             <span>{{list.phone}}</span>
             <p class="lable" v-if="list.state==0">停用</p>
           </div>
-          <div>{{list.customerShopName}}</div>
+          <!--div>{{list.customerShopName}}</div-->
           <div>{{list.address}}</div>
         </div>
       </div>

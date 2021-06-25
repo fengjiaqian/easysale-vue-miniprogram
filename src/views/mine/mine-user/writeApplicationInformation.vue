@@ -123,6 +123,11 @@ export default {
     //TODO: 带入电话号码和姓名
     //TODO: 上传参数加入图片
     _applyDealer() {
+      if (true) {
+        this.$toast("功能暂未开放");
+        return false;
+      }
+
       const partter = /^0?1[3|4|5|6|8|7|9][0-9]\d{8}$/;
       const regExp = new RegExp(partter);
       if (!regExp.test(this.applyInfo.phone)) {

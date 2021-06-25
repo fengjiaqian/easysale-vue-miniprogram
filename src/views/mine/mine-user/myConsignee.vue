@@ -14,7 +14,7 @@
           <strong>{{item.name}}</strong>
           <strong>{{item.phone}}</strong>
         </div>
-        <div class="shop-name">{{item.customerShopName}}</div>
+        <!--div class="shop-name">{{item.customerShopName}}</div-->
         <div class="receive-address">{{item.address}}</div>
         <div class="operate" v-if="showOperation">
           <a href="javascript:;" @click.stop="_modify(item)">编辑</a>
