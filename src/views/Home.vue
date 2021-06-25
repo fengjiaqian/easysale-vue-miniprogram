@@ -147,6 +147,9 @@
             </div>
             <product v-for="product in item.products " :product="product" :key="product.id"></product>
           </div>
+          <div class="menu-title">
+            <span>到底了</span>
+          </div>
         </main>
       </cube-scroll>
     </div>

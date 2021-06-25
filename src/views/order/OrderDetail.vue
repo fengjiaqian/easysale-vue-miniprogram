@@ -26,8 +26,12 @@
                     <span>优惠：&yen;{{order.reduceAmount | priceToFixed}}</span>
                 </div>
                 <div class="fz30">
-                    实付：
+                    押金：
                     <span class="c-theme">&yen;{{order.orderAmount | priceToFixed}}</span>
+                    已退：
+                    <span class="c-theme">&yen;{{totalRefundFee | priceToFixed}}</span>
+                    剩余：
+                    <span class="c-theme">&yen;{{leaveRefundFee | priceToFixed}}</span>
                 </div>
             </div>
         </div>
@@ -79,14 +83,10 @@
         ></textarea>
             </div>
         </div>
-        <div class="order-detail-area" v-if="userType!=3 && order.orderState==2">
+        <div class="order-detail-area" v-if="userType!=3 && (order.orderState==2||(order.orderState==4 && order.orderAmount>totalRefundFee))">
           <h5>
             退还金额：
-            <input
-                v-model="order.refundFee"
-              type="number"
-              placeholder="请输入金额"
-              :class="{'c-theme':true}">元
+            <input v-model="order.refundFee" type="number" max="2" placeholder="请输入金额"  @change="handleChange" :class="{'c-theme':true}">元
           </h5>
         </div>
         <!--  -->
@@ -97,13 +97,16 @@
         <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="order.canCancel">
             <a href="javascript:;" class="btn" @click="_operate(5,order.id)" style="width:100%">取消订单</a>
         </div>
-      <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="userType!=3 && order.orderState==2">
+      <div class="bottom-wrap" :class="{'isIphoneX':isIphoneX}" v-if="userType!=3 && (order.orderState==2||(order.orderState==4&&order.orderAmount>totalRefundFee))">
         <a href="javascript:;" class="btn" @click="_refund()" style="width:100%">退租</a>
       </div>
     </div>
 </template>
 
 <script>
+function isValueNumber(value) {
+  return /(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/.test(value);
+}
     /**
      * 1.标题不同
      * 2.操作项不同
@@ -123,7 +126,9 @@
                 order: {},
                 products: [],
                 reason: "",
-                isIphoneX:this.isIphoneX
+                isIphoneX:this.isIphoneX,
+                totalRefundFee:0,
+                leaveRefundFee:0
             };
         },
         components: {
@@ -144,6 +149,8 @@
                         orders.length && (this.order = orders[0]);
                         this.order.refundFee=0;
                         this.products = pullProductsFromOrder(this.order);
+                        this.totalRefundFee = parseFloat(((this.order.totalRefundFee||0)/100).toPrecision(12));
+                        this.leaveRefundFee = parseFloat((this.order.orderAmount - this.totalRefundFee).toPrecision(12));
                     })
                     .catch(err => {
                         this.$toast(err.message);
@@ -154,24 +161,32 @@
                 if (!this.order.refundFee) {
                   return this.$toast("请输入退款金额！");
                 }
-                if (this.order.refundFee > this.order.orderAmount) {
-                  return this.$toast("退租金额不能大于实付金额！");
+                if (this.order.refundFee > this.leaveRefundFee) {
+                  return this.$toast("退款金额不能大于剩余押金！");
                 }
-                refund({
-                  outTradeNo: this.order.id,
-                  totalFee: parseInt((this.order.orderAmount * 100).toPrecision(12)),
-                  refundFee: parseInt((this.order.refundFee * 100).toPrecision(12))
-                }).then(res => {
-                  const state = 2;
-                  this.$router.push({
-                    path: "/navi/orders",
-                    query: {
-                      state
-                    }
-                  });
-                }).catch(err => {
-                  this.$toast(err.message);
-                });
+              this.$confirm("确定退租金"+this.order.refundFee+"元？")
+                  .then(() => {
+                      refund({
+                        outTradeNo: this.order.id,
+                        totalFee: parseInt((this.order.orderAmount * 100).toPrecision(12)),
+                        refundFee: parseInt((this.order.refundFee * 100).toPrecision(12))
+                      }).then(res => {
+                        this._QueryOrders();
+                      }).catch(err => {
+                        this.$toast(err.message);
+                      });
+                  }).catch(() => {})
+
+            },
+            handleChange(event) {
+              var val = event.target.value.trim();
+              if (isValueNumber(val)) {
+                val = Number(val).toFixed(2);
+                this.order.refundFee = val;
+                if (val < 0) this.order.refundFee = 0;
+              } else {
+                event.target.value = Number(this.order.refundFee).toFixed(2);
+              }
             },
             //封装到operate
             _operate(state, orderId) {
