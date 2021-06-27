@@ -121,13 +121,13 @@ export default {
   created() {
     this.params = params;
     this.params.pageNum = 1;
-    const state = this.$route.query.state || "";
+    const state = this.$route.query.state || storage.get("orderQueryState", false);
     if (state) {
       this.currentState = state;
       this.params.orderState = state;
     }
     if (!this.isVisitor) {
-      this._QueryOrders();
+      this._switchOrderType(state);
     }
   },
   activated() {
@@ -175,6 +175,7 @@ export default {
       this._QueryOrders();
     },
     _switchOrderType(state) {
+      storage.set("orderQueryState", state);
       this.$refs.scrollOrders && this.$refs.scrollOrders.scrollTo(0, 0);
       this.currentState = state;
       this.params.orderState = state;

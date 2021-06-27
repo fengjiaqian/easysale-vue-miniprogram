@@ -5,7 +5,7 @@
     <m-header :isFixed="true"  :isSearch = "false"></m-header>
     <div v-if="product.productName">
       <div class="D-img">
-        <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
+        <img v-preview="product.productImageUrl" v-lazy="product.productImageUrl || ''" :alt="product.productName">
       </div>
       <div class="D-name">{{product.productName}}<i v-if="product.remark" :class="'s-success'">{{product.remark}}</i></div>
       <!-- wx 新增加的div  描述规格 -->

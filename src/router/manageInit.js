@@ -62,7 +62,7 @@ const manageInit = [
         path: '/complaintHomepage',
         name: 'complaintHomepage',
         meta: {
-            title: '投诉管理',
+            title: '意见管理',
         },
         component: complaintHomepage,
     },
@@ -70,7 +70,7 @@ const manageInit = [
         path: '/addNewComplaint',
         name: 'addNewComplaint',
         meta: {
-            title: '新建投诉单',
+            title: '新建意见单',
         },
         component: addNewComplaint,
     },
@@ -78,7 +78,7 @@ const manageInit = [
         path: '/complaintDetail',
         name: 'complaintDetail',
         meta: {
-            title: '投诉详情',
+            title: '意见详情',
         },
         component: complaintDetail,
     },

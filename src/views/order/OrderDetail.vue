@@ -198,12 +198,23 @@ function isValueNumber(value) {
             },
             //封装到operate
             _operate(state, orderId) {
+                if (state == 3 && !this.reason) {
+                  return this.$toast("请输入拒绝原因！");
+                }
                 const options = {
                     state,
                     orderId,
                     audit_remark: this.reason
                 };
-                orderOperate.call(this, options, this._QueryOrders.bind(this));
+                if (state == 3 || state == 5) {
+                  this.$confirm(state == 5?"确定取消订单吗？":"确定拒绝订单吗？")
+                      .then(() => {
+                        orderOperate.call(this, options, this._QueryOrders.bind(this));
+                      }).catch(() => {})
+                } else {
+                  orderOperate.call(this, options, this._QueryOrders.bind(this));
+                }
+
             }
         },
 

@@ -4,10 +4,10 @@
     <div class="body">
       <div class="reason">
         <p class="title">
-          <i>*</i>投诉类型
+          <i>*</i>意见类型
         </p>
         <div class="complaint-type" @click="openDialog">
-          <p :style="{color:complaintHeadLine?'#333':'#BDBDBD'}">{{complaintHeadLine||'请选择投诉类型'}}</p>
+          <p :style="{color:complaintHeadLine?'#333':'#BDBDBD'}">{{complaintHeadLine||'请选择意见类型'}}</p>
           <img :src="arrowUrl" class="arrow-img">
         </div>
       </div>
@@ -19,7 +19,7 @@
           id="description"
           cols="30"
           rows="9"
-          placeholder="请输入投诉内容"
+          placeholder="请输入意见内容"
           v-model="complaintContent"
         ></textarea>
         <p class="count">{{length}}/100</p>
@@ -40,7 +40,7 @@
     <select-dialog
       :roleList="typeList"
       :rolePopShow="rolePopShow"
-      title="选择投诉类型"
+      title="选择意见类型"
       @closePop="closePop"
       @submitQuery="certain"
     ></select-dialog>
@@ -152,10 +152,10 @@ export default {
     isValid() {
       let errList = [];
       if (!this.complaintType) {
-        errList.push({ errMsg: "请选项投诉类型" });
+        errList.push({ errMsg: "请选项意见类型" });
       }
       if (!this.complaintContent) {
-        errList.push({ errMsg: "请填写投诉内容" });
+        errList.push({ errMsg: "请填写意见内容" });
       }
 
       if (errList.length !== 0) {

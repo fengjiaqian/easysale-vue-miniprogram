@@ -3,7 +3,7 @@
         <m-header :isFixed="true"></m-header>
         <div class="content">
             <div class="status">
-                <div class="state-title">投诉状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerComplaint.state]}}</span>
+                <div class="state-title">意见状态：<span style="color:#FF5638;font-weight:bold;">{{state[customerComplaint.state]}}</span>
                 </div>
                 <div class="continue" v-if="customerComplaint.state==1">
                     <div class="triangle"></div>
@@ -16,7 +16,7 @@
             </div>
             <div class="title-box">
                 <div class="reason-warp">
-                    <span class="title ">投诉原因</span>
+                    <span class="title ">意见原因</span>
                     <span class="font-30-666  reason-detail ">{{customerComplaint.complaintHeadLine}}</span>
                 </div>
                 <div class="content-warp">
@@ -36,12 +36,12 @@
                     <p class="font-30-666 margin-bottom-8">客户姓名：{{customer.customerName}}</p>
                     <p class="font-30-666 margin-bottom-8" style="position: relative">手机号码：{{customer.customerPhone}}
                         <a class="tel" :href="'tel:'+customer.customerPhone"></a></p>
-                    <p class="font-30-666 margin-bottom-8">投诉时间：{{customer.createTime}}</p>
+                    <p class="font-30-666 margin-bottom-8">创建时间：{{customer.createTime}}</p>
                     <p class="font-30-666" v-if="customer.saleName">销售负责人：{{customer.saleName}}</p>
                 </div>
             </div>
             <div class="title-box" v-if="userType == 3">
-                <span class="title">投诉时间</span>
+                <span class="title">创建时间</span>
                 <span class="font-30-666 company-name">{{customerComplaint.createTime}}</span>
             </div>
             <!-- <div class="title-box">
@@ -63,7 +63,7 @@
                 
             </div>
         </div>
-        <button class="cancel-btn" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销投诉
+        <button class="cancel-btn" :class="{'isIphoneX':isIphoneX}" v-if="userType == 3&&customerComplaint.state==0" @click="cancelComplaint">撤销意见
         </button>
         <div v-if="userType !=3&&customerComplaint.state==0">
             <button class="deal-btn" @click="directProcessing">处理</button>
@@ -138,7 +138,7 @@
              * 撤销投诉
              */
             cancelComplaint() {
-                this.$confirm('您确定撤销投诉吗？')
+                this.$confirm('您确定撤销意见吗？')
                     .then(() => {
                         cancelComplaint(this.id).then(res => {
                             this.$toast('操作成功');

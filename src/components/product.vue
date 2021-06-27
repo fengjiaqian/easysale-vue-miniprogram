@@ -1,7 +1,7 @@
 <template>
   <div class="H-product-item clearfix" @click="_enterDetail">
     <div class="H-product-img">
-      <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
+      <img v-preview="product.productImageUrl" v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
     <div class="H-product-content">
       <p class="name">{{product.productName}}&nbsp;<i v-if="product.remark" :class="'s-success'">{{product.remark}}</i></p>

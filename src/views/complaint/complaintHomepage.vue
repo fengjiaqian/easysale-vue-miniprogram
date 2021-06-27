@@ -10,7 +10,7 @@
                   @click="switchShop(item,idx)">{{item.shopName}}</span>
         </div>
         <empty style="margin-top: 100px"
-               :txt="'暂无相关投诉单'" v-if="empty"
+               :txt="'暂无相关意见单'" v-if="empty"
                :iconUrl="iconUrl"></empty>
         <div :class="{'mt-185':userType != 3,'mt-275':userType == 3,'mb':userType == 3}"
              style="height: 100%" v-if="complaintsList.length">
@@ -26,7 +26,7 @@
 
             </scroll>
         </div>
-        <button class="footer-btn" :class="{'isIphoneX':isIphoneX}" @click="addComplaints()" v-if="userType == 3">我要投诉</button>
+        <button class="footer-btn" :class="{'isIphoneX':isIphoneX}" @click="addComplaints()" v-if="userType == 3">我要提意见</button>
     </div>
 </template>
 <script>
@@ -56,14 +56,14 @@
                 empty: true,
                 isAllSelected: false,
                 iconUrl: iconUrl,
-                title: '投诉管理',
+                title: '意见管理',
                 dealerList: [],
                 activeshopIdx: 0,//默认选中的经销商
                 shopId: ''
             }
         },
         created() {
-            this.title = this.userType == '3' ? '投诉列表' : '投诉管理';
+            this.title = this.userType == '3' ? '意见列表' : '意见管理';
             if (this.userType == '3') {
                 this._QueryDealComplaint();
             } else {
@@ -176,7 +176,7 @@
              * 撤销投诉
              */
             cancelComplaint(id) {
-                this.$confirm('您确定撤销投诉吗？')
+                this.$confirm('您确定撤销意见吗？')
                     .then(() => {
                         cancelComplaint(id).then(res => {
                             this.$toast('操作成功');

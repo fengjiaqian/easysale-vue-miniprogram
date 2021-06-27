@@ -20,7 +20,7 @@
                     @click.stop="directProcessing(listData.customerComplaint.id)">处理
             </button>
             <button v-if="userType == 3&&tabState==0" class="cancel-btn"
-                    @click.stop="cancelComplaint(listData.customerComplaint.id)">撤销投诉
+                    @click.stop="cancelComplaint(listData.customerComplaint.id)">撤销意见
             </button>
         </div>
     </div>
