@@ -612,13 +612,13 @@ export default {
         case 0:
           jumpPath = "/complaintHomepage";
           break;
+        // case 1:
+        //   jumpPath = "/redemptionHomepage";
+        //   break;
+        // case 2:
+        //   jumpPath = "/returnHomepage";
+        //   break;
         case 1:
-          jumpPath = "/redemptionHomepage";
-          break;
-        case 2:
-          jumpPath = "/returnHomepage";
-          break;
-        case 4:
           jumpPath = "/writeApplicationInformation";
           query = {
             mobileNo: storage.get("mobileNo", "")
