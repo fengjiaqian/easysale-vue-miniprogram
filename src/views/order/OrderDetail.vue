@@ -14,8 +14,15 @@
                 </div>
                 <div class="tips">{{order.auditRemark||(order.orderState==2?'我们会尽快为您处理':'抱歉，暂时无法为您提供服务')}}</div>
             </div>
-
         </div>
+      <div class="order-detail-area" v-if="order.orderState==4">
+        <h5>
+          退款说明
+        </h5>
+        <div class="info-display">
+          {{order.auditRemark}}
+        </div>
+      </div>
         <div class="order-detail-area product-Info">
             <h5>商品信息</h5>
             <order-products v-if="products.length" :products="products"></order-products>
@@ -73,10 +80,10 @@
             </div>
         </div>
         <!-- 备注 -->
-        <div class="order-detail-area" v-if="order.canRefuse">
+        <div class="order-detail-area" v-if="userType!=3 && (order.orderState == 1 ||order.orderState == 2 || order.orderState == 4) && leaveRefundFee > 0">
             <h5>
                 备注
-                <span class="c-9 fz28">(若拒绝，则必须填写拒绝原因)</span>
+                <span class="c-9 fz28">(若拒绝和退款，则必须填写备注)</span>
             </h5>
             <div class="info-display">
         <textarea
@@ -87,7 +94,7 @@
                 rows="4"
                 placeholder="请输入内容"
                 v-model="reason"
-        ></textarea>
+        >{{order.auditRemark}}</textarea>
             </div>
         </div>
         <div class="order-detail-area" v-if="userType!=3 && (order.orderState==2||(order.orderState==4 && order.orderAmount>totalRefundFee))">
@@ -168,6 +175,12 @@ function isValueNumber(value) {
                 if (!this.order.refundFee) {
                   return this.$toast("请输入退款金额！");
                 }
+                if (!this.reason) {
+                  return this.$toast("请输入退款说明(备注)！");
+                }
+                if (this.reason.length > 80) {
+                  return this.$toast("退款说明(备注)过长！");
+                }
                 if (this.order.refundFee > this.leaveRefundFee) {
                   return this.$toast("退款金额不能大于剩余押金！");
                 }
@@ -176,7 +189,8 @@ function isValueNumber(value) {
                       refund({
                         outTradeNo: this.order.id,
                         totalFee: parseInt((this.order.orderAmount * 100).toPrecision(12)),
-                        refundFee: parseInt((this.order.refundFee * 100).toPrecision(12))
+                        refundFee: parseInt((this.order.refundFee * 100).toPrecision(12)),
+                        refundDesc: this.reason
                       }).then(res => {
                         this.$toast("押金退还成功！", {duration:1000});
                         this._QueryOrders();
