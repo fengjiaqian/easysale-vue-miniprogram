@@ -56,7 +56,10 @@
                     return;
                 }
                 const that = this;
-                const {shopName, phone, instruction,address} = config
+                let {shopName, phone, instruction, address, description} = config;
+                if (!instruction) {
+                  instruction = description;
+                }
                 const _canvas = document.getElementById("sLogo");
                 const ctx = _canvas.getContext("2d");
                 var img=new Image();

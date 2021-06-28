@@ -666,8 +666,19 @@ export default {
       storage.set("shareData", data);
     },
     _jumpToShare() {
-      const data = storage.get("shareData", "");
-      if (!data) {
+      let storeDealer = storage.get("currentDealer", {});
+      storeDealer.shopId = storeDealer.id;
+      storeDealer.shopText='租赁服务平台'
+      storeDealer = JSON.stringify(storeDealer);
+      storeDealer = encodeURIComponent(storeDealer);
+      this.lock = false;
+      this.shareCounter = 5;
+      const jumpUrl = encodeURIComponent(`navi/home`);
+      const path = `/pages/shareShop/shareShop?jumpUrl=${jumpUrl}&resultData=${storeDealer}`;
+      window.wx.miniProgram.navigateTo({
+        url: path
+      });
+      /*if (!data) {
         if (!this.lock) {
           this.lock = true;
         }
@@ -687,7 +698,7 @@ export default {
         window.wx.miniProgram.navigateTo({
           url: path
         });
-      }
+      }*/
     },
     _share(avatarImg, nickName, currentDealer) {
       let params = {
