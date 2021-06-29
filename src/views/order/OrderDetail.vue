@@ -19,7 +19,7 @@
         <h5>
           退款说明
         </h5>
-        <div class="info-display">
+        <div class="tips">
           {{order.auditRemark}}
         </div>
       </div>

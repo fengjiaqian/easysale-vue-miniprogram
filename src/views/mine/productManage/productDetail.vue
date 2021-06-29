@@ -3,11 +3,11 @@
         <m-header :isFixed="true"  :isSearch = "false"></m-header>
         <div class="body">
             <div class="D-img">
-                <img v-preview="product.productImageUrl" v-lazy="product.productImageUrl || ''" :alt="product.productName">
+                <img v-lazy="product.productImageUrl || ''" :alt="product.productName">
             </div>
             <div class="D-name">{{product.productName}}</div>
             <div class="D-grama">
-                <span class="brand">品牌1：{{product.brandName}}</span>
+                <span class="brand">品牌：{{product.brandName}}</span>
             </div>
             <div class="D-spec">
                 规格：

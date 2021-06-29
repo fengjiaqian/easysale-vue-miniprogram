@@ -11,7 +11,7 @@
       <!-- wx 新增加的div  描述规格 -->
       <div class="D-norm">规格 : {{product.specification}}</div>
       <div class="D-price">
-        <span class="c-yellow" style="font-size: medium">押金:&nbsp;</span>
+        <span class="c-yellow" style="font-size: medium" v-if="product.remark">押金:&nbsp;</span>
         <span class="c-yellow" v-html="$options.filters.price(product.price,product.priceUnit)"></span>
       </div>
       <!--<div v-if="product.remark" :class="[product.remark!=null ? 'p-remark' : '']">{{product.remark}}</div>-->

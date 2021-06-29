@@ -8,7 +8,7 @@
       <div class="spec">规格 {{product.specification}}</div>
       <div class="price">
         <div>
-          <span class="c-yellow" style="font-size: medium">押金:&nbsp;</span>
+          <span class="c-yellow" style="font-size: medium" v-if="product.remark">押金:&nbsp;</span>
           <span class="c-yellow" v-html="$options.filters.price(product.price, product.priceUnit)"></span>
         </div>
         <number-picker :product="product"></number-picker>
