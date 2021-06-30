@@ -15,12 +15,13 @@
                 <div class="tips">{{order.auditRemark||(order.orderState==2?'我们会尽快为您处理':'抱歉，暂时无法为您提供服务')}}</div>
             </div>
         </div>
-      <div class="order-detail-area" v-if="order.orderState==4">
-        <h5>
-          退款说明
-        </h5>
-        <div class="tips">
-          {{order.auditRemark}}
+      <div class="continue" v-if="order.orderState==4">
+        <div class="triangle"></div>
+        <div class="bg">
+          <div class="report">
+            <div class="left">退款说明：</div>
+          </div>
+          <div class="tips">{{order.auditRemark}}</div>
         </div>
       </div>
         <div class="order-detail-area product-Info">
@@ -178,7 +179,7 @@ function isValueNumber(value) {
                 if (!this.reason) {
                   return this.$toast("请输入退款说明(备注)！");
                 }
-                if (this.reason.length > 80) {
+                if (this.reason.length > 40) {
                   return this.$toast("退款说明(备注)过长！");
                 }
                 if (this.order.refundFee > this.leaveRefundFee) {
