@@ -9,7 +9,7 @@
       <div class="left">联系电话 :</div>
       <input class="right" type="number" v-model="consigneeInfo.phone" placeholder="请输入手机号码">
     </div>
-    <div class="mc-item mc-item-shopname">
+    <!--div class="mc-item mc-item-shopname">
       <div class="left">店铺名称 :</div>
       <input
         class="right"
@@ -17,11 +17,11 @@
         v-model="consigneeInfo.customerShopName"
         placeholder="请输入店铺名称"
       >
-    </div>
+    </div-->
     <div class="address-column">
       <span>收货地址 :</span>
       <div class="locate-address">
-        <textarea v-model="consigneeInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入店铺地址"></textarea>
+        <textarea v-model="consigneeInfo.address" maxlength="50" cols="30" rows="2" placeholder="请输入地址"></textarea>
       </div>
       <i @click="obtainAddress" class="position"></i>
     </div>

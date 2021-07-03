@@ -18,7 +18,7 @@
         <input v-model="customerInfo.phone" @input="limitPhone" type="tel" placeholder="请输入手机号码">
       </li>
       <div class="h20"></div>
-      <li>
+      <!--li>
         <span>店铺名称：</span>
         <input
           v-model="customerInfo.customerShopName"
@@ -26,7 +26,7 @@
           type="text"
           placeholder="请输入店铺名称"
         >
-      </li>
+      </li-->
       <li class="special-li">
         <span>详细地址：</span>
         <div class="locate-address">

@@ -38,7 +38,7 @@
             maxlength="50"
             cols="30"
             rows="2"
-            :placeholder="showStore?`请输入店铺地址`:`请输入公司地址`"
+            :placeholder="showStore?`请输入地址`:`请输入地址`"
           ></textarea>
         </div>
         <i @click="obtainAddress" class="position"></i>

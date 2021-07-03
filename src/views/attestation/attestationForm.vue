@@ -31,7 +31,7 @@
               maxlength="50"
               cols="30"
               rows="3"
-              placeholder="请输入店铺地址"
+              placeholder="请输入地址"
             ></textarea>
             <i @click="obtainAddress" class="position"></i>
           </li>
