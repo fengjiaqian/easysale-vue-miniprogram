@@ -4,10 +4,13 @@
       <img v-preview="product.productImageUrl" v-lazy="product.productImageUrl || ''" :alt="product.productName">
     </div>
     <div class="H-product-content">
-      <p class="name">{{product.productName}}&nbsp;<i v-if="product.remark" :class="'s-success'">{{product.remark}}</i></p>
+      <p class="name">{{product.productName}}</p>
       <div class="spec">规格 {{product.specification}}</div>
       <div class="price">
-        <div>
+        <div v-if="product.remark">
+          <i :class="'s-success'">{{product.remark}}</i>
+        </div>
+        <div v-else>
           <span class="c-yellow" style="font-size: medium" v-if="product.remark">押金:&nbsp;</span>
           <span class="c-yellow" v-html="$options.filters.price(product.price, product.priceUnit)"></span>
         </div>

@@ -82,13 +82,14 @@
                     ctx.font = "26px '字体','字体','微软雅黑','宋体'"
                     if (instruction) {
                         if (instruction.length > 20) {
-                            const des1 = instruction.substr(0, 20);
-                            ctx.fillText(des1, 128,256);
-                            let des2 = instruction.substr(20,40);
-                            if (instruction.length > 40) {
-                                des2 = instruction.substr(20, 38) + "..."
-                            }
-                            ctx.fillText(des2, 128, 296);
+                            const des1 = that.subStrCn(instruction,0,20)//instruction.substr(0, 20);
+                            ctx.fillText(des1, 128,226);
+                            let des2 = that.subStrCn(instruction,20,20)//instruction.substr(20,40);
+                            ctx.fillText(des2, 128, 266);
+                          if (instruction.length > 40) {
+                            let des3 = that.subStrCn(instruction,40,20)//instruction.substr(20,40);
+                            ctx.fillText(des3, 128, 306);
+                          }
                         } else {
                             ctx.fillText(instruction, 124,270);
                         }
@@ -98,7 +99,25 @@
                 }
 
 
+            },
+          /**
+           * 截取字符串(通过substring实现并支持中英文混合)
+           * @param str
+           * @param n 需要截取的长度
+           * @returns {*}
+           */
+           subStrCn(str,startNum,endNum){
+            let r = /[^\x00-\xff]/g;
+            if(str.replace(r,"**").length<=endNum){return str;}
+            let m = Math.floor(endNum/2);
+            for(let i=m; i<str.length; i++){
+              if(str.substr(startNum,i).replace(r,"**").length>=endNum){
+                return str.substr(startNum,endNum);
+              }
             }
+            return str;
+          }
+
         }
     }
 </script>
